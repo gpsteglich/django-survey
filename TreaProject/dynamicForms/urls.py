@@ -6,12 +6,28 @@ Created on 30/8/2014
 from django.conf.urls import patterns, url
 from rest_framework.urlpatterns import format_suffix_patterns
 from dynamicForms import views 
+from django.views.generic import TemplateView
+
+class SimpleStaticView(TemplateView):
+    def get_template_names(self):
+        return [self.kwargs.get('template_name') + ".html"]
+    
+    def get(self, request, *args, **kwargs):
+        from django.contrib.auth import authenticate, login
+        if request.user.is_anonymous():
+            # Auto-login the User for Demonstration Purposes
+            user = authenticate()
+            login(request, user)
+        return super(SimpleStaticView, self).get(request, *args, **kwargs)
 
 urlpatterns = patterns('dynamicForms.views',
     url(r'(?P<pk>[0-9]+)/$', views.FormDetail.as_view()),
-    url(r'$', views.FormList.as_view()),
+    url(r'^list/$', views.FormList.as_view()),
     url(r'^users/$', views.UserList.as_view()),
     url(r'^users/(?P<pk>[0-9]+)/$', views.UserDetail.as_view()),
+    url(r'^visor$', TemplateView.as_view(template_name='ViewFormProto.html')),
+    url(r'^text$', TemplateView.as_view(template_name='question_char.html')),
+    url(r'^number$', TemplateView.as_view(template_name='question_num.html')),
 )
 
 urlpatterns = format_suffix_patterns(urlpatterns)
