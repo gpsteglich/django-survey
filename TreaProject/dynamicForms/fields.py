@@ -17,6 +17,16 @@ NUMBER = 10
 URL = 11
 
 
+DRAFT = 0
+PUBLISHED = 1
+#These are the possible status for a form
+STATUS = (
+          (DRAFT, _("Draft")),
+          (PUBLISHED, _("Published")),
+          )
+
+
+#These are the field types.
 NAMES = (
     (TEXT, _("Single line text")),
     (TEXTAREA, _("Multi line text")),
@@ -44,7 +54,7 @@ class JSONField(models.TextField):
         """Convert our string value to JSON after we load it from the DB"""
 
         if value == "":
-            return None
+            return ""
 
         try:
             if isinstance(value, str):
