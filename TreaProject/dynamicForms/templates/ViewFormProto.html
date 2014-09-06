@@ -9,7 +9,7 @@
 <body ng-app="dynamicForms">
 <div class="content" ng-controller="visorCtrl">
 {% verbatim %} 
-    {{ questions }}
+    {{ questions | json }}
     <div class="panel" ng-repeat="question in questions">
         <div class="panel-heading clearfix">
             <h3>Tipo: {{ question.type }}</h3>
