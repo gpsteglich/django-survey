@@ -2,7 +2,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 import json
 from django.utils.translation import ugettext_lazy as _
-#from south.modelsinspector import add_introspection_rules
+from south.modelsinspector import add_introspection_rules
 
 TEXT = 1
 TEXTAREA = 2
@@ -41,7 +41,7 @@ NAMES = (
     (DATE, _("Date")),
 )
 
-#add_introspection_rules([], ["^dynamicForms.fields.JSONField"])
+add_introspection_rules([], ["^dynamicForms.fields.JSONField"])
 
 class JSONField(models.TextField):
     """JSONField is a generic textfield that neatly serializes/unserializes

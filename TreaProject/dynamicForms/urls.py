@@ -7,6 +7,9 @@ from django.conf.urls import patterns, url
 from rest_framework.urlpatterns import format_suffix_patterns
 from dynamicForms import views 
 from django.views.generic import TemplateView
+from django.contrib import admin
+
+admin.autodiscover()
 
 class SimpleStaticView(TemplateView):
     def get_template_names(self):
@@ -25,7 +28,7 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^list/$', views.FormList.as_view()),
     url(r'^users/$', views.UserList.as_view()),
     url(r'^users/(?P<pk>[0-9]+)/$', views.UserDetail.as_view()),
-    url(r'^visor$', TemplateView.as_view(template_name='ViewFormProto.html')),
+    url(r'^visorTest$', TemplateView.as_view(template_name='visorTest.html')),
     url(r'^text$', TemplateView.as_view(template_name='question_char.html')),
     url(r'^number$', TemplateView.as_view(template_name='question_num.html')),
 )

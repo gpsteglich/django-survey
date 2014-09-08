@@ -9,7 +9,7 @@ class Form(models.Model):
     expiry_date = models.DateField()
     version = models.IntegerField()
     owner = models.ForeignKey('auth.User', related_name='forms', default='1')
-    json = JSONField(max_length=1000, default="", blank=True)
+    json = JSONField(default="", blank=True)
     
     
     class Meta:

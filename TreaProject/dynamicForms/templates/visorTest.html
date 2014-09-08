@@ -1,0 +1,36 @@
+{% load staticfiles %}
+
+<html>
+	<head>
+	<link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+	    <script src={% static "angular/angular.min.js" %}></script>
+	    <script src={% static "js/app.js" %}></script>
+	</head>
+	<body ng-app="dynamicForms">
+		<div class="content" ng-controller="visorCtrl">
+		{% verbatim %} 
+            <h1>This is a json</h1>
+		    <pre>{{ form | json }}</pre> <br/>
+            <!--pre>{{ form.json | json}} </pre> <br/>
+            <pre> {{ jsonStr }} </pre-->
+		    <div class="panel" ng-repeat="question in questions">
+		        <div class="panel-heading clearfix">
+		            <h3>Tipo: {{ question.type }}</h3>
+		            <h3>Pregunta: {{ question.text }}</h3>
+		            <h3>Obligatoria: {{ question.required }}</h3>
+		            <author class="pull-right"></author>
+		            Template de pregunta:
+		            <div ng-include="question.type">
+		                
+		            </div>
+		            
+		            
+		        </div>
+		        <p class="well">Json: {{ question }}</p>
+		    </div>
+		{% endverbatim %}
+		</div>
+	
+	    
+	</body>
+</html>

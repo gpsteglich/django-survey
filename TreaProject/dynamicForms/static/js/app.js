@@ -1,7 +1,10 @@
+'use strict';
+
 (function () {
     var app = angular.module('dynamicForms', []);
 
     app.controller('visorCtrl', ['$scope', '$http', function ($scope, $http) {
+        /*
         $scope.questions = [
             {
                 type: 'text',
@@ -16,16 +19,17 @@
                 answer: '',
             }
         ];
-        /*
-        $scope.posts = [];
-        $http.get('list').success(function(data){
-            $scope.posts = data;
-        });
         */
-        
-        $scope.templates = "question_num"
-        
+        $scope.posts = [];
+        $http.get('form/4/').success(function(data){
+            $scope.form = data;
+            var jsonStr = data.json;
+            jsonStr = jsonStr.replace(/'/gi, '"');
+            jsonStr = jsonStr.replace(/T/, 't');
+            jsonStr = jsonStr.replace(/F/, 'f');
+            $scope.jsonStr = jsonStr;
+            $scope.questions = JSON.parse(jsonStr);
+        });        
     } ]);
-    
 })();
 
