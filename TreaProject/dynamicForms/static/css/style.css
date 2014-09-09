@@ -1,0 +1,27 @@
+.page-background{
+    background-color: #777;
+}
+.container-white{
+    background-color: #fff;
+    height: 100%;
+}
+.question-even{
+    background-color: #eee;
+}
+.radial-center { 
+    /* fallback */ 
+    background-color: #97bbe0; 
+    background-image: url(images/radial_bg.png); 
+    background-position: center center; 
+    background-repeat: no-repeat; 
+    /* Safari 4-5, Chrome 1-9 */ 
+    /* Can't specify a percentage size? Laaaaaame. */ 
+    background: -webkit-gradient(radial, center center, 0, center center, 460, from(#fff), to(#97bbe0)); 
+    /* Safari 5.1+, Chrome 10+ */ 
+    background: -webkit-radial-gradient(circle, #fff, #97bbe0); 
+    /* Firefox 3.6+ */ 
+    background: -moz-radial-gradient(circle, #fff, #97bbe0); 
+    /* IE 10 */ 
+    background: -ms-radial-gradient(circle, #fff, #97bbe0); 
+    /* Opera couldn't do radial gradients, then at some point they started supporting the -webkit- syntax, how it kinda does but it's kinda broken (doesn't do sizing) */ 
+}

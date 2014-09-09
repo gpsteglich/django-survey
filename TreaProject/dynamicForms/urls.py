@@ -29,7 +29,9 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^users/$', views.UserList.as_view()),
     url(r'^users/(?P<pk>[0-9]+)/$', views.UserDetail.as_view()),
     url(r'^visorTest$', TemplateView.as_view(template_name='visorTest.html')),
+    url(r'^visor$', TemplateView.as_view(template_name='visor.html')),
     url(r'^text$', TemplateView.as_view(template_name='question_char.html')),
+    url(r'^textarea$', TemplateView.as_view(template_name='question_text_area.html')),
     url(r'^number$', TemplateView.as_view(template_name='question_num.html')),
 )
 

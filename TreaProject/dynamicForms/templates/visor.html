@@ -1,0 +1,40 @@
+{% load staticfiles %}
+
+<html>
+	<head>
+        <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+        <title>Formulario din.a.m.ico</title>
+	</head>
+	<body ng-app="dynamicForms" class="radial-center">
+        <div class="container container-white" ng-controller="visorCtrl">
+            {% verbatim %}
+                <header>
+                    <h1 class="text-center">{{form.title}}</h1>
+                    <h3 class="text-right">Versión: {{form.version}}</h3>
+                </header>
+
+                <div style="padding-top:30px;">
+                    <div ng-repeat="question in questions">
+                        <div ng-class="{ 'question-even' :$even }" class="col-sm-12" style="padding:15px;" ng-include="question.type" />
+                    </div>
+                </div>
+                <div class="text-right">
+                    <button class="btn btn-primary">Guardar</button>
+                </div>
+                <!--pre style="margin-top:15px;">{{questions|json}}</pre-->
+
+                <footer>
+                    <span class="glyphicon glyphicon-chevron-left"></span> Fomularios dinámicos _ django-survey _ 2014
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </footer>
+            {% endverbatim %}
+        </div>
+        
+        <script src={% static "bootstrap/js/bootstrap.js" %}></script>
+        <script src={% static "jquery/jquery-2.1.1.min.js" %}></script>
+        <script src={% static "angular/angular.min.js" %}></script>
+	    <script src={% static "js/app.js" %}></script>
+        
+    </body>
+</html>
