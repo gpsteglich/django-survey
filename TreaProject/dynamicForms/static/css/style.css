@@ -1,20 +1,22 @@
+    /* Custom page style */
 .page-background{
     background-color: #777;
 }
 .container-white{
-    background-color: #fff;
+    background-color: #fbfbe9;
     height: 100%;
 }
 .question-even{
-    background-color: #fff;
+    background-color: transparent;
 }
+
+    /* Background gradient effect */
 .radial-center { 
     /* fallback */ 
     background-color: #97bbe0;
     background-position: center center; 
     background-repeat: no-repeat; 
-    /* Safari 4-5, Chrome 1-9 */ 
-    /* Can't specify a percentage size? Laaaaaame. */ 
+    /* Safari 4-5, Chrome 1-9 */
     background: -webkit-gradient(radial, center center, 0, center center, 460, from(#fff), to(#97bbe0)); 
     /* Safari 5.1+, Chrome 10+ */ 
     background: -webkit-radial-gradient(circle, #fff, #97bbe0); 
@@ -22,5 +24,18 @@
     background: -moz-radial-gradient(circle, #fff, #97bbe0); 
     /* IE 10 */ 
     background: -ms-radial-gradient(circle, #fff, #97bbe0); 
-    /* Opera couldn't do radial gradients, then at some point they started supporting the -webkit- syntax, how it kinda does but it's kinda broken (doesn't do sizing) */ 
+}
+    
+    /* Form fields style */
+.css-form input.ng-invalid.ng-dirty {
+    background-color: #ffdfe1;
+}
+.css-form input.ng-valid.ng-dirty {
+    background-color: #d6ffd9;
+}
+.css-form textarea.ng-invalid.ng-dirty {
+    background-color: #ffdfe1;
+}
+.css-form textarea.ng-valid.ng-dirty {
+    background-color: #d6ffd9;
 }

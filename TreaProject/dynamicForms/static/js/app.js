@@ -38,8 +38,20 @@
             jsonStr = jsonStr.replace(/T/gi, 't');
             jsonStr = jsonStr.replace(/F/gi, 'f');
             $scope.jsonStr = jsonStr;
-            $scope.questions = JSON.parse(jsonStr);
-        });        
-    } ]);
+            //descomentar la siguiente linea para usar la api de django
+            //$scope.questions = JSON.parse(jsonStr);
+            
+            // Keep a copy to check changes
+            $scope.orignialQuestions = angular.copy($scope.questions);
+            
+        });
+        // Function to check changes
+        $scope.unchanged = function(){
+            return angular.equals($scope.questions, $scope.orignialQuestions);   
+        };
+        $scope.save = function(){
+            alert(JSON.stringify($scope.questions));
+        };
+    }]);
 })();
 
