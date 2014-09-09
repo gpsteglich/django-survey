@@ -16,6 +16,7 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^users/$', views.UserList.as_view()),
     url(r'^users/(?P<pk>[0-9]+)/$', views.UserDetail.as_view()),
     url(r'^index.html', TemplateView.as_view(template_name= 'mainPage.html')),
+    url(r'^login.html', TemplateView.as_view(template_name= 'login.html')),
 )
 
 urlpatterns = format_suffix_patterns(urlpatterns)
