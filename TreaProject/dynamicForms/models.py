@@ -17,12 +17,9 @@ class Form(models.Model):
     
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
-        try:
-             obj = Form.objects.get(slug=self.slug)
-             if obj != None:
-                 raise ValidationError("mensajederror")
-        except Form.DoesNotExist:
-            super(Form,self).save(*args, **kwargs)
+        if Form.objects.filter(slug=self.slug).exists():
+            raise ValidationError("Slug already exists. Choose another title.")
+        super(Form,self).save(*args, **kwargs)
         
     class Meta:
         ordering = ('title',)

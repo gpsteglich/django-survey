@@ -31,7 +31,7 @@ class FormList(generics.CreateAPIView):
     
     def pre_save(self, obj):
         obj.owner = self.request.user
-    
+            
     
 class FormDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Form.objects.all()
@@ -40,6 +40,7 @@ class FormDetail(generics.RetrieveUpdateDestroyAPIView):
     
     def pre_save(self, obj):
         obj.owner = self.request.user
+        
 
 
 class UserList(generics.ListAPIView):
