@@ -6,12 +6,11 @@
     height: 100%;
 }
 .question-even{
-    background-color: #eee;
+    background-color: #fff;
 }
 .radial-center { 
     /* fallback */ 
-    background-color: #97bbe0; 
-    background-image: url(images/radial_bg.png); 
+    background-color: #97bbe0;
     background-position: center center; 
     background-repeat: no-repeat; 
     /* Safari 4-5, Chrome 1-9 */ 
