@@ -27,15 +27,15 @@
 }
     
     /* Form fields style */
-.css-form input.ng-invalid.ng-dirty {
+.dyn-form input.ng-invalid.ng-dirty {
     background-color: #ffdfe1;
 }
-.css-form input.ng-valid.ng-dirty {
+.dyn-form input.ng-valid.ng-dirty {
     background-color: #d6ffd9;
 }
-.css-form textarea.ng-invalid.ng-dirty {
+.dyn-form textarea.ng-invalid.ng-dirty {
     background-color: #ffdfe1;
 }
-.css-form textarea.ng-valid.ng-dirty {
+.dyn-form textarea.ng-valid.ng-dirty {
     background-color: #d6ffd9;
 }
