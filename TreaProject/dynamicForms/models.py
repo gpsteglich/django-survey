@@ -37,7 +37,7 @@ class Field(models.Model):
 
     form = models.ForeignKey("Form", related_name="fields")
 
-    class Meta(object):
+    class Meta:
         verbose_name = "Field"
 
     def __str__(self):
@@ -66,4 +66,11 @@ class Field(models.Model):
         choice = choice.strip()
         if choice:
             yield choice, choice
+
+class FormEntry(models.Model):
+    form = models.ForeignKey("Form", related_name="entries")
+
+
+class FieldEntry(models.Model):
+    entry = models.ForeignKey("FormEntry", related_name="fields")
 
