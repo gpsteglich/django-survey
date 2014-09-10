@@ -1,45 +1,52 @@
 {% load staticfiles %}
-
+<!DOCTYPE html>
 <html>
 	<head>
         <meta charset="utf-8"
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Formulario din.a.m.ico</title>
+        <title>Formulario din.a.mico</title>
         <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 	</head>
-	<body ng-app="dynamicForms" class="radial-center">
-        <div class="container container-white" ng-controller="visorCtrl">
-            {% verbatim %}
-                <header>
-                    <h1 class="text-center">{{form.title}}</h1>
-                    <h3 class="text-right">Versión: {{form.version}}</h3>
-                </header>
-
-                <form novalidate class="css-form">
-                    <div style="padding-top:30px;">
-                        <div ng-repeat="question in questions">
-                            <div ng-class="{ 'question-even' :$even }" class="col-sm-12" style="padding:15px;" ng-include="question.type" />
+	<body class="radial-center" ng-app="dynamicForms">
+        {% verbatim %}
+        <div class="container" style="padding: 0px" ng-controller="VisorCtrl as visor">
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading text-center">
+                            <h1 class="text-center"><span class="glyphicon glyphicon-list"></span> {{visor.form.title}}</h1>
+                            <h3 class="text-right">Versión: {{visor.form.version}}</h3>
                         </div>
+                        <form role="form" name="dynForm" ng-submit="visor.save(dynForm.$valid)" novalidate class="dyn-form panel-body">
+                            <div style="padding-top:30px;" ng-class="{ 'has-error' : userFieldForm.email.$invalid }">
+                                <div ng-repeat="question in visor.questions" class="form-group">
+                                    <div ng-include="question.type"></div>
+                                    <!--ng-form name="questionForm">
+                                        <p class="help-block" ng-show="questionForm.answer.$invalid">Alerta!!!</p>
+                                    </ng-form-->
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </div>    
+                        </form>
+                        <footer class="text-center">
+                            <span class="glyphicon glyphicon-chevron-right"></span> Fomularios dinámicos _ django-survey _ 2014
+                            <span class="glyphicon glyphicon-chevron-left"></span>
+                        </footer>
+                        <pre style="margin-top:15px;">form json {{visor.form|json}}</pre>
+                        <pre style="margin-top:15px;">questions json {{visor.questions|json}}</pre>
                     </div>
-                    <div class="text-right">
-                        <button class="btn btn-primary" ng-click="save()"
-                                ng-disabled="unchanged()">Guardar</button>
-                    </div>    
-                </form>
-                
-                <footer class="text-center">
-                    <span class="glyphicon glyphicon-chevron-right"></span> Fomularios dinámicos _ django-survey _ 2014
-                    <span class="glyphicon glyphicon-chevron-left"></span>
-                </footer>
-                <pre style="margin-top:15px;">{{questions|json}}</pre>
-            {% endverbatim %}
+                </div>
+            </div>
         </div>
-        
+        {% endverbatim %}
         <script src={% static "bootstrap/js/bootstrap.js" %}></script>
         <script src={% static "jquery/jquery-2.1.1.min.js" %}></script>
         <script src={% static "angular/angular.min.js" %}></script>
 	    <script src={% static "js/app.js" %}></script>
         
     </body>
+    
 </html>
