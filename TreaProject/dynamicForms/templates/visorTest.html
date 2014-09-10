@@ -2,7 +2,8 @@
 
 <html>
 	<head>
-	<link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+	    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/visorTest.css' %}">
 	    <script src={% static "angular/angular.min.js" %}></script>
 	    <script src={% static "js/app.js" %}></script>
 	</head>
@@ -15,8 +16,8 @@
                     <div class="panel panel-primary ">
                         <div class="panel-heading">Completar Formulario</div>
                         <form role="form" class="panel-body">                                            
-                            <div  ng-repeat="question in questions">
-                                <div class="form-group" id="sorteable">
+                            <div  ng-repeat="question in questions" ng-click="selectField($index)" class="fieldContainer fieldColor">
+                                <div class="form-group" >
                                     <div  ng-include="question.type"></div>
                                 </div>
                             </div>
@@ -24,8 +25,10 @@
                             
                         </form>
                     </div>
-                </div>                
-                <div class="col-md-3"></div>
+                </div>    
+                <div class="col-xs-2">                  
+                     <div  ng-include="'modify_input'"></div>      
+                </div>
             </div>
 	   </div>
     {%endverbatim%}

@@ -33,6 +33,8 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^text$', TemplateView.as_view(template_name='question_char.html')),
     url(r'^textarea$', TemplateView.as_view(template_name='question_text_area.html')),
     url(r'^number$', TemplateView.as_view(template_name='question_num.html')),
+    url(r'^modify_input$', TemplateView.as_view(template_name='modifyInput.html')),
+
 )
 
 urlpatterns = format_suffix_patterns(urlpatterns)
