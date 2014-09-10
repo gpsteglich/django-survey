@@ -6,6 +6,9 @@ from dynamicForms import fields
 
 
 class Form(models.Model):
+    """
+    Forms of the app.
+    """
     title = models.CharField(max_length=100)
     slug = models.SlugField(unique=True)
     status = models.IntegerField(choices=STATUS, default=DRAFT)
@@ -16,6 +19,10 @@ class Form(models.Model):
     json = JSONField(default="", blank=True)
     
     def save(self, *args, **kwargs):
+        """
+        Check if the slug is unique before saving a form.
+        Throws ValidationError if the slug already exists.
+        """
         self.slug = slugify(self.title)
         if Form.objects.filter(slug=self.slug).exists():
             raise ValidationError("Slug already exists. Choose another title.")
@@ -26,6 +33,9 @@ class Form(models.Model):
         
 
 class Field(models.Model):
+    """
+    Fields of the forms.
+    """
     label = models.CharField("Question", max_length=100)
     slug = models.SlugField(unique=True)
     field_type = models.IntegerField("Type", choices=fields.NAMES)
