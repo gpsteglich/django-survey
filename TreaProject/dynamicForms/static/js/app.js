@@ -1,10 +1,15 @@
 'use strict';
 
 (function () {
+    /*
+    * Module dynamicForms
+    * This module encapsulates the logic that will handle the form.
+    */
     var app = angular.module('dynamicForms', []);
 
-    app.controller('visorCtrl', ['$scope', '$http', function ($scope, $http) {
-        $scope.questions = [
+    app.controller('VisorCtrl', ['$scope','$http', function ($scope, $http) {
+        /*
+        this.questions = [
             {
                 type: 'text',
                 text: '¿Cual es tu color favorito?',
@@ -29,28 +34,33 @@
                 required: true,
                 answer: '',
             }
-        ];
-        $scope.posts = [];
+        ];*/
+        var visor = this;
         $http.get('form/4/').success(function(data){
-            $scope.form = data;
+            visor.form = data;
             var jsonStr = data.json;
             jsonStr = jsonStr.replace(/'/gi, '"');
-            jsonStr = jsonStr.replace(/T/gi, 't');
-            jsonStr = jsonStr.replace(/F/gi, 'f');
-            $scope.jsonStr = jsonStr;
+            jsonStr = jsonStr.replace(/True/gi, 'true');
+            jsonStr = jsonStr.replace(/False/gi, 'false');
+            visor.jsonStr = jsonStr;
             //descomentar la siguiente linea para usar la api de django
-            //$scope.questions = JSON.parse(jsonStr);
+            visor.questions = JSON.parse(jsonStr);
             
             // Keep a copy to check changes
-            $scope.orignialQuestions = angular.copy($scope.questions);
+            visor.orignialQuestions = angular.copy(visor.questions);
             
         });
+        
         // Function to check changes
-        $scope.unchanged = function(){
-            return angular.equals($scope.questions, $scope.orignialQuestions);   
+        visor.unchanged = function(){
+            return angular.equals(visor.questions, visor.orignialQuestions);   
         };
-        $scope.save = function(){
-            alert(JSON.stringify($scope.questions));
+        
+        visor.save = function(isValid){
+            // check to make sure the form is completely valid
+            if (isValid) {
+                alert("No hay errores");
+            }
         };
     }]);
 })();
