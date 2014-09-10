@@ -4,6 +4,7 @@ import json
 from django.utils.translation import ugettext_lazy as _
 from south.modelsinspector import add_introspection_rules
 
+#field type constaants
 TEXT = 1
 TEXTAREA = 2
 EMAIL = 3
@@ -16,7 +17,7 @@ DATE = 9
 NUMBER = 10
 URL = 11
 
-
+#form status constants
 DRAFT = 0
 PUBLISHED = 1
 #These are the possible status for a form
