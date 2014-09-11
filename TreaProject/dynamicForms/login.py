@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 
+
 def login(request):
     
     if request.method == 'POST': 

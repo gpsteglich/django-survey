@@ -6,10 +6,12 @@ Created on 30/8/2014
 
 
 from django.conf.urls import patterns, url
-from rest_framework.urlpatterns import format_suffix_patterns
-from dynamicForms import views 
-from django.views.generic import TemplateView
 from django.contrib import admin
+from django.views.generic import TemplateView
+
+from dynamicForms import views 
+from rest_framework.urlpatterns import format_suffix_patterns
+
 
 admin.autodiscover()
 

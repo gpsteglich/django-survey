@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 
+
 def logout(request):
     
     try:
