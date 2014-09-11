@@ -42,6 +42,21 @@ NAMES = (
     (DATE, _("Date")),
 )
 
+# Corresponding classes for each field type
+CLASSES = {
+    TEXT: forms.CharField,
+    TEXTAREA: forms.CharField,
+    EMAIL: forms.EmailField,
+    CHECKBOX: forms.BooleanField,
+    CHECKBOX_MULTIPLE: forms.MultipleChoiceField,
+    SELECT: forms.ChoiceField,
+    SELECT_MULTIPLE: forms.MultipleChoiceField,
+    RADIO_MULTIPLE: forms.ChoiceField,
+    DATE: forms.DateField,
+    NUMBER: forms.FloatField,
+    URL: forms.URLField,
+}
+
 add_introspection_rules([], ["^dynamicForms.fields.JSONField"])
 
 class JSONField(models.TextField):
