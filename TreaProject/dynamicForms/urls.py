@@ -5,7 +5,7 @@ Created on 30/8/2014
 '''
 from django.conf.urls import patterns, url
 from rest_framework.urlpatterns import format_suffix_patterns
-from dynamicForms import views
+from dynamicForms import views, login
 from django.contrib import admin
 
 admin.autodiscover()
@@ -31,13 +31,14 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^forms/$', views.FormList.as_view()),
     url(r'^users/$', views.UserList.as_view()),
     url(r'^users/(?P<pk>[0-9]+)/$', views.UserDetail.as_view()),
+    url(r'^login/$', login.login),
     url(r'^visorTest$', TemplateView.as_view(template_name='visorTest.html')),
     url(r'^visor$', TemplateView.as_view(template_name='visor.html')),
     url(r'^text$', TemplateView.as_view(template_name='question_char.html')),
     url(r'^textarea$', TemplateView.as_view(template_name='question_text_area.html')),
     url(r'^number$', TemplateView.as_view(template_name='question_num.html')),
     url(r'^modify_input$', TemplateView.as_view(template_name='modifyInput.html')),
-
+    
 )
 
 urlpatterns = format_suffix_patterns(urlpatterns)

@@ -1,12 +1,12 @@
-from django.httpb import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 
 def login(request):
     
     if request.method == 'POST': 
         if (request.POST['username'] == 'admin' and 'admin' == request.POST['password']): 
             request.session['admin_id'] = 2
-            return HttpResponse("You're logged in.")    
+            return HttpResponseRedirect("mainpage.html")    
         else:          
-            return HttpResponse("User and password didn't match.")   
+            return HttpResponseRedirect("mainpage.html")   
     else: 
-        return HttpResponse("Login page.")
+        return HttpResponseRedirect("login.html")
