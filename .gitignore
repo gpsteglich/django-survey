@@ -39,7 +39,8 @@ coverage.xml
 
 # Mr Developer
 .mr.developer.cfg
-migrations/
+.project
+.pydevproject
 
 # Rope
 .ropeproject

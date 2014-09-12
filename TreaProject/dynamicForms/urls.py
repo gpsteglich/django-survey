@@ -5,7 +5,10 @@ Created on 30/8/2014
 '''
 from django.conf.urls import patterns, url
 from rest_framework.urlpatterns import format_suffix_patterns
-from dynamicForms import views 
+from dynamicForms import views
+from django.contrib import admin
+
+admin.autodiscover()
 from django.views.generic import TemplateView
 from django.contrib import admin
 
@@ -24,8 +27,8 @@ class SimpleStaticView(TemplateView):
         return super(SimpleStaticView, self).get(request, *args, **kwargs)
 
 urlpatterns = patterns('dynamicForms.views',
-    url(r'(?P<pk>[0-9]+)/$', views.FormDetail.as_view()),
-    url(r'^list/$', views.FormList.as_view()),
+    url(r'^forms/(?P<slug>[a-z,0-9,\-,\_]+)/$', views.FormDetail.as_view()),
+    url(r'^forms/$', views.FormList.as_view()),
     url(r'^users/$', views.UserList.as_view()),
     url(r'^users/(?P<pk>[0-9]+)/$', views.UserDetail.as_view()),
     url(r'^visorTest$', TemplateView.as_view(template_name='visorTest.html')),

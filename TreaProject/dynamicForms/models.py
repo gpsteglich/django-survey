@@ -18,6 +18,9 @@ class Form(models.Model):
     owner = models.ForeignKey('auth.User', related_name='forms', blank=True)
     json = JSONField(default="", blank=True)
     
+    def __str__(self):
+        return self.title
+    
     def save(self, *args, **kwargs):
         """
         Check if the slug is unique before saving a form.
@@ -47,7 +50,7 @@ class Field(models.Model):
 
     form = models.ForeignKey("Form", related_name="fields")
 
-    class Meta:
+    class Meta(object):
         verbose_name = "Field"
 
     def __str__(self):
@@ -76,11 +79,4 @@ class Field(models.Model):
         choice = choice.strip()
         if choice:
             yield choice, choice
-
-class FormEntry(models.Model):
-    form = models.ForeignKey("Form", related_name="entries")
-
-
-class FieldEntry(models.Model):
-    entry = models.ForeignKey("FormEntry", related_name="fields")
 
