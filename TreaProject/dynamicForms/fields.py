@@ -1,6 +1,6 @@
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
-from django.utils import simplejson as json
+import json
 from django.utils.translation import ugettext_lazy as _
 from south.modelsinspector import add_introspection_rules
 
