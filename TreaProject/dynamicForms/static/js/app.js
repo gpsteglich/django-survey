@@ -57,6 +57,7 @@
       }]);
     
     app.controller('EditorCtrl', ['$scope','$http', function ($scope, $http) {
+        $scope.editorMode = true; 
         this.questions = [
             {
                 type: 'text',
