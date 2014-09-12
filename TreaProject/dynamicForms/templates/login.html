@@ -1,32 +1,76 @@
 {% load staticfiles %}
-
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Django Survey - Login page</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-    <script src={% static "angular/angular.min.js" %}></script>
-    <script src={% static "js/app.js" %}></script>
-  </head>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title> {%block tittle%}SB Admin - Bootstrap Admin Template {%endblock%} </title>
+    
+    
+    
+      <!-- jQuery Version 1.11.0 -->
+    <script src={% static 'bootstrap/jquery/js/jquery-2.1.1.min.js'%>></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src={% static 'botstrap/js/bootstrap.min.js'%>></script>
+    <link href= {% static 'bootstrap/css/bootstrap.min.css'%} rel="stylesheet">
+    <link href={% static 'bootstrap/css/sb-admin.css'%} rel="stylesheet">
+    
 
 
-  <body>
-    <div id="loginModal" class="modal show col-md-4 center-block" tabindex="-1" role="dialog" aria-hidden="true">
-      <h1 class="text-center">Login</h1>
-      <div class="modal-body">
-        <form class="form">
-          <div class="form-group">
-            <input type="text" class="form-control input-lg" placeholder="Username">
-          </div>
-          <div class="form-group">
-            <input type="password" class="form-control input-lg" placeholder="Password">
-          </div>
-          <div class="form-group">
-            <button class="btn btn-primary btn-lg btn-block">Submit</button>
-          </div>
-        </form>
-      </div>
+    
+    
+</head>
+
+<body>
+
+<div id="myModal" class="modal show" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-header"  align="Center">User access</h2>
+                <label>Please fill the fields:</label>
+            </div>
+            <div class="modal-body">
+            <form>
+            <div class="form-group">
+                <div class="row">
+			        <div class="col-xs-11">
+			            <div class="input-group">
+			                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+			                <input type="text" class="form-control" placeholder="Username">
+			            </div>
+			        </div>
+			           </div>
+			        </div>		 
+			         <div class="form-group">
+                <div class="row">
+			        <div class="col-xs-11">
+			            <div class="input-group">
+			                <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+			                <input type="text" class="form-control" placeholder="Password">
+			            </div>
+			        </div>
+			           </div>
+			        </div>	      
+		   </form>
+            </div>
+            <div class="modal-footer">
+                
+                <button type="button" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
     </div>
-  </body>
+</div>
+</body>
+   
+  
+</body>
 
 </html>
