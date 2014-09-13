@@ -13,16 +13,16 @@ def user_login(request):
         username = request.POST['username']
         password = request.POST['password']
         #check if user is valid
-        user = authenticate(username=username, password=password)
+        _user = authenticate(username=username, password=password)
         
         #if there is a user object, its correct
         #if None, no user with matching data was found
-        if user:
+        if _user:
             #if account active
-            #if user.is_active():
+            #if _user.is_active():
             if True:
-                #login and send user to mainpage 
-                login(request, user)
+            #login and send user to mainpage 
+                login(request, _user)
                 return HttpResponseRedirect("/dynamicForms/mainPage/")
             
             else:
@@ -30,11 +30,11 @@ def user_login(request):
                 return HttpResponse("Your account is disabled.")
         else:
             #bad login 
-            return HttpResponse("Invalid username/password.")
+            return render_to_response('login.html', {"error": True}, context)
         
     else:
         #method wasnt POST
-        return render_to_response('login.html', {}, context)
+        return render_to_response('login.html', {"error": False}, context)
             
    
                
