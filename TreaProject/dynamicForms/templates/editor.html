@@ -25,19 +25,19 @@
 		                	<div class= "panel-body">
 								<div class="row" style ="margin-bottom:0.5%;" >
 									<div class=" col-md-3">
-										<button  type="button" class= "btn btn-info btn-lg btn-block"   ng-click="visor.addField()">
+										<button  type="button" class= "btn btn-info btn-lg btn-block"   ng-click="visor.addField(visor.FieldTypes[0])">
 											<span class="glyphicon glyphicon-text-height"></span>
 											Single line text
 										</button>
 									</div>
 									<div class=" col-md-3">
-										<button type="button" class= "btn btn-info btn-lg btn-block ">
+										<button type="button" class= "btn btn-info btn-lg btn-block " ng-click="visor.addField(visor.FieldTypes[2])">
 											<span class="glyphicon glyphicon-list"></span>
 											Multiple line text
 										</button>
 									</div>
 									<div class=" col-md-3">
-										<button type="button" class= "btn btn-info btn-lg btn-block ">
+										<button type="button" class= "btn btn-info btn-lg btn-block " ng-click="visor.addField(visor.FieldTypes[1])">
 											<span class="glyphicon glyphicon-sort-by-order"></span>
 											Number
 										</button>
@@ -92,7 +92,7 @@
 	                                        </div>
 	                                </div>
 	                            <div class="text-right">
-	                                <button type="submit" class="btn btn-default">Save</button>                                    
+	                                <button type="submit" ng-click="visor.submitForm()" class="btn btn-default">Save</button>                                    
 	                            </div>
 	                        </form>
 	                    </div>
