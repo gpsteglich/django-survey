@@ -9,4 +9,4 @@ def user_logout(request):
     logout(request)
 
     # Take the user back to the homepage.
-    return HttpResponseRedirect('/mainpage/')
+    return HttpResponseRedirect('/dynamicForms/login/')
