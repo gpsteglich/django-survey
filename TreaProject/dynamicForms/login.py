@@ -1,5 +1,6 @@
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 
@@ -30,7 +31,7 @@ def user_login(request):
                 return HttpResponse("Your account is disabled.")
         else:
             #bad login 
-            return render_to_response('login.html', {"error": True}, context)
+            return render_to_response('login.html', {'error': True}, context)
         
     else:
         #method wasnt POST
