@@ -1,5 +1,6 @@
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 
@@ -14,7 +15,6 @@ def user_login(request):
         password = request.POST['password']
         #check if user is valid
         user = authenticate(username=username, password=password)
-        
         #if there is a user object, its correct
         #if None, no user with matching data was found
         if user:
@@ -30,7 +30,7 @@ def user_login(request):
                 return HttpResponse("Your account is disabled.")
         else:
             #bad login 
-            return HttpResponse("Invalid username/password.")
+            return render_to_response('login.html', {'error': True}, context)
         
     else:
         #method wasnt POST
