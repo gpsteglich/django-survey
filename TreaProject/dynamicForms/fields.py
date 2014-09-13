@@ -1,9 +1,11 @@
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
-import json
 from django.utils.translation import ugettext_lazy as _
+import json
+
 from south.modelsinspector import add_introspection_rules
 from django import forms
+
 
 #field type constaants
 TEXT = 1

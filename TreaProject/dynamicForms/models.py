@@ -1,8 +1,9 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.template.defaultfilters import slugify
-from django.core.exceptions import ValidationError
-from dynamicForms.fields import JSONField, STATUS, DRAFT
+
 from dynamicForms import fields
+from dynamicForms.fields import JSONField, STATUS, DRAFT
 
 
 class Form(models.Model):

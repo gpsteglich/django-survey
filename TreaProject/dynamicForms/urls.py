@@ -3,6 +3,8 @@ Created on 30/8/2014
 
 @author: federico
 '''
+
+
 from django.conf.urls import patterns, url
 from rest_framework.urlpatterns import format_suffix_patterns
 from dynamicForms import views, login
@@ -10,9 +12,7 @@ from django.contrib import admin
 
 admin.autodiscover()
 from django.views.generic import TemplateView
-from django.contrib import admin
 
-admin.autodiscover()
 
 class SimpleStaticView(TemplateView):
     def get_template_names(self):
@@ -30,10 +30,13 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^forms/(?P<slug>[a-z,0-9,\-,\_]+)/$', views.FormDetail.as_view()),
     url(r'^forms/$', views.FormList.as_view()),
     url(r'^users/$', views.UserList.as_view()),
+    url(r'^mainPage', TemplateView.as_view(template_name= 'mainPage.html')),
+    url(r'^login', TemplateView.as_view(template_name= 'login.html')),
     url(r'^users/(?P<pk>[0-9]+)/$', views.UserDetail.as_view()),
-    url(r'^login/$', login.login),
+    url(r'^login-user/$', login.login),
     url(r'^visorTest$', TemplateView.as_view(template_name='visorTest.html')),
     url(r'^visor$', TemplateView.as_view(template_name='visor.html')),
+    url(r'^editor$', TemplateView.as_view(template_name='editor.html')),
     url(r'^text$', TemplateView.as_view(template_name='question_char.html')),
     url(r'^textarea$', TemplateView.as_view(template_name='question_text_area.html')),
     url(r'^number$', TemplateView.as_view(template_name='question_num.html')),
