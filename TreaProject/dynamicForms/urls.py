@@ -7,7 +7,7 @@ Created on 30/8/2014
 
 from django.conf.urls import patterns, url
 from rest_framework.urlpatterns import format_suffix_patterns
-from dynamicForms import views, login
+from dynamicForms import views, login,logout
 from django.contrib import admin
 
 admin.autodiscover()
@@ -28,11 +28,13 @@ class SimpleStaticView(TemplateView):
 
 urlpatterns = patterns('dynamicForms.views',
     url(r'^forms/(?P<slug>[a-z,0-9,\-,\_]+)/$', views.FormDetail.as_view()),
+    url(r'^forms/(?P<slug>[a-z,0-9,\-,\_]+)/submit/$', 'submit_form_entry'),
     url(r'^forms/$', views.FormList.as_view()),
     url(r'^users/$', views.UserList.as_view()),
     url(r'^mainPage', TemplateView.as_view(template_name= 'mainPage.html')),
     url(r'^users/(?P<pk>[0-9]+)/$', views.UserDetail.as_view()),
     url(r'^login/$', login.user_login, name='login'),
+    url(r'^logout/$', logout.user_logout, name='logout'),
     url(r'^visorTest$', TemplateView.as_view(template_name='visorTest.html')),
     url(r'^visor$', TemplateView.as_view(template_name='visor.html')),
     url(r'^editor$', TemplateView.as_view(template_name='editor.html')),

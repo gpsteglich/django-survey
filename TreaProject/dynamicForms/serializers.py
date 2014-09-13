@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 
-from dynamicForms.models import Form
+from dynamicForms.models import Form, FieldEntry
 from rest_framework import serializers
 
 
@@ -25,6 +25,11 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'forms')
-        
-        
-        
+
+
+class FieldEntrySerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = FieldEntry
+        fields = ('field_id', 'field_type', 'text', 'required', 'answer')
+
