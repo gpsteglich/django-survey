@@ -1,6 +1,7 @@
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render_to_response
+from django.template.context import RequestContext
 
 def user_login(request):
     
@@ -11,7 +12,6 @@ def user_login(request):
         #get data from login form
         username = request.POST['username']
         password = request.POST['password']
-        
         #check if user is valid
         user = authenticate(username=username, password=password)
         
@@ -19,10 +19,11 @@ def user_login(request):
         #if None, no user with matching data was found
         if user:
             #if account active
-            if user.is_active():
+            #if user.is_active():
+            if True:
                 #login and send user to mainpage 
                 login(request, user)
-                return HttpResponseRedirect("/mainpage/")
+                return HttpResponseRedirect("/dynamicForms/mainPage/")
             
             else:
                 #an inactive account was used- no login in.
@@ -33,7 +34,7 @@ def user_login(request):
         
     else:
         #method wasnt POST
-        return render_to_response('/login.html', {}, context)
+        return render_to_response('login.html', {}, context)
             
    
                
