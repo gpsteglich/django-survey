@@ -1,0 +1,8 @@
+{% verbatim %}
+    <label>{{$index + 1}}. {{question.text}}</label>
+    <button class="btn pull-right" ng-show="editorMode" ng-click="visor.deleteField($index)"
+            style="background-color:transparent;padding:0;">
+        <span class="glyphicon glyphicon-remove"></span>
+    </button>
+    <input type="number" class="form-control" ng-model="question.answer" ng-required="question.required" />
+{% endverbatim %} 

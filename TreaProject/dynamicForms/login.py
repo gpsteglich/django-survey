@@ -35,9 +35,7 @@ def user_login(request):
         #method wasnt POST
         return render_to_response('/login.html', {}, context)
             
-    
-                
-                         
-                              
-         
-      
+   
+               
+                       
+            

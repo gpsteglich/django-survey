@@ -1,0 +1,42 @@
+{%verbatim%}
+ <div class="panel panel-danger" ng-model="visor.selectedField">
+    <div class="panel-heading">
+        Field Properties
+    </div>
+    <div class="panel-body">
+        <div class="form-group">
+            <label for="FieldLabel">Field Label</label>
+            <input  class="form-control"  ng-model="visor.selectedField.text">
+        </div>
+        <div class="form-group">
+            <label for="FieldType">Field Type</label>
+            <select class="form-control" ng-model="visor.selectedField.type"  ng-options="types for types in visor.FieldTypes"></select>
+        </div>   
+        
+        <div class="form-group">
+            <div class="radio-inline">
+                <lable>
+                    <input type="radio" ng-model="visor.selectedField.required" ng-value="true"> Required
+                </lable>           
+            </div>
+            <div class="radio-inline">
+                <lable>
+                    <input type="radio" ng-model="visor.selectedField.required" ng-value="false">Not Required
+                </lable>           
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <button type="button" class="btn btn-default btn-xs" ng-click="visor.addField()">
+              <span class="glyphicon glyphicon-star"></span> Add Field
+            </button>
+            <button type="button" class="btn btn-default btn-xs" ng-click="visor.clearSelectedField()">
+              <span class="glyphicon glyphicon-star"></span> Clear
+            </button>
+            
+        </div>
+        
+    </div>
+</div>
+{%endverbatim%}
+

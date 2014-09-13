@@ -1,9 +1,13 @@
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
-from django.utils import simplejson as json
 from django.utils.translation import ugettext_lazy as _
-from south.modelsinspector import add_introspection_rules
+import json
 
+from south.modelsinspector import add_introspection_rules
+from django import forms
+
+
+#field type constaants
 TEXT = 1
 TEXTAREA = 2
 EMAIL = 3
@@ -16,7 +20,7 @@ DATE = 9
 NUMBER = 10
 URL = 11
 
-
+#form status constants
 DRAFT = 0
 PUBLISHED = 1
 #These are the possible status for a form
@@ -40,6 +44,21 @@ NAMES = (
     (RADIO_MULTIPLE, _("Radio buttons")),
     (DATE, _("Date")),
 )
+
+# Corresponding classes for each field type
+CLASSES = {
+    TEXT: forms.CharField,
+    TEXTAREA: forms.CharField,
+    EMAIL: forms.EmailField,
+    CHECKBOX: forms.BooleanField,
+    CHECKBOX_MULTIPLE: forms.MultipleChoiceField,
+    SELECT: forms.ChoiceField,
+    SELECT_MULTIPLE: forms.MultipleChoiceField,
+    RADIO_MULTIPLE: forms.ChoiceField,
+    DATE: forms.DateField,
+    NUMBER: forms.FloatField,
+    URL: forms.URLField,
+}
 
 add_introspection_rules([], ["^dynamicForms.fields.JSONField"])
 
