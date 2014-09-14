@@ -70,9 +70,11 @@ def submit_form_entry(request, slug, format=None):
     """
     APIView to submit a Form Entry.
     """
-    entry = FormEntry(form=Form.objects.get(slug=slug))  
+    entry = FormEntry(form=Form.objects.get(slug=slug)) 
+    entry.save() 
     for field in request.DATA:
             serializer = FieldEntrySerializer(data=field)
             serializer.object.entry = entry
             if serializer.is_valid():
                 serializer.save()
+    return Response(serializer.data)
