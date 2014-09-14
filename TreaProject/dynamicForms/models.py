@@ -25,6 +25,7 @@ class Form(models.Model):
     def save(self, *args, **kwargs):
         """
         Check if the slug is unique before saving a form.
+        If there such a slug it checks if it is the same form.
         Throws ValidationError if the slug already exists.
         """
         self.slug = slugify(self.title)

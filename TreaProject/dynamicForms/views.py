@@ -17,22 +17,12 @@ class FormList(generics.ListCreateAPIView):
     APIView where the forms of the app are listed and a new form can be added.
     """
     queryset = Form.objects.all()
-    serializer_class =  NewFormSerializer
+    serializer_class =  FormSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     
     def pre_save(self, obj):
         obj.owner = self.request.user
 
-class FormCreate(generics.CreateAPIView):
-    """
-    APIView to see details, modify or delete a form.
-    """
-    queryset = Form.objects.all()
-    serializer_class = FormSerializer
-    permission_classes = (permissions.AllowAny,)
-    
-    def pre_save(self, obj):
-        obj.owner = self.request.user
 
 class FormDetail(generics.RetrieveUpdateDestroyAPIView):
     """
@@ -40,7 +30,7 @@ class FormDetail(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = Form.objects.all()
     serializer_class = FormSerializer
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     
     def pre_save(self, obj):
         obj.owner = self.request.user
