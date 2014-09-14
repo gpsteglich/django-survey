@@ -94,7 +94,7 @@ class FieldEntry(models.Model):
     field_id = models.IntegerField()
     field_type = models.CharField(max_length=200)
     text = models.CharField(max_length=200)
-    required = models.CharField(max_length=200)
+    required = models.BooleanField()
     answer = models.CharField(max_length=200)
     entry = models.ForeignKey("FormEntry", related_name="fields")
 
