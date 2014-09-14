@@ -118,13 +118,15 @@
             
         };
        
-        
+        2
         this.clearSelectedField = function(){
             this.selectedField = angular.copy(this.newField);            
         };
         
         var visor = this;
-         $http.get('forms/form/').success(function(data){
+        //LO MAS PROBABLE ES QUE NO SE MUESTRE UN FORM
+        // CAMBIAR form10 POR UN SLAG DE UN FORMULARIO EN TU BASE DE DATOS.
+         $http.get('forms/form10/').success(function(data){
             
             visor.form = data;
             var jsonStr = data.json;            
@@ -138,12 +140,35 @@
         });
         
         this.submitForm = function(){
-            $http.put('forms/form/',visor.form).success( function(data){
-                alert('bien');               
-            }).error(function() {
-                alert('TODO MAL');
-    });        
-        };
+            
+//            var newJson = {};
+//            newJson["Fields"] = visor.questions;
+            
+//            visor.form.json =  newJson;
+            
+            //Se guarda, pero el json NO!!! Probe poner el JSON como string y nada, y a lo ultimo como 
+            //como json json y tampoco.
+            //post no tengo permisos :S
+            //creo que igual se pueden crear forms con put, pero ya digo
+            // el json no se guarda...
+            //si voy al admin y lo escribo funciona...el tema es la api rest.
+            var form = {
+                "title": "5",
+                "slug": "5",
+                "status": 0,
+                "publish_date": "2014-09-01",
+                "expiry_date": "2014-11-04",
+                "version": 1,
+                "owner": "federico",
+                "json": {"text":"bien"}
+            };
+            $http.put('forms/21/',form).success( function(data){
+                    alert(data);
+                    alert('bien');               
+                }).error(function() {
+                    alert('TODO MAL');
+                });        
+            };
         
     }]);
 })();
