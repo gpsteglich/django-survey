@@ -26,6 +26,7 @@ class Form(models.Model):
     def save(self, *args, **kwargs):
         """
         Check if the slug is unique before saving a form.
+        If there such a slug it checks if it is the same form.
         Throws ValidationError if the slug already exists.
         """
         self.slug = slugify(self.title)
@@ -95,6 +96,6 @@ class FieldEntry(models.Model):
     field_type = models.CharField(max_length=200)
     text = models.CharField(max_length=200)
     required = models.BooleanField()
-    answer = models.CharField(max_length=200)
+    answer = models.Field(max_length=200)
     entry = models.ForeignKey("FormEntry", related_name="fields")
 

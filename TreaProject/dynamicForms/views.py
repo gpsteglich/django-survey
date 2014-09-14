@@ -11,6 +11,8 @@ from rest_framework import status
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 
+from django.template.defaultfilters import slugify
+
 
 class FormList(generics.ListCreateAPIView):
     """
@@ -23,17 +25,8 @@ class FormList(generics.ListCreateAPIView):
     
     def pre_save(self, obj):
         obj.owner = self.request.user
+      
 
-class FormCreate(generics.CreateAPIView):
-    """
-    APIView to see details, modify or delete a form.
-    """
-    queryset = Form.objects.all()
-    serializer_class = FormSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    
-    def pre_save(self, obj):
-        obj.owner = self.request.user
 
 class FormDetail(generics.RetrieveUpdateDestroyAPIView):
     """
@@ -77,9 +70,11 @@ def submit_form_entry(request, slug, format=None):
     """
     APIView to submit a Form Entry.
     """
-    entry = FormEntry(form=Form.objects.get(slug=slug))  
+    entry = FormEntry(form=Form.objects.get(slug=slug)) 
+    entry.save() 
     for field in request.DATA:
             serializer = FieldEntrySerializer(data=field)
             serializer.object.entry = entry
             if serializer.is_valid():
                 serializer.save()
+    return Response(serializer.data)
