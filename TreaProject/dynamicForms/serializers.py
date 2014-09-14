@@ -6,17 +6,19 @@ from rest_framework import serializers
 
 class FormSerializer(serializers.ModelSerializer):
     owner = serializers.Field(source='owner.username')
+    json = serializers.CharField(required=False)
     class Meta:
         model = Form
         fields = ('title', 'slug', 'status', 'publish_date', 'expiry_date', 'version', 'owner', 'json')
-    
+        lookup_field='slug'
+        
 
 class NewFormSerializer(serializers.ModelSerializer):
     owner = serializers.Field(source='owner.username')
-    
+    json = serializers.CharField(required=False)
     class Meta:
         model = Form
-        fields = ('title', 'owner', 'json')
+        fields = ('title' ,'owner', 'json')
         
 
 class UserSerializer(serializers.ModelSerializer):
