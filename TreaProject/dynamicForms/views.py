@@ -29,7 +29,7 @@ class FormCreate(generics.CreateAPIView):
     """
     queryset = Form.objects.all()
     serializer_class = FormSerializer
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     
     def pre_save(self, obj):
         obj.owner = self.request.user
@@ -40,7 +40,7 @@ class FormDetail(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = Form.objects.all()
     serializer_class = FormSerializer
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     
     def pre_save(self, obj):
         obj.owner = self.request.user
