@@ -17,7 +17,7 @@ class FormList(generics.ListCreateAPIView):
     APIView where the forms of the app are listed and a new form can be added.
     """
     queryset = Form.objects.all()
-    serializer_class =  NewFormSerializer
+    serializer_class =  FormSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     
     def pre_save(self, obj):

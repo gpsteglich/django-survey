@@ -4,6 +4,7 @@ from django.template.defaultfilters import slugify
 
 from dynamicForms import fields
 from dynamicForms.fields import JSONField, STATUS, DRAFT
+from datetime import datetime
 
 
 class Form(models.Model):
@@ -28,6 +29,8 @@ class Form(models.Model):
         Throws ValidationError if the slug already exists.
         """
         self.slug = slugify(self.title)
+        self.expiry_date = datetime.now()
+        self.publish_date = datetime.now()
         if Form.objects.filter(slug=self.slug).exists():
             f1 = Form.objects.get(slug=self.slug)
             if (self.pk != f1.pk):

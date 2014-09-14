@@ -8,35 +8,7 @@
     var app = angular.module('dynamicForms', []);
 
     app.controller('VisorCtrl', ['$scope','$http', function ($scope, $http) {
-      
-       
-        
-//        this.questions = [
-//            {
-//                type: 'text',
-//                text: '¿Cual es tu color favorito?',
-//                required: true,
-//                answer: '',
-//            },
-//            {
-//                type: 'number',
-//                text: '¿Qué edad tenés?',
-//                required: false,
-//                answer: '',
-//            },
-//            {
-//                type: 'textarea',
-//                text: 'Direccion',
-//                required: false,
-//                answer: '',
-//            },
-//            {
-//                type: 'number',
-//                text: 'Número de teléfono',
-//                required: true,
-//                answer: '',
-//            }
-//        ];
+
         var visor = this;
         $http.get('forms/form/').success(function(data){
             
@@ -55,61 +27,35 @@
     
     app.controller('EditorCtrl', ['$scope','$http', function ($scope, $http) {
         $scope.editorMode = true; 
-//        this.questions = [
-//            {
-//                type: 'text',
-//                text: '¿Cual es tu color favorito?',
-//                required: true,
-//                answer: '',
-//            },
-//            {
-//                type: 'number',
-//                text: '¿Qué edad tenés?',
-//                required: false,
-//                answer: '',
-//            },
-//            {
-//                type: 'textarea',
-//                text: 'Direccion',
-//                required: false,
-//                answer: '',
-//            },
-//            {
-//                type: 'number',
-//                text: 'Número de teléfono',
-//                required: true,
-//                answer: '',
-//            }
-//        ];
-//        
+        var editor = this;
         //indica el campo seleccionado cuando. cuando doy click se llama a la funcion selectField.
         // se usa en la pestania de modificacion.
-        this.selectedField;
-      
-        this.selectField = function(index) {
+        editor.selectedField;
+        editor.questions = [];
+        editor.selectField = function(index) {
             
-            this.selectedField = this.questions[index];
+            editor.selectedField = editor.questions[index];
 
         };
         //array de tipos de campos
-        this.FieldTypes = [
+        editor.FieldTypes = [
             'text',
             'number',
             'textarea'            
         ];
-        
-        this.deleteField = function(index){
+
+        editor.deleteField = function(index){
             //funcion para eliminar campos, index, es el indice de ng-repeat.
-            this.questions.splice(index,1);        
+            editor.questions.splice(index,1);        
         };
          //modelo de nuevo campo vacio. Falta agregar id a cada campo.
-         this.newField =  {
+         editor.newField =  {
                 type:'' ,
                 text: '',
                 required: '',
                 answer: '',
             };
-         this.addField = function(type) {
+         editor.addField = function(type) {
             //se aplica en cada boton de la paleta.
              //type es un tipo del array newField 
              // necesita haber una estructura de array
@@ -117,65 +63,76 @@
              // en modo creacion, se necesita crear una estructura inicial vacia.
              // cuidado con los modelos. Es necesario copiar los modelos, sino seguiran con el binding y se 
              //seguiran modificando.
-            var newField = angular.copy(this.newField);
-            newField.type = type;
-            this.questions.push(newField);
-            this.selectedField = angular.copy(this.newField);
+            var newField = angular.copy(editor.newField);
+            newField.type = type || 'text';
+            editor.questions.push(newField);
+            editor.selectedField = angular.copy(editor.newField);
 
             
         };
        
-        2
-        this.clearSelectedField = function(){
-            this.selectedField = angular.copy(this.newField);            
+        editor.clearSelectedField = function(){
+            editor.selectedField = angular.copy(editor.newField);            
         };
         
-        var visor = this;
         //LO MAS PROBABLE ES QUE NO SE MUESTRE UN FORM
         // CAMBIAR form10 POR UN SLAG DE UN FORMULARIO EN TU BASE DE DATOS.
-         $http.get('forms/form10/').success(function(data){
-            
-            visor.form = data;
-            var jsonStr = data.json;            
-            visor.jsonStr = jsonStr;
-            //descomentar la siguiente linea para usar la api de django
-            visor.questions = JSON.parse(jsonStr).Fields;
-            
-            // Keep a copy to check changes
-            visor.orignialQuestions = angular.copy(visor.questions);
-            
-        });
+        editor.actualSlug;
+        if (editor.actualSlug){
+             $http.get('forms/'+editor.actualSlug).success(function(data){
+
+                editor.form = data;
+                editor.actualSlug = data.slug;
+                var jsonStr = data.json;            
+                editor.jsonStr = jsonStr;
+                //descomentar la siguiente linea para usar la api de django
+                editor.questions = JSON.parse(jsonStr).Fields;
+
+            });
+        } else {
+            editor.form = {
+                'title' : '',
+                'slug' : '',
+                'status' : 0,
+                'publish_date' : '2014-06-06',
+                'expiry_date' : '2014-06-06',
+                'version' : 0,
+                'owner' : '',
+                'json' : ''
+            };
+            alert(JSON.stringify(editor.form, null, 4));
+        };
         
-        this.submitForm = function(){
-            //Esta funcion se llama en el submit del editor. Se puede cambiar el boton por un "guardar formulario en creacion y seguir editando".
-//            var newJson = {};
+       
+        editor.submitForm = function(){
+//Esta funcion se llama en el submit del editor. Se puede cambiar el boton por un "guardar formulario en creacion y seguir editando".
 //            newJson["Fields"] = visor.questions;
-            
-//            visor.form.json =  newJson;
-            
-            //Se guarda, pero el json NO!!! Probe poner el JSON como string y nada, y a lo ultimo como 
-            //como json json y tampoco.
-            //post no tengo permisos :S
-            //creo que igual se pueden crear forms con put, pero ya digo
-            // el json no se guarda...
-            //si voy al admin y lo escribo funciona...el tema es la api rest.
-            var form = {
-                "title": "5",
-                "slug": "5",
-                "status": 0,
-                "publish_date": "2014-09-01",
-                "expiry_date": "2014-11-04",
-                "version": 1,
-                "owner": "federico",
-                "json": {"text":"bien"}
+            editor.form.json = JSON.stringify({'Fields' : editor.questions});
+            if (editor.actualSlug){
+                alert('put');
+                $http.put('forms/'+ editor.actualSlug,editor.form)
+                    .success( function(data, status, headers, config){
+                            alert('bien: ' + status);
+                            alert(JSON.stringify(data, null, 4));
+                        })
+                    .error(function(data, status, headers, config) {
+                            alert('TODO MAL: ' + status );
+                        });
+            } else {
+                alert('post');
+                editor.form.slug = 'temp_slug';
+                editor.actualSlug = editor.form.slug;
+                $http.post('forms/',editor.form)
+                .success( function(data, status, headers, config){
+                        alert('bien: ' + status);
+                        alert(JSON.stringify(data, null, 4));
+                    })
+                .error(function(data, status, headers, config) {
+                        alert('TODO MAL: ' + status );
+                        alert(JSON.stringify(data, null, 4));
+                    });
             };
-            $http.put('forms/21/',form).success( function(data){
-                    alert(data);
-                    alert('bien');               
-                }).error(function() {
-                    alert('TODO MAL');
-                });        
-            };
+        };
         
     }]);
 })();
