@@ -1,7 +1,9 @@
 from django.contrib import admin
 
-from dynamicForms.models import Form
+from dynamicForms.models import Form, FieldEntry, FormEntry
 
 
 # Register your models here.
 admin.site.register(Form)
+admin.site.register(FieldEntry)
+admin.site.register(FormEntry)

@@ -65,7 +65,7 @@
                 field_id : 0,
                 field_type:'' ,
                 text: '',
-                required: '',
+                required: false,
                 answer: '',
             };
          editor.addField = function(type) {
