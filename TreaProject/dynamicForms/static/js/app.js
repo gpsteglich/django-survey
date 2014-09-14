@@ -82,7 +82,8 @@
 //            }
 //        ];
 //        
-        
+        //indica el campo seleccionado cuando. cuando doy click se llama a la funcion selectField.
+        // se usa en la pestania de modificacion.
         this.selectedField;
       
         this.selectField = function(index) {
@@ -90,7 +91,7 @@
             this.selectedField = this.questions[index];
 
         };
-        
+        //array de tipos de campos
         this.FieldTypes = [
             'text',
             'number',
@@ -98,10 +99,10 @@
         ];
         
         this.deleteField = function(index){
-        
+            //funcion para eliminar campos, index, es el indice de ng-repeat.
             this.questions.splice(index,1);        
         };
-        
+         //modelo de nuevo campo vacio. Falta agregar id a cada campo.
          this.newField =  {
                 type:'' ,
                 text: '',
@@ -109,7 +110,13 @@
                 answer: '',
             };
          this.addField = function(type) {
-            
+            //se aplica en cada boton de la paleta.
+             //type es un tipo del array newField 
+             // necesita haber una estructura de array
+             // para agregar. Por ej, en modo edicion el array ya viene dado.
+             // en modo creacion, se necesita crear una estructura inicial vacia.
+             // cuidado con los modelos. Es necesario copiar los modelos, sino seguiran con el binding y se 
+             //seguiran modificando.
             var newField = angular.copy(this.newField);
             newField.type = type;
             this.questions.push(newField);
@@ -140,7 +147,7 @@
         });
         
         this.submitForm = function(){
-            
+            //Esta funcion se llama en el submit del editor. Se puede cambiar el boton por un "guardar formulario en creacion y seguir editando".
 //            var newJson = {};
 //            newJson["Fields"] = visor.questions;
             
