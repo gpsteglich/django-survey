@@ -18,6 +18,7 @@ class FormList(generics.ListCreateAPIView):
     """
     APIView where the forms of the app are listed and a new form can be added.
     """
+    model = Form
     queryset = Form.objects.all()
     serializer_class =  FormSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
@@ -65,7 +66,7 @@ class JSONResponse(HttpResponse):
         super(JSONResponse, self).__init__(content, **kwargs)
 
 @api_view(['POST'])
-def submit_form_entry(request, slug):
+def submit_form_entry(request, slug, format=None):
     """
     APIView to submit a Form Entry.
     """
