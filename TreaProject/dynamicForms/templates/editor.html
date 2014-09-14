@@ -78,13 +78,14 @@
 								
 							</div>
 		                </div>
-		         </div>   
+		            </div>   
 	            </div>
 	            <div class="row">
 	                <div class="col-md-2 "></div>
 	                <div class=" col-md-6">
 	                    <div class="panel panel-primary ">
-	                        <div class="panel-heading text-center"><h1>{{visor.form.title}}</h1></div>
+	                        <div class="panel-heading text-center"><h1>
+                                <input  class="form-control" type="text" ng-model="visor.form.title"/></h1></div>
 	                        <form role="form" class="panel-body">                                                   
 	                                <div  ng-repeat="question in visor.questions"  ng-click="visor.selectField($index)" > 
 	                                        <div class="form-group" >
@@ -96,6 +97,8 @@
 	                            </div>
 	                        </form>
 	                    </div>
+                        <pre>form: {{visor.form|json}}</pre>
+                        <pre>questions: {{visor.questions|json}}</pre>
 	                </div>  
 	                <div class="col-md-3" style= " margin-left:2%" >                  
 	                     <div  ng-include="'modify_input'"></div>      

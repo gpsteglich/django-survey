@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-var dynaimcFormsControllers = angular.module('dynamicFormsControllers', []);
+var dynaimcFormsControllers = angular.module('formListCtrl', []);
 
 dynaimcFormsControllers.controller('PhoneListCtrl', ['$scope', 'Phone',
   function($scope, Phone) {
