@@ -21,7 +21,7 @@
                         <form role="form" name="dynForm" ng-submit="visor.save(dynForm.$valid)" novalidate class="dyn-form panel-body">
                             <div style="padding-top:30px;" ng-class="{ 'has-error' : userFieldForm.email.$invalid }">
                                 <div ng-repeat="question in visor.questions" class="form-group">
-                                    <div ng-include="question.type"></div>
+                                    <div ng-include="question.field_type"></div>
                                     <!--ng-form name="questionForm">
                                         <p class="help-block" ng-show="questionForm.answer.$invalid">Alerta!!!</p>
                                     </ng-form-->

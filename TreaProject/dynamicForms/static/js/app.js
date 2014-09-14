@@ -10,7 +10,9 @@
     app.controller('VisorCtrl', ['$scope','$http', function ($scope, $http) {
 
         var visor = this;
-        $http.get('forms/form/').success(function(data){
+        
+        var path = location.pathname.match(/\/visor\/(.*)/)[1];
+        $http.get('/dynamicForms/forms/'+path).success(function(data){
             
             visor.form = data;
             var jsonStr = data.json;//          
@@ -22,6 +24,16 @@
             visor.orignialQuestions = angular.copy(visor.questions);
             
         });
+        
+        visor.save = function(){
+            $http.post('/dynamicForms/forms/'+visor.form.slug+'/submit/',visor.questions)
+                .success( function(data, status, headers, config){
+                        
+                    })
+                .error(function(data, status, headers, config) {
+                        alert(status);
+                    });
+        };
         
       }]);
     
@@ -50,7 +62,8 @@
         };
          //modelo de nuevo campo vacio. Falta agregar id a cada campo.
          editor.newField =  {
-                type:'' ,
+                field_id : 0,
+                field_type:'' ,
                 text: '',
                 required: '',
                 answer: '',
@@ -64,7 +77,8 @@
              // cuidado con los modelos. Es necesario copiar los modelos, sino seguiran con el binding y se 
              //seguiran modificando.
             var newField = angular.copy(editor.newField);
-            newField.type = type || 'text';
+            newField.field_id = editor.questions.length;
+            newField.field_type = type || 'text';
             editor.questions.push(newField);
             editor.selectedField = angular.copy(editor.newField);
 
@@ -93,14 +107,13 @@
             editor.form = {
                 'title' : '',
                 'slug' : '',
-                'status' : 0,
+                'status' : 1,
                 'publish_date' : '2014-06-06',
                 'expiry_date' : '2014-06-06',
                 'version' : 0,
                 'owner' : '',
                 'json' : ''
             };
-            alert(JSON.stringify(editor.form, null, 4));
         };
         
        
@@ -109,27 +122,22 @@
 //            newJson["Fields"] = visor.questions;
             editor.form.json = JSON.stringify({'Fields' : editor.questions});
             if (editor.actualSlug){
-                alert('put');
                 $http.put('forms/'+ editor.actualSlug,editor.form)
                     .success( function(data, status, headers, config){
-                            alert('bien: ' + status);
-                            alert(JSON.stringify(data, null, 4));
+                        
                         })
                     .error(function(data, status, headers, config) {
-                            alert('TODO MAL: ' + status );
+                            
                         });
             } else {
-                alert('post');
                 editor.form.slug = 'temp_slug';
-                editor.actualSlug = editor.form.slug;
                 $http.post('forms/',editor.form)
                 .success( function(data, status, headers, config){
-                        alert('bien: ' + status);
-                        alert(JSON.stringify(data, null, 4));
+                        editor.form.slug = data.slug;
+                        editor.actualSlug = data.slug;    
                     })
                 .error(function(data, status, headers, config) {
-                        alert('TODO MAL: ' + status );
-                        alert(JSON.stringify(data, null, 4));
+                        
                     });
             };
         };

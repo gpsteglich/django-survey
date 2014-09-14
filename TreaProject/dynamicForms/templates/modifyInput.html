@@ -10,7 +10,7 @@
         </div>
         <div class="form-group">
             <label for="FieldType">Field Type</label>
-            <select class="form-control" ng-model="visor.selectedField.type"  ng-options="types for types in visor.FieldTypes"></select>
+            <select class="form-control" ng-model="visor.selectedField.field_type"  ng-options="types for types in visor.FieldTypes"></select>
         </div>   
         
         <div class="form-group">
@@ -27,7 +27,7 @@
         </div>
         
         <div class="form-group">
-            <button type="button" class="btn btn-default btn-xs" ng-click="visor.addField(visor.selectedField.type)">
+            <button type="button" class="btn btn-default btn-xs" ng-click="visor.addField(visor.selectedField.field_type)">
               <span class="glyphicon glyphicon-star"></span> Add Field
             </button>
             <button type="button" class="btn btn-default btn-xs" ng-click="visor.clearSelectedField()">

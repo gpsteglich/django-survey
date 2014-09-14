@@ -12,6 +12,7 @@ from django.contrib import admin
 
 admin.autodiscover()
 from django.views.generic import TemplateView
+from django.shortcuts import redirect
 
 
 class SimpleStaticView(TemplateView):
@@ -27,8 +28,8 @@ class SimpleStaticView(TemplateView):
         return super(SimpleStaticView, self).get(request, *args, **kwargs)
 
 urlpatterns = patterns('dynamicForms.views',
-    url(r'^forms/(?P<slug>[a-z,0-9,\-,\_]+)/$', views.FormDetail.as_view()),
     url(r'^forms/(?P<slug>[a-z,0-9,\-,\_]+)/submit/$', 'submit_form_entry'),
+    url(r'^forms/(?P<slug>[a-z,0-9,\-,\_]+)/$', views.FormDetail.as_view()),
     url(r'^forms/$', views.FormList.as_view()),
     url(r'^users/$', views.UserList.as_view()),
     url(r'^mainPage/', TemplateView.as_view(template_name= 'mainPage.html')),
@@ -37,13 +38,16 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^login/$', login.user_login, name='login'),
     url(r'^logout/$', logout.user_logout, name='logout'),
     url(r'^visorTest$', TemplateView.as_view(template_name='visorTest.html')),
-    url(r'^visor$', TemplateView.as_view(template_name='visor.html')),
+    #url(r'^visor$', TemplateView.as_view(template_name='visor.html')),
     url(r'^editor$', TemplateView.as_view(template_name='editor.html')),
     url(r'^text$', TemplateView.as_view(template_name='question_char.html')),
     url(r'^textarea$', TemplateView.as_view(template_name='question_text_area.html')),
     url(r'^number$', TemplateView.as_view(template_name='question_num.html')),
     url(r'^modify_input$', TemplateView.as_view(template_name='modifyInput.html')),
-    
+    url(r'^visor/(?P<slug>[a-z,0-9,\-,\_]+)/text$', TemplateView.as_view(template_name='question_char.html')),
+    url(r'^visor/(?P<slug>[a-z,0-9,\-,\_]+)/textarea$', TemplateView.as_view(template_name='question_text_area.html')),
+    url(r'^visor/(?P<slug>[a-z,0-9,\-,\_]+)/number$', TemplateView.as_view(template_name='question_num.html')),
+    url(r'^visor/(?P<slug>[a-z,0-9,\-,\_]+)/$', TemplateView.as_view(template_name='visor.html')),
 )
 
 urlpatterns = format_suffix_patterns(urlpatterns)
