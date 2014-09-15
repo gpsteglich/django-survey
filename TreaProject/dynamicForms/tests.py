@@ -1,8 +1,12 @@
 from django.test import TestCase
-
 # Create your tests here.
 from dynamicForms import models
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
+from django.test.client import Client
 import datetime;
+from dynamicForms import login
+
 
 class FormTestCase(TestCase):
     
@@ -28,8 +32,12 @@ class FormTestCase(TestCase):
                                         publish_date = datetime.datetime.now(),
                                         expiry_date = datetime.datetime.now(),
                                         owner_id = 1)
-     
-    def test_one(self):
+        
+        self.user = User.objects.create_user(
+            username='user', email='user@Test', password='user')
+        
+        
+    def test_create(self):
         
         f1 = models.Form.objects.get(title = "new form1")
         self.assertEqual(f1.title, "new form1")   
@@ -74,5 +82,13 @@ class FormTestCase(TestCase):
          count = entry_list.__len__()
          self.assertEqual(count,5)
          
-    
-    
+    def test_fall_login(self):
+        
+        c = Client()
+        response = c.post('/dynamicForms/login/', {'username': 'user', 'password': 'user'}, follow = True)
+        self.assertEqual(response.status_code, 200)
+        response = c.post('/dynamicForms/login/', {'username': 'user2', 'password': 'user2'}, follow = True)
+        self.assertEqual(response.status_code, 200)
+        
+        
+        

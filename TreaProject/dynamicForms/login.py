@@ -19,9 +19,8 @@ def user_login(request):
         #if there is a user object, its correct
         #if None, no user with matching data was found
         if _user:
-            #if account active
-            #if _user.is_active():
-            if True:
+           
+            if _user.is_active:
             #login and send user to mainpage 
                 login(request, _user)
                 return HttpResponseRedirect("/dynamicForms/mainPage/")
