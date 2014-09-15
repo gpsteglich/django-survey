@@ -8,8 +8,7 @@
     var app = angular.module('dynamicForms', []);
 
     app.controller('VisorCtrl', ['$scope','$http', function ($scope, $http) {
-		alert(location.pathname.match(/\/visor\/(.*)/)[1]);
-		
+
         var visor = this;
         
         var path = location.pathname.match(/\/visor\/(.*)/)[1];
