@@ -30,12 +30,30 @@ class Form(models.Model):
         Throws ValidationError if the slug already exists.
         """
         self.slug = slugify(self.title)
-        self.expiry_date = datetime.now()
-        self.publish_date = datetime.now()
+        self.slug += "_v"
+        self.slug += str(self.version)
         if Form.objects.filter(slug=self.slug).exists():
+            # If it is an update it will enter here
+            # Or if I try to create a new form with an conflicting slug
             f1 = Form.objects.get(slug=self.slug)
             if (self.pk != f1.pk):
-                raise ValidationError("Slug already exists. Choose another title.")
+                raise ValidationError("Slug already exists. This might be because you "
+                                      "are trying to create an existing version or there"
+                                      " is another form with a similar title.")
+        else:
+            #When it's a POST of a new Form
+            if (self.version != 1):
+                # if it is a new version of an existing form
+                # check if there is no previous draft and
+                # check that there exists a version less than the current
+                base_slug = slugify(self.title) + "_v" + str(self.version - 1)
+                if not Form.objects.filter(slug=base_slug).exists():
+                    raise ValidationError('Versioning error. There is no Form with a prior version.')
+                old_form = Form.objects.get(slug=base_slug)
+                if (old_form.status == DRAFT):
+                    raise ValidationError('There is a previous draft pending for this Form')
+        
+                    
         super(Form,self).save(*args, **kwargs)
         
         
