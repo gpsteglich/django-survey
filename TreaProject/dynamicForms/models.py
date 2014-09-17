@@ -3,8 +3,8 @@ from django.db import models
 from django.template.defaultfilters import slugify
 
 from dynamicForms import fields
-from dynamicForms.fields import JSONField, STATUS, DRAFT
-from datetime import datetime
+from dynamicForms.fields import JSONField, STATUS, DRAFT, PUBLISHED
+from datetime import date
 
 
 class Form(models.Model):
@@ -29,6 +29,8 @@ class Form(models.Model):
         If there such a slug it checks if it is the same form.
         Throws ValidationError if the slug already exists.
         """
+        if (self.version < 1):
+            raise ValidationError("Version cannot be below 1.")
         self.slug = slugify(self.title)
         self.slug += "_v"
         self.slug += str(self.version)
@@ -53,7 +55,8 @@ class Form(models.Model):
                 if (old_form.status == DRAFT):
                     raise ValidationError('There is a previous draft pending for this Form')
         
-                    
+        if (self.status == PUBLISHED):
+            self.publish_date = date.today()
         super(Form,self).save(*args, **kwargs)
         
         

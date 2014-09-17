@@ -10,12 +10,11 @@ class FormSerializer(serializers.ModelSerializer):
     """
     owner = serializers.Field(source='owner.username')
     json = serializers.CharField(required=False)
-    slug = serializers.SlugField(required=False)
     
     class Meta:
         model = Form
         fields = ('title', 'slug', 'status', 'publish_date', 'expiry_date', 'version', 'owner', 'json')
-    
+        read_only_fields = ('slug',)
 
 
 class NewFormSerializer(serializers.ModelSerializer):
