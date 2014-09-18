@@ -1,17 +1,19 @@
 
 from django.contrib.auth.models import User
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 
-from dynamicForms.models import Form,FormEntry
-from dynamicForms.serializers import FormSerializer, UserSerializer, NewFormSerializer,FieldEntrySerializer
 from rest_framework.decorators import api_view
 from rest_framework import generics
 from rest_framework import permissions
 from rest_framework import status
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from django.template.defaultfilters import slugify
+from dynamicForms.models import Form,FormEntry, Version
+from dynamicForms.serializers import FormSerializer, UserSerializer
+from dynamicForms.serializers import FieldEntrySerializer
+from dynamicForms.serializers import VersionSerializer
 
 
 class FormList(generics.ListCreateAPIView):
@@ -39,21 +41,62 @@ class FormDetail(generics.RetrieveUpdateDestroyAPIView):
     def pre_save(self, obj):
         obj.owner = self.request.user
         
+class VersionList(generics.ListCreateAPIView):
+    """
+    APIView where the forms of the app are listed and a new form can be added.
+    """
+    model = Version
+    serializer_class =  VersionSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    
+    def get(self, request, slug, format=None):
+        versions = Form.objects.get(slug=slug).versions.all()
+        serializer = VersionSerializer(versions, many=True)
+        return Response(serializer.data)
 
-class UserList(generics.ListAPIView):
-    """
-    APIView listing the users of the app.
-    """
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+    def post(self, request, slug, format=None):
+        serializer = VersionSerializer(data=request.DATA)
+        form = Form.objects.get(slug=slug)
+        serializer.form = form
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
 
 
-class UserDetail(generics.RetrieveAPIView):
+class VersionDetail(generics.RetrieveUpdateDestroyAPIView):
     """
-    APIView showing basic details about the users of the app.
+    APIView to see details, modify or delete a form.
     """
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+    queryset = Version.objects.all()
+    serializer_class = VersionSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    
+    def get_object(self, slug, number):
+        try:
+            form = Form.objects.get(slug=slug)
+            return form.versions.get(number=number)
+        except Version.DoesNotExist or Form.DoesNotExist:
+            raise Http404
+
+    def get(self, request, slug, number, format=None):
+        version = self.get_object(slug, number)
+        serializer = VersionSerializer(version)
+        return Response(serializer.data)
+
+    def put(self, request, slug, number, format=None):
+        version = self.get_object(slug, number)
+        serializer = VersionSerializer(version, data=request.DATA)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request,  slug, number, format=None):
+        #version = self.get_object(slug, number)
+        #version.delete()
+        return Response(status=status.HTTP_403_FORBIDDEN)
+           
 
                 
 class JSONResponse(HttpResponse):

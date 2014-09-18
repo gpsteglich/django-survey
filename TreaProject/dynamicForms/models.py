@@ -13,12 +13,7 @@ class Form(models.Model):
     """
     title = models.CharField(max_length=100)
     slug = models.SlugField(unique=True)
-    status = models.IntegerField(choices=STATUS, default=DRAFT)
-    publish_date = models.DateField(blank=True)
-    expiry_date = models.DateField(blank=True)
-    version = models.IntegerField(default=1)
     owner = models.ForeignKey('auth.User', related_name='forms', blank=True)
-    json = JSONField(default="", blank=True)
     
     def __str__(self):
         return self.title
@@ -29,41 +24,60 @@ class Form(models.Model):
         If there such a slug it checks if it is the same form.
         Throws ValidationError if the slug already exists.
         """
-        if (self.version < 1):
-            raise ValidationError("Version cannot be below 1.")
         self.slug = slugify(self.title)
-        self.slug += "_v"
-        self.slug += str(self.version)
         if Form.objects.filter(slug=self.slug).exists():
             # If it is an update it will enter here
             # Or if I try to create a new form with an conflicting slug
             f1 = Form.objects.get(slug=self.slug)
             if (self.pk != f1.pk):
-                raise ValidationError("Slug already exists. This might be because you "
-                                      "are trying to create an existing version or there"
-                                      " is another form with a similar title.")
-        else:
-            #When it's a POST of a new Form
-            if (self.version != 1):
-                # if it is a new version of an existing form
-                # check if there is no previous draft and
-                # check that there exists a version less than the current
-                base_slug = slugify(self.title) + "_v" + str(self.version - 1)
-                if not Form.objects.filter(slug=base_slug).exists():
-                    raise ValidationError('Versioning error. There is no Form with a prior version.')
-                old_form = Form.objects.get(slug=base_slug)
-                if (old_form.status == DRAFT):
-                    raise ValidationError('There is a previous draft pending for this Form')
-        
-        if (self.status == PUBLISHED):
-            self.publish_date = date.today()
+                raise ValidationError("Slug already exists. Choose another title.")
         super(Form,self).save(*args, **kwargs)
         
         
     class Meta:
         ordering = ('title',)
         
-
+        
+class Version(models.Model):
+    number = models.IntegerField(default=1)
+    json = JSONField(default="", blank=True)
+    status = models.IntegerField(choices=STATUS, default=DRAFT)
+    publish_date = models.DateField(blank=True)
+    expiry_date = models.DateField(blank=True)
+    form = models.ForeignKey("Form", related_name="versions")
+    
+    def __str__(self):
+        return str(self.number)
+    #'%d: %s' % (self.number, self.get_status_display())
+    
+    def save(self, *args, **kwargs):
+        
+        #if (self.number < 1):
+        #   raise ValidationError("Version cannot be below 1.")
+        if Version.objects.filter(pk=self.pk).exists():
+            #When it's an update of an existing version
+            pass
+        else:
+            #When it's a POST of a new Version
+            # if it is a new version of an existing form
+            # check if there is no previous draft and
+            # check that there exists a version less than the current
+            all_versions = self.form.versions.all()  
+            count = all_versions.count()
+            if not all_versions.filter(number=count).exists():
+                # We consider all the previous versions have to exist.
+                # There would be a severe problem if the admin touches the database to delete a old version.
+                raise ValidationError("Oops. There is a problem with the version" 
+                                      "numbers. The previous version does not exist.")
+            if (all_versions.get(number=count).status == DRAFT):
+                raise ValidationError('There is a previous draft pending for this Form')
+            self.number = all_versions.count() + 1
+        if (self.status == PUBLISHED):
+            self.publish_date = date.today()
+        super(Version,self).save(*args, **kwargs)    
+            
+            
+    
 class Field(models.Model):
     """
     Fields of the forms.
