@@ -8,7 +8,7 @@
         <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 	</head>
-	<body class="radial-center" ng-app="dynamicForms">
+	<body class="radial-center" ng-app="dynamicFormsFramework">
         {% verbatim %}
         <div class="container" style="padding: 0px" ng-controller="VisorCtrl as visor">
             <div class="row">
@@ -41,10 +41,10 @@
         </div>
         {% endverbatim %}
         <script src={% static "bootstrap/js/bootstrap.js" %}></script>
-        <script src={% static "jquery/jquery-2.1.1.min.js" %}></script>
+        <script src={% static "jquery/js/jquery-2.1.1.min.js" %}></script>
         <script src={% static "angular/angular.min.js" %}></script>
 	    <script src={% static "js/app.js" %}></script>
-        
+        <script src={% static "js/visorCtrl.js" %}></script>
     </body>
     
 </html>

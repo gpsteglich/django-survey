@@ -1,21 +1,25 @@
 'use strict';
 
 (function () {
+	
+    var app = angular.module('dynamicFormsFramework');
+    
+    /*
+     * The VisorCtrl holds the logic to display, validate and submit the form.
+     */
     app.controller('VisorCtrl', ['$scope','$http', function ($scope, $http) {
 
         var visor = this;
         
+        /*
+         * To get the form the slug is catched form the path.
+         * This should be handled by $routerprovider
+         */
         var path = location.pathname.match(/\/visor\/(.*)/)[1];
+        
         $http.get('/dynamicForms/forms/'+path).success(function(data){            
             visor.form = data;
-            var jsonStr = data.json;//          
-            visor.jsonStr = jsonStr;
-            //descomentar la siguiente linea para usar la api de django
-            visor.questions = JSON.parse(jsonStr).Fields;
-            
-            // Keep a copy to check changes
-            visor.orignialQuestions = angular.copy(visor.questions);
-            
+            visor.questions = JSON.parse(data.json).Fields;
         });
         
         visor.save = function(){
@@ -29,5 +33,5 @@
         };
         
         
-      }]);
+    }]);
 })();
