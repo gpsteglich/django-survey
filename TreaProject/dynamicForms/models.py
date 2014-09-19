@@ -64,14 +64,16 @@ class Version(models.Model):
             # check that there exists a version less than the current
             all_versions = self.form.versions.all()  
             count = all_versions.count()
-            if not all_versions.filter(number=count).exists():
-                # We consider all the previous versions have to exist.
-                # There would be a severe problem if the admin touches the database to delete a old version.
-                raise ValidationError("Oops. There is a problem with the version" 
-                                      "numbers. The previous version does not exist.")
-            if (all_versions.get(number=count).status == DRAFT):
-                raise ValidationError('There is a previous draft pending for this Form')
-            self.number = all_versions.count() + 1
+            if (count > 0):
+                #if it is the first version do not check any of these
+                if not all_versions.filter(number=count).exists():
+                    # We consider all the previous versions have to exist.
+                    # There would be a severe problem if the admin touches the database to delete a old version.
+                    raise ValidationError("Oops. There is a problem with the version" 
+                                          "numbers. The previous version does not exist.")
+                if (all_versions.get(number=count).status == DRAFT):
+                    raise ValidationError('There is a previous draft pending for this Form')
+                self.number = all_versions.count() + 1
         if (self.status == PUBLISHED):
             self.publish_date = date.today()
         super(Version,self).save(*args, **kwargs)    
