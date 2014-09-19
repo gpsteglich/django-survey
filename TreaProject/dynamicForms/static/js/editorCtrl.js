@@ -78,7 +78,7 @@
             editor.form = {
                 'title' : '',
                 'slug' : '',
-                'status' : 1,
+                'status' :1 ,
                 'publish_date' : '2014-06-06',
                 'expiry_date' : '2014-06-06',
                 'version' : 0,
@@ -87,7 +87,31 @@
             };
         };
         
+        editor.saveForm = function(){
+        	editor.form.status = 0;
+            editor.form.json = JSON.stringify({'Fields' : editor.questions});
+            if (editor.actualSlug){
+                $http.put('forms/'+ editor.actualSlug,editor.form)
+                    .success( function(data, status, headers, config){ç
+                    	
+                    })
+                    .error(function(data, status, headers, config) {
+                    	
+                    });
+            } else {
+                editor.form.slug = 'temp_slug';
+                $http.post('forms/',editor.form)
+                .success( function(data, status, headers, config){
+                        editor.form.slug = data.slug;
+                        editor.actualSlug = data.slug;    
+                    })
+                .error(function(data, status, headers, config) {
+                        
+                    });
+            };
+        };
         editor.submitForm = function(){
+        	editor.form.status = 1;
             editor.form.json = JSON.stringify({'Fields' : editor.questions});
             if (editor.actualSlug){
                 $http.put('forms/'+ editor.actualSlug,editor.form)
