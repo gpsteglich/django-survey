@@ -27,7 +27,6 @@ class VersionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Version
         fields = ('number', 'status', 'publish_date', 'expiry_date', 'json', 'form')
-        read_only_fields = ('number',)
     
 
 class UserSerializer(serializers.ModelSerializer):

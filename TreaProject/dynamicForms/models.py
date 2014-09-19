@@ -76,53 +76,8 @@ class Version(models.Model):
                 self.number = all_versions.count() + 1
         if (self.status == PUBLISHED):
             self.publish_date = date.today()
-        super(Version,self).save(*args, **kwargs)    
-            
-            
-    
-class Field(models.Model):
-    """
-    Fields of the forms.
-    """
-    label = models.CharField("Question", max_length=100)
-    slug = models.SlugField(unique=True)
-    field_type = models.IntegerField("Type", choices=fields.NAMES)
-    required = models.BooleanField("Required", default=True)
-    choices = models.CharField("Choices", max_length=200, blank=True,
-            help_text="Por ahora opciones separadas por comas.")
-    default = models.CharField("Default value", blank=True, max_length=100)
-    help_text = models.CharField("Help text", blank=True, max_length=100)
+        super(Version,self).save(*args, **kwargs)
 
-    form = models.ForeignKey("Form", related_name="fields")
-
-    class Meta:
-        verbose_name = "Field"
-
-    def __str__(self):
-        return str(self.label)
-
-    def get_choices(self):
-        """
-        Parse a comma separated choice string into a list of choices taking
-        into account quoted choices.
-        """
-        choice = ""
-        quoted = False
-        for char in self.choices:
-            if not quoted and char == "`":
-                quoted = True
-            elif quoted and char == "`":
-                quoted = False
-            elif char == "," and not quoted:
-                choice = choice.strip()
-                if choice:
-                    yield choice, choice
-                choice = ""
-            else:
-                choice += char
-        choice = choice.strip()
-        if choice:
-            yield choice, choice
 
 class FormEntry(models.Model):
     form = models.ForeignKey("Form", related_name="entries")
@@ -133,6 +88,6 @@ class FieldEntry(models.Model):
     field_type = models.CharField(max_length=200)
     text = models.CharField(max_length=200)
     required = models.BooleanField()
-    answer = models.Field(max_length=200)
+    answer = models.CharField(max_length=200)
     entry = models.ForeignKey("FormEntry", related_name="fields")
 
