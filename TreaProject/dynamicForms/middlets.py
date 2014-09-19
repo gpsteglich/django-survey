@@ -16,3 +16,4 @@ class ValidationErrorToHttpErrorMiddleware(object):
         if isinstance(exception, ValidationError):
             content = {'error': exception.message}
             return JSONResponse(content)
+
