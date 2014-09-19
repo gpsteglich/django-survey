@@ -13,8 +13,8 @@ class FormSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Form
-        fields = ('title', 'slug', 'versions', 'owner')
-        read_only_fields = ('slug',)
+        fields = ('id', 'title', 'slug', 'versions', 'owner')
+        read_only_fields = ('slug','id')
 
 
 class VersionSerializer(serializers.ModelSerializer):
