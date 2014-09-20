@@ -98,7 +98,30 @@ class VersionDetail(generics.RetrieveUpdateDestroyAPIView):
         #version = self.get_object(slug, number)
         #version.delete()
         return Response(status=status.HTTP_403_FORBIDDEN)
-           
+    
+    
+class NewVersion(APIView):
+    
+    """
+    APIView to create a new version of a form or duplicate a form
+    """
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    
+    def post(self, request, pk, number, action):
+        #get version of form that is going to be duplicated
+        form = Form.objects.get(id=pk)
+        version = form.versions.get(number=number)
+        if action == "new_version":
+            new_version = Version(json=version.json, form=pk)
+            new_version.save()
+        elif action == "duplicate":
+            new_form = Form(title=form.title + "/duplicated" )
+            new_form.save()
+            new_version = Version(json=version.jason, form=new_form.pk)
+            new_version.save()
+        return Response(status=status.HTTP_201_CREATED)
+            
+            
 class FillForm(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = VersionSerializer
 
