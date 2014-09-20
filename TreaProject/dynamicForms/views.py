@@ -32,7 +32,6 @@ class FormList(generics.ListCreateAPIView):
         obj.owner = self.request.user
       
 
-
 class FormDetail(generics.RetrieveUpdateDestroyAPIView):
     """
     APIView to see details, modify or delete a form.
@@ -43,6 +42,7 @@ class FormDetail(generics.RetrieveUpdateDestroyAPIView):
     
     def pre_save(self, obj):
         obj.owner = self.request.user
+
         
 class VersionList(generics.ListCreateAPIView):
     """
@@ -102,7 +102,6 @@ class VersionDetail(generics.RetrieveUpdateDestroyAPIView):
     
     
 class NewVersion(APIView):
-    
     """
     APIView to create a new version of a form or duplicate a form
     """
@@ -167,6 +166,7 @@ class JSONResponse(HttpResponse):
         kwargs['content_type'] = 'application/json'
         super(JSONResponse, self).__init__(content, **kwargs)
 
+
 @api_view(['POST'])
 def submit_form_entry(request, slug, format=None):
     """
@@ -194,6 +194,7 @@ def submit_form_entry(request, slug, format=None):
                 field_entry.entry = entry
                 field_entry.save()
     return Response(status = status.HTTP_200_OK)
+
 
 def formList(request):
     forms = Form.objects.values()
