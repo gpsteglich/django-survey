@@ -10,6 +10,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from django.shortcuts import render_to_response
 from dynamicForms.models import Form,FormEntry, Version, FieldEntry
 from dynamicForms.fields import PUBLISHED
 from dynamicForms.serializers import FormSerializer, UserSerializer
@@ -45,7 +46,7 @@ class FormDetail(generics.RetrieveUpdateDestroyAPIView):
         
 class VersionList(generics.ListCreateAPIView):
     """
-    APIView where the forms of the app are listed and a new form can be added.
+    APIView where the version of the selected form are listed and a new version can be added.
     """
     model = Version
     serializer_class =  VersionSerializer
@@ -156,7 +157,7 @@ def submit_form_entry(request, slug, format=None):
     '''
     entry = FormEntry(form=Form.objects.get(slug=slug))
     entry.entry_time = datetime.now()
-    entry.save()
+    entry.save() 
     for field in request.DATA:
             serializer = FieldEntrySerializer(data=field)
             if serializer.is_valid():
@@ -167,3 +168,10 @@ def submit_form_entry(request, slug, format=None):
                 field_entry.entry = entry
                 field_entry.save()
     return Response(status = status.HTTP_200_OK)
+
+def formList(request):
+    forms = Form.objects.values()
+    for f in forms:
+        vers = Form.objects.get(slug=f['slug']).versions.values()
+        f["versions"] = vers
+    return render_to_response('mainPage.html', {"formList": forms})
