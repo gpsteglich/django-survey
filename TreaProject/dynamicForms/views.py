@@ -45,7 +45,7 @@ class FormDetail(generics.RetrieveUpdateDestroyAPIView):
         
 class VersionList(generics.ListCreateAPIView):
     """
-    APIView where the forms of the app are listed and a new form can be added.
+    APIView where the version of the selected form are listed and a new version can be added.
     """
     model = Version
     serializer_class =  VersionSerializer
