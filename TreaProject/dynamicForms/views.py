@@ -10,6 +10,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from django.shortcuts import render_to_response
 from dynamicForms.models import Form,FormEntry, Version
 from dynamicForms.fields import PUBLISHED
 from dynamicForms.serializers import FormSerializer, UserSerializer
@@ -146,3 +147,10 @@ def submit_form_entry(request, slug, format=None):
             if serializer.is_valid():
                 serializer.save()
     return Response(serializer.data)
+
+def formList(request):
+    forms = Form.objects.values()
+    for f in forms:
+        vers = Form.objects.get(slug=f['slug']).versions.values()
+        f["versions"] = vers
+    return render_to_response('mainPage.html', {"formList": forms})

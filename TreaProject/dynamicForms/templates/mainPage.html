@@ -10,20 +10,62 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">
-                            Main Page 
+                            Forms 
                         </h1>
                     </div>
                 </div>
                 <div class="row">
 				    <div class="col-sm-10">
 				        <div class="list-group">
-				            <a class="list-group-item active" href="#">formulario1</a>
-				            <a class="list-group-item" href="#">formulario2</a>
-				            <a class="list-group-item" href="#">formulario3</a>
-				            <a class="list-group-item" href="#">formulario4</a>
-				            <a class="list-group-item" href="#">formulario5</a>
-				        </div>
+			            {% for form in formList %}
+                            <div class="panel-group" id="accordion">
+                              <div class="panel panel-default">
+                                <div class="panel-heading">
+                                  <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#selector" href="#collapse{{ form.id }}">
+                                      {{ form.id }} - {{ form.title }}
+                                    </a>
+                                  </h4>
+                                </div>
+                                <div id="collapse{{ form.id }}" class="panel-collapse collapse in">
+                                  <div class="panel-body">
+                                    {% for v in form.versions %}
+                                        <li>Version: {{ v.number }}
+                                            <button type="button" class="btn btn-default btn-xs" 
+                                            {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
+                                                <span class="glyphicon glyphicon-pencil"></span>Edit
+                                            </button>
+                                            <button type="button" class="btn btn-default btn-xs">
+                                                <span class="glyphicon glyphicon-eye-open"></span>View
+                                            </button>
+                                            <button type="button" class="btn btn-default btn-xs"
+                                            {% ifnotequal v.status 1 %} disabled {% endifnotequal %}>
+                                                <span class="glyphicon glyphicon-plus"></span>New Version
+                                            </button>
+                                            <button type="button" class="btn btn-default btn-xs"
+                                            {% ifequal v.status 0 %} disabled {% endifequal %}>    
+                                                <span class="glyphicon glyphicon-forward"></span>Duplicate
+                                            </button>
+                                            <button type="button" class="btn btn-default btn-xs"
+                                            {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
+                                                <span class="glyphicon glyphicon-remove-circle"></span>Discard
+                                            </button>
+                                            <button type="button" class="btn btn-default btn-xs">
+                                                <span class="glyphicon glyphicon-trash"></span>Delete
+                                            </button>
+
+                                            </li>
+                                    {% endfor %}
+                                  </div>
+                                </div>
+                              </div>
+
+
+                        {% endfor %}
+                        </div>
     				</div>
              </div>
           </div>
+
+          
 {%endblock%}
