@@ -46,7 +46,7 @@ class FormDetail(generics.RetrieveUpdateDestroyAPIView):
         
 class VersionList(generics.ListCreateAPIView):
     """
-    APIView where the forms of the app are listed and a new form can be added.
+    APIView where the version of the selected form are listed and a new version can be added.
     """
     model = Version
     serializer_class =  VersionSerializer
@@ -101,11 +101,16 @@ class VersionDetail(generics.RetrieveUpdateDestroyAPIView):
         return Response(status=status.HTTP_403_FORBIDDEN)
            
 class FillForm(generics.RetrieveUpdateDestroyAPIView):
+    """
+    APIView to retrieve current version of a form to be filled
+    """
     serializer_class = VersionSerializer
 
     def get(self, request, slug, format=None):
         form = Form.objects.get(slug=slug)
         form_versions = Version.objects.filter(form=form)
+        # Max will keep track of the highest published version
+        # of the form to be displayed
         max = 0
         final_version = ''
         for version in form_versions:
@@ -114,7 +119,19 @@ class FillForm(generics.RetrieveUpdateDestroyAPIView):
                 final_version = version
         serializer = VersionSerializer(final_version)
         return Response(serializer.data)
-                
+
+class GetTitle(generics.RetrieveUpdateDestroyAPIView):
+    """
+    APIView to get form title, since it is not included in version
+    """
+    serializer_class = FormSerializer
+
+    def get(self, request, slug, format=None):
+        form = Form.objects.get(slug=slug)
+        serializer = FormSerializer(form)
+        return Response(serializer.data)
+
+
 class JSONResponse(HttpResponse):
     """
     An HttpResponse that renders its content into JSON.
@@ -139,7 +156,7 @@ def submit_form_entry(request, slug, format=None):
                 #Enviar respuesta al front con el error
     '''
     entry = FormEntry(form=Form.objects.get(slug=slug))
-    entry_time = datetime.now()
+    entry.entry_time = datetime.now()
     entry.save() 
     for field in request.DATA:
             serializer = FieldEntrySerializer(data=field)

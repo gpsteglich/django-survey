@@ -30,6 +30,7 @@ class SimpleStaticView(TemplateView):
 urlpatterns = patterns('dynamicForms.views',
     url(r'^forms/(?P<pk>[a-z,0-9,\-,\_]+)/$', views.FormDetail.as_view()),
     url(r'^forms/(?P<slug>[a-z,0-9,\-,\_]+)/$', views.FormDetail.as_view()),
+    url(r'^forms/(?P<slug>[a-z,0-9,\-,\_]+)/$', views.GetTitle.as_view()),
     url(r'^forms/$', views.FormList.as_view()),
     url(r'^version/(?P<pk>[a-z,0-9,\-,\_]+)/$', views.VersionList.as_view()),
     url(r'^version/(?P<pk>[a-z,0-9,\-,\_]+)/(?P<number>[0-9]+)/$', views.VersionDetail.as_view()),
