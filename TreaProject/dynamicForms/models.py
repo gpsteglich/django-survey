@@ -80,6 +80,7 @@ class Version(models.Model):
 
 class FormEntry(models.Model):
     form = models.ForeignKey("Form", related_name="entries")
+    entry_time = models.DateField(blank=True)
 
 
 class FieldEntry(models.Model):
