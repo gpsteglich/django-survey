@@ -2,7 +2,6 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.template.defaultfilters import slugify
 
-from dynamicForms import fields
 from dynamicForms.fields import JSONField, STATUS, DRAFT, PUBLISHED
 from datetime import date
 
