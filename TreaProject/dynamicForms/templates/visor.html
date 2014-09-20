@@ -16,7 +16,6 @@
                     <div class="panel panel-primary">
                         <div class="panel-heading text-center">
                             <h1 class="text-center"><span class="glyphicon glyphicon-list"></span> {{visor.form.title}}</h1>
-                            <h3 class="text-right">Versión: {{visor.form.version}}</h3>
                         </div>
                         <form role="form" name="dynForm" ng-submit="visor.save(dynForm.$valid)" novalidate class="dyn-form panel-body">
                             <div style="padding-top:30px;" ng-class="{ 'has-error' : userFieldForm.email.$invalid }">
@@ -35,7 +34,6 @@
                             <span class="glyphicon glyphicon-chevron-right"></span> Fomularios dinámicos _ django-survey _ 2014
                             <span class="glyphicon glyphicon-chevron-left"></span>
                         </footer>
-                        <pre>{{visor.path}}</pre>
                     </div>
                 </div>
             </div>

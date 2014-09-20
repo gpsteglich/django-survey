@@ -89,5 +89,5 @@ class FieldEntry(models.Model):
     text = models.CharField(max_length=200)
     required = models.BooleanField()
     answer = models.CharField(max_length=200)
-    entry = models.ForeignKey("FormEntry", related_name="fields")
+    entry = models.ForeignKey("FormEntry", related_name="fields", blank=True)
 

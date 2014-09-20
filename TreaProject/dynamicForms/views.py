@@ -10,7 +10,8 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from dynamicForms.models import Form,FormEntry, Version
+from django.shortcuts import render_to_response
+from dynamicForms.models import Form,FormEntry, Version, FieldEntry
 from dynamicForms.fields import PUBLISHED
 from dynamicForms.serializers import FormSerializer, UserSerializer
 from dynamicForms.serializers import FieldEntrySerializer
@@ -45,7 +46,7 @@ class FormDetail(generics.RetrieveUpdateDestroyAPIView):
         
 class VersionList(generics.ListCreateAPIView):
     """
-    APIView where the forms of the app are listed and a new form can be added.
+    APIView where the version of the selected form are listed and a new version can be added.
     """
     model = Version
     serializer_class =  VersionSerializer
@@ -124,11 +125,16 @@ class NewVersion(APIView):
             
             
 class FillForm(generics.RetrieveUpdateDestroyAPIView):
+    """
+    APIView to retrieve current version of a form to be filled
+    """
     serializer_class = VersionSerializer
 
     def get(self, request, slug, format=None):
         form = Form.objects.get(slug=slug)
         form_versions = Version.objects.filter(form=form)
+        # Max will keep track of the highest published version
+        # of the form to be displayed
         max = 0
         final_version = ''
         for version in form_versions:
@@ -137,7 +143,19 @@ class FillForm(generics.RetrieveUpdateDestroyAPIView):
                 final_version = version
         serializer = VersionSerializer(final_version)
         return Response(serializer.data)
-                
+
+class GetTitle(generics.RetrieveUpdateDestroyAPIView):
+    """
+    APIView to get form title, since it is not included in version
+    """
+    serializer_class = FormSerializer
+
+    def get(self, request, slug, format=None):
+        form = Form.objects.get(slug=slug)
+        serializer = FormSerializer(form)
+        return Response(serializer.data)
+
+
 class JSONResponse(HttpResponse):
     """
     An HttpResponse that renders its content into JSON.
@@ -162,11 +180,22 @@ def submit_form_entry(request, slug, format=None):
                 #Enviar respuesta al front con el error
     '''
     entry = FormEntry(form=Form.objects.get(slug=slug))
-    entry_time = datetime.now()
+    entry.entry_time = datetime.now()
     entry.save() 
     for field in request.DATA:
             serializer = FieldEntrySerializer(data=field)
-            serializer.object.entry_id = entry.id
             if serializer.is_valid():
                 serializer.save()
-    return Response(serializer.data)
+                #FIXME: Improve foreing key setting
+                num = serializer.object.pk
+                field_entry = FieldEntry.objects.get(id=num)
+                field_entry.entry = entry
+                field_entry.save()
+    return Response(status = status.HTTP_200_OK)
+
+def formList(request):
+    forms = Form.objects.values()
+    for f in forms:
+        vers = Form.objects.get(slug=f['slug']).versions.values()
+        f["versions"] = vers
+    return render_to_response('mainPage.html', {"formList": forms})

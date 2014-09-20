@@ -15,25 +15,37 @@
          * To get the form the slug is catched form the path.
          * This should be handled by $routerprovider
          */
-        visor.path = location.pathname.match(/\/visor\/(.*)/)[1];
-        visor.versionNum = 1;
-            //Load Form
-        $http.get('/dynamicForms/visor/publishVersion/'+visor.path)
-         .success(function(data){
-            visor.version = data;
-             visor.questions = JSON.parse(data.json).Fields;
-            /*    //Load version
-            $http.get('version/'+visor.path+'/'+visor.versionNum)
+        //FIXME: corregir la manera de obtener el slug
+        visor.slug = location.pathname.match(/\/visor\/(.*)/)[1];
+
+            // Load Form
+        $http.get('/dynamicForms/form/'+visor.slug)
+            .success(function(data){
+                visor.title = data.title;
+                visor.form = data;
+            })
+            .error(function(data, status, headers, config){
+                alert('error cargando formulario: ' + status);
+            })
+            // Load Version
+        $http.get('/dynamicForms/visor/publishVersion/'+visor.slug)
             .success(function(data){
                 visor.version = data;
                 visor.questions = JSON.parse(data.json).Fields;
             })
             .error(function(data, status, headers, config){
-                alert('error cargando version: ' + status);
-            })*/
-         })
-         .error(function(data, status, headers, config){
-             alert('error cargando formulario: ' + status);
-         })
+                alert('error cargando las preguntas: ' + status);
+            })
+        
+        visor.save = function(){
+        $http.post('/dynamicForms/visorPub/'+visor.form.slug+'/submit/',visor.questions)
+            .success( function(data, status, headers, config){
+
+            })
+            .error(function(data, status, headers, config) {
+                alert('Error guardando las respuestas: ' + status);
+            });
+        };
+        
     }]);
 })();
