@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from dynamicForms.models import Form,FormEntry, Version
+from dynamicForms.fields import PUBLISHED
 from dynamicForms.serializers import FormSerializer, UserSerializer
 from dynamicForms.serializers import FieldEntrySerializer
 from dynamicForms.serializers import VersionSerializer
@@ -49,14 +50,14 @@ class VersionList(generics.ListCreateAPIView):
     serializer_class =  VersionSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     
-    def get(self, request, slug, format=None):
-        versions = Form.objects.get(slug=slug).versions.all()
+    def get(self, request, pk, format=None):
+        versions = Form.objects.get(id=pk).versions.all()
         serializer = VersionSerializer(versions, many=True)
         return Response(serializer.data)
 
-    def post(self, request, slug, format=None):
+    def post(self, request, pk, format=None):
         serializer = VersionSerializer(data=request.DATA)
-        form = Form.objects.get(slug=slug)
+        form = Form.objects.get(id=pk)
         serializer.form = form
         if serializer.is_valid():
             serializer.save()
@@ -72,32 +73,45 @@ class VersionDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = VersionSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     
-    def get_object(self, slug, number):
+    def get_object(self, pk, number):
         try:
-            form = Form.objects.get(slug=slug)
+            form = Form.objects.get(id=pk)
             return form.versions.get(number=number)
         except Version.DoesNotExist or Form.DoesNotExist:
             raise Http404
 
-    def get(self, request, slug, number, format=None):
-        version = self.get_object(slug, number)
+    def get(self, request, pk, number, format=None):
+        version = self.get_object(pk, number)
         serializer = VersionSerializer(version)
         return Response(serializer.data)
 
-    def put(self, request, slug, number, format=None):
-        version = self.get_object(slug, number)
+    def put(self, request, pk, number, format=None):
+        version = self.get_object(pk, number)
         serializer = VersionSerializer(version, data=request.DATA)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request,  slug, number, format=None):
+    def delete(self, request,  pk, number, format=None):
         #version = self.get_object(slug, number)
         #version.delete()
         return Response(status=status.HTTP_403_FORBIDDEN)
            
+class FillForm(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = VersionSerializer
 
+    def get(self, request, slug, format=None):
+        form = Form.objects.get(slug=slug)
+        form_versions = Version.objects.filter(form=form)
+        max = 0
+        final_version = ''
+        for version in form_versions:
+            if version.number > max: #and version.status == PUBLISHED:
+                max = version.number
+                final_version = version
+        serializer = VersionSerializer(final_version)
+        return Response(serializer.data)
                 
 class JSONResponse(HttpResponse):
     """

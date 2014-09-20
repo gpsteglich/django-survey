@@ -15,23 +15,25 @@
          * To get the form the slug is catched form the path.
          * This should be handled by $routerprovider
          */
-        var path = location.pathname.match(/\/visor\/(.*)/)[1];
-        
-        $http.get('/dynamicForms/forms/'+path).success(function(data){            
-            visor.form = data;
-            visor.questions = JSON.parse(data.json).Fields;
-        });
-        
-        visor.save = function(){
-            $http.post('/dynamicForms/forms/'+visor.form.slug+'/submit/',visor.questions)
-                .success( function(data, status, headers, config){
-                        
-                    })
-                .error(function(data, status, headers, config) {
-                        alert(status);
-                    });
-        };
-        
-        
+        visor.path = location.pathname.match(/\/visor\/(.*)/)[1];
+        visor.versionNum = 1;
+            //Load Form
+        $http.get('/dynamicForms/visor/publishVersion/'+visor.path)
+         .success(function(data){
+            visor.version = data;
+             visor.questions = JSON.parse(data.json).Fields;
+            /*    //Load version
+            $http.get('version/'+visor.path+'/'+visor.versionNum)
+            .success(function(data){
+                visor.version = data;
+                visor.questions = JSON.parse(data.json).Fields;
+            })
+            .error(function(data, status, headers, config){
+                alert('error cargando version: ' + status);
+            })*/
+         })
+         .error(function(data, status, headers, config){
+             alert('error cargando formulario: ' + status);
+         })
     }]);
 })();
