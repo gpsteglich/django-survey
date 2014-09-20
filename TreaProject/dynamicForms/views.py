@@ -108,13 +108,15 @@ class NewVersion(APIView):
     """
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     
-    def post(self, request, pk, number, action):
+    def get(self, request, pk, number, action):
         #get version of form that is going to be duplicated
         form = Form.objects.get(id=pk)
-        version = form.versions.get(number=number)
+        version = Version.objects.get(form=form, number=number)
         if action == "new":
-            new_version = Version(json=version.json, form=pk)
+            
+            new_version = Version(json=version.json, form=form)
             new_version.save()
+            
         elif action == "duplicate":
             new_form = Form(title=form.title)
             new_form.title += "/duplicated/" + str(new_form.id)
