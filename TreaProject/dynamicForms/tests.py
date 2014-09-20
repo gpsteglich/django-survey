@@ -43,6 +43,7 @@ class FormTestCase(TestCase):
         self.assertEqual(f1.title, "new form1")   
         self.assertEqual(f1.slug, "new-form1")
         
+        
     def test_slug_exists(self):
          
         try:
@@ -54,6 +55,7 @@ class FormTestCase(TestCase):
          
              print ("OK: Creation of new form not allowed because generated slug already exists db")
          #f2 = models.Form.objects.get(title = "new form1")
+        
          
     def test_delete_form(self):
                  
@@ -61,8 +63,10 @@ class FormTestCase(TestCase):
             f1 = models.Form.objects.get(title = "new form6")
         except: 
             print("OK: new form6 does not exists because it has never been created")
+            
         f1 = models.Form.objects.get(title = "new form4")
         f1.delete()
+        
         try:
             f1 = models.Form.objects.get(title = "new form4")
         except:
@@ -74,13 +78,14 @@ class FormTestCase(TestCase):
         entry_list = list(models.Form.objects.all())
         count = entry_list.__len__()
         self.assertEqual(count,4)
+        
          
-             
     def test_count_forms(self):     
          
          entry_list = list(models.Form.objects.all())
          count = entry_list.__len__()
          self.assertEqual(count,5)
+        
          
     def test_fall_login(self):
         
@@ -89,6 +94,5 @@ class FormTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         response = c.post('/dynamicForms/login/', {'username': 'user2', 'password': 'user2'}, follow = True)
         self.assertEqual(response.status_code, 200)
-        
         
         
