@@ -111,13 +111,14 @@ class NewVersion(APIView):
         #get version of form that is going to be duplicated
         form = Form.objects.get(id=pk)
         version = form.versions.get(number=number)
-        if action == "new_version":
+        if action == "new":
             new_version = Version(json=version.json, form=pk)
             new_version.save()
         elif action == "duplicate":
-            new_form = Form(title=form.title + "/duplicated" )
+            new_form = Form(title=form.title)
+            new_form.title += "/duplicated/" + str(new_form.id)
             new_form.save()
-            new_version = Version(json=version.jason, form=new_form.pk)
+            new_version = Version(json=version.jason, form=new_form.id)
             new_version.save()
         return Response(status=status.HTTP_201_CREATED)
             
