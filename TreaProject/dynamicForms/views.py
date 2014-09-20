@@ -155,7 +155,7 @@ def submit_form_entry(request, slug, format=None):
                 #Enviar respuesta al front con el error
     '''
     entry = FormEntry(form=Form.objects.get(slug=slug))
-    entry_time = datetime.now()
+    entry.entry_time = datetime.now()
     entry.save() 
     for field in request.DATA:
             serializer = FieldEntrySerializer(data=field)
