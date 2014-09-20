@@ -14,64 +14,7 @@
 	            <div class ="row">
 		            <div class=" col-md-2"></div>
 		            	<div class=" col-md-6">
-			                <div class= "panel panel-danger">
-			                	<div class= "panel-heading" align="Center">  Palette</div>
-			                	<div class= "panel-body">
-									<div class="row" style ="margin-bottom:0.5%;" >
-										<div class=" col-md-3">
-											<button  type="button" class= "btn btn-info btn-lg btn-block"   ng-click="visor.addField(visor.FieldTypes[0])">
-												<span class="glyphicon glyphicon-text-height"></span>
-												Single line text
-											</button>
-										</div>
-										<div class=" col-md-3">
-											<button type="button" class= "btn btn-info btn-lg btn-block " ng-click="visor.addField(visor.FieldTypes[2])">
-												<span class="glyphicon glyphicon-list"></span>
-												Multiple line text
-											</button>
-										</div>
-										<div class=" col-md-3">
-											<button type="button" class= "btn btn-info btn-lg btn-block " ng-click="visor.addField(visor.FieldTypes[1])">
-												<span class="glyphicon glyphicon-sort-by-order"></span>
-												Number
-											</button>
-										</div>
-										<div class=" col-md-3">
-											<button type="button" class= "btn btn-info btn-lg btn-block disabled ">
-												<span class="glyphicon glyphicon-unchecked"></span>
-												CheckBox
-											</button>
-										</div>					
-									</div>
-									<div class="row" id="btnPalette" style ="margin-top:0.5%;">
-										<div class=" col-md-3">
-											<button type="button" class= "btn btn-info btn-lg btn-block disabled ">
-												<span class="glyphicon glyphicon-collapse-down"></span>
-												Dropdown
-											</button>
-										</div>
-										<div class=" col-md-3">
-											<button type="button" class= "btn btn-info btn-lg btn-block disabled ">
-												<span class="glyphicon glyphicon-calendar"></span>
-												Date
-											</button>
-										</div>
-										<div class=" col-md-3">
-											<button type="button" class= "btn btn-info btn-lg btn-block disabled ">
-												<span class="glyphicon glyphicon-home"></span>
-												Adress
-											</button>
-										</div>
-										<div class=" col-md-3">
-											<button type="button" class= "btn btn-info btn-lg btn-block disabled ">
-												<span class="glyphicon glyphicon-record"></span>	
-												RadioButton
-											</button>
-										</div>			
-									</div>
-									
-								</div>
-			                </div>
+			               <div  ng-include="'palette'"></div>  
 			            </div>   
 		            </div>
 	            <div class="row">

@@ -19,19 +19,16 @@ def user_login(request):
         #if there is a user object, its correct
         #if None, no user with matching data was found
         if _user:
-           
             if _user.is_active:
-            #login and send user to mainpage 
+                #login and send user to mainpage 
                 login(request, _user)
                 return HttpResponseRedirect("/dynamicForms/mainPage/")
-            
             else:
                 #an inactive account was used- no login in.
                 return HttpResponse("Your account is disabled.")
         else:
             #bad login 
             return render_to_response('login.html', {'error': True}, context)
-        
     else:
         #method wasnt POST
         return render_to_response('login.html', {"error": False}, context)

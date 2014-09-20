@@ -15,6 +15,7 @@ from dynamicForms.fields import PUBLISHED
 from dynamicForms.serializers import FormSerializer, UserSerializer
 from dynamicForms.serializers import FieldEntrySerializer
 from dynamicForms.serializers import VersionSerializer
+from datetime import datetime
 
 
 class FormList(generics.ListCreateAPIView):
@@ -127,11 +128,21 @@ def submit_form_entry(request, slug, format=None):
     """
     APIView to submit a Form Entry.
     """
-    entry = FormEntry(form=Form.objects.get(slug=slug)) 
+    # TODO: agregar primera iteracion por las respuestas
+    # para hacer la validacion, antes de crear el entry
+    '''
+    for field in request.DATA:
+            serializer = FieldEntrySerializer(data=field)
+            #Validar campo
+            #if not validar:
+                #Enviar respuesta al front con el error
+    '''
+    entry = FormEntry(form=Form.objects.get(slug=slug))
+    entry_time = datetime.now()
     entry.save() 
     for field in request.DATA:
             serializer = FieldEntrySerializer(data=field)
-            serializer.object.entry = entry
+            serializer.object.entry_id = entry.id
             if serializer.is_valid():
                 serializer.save()
     return Response(serializer.data)

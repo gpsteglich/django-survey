@@ -7,7 +7,7 @@ from south.modelsinspector import add_introspection_rules
 
 
 
-#field type constaants
+#field type constants
 TEXT = 1
 TEXTAREA = 2
 EMAIL = 3
@@ -28,7 +28,6 @@ STATUS = (
           (DRAFT, _("Draft")),
           (PUBLISHED, _("Published")),
           )
-
 
 #These are the field types.
 NAMES = (

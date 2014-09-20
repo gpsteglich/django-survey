@@ -28,8 +28,8 @@ class SimpleStaticView(TemplateView):
         return super(SimpleStaticView, self).get(request, *args, **kwargs)
 
 urlpatterns = patterns('dynamicForms.views',
-    url(r'^forms/(?P<pk>[a-z,0-9,\-,\_]+)/$', views.FormDetail.as_view()),
-    url(r'^forms/(?P<slug>[a-z,0-9,\-,\_]+)/$', views.FormDetail.as_view()),
+    url(r'^visor/(?P<slug>[a-z,0-9,\-,\_]+)/submit/$', 'submit_form_entry'),
+    url(r'^forms/(?P<id>[a-z,0-9,\-,\_]+)/$', views.FormDetail.as_view()),
     url(r'^forms/$', views.FormList.as_view()),
     url(r'^version/(?P<pk>[a-z,0-9,\-,\_]+)/$', views.VersionList.as_view()),
     url(r'^version/(?P<pk>[a-z,0-9,\-,\_]+)/(?P<number>[0-9]+)/$', views.VersionDetail.as_view()),
@@ -45,6 +45,7 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^text$', TemplateView.as_view(template_name='question_char.html')),
     url(r'^textarea$', TemplateView.as_view(template_name='question_text_area.html')),
     url(r'^number$', TemplateView.as_view(template_name='question_num.html')),
+    url(r'^palette$', TemplateView.as_view(template_name='palette.html')),
     url(r'^modify_input$', TemplateView.as_view(template_name='modifyInput.html')),
     url(r'^visor/publishVersion/(?P<slug>[a-z,0-9,\-,\_]+)/$', views.FillForm.as_view()),
     url(r'^visor/(?P<slug>[a-z,0-9,\-,\_]+)/submit/$', 'submit_form_entry'),
