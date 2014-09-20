@@ -10,7 +10,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from dynamicForms.models import Form,FormEntry, Version
+from dynamicForms.models import Form,FormEntry, Version, FieldEntry
 from dynamicForms.fields import PUBLISHED
 from dynamicForms.serializers import FormSerializer, UserSerializer
 from dynamicForms.serializers import FieldEntrySerializer
@@ -156,10 +156,14 @@ def submit_form_entry(request, slug, format=None):
     '''
     entry = FormEntry(form=Form.objects.get(slug=slug))
     entry.entry_time = datetime.now()
-    entry.save() 
+    entry.save()
     for field in request.DATA:
             serializer = FieldEntrySerializer(data=field)
-            serializer.object.entry_id = entry.id
             if serializer.is_valid():
                 serializer.save()
-    return Response(serializer.data)
+                #FIXME: Improve foreing key setting
+                num = serializer.object.pk
+                field_entry = FieldEntry.objects.get(id=num)
+                field_entry.entry = entry
+                field_entry.save()
+    return Response(status = status.HTTP_200_OK)

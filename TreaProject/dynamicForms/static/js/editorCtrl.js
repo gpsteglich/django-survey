@@ -63,7 +63,7 @@
          * or editing a form. If it is undefined its a new form,
          * else is editing an existing one.
          */
-        editor.actualForm = 2;
+        editor.actualForm = 1;
         editor.actualVersion = 1;
         
         if (editor.actualForm){
