@@ -31,7 +31,10 @@
         editor.FieldTypes = [
             'text',
             'number',
-            'textarea'            
+            'textarea',
+            'combobox',
+            'mail',
+            'identityDoc'
         ];
 
         editor.deleteField = function(index){
