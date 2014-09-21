@@ -126,14 +126,15 @@
             if (editor.isNewForm()){
                 $http.post('forms/', editor.form)
                 .success( function(data, status, headers, config){
-                    editor.form.slug = data.slug;
+                    editor.form = data;
                     editor.formIdParam = data.id;
                     editor.version.form = data.id;
                     editor.version.json = JSON.stringify({'Fields' : editor.questions});
                     $http.post('version/'+editor.formIdParam+'/', editor.version)
                     .success( function(data, status, headers, config){
                         editor.versionIdParam = data.number;
-                        // update the url
+                        editor.version = data;
+                        // update the url parameters
                         $location.search({form:editor.formIdParam, ver:editor.versionIdParam});
                     })
                     .error(function(data, status, headers, config) {
@@ -146,11 +147,11 @@
             } else {
                 $http.put('forms/'+ editor.formIdParam + '/', editor.form)
                 .success( function(data, status, headers, config){
-                    editor.form.slug = data.slug;
+                    editor.form = data;
                     editor.version.json = JSON.stringify({'Fields' : editor.questions});
                     $http.put('version/'+editor.formIdParam+'/'+editor.versionIdParam+"/", editor.version)
                     .success( function(data, status, headers, config){
-                        
+                        editor.version = data;
                     })
                     .error(function(data, status, headers, config) {
                         alert('error guardando version: ' + status);
