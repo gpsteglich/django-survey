@@ -1,5 +1,6 @@
 
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, Http404
 
 from rest_framework.decorators import api_view
@@ -207,7 +208,7 @@ def submit_form_entry(request, slug, format=None):
                 field_entry.save()
     return Response(status = status.HTTP_200_OK)
 
-
+@login_required
 def formList(request):
     forms = Form.objects.values()
     for f in forms:
