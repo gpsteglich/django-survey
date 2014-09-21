@@ -82,6 +82,8 @@
                 $http.get('version/'+editor.actualForm+'/'+editor.actualVersion)
                 .success(function(data){
                     editor.version = data;
+                    editor.questions = JSON.parse(data.json).Fields
+
                 })
                 .error(function(data, status, headers, config){
                     alert('error cargando version: ' + status);
@@ -111,12 +113,12 @@
         
         editor.saveForm = function(){
             editor.version.status = 0;
-            $http.put('forms/'+ editor.actualForm +'/', editor.form)
+            $http.put('forms/'+ editor.actualForm + '/', editor.form)
             .success( function(data, status, headers, config){
                 editor.form.slug = data.slug;
                 editor.actualForm = data.id;
                 editor.version.json = JSON.stringify({'Fields' : editor.questions});
-                $http.put('version/'+editor.actualForm+'/'+editor.actualVersion+'/', editor.version)
+                $http.put('version/'+editor.actualForm+'/'+editor.actualVersion+"/", editor.version)
                 .success( function(data, status, headers, config){
                     editor.actualVersion = data.number;
                 })
