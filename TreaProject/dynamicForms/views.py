@@ -113,7 +113,7 @@ class NewVersion(APIView):
         form = Form.objects.get(id=pk)
         version = Version.objects.get(form=form, number=number)
         if action == "new":
-            
+            #create version and save it on database
             new_version = Version(json=version.json, form=form)
             new_version.save()
             
