@@ -41,8 +41,8 @@ class Version(models.Model):
     number = models.IntegerField(default=1)
     json = JSONField(default="", blank=True)
     status = models.IntegerField(choices=STATUS, default=DRAFT)
-    publish_date = models.DateField(blank=True)
-    expiry_date = models.DateField(blank=True)
+    publish_date = models.DateField(blank=True, null=True)
+    expiry_date = models.DateField(blank=True, null=True)
     form = models.ForeignKey("Form", related_name="versions")
     
     def __str__(self):
@@ -79,7 +79,7 @@ class Version(models.Model):
 
 
 class FormEntry(models.Model):
-    form = models.ForeignKey("Form", related_name="entries")
+    version = models.ForeignKey("Version", related_name="entries")
     entry_time = models.DateField(blank=True)
 
 
@@ -89,5 +89,5 @@ class FieldEntry(models.Model):
     text = models.CharField(max_length=200)
     required = models.BooleanField()
     answer = models.CharField(max_length=200)
-    entry = models.ForeignKey("FormEntry", related_name="fields", blank=True)
+    entry = models.ForeignKey("FormEntry", related_name="fields", blank=True, null=True)
 
