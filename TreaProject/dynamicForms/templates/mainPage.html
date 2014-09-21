@@ -31,7 +31,7 @@
                                   <div class="panel-body">
                                     {% for v in form.versions %}
                                         <li>Version: {{ v.number }}
-                                            <a type="button" class="btn btn-default btn-xs" 
+                                            <a type="button" class="btn btn-default btn-xs" href= "/dynamicForms/editor#?form={{form.id}}&ver={{v.number}}"
                                             {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
                                                 <span class="glyphicon glyphicon-pencil"></span>Edit
                                             </a>

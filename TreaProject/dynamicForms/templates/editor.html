@@ -37,6 +37,9 @@
                                     <button type="submit" ng-click="visor.saveForm()" class="btn btn-default">Save</button>
                                 </div>
                             </form>
+                            <pre>isNewForm: {{visor.isNewForm()}}</pre>
+                            <pre>form: {{visor.form|json}}</pre>
+                            <pre>version: {{visor.version|json}}</pre>
 	                    </div>
 	                </div>  
 	                <div class="col-md-3" style= " margin-left:2%" >                  
@@ -48,6 +51,7 @@
             <script src={% static "jquery/js/jquery-2.1.1.min.js" %}></script>
             <script src={% static "jquery/js/jquery-ui.min.js" %}></script>
 		    <script src={% static "angular/angular.min.js" %}></script>
+            <script src={% static "angular/angular-route.min.js" %}></script>
 		    <script src={% static "js/app.js" %}></script>
             <script src={% static "js/editorCtrl.js" %}></script>
 		</div> <!-- div de page-wrapper -->
