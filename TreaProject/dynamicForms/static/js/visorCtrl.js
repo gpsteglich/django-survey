@@ -17,7 +17,6 @@
          */
         //FIXME: corregir la manera de obtener el slug
         visor.slug = location.pathname.match(/\/visor\/(.*)/)[1];
-
             // Load Form
         $http.get('/dynamicForms/form/'+visor.slug)
             .success(function(data){
@@ -40,7 +39,7 @@
         visor.save = function(){
         $http.post('/dynamicForms/visorPub/'+visor.form.slug+'/submit/',visor.questions)
             .success( function(data, status, headers, config){
-
+                
             })
             .error(function(data, status, headers, config) {
                 alert('Error guardando las respuestas: ' + status);
