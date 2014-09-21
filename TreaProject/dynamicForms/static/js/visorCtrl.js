@@ -17,7 +17,6 @@
          */
         //FIXME: corregir la manera de obtener el slug
         visor.slug = location.pathname.match(/\/visor\/(.*)/)[1];
-
             // Load Form
         $http.get('/dynamicForms/form/'+visor.slug)
             .success(function(data){
