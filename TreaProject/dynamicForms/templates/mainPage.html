@@ -32,10 +32,11 @@
                                     {% for v in form.versions %}
                                         <li>Version: {{ v.number }}
                                             <a type="button" class="btn btn-default btn-xs" href= "/dynamicForms/editor#?form={{form.id}}&ver={{v.number}}"
-                                            {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
+                                                {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
                                                 <span class="glyphicon glyphicon-pencil"></span>Edit
                                             </a>
-                                            <a type="button" class="btn btn-default btn-xs" href= "/dynamicForms/visor/{{form.slug}}/" >
+                                            <a type="button" class="btn btn-default btn-xs" target="_blank" href= "/dynamicForms/visor/{{form.slug}}/" 
+                                                {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
                                                 <span class="glyphicon glyphicon-eye-open"></span>View
                                             </a>
                                             <a type="button" class="btn btn-default btn-xs" href = "/dynamicForms/version/{{form.id}}/{{v.number}}/new" 
@@ -43,11 +44,11 @@
                                                 <span class="glyphicon glyphicon-plus"></span>New Version
                                             </a>
                                             <a type="button" class="btn btn-default btn-xs"
-                                            {% ifequal v.status 0 %} disabled {% endifequal %}>    
+                                                {% ifequal v.status 0 %} disabled {% endifequal %}>    
                                                 <span class="glyphicon glyphicon-forward"></span>Duplicate
                                             </a>
                                             <a type="button" class="btn btn-default btn-xs"
-                                            {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
+                                                {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
                                                 <span class="glyphicon glyphicon-remove-circle"></span>Discard
                                             </a>
                                             <a type="button" class="btn btn-default btn-xs">

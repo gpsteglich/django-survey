@@ -72,6 +72,10 @@
             return !(Boolean(editor.formIdParam) && Boolean(editor.versionIdParam));
         };
         
+        
+        /*
+        * Load or create a new Form
+        */
         if (editor.isNewForm()){
             /*
             * New Form Case
@@ -114,6 +118,9 @@
             })
         };
         
+        /*
+        * Save and publish form
+        */
         editor.saveForm = function(){
             editor.persistForm(0);
         }
@@ -138,11 +145,12 @@
                         $location.search({form:editor.formIdParam, ver:editor.versionIdParam});
                     })
                     .error(function(data, status, headers, config) {
-                        alert('error guardando nueva version: ' + status);
+                        var errors = data.error;
+                        alert('error saving new version: ' + status);
                     });
                 })
                 .error(function(data, status, headers, config) {
-                    alert('error guardando nuevo formulario: ' + status);
+                    alert('error saving new form: ' + status);
                 });
             } else {
                 $http.put('forms/'+ editor.formIdParam + '/', editor.form)
@@ -154,11 +162,11 @@
                         editor.version = data;
                     })
                     .error(function(data, status, headers, config) {
-                        alert('error guardando version: ' + status);
+                        alert('error saving version: ' + status);
                     });
                 })
                 .error(function(data, status, headers, config) {
-                    alert('error guardando formulario: ' + status);
+                    alert('error saving form: ' + status);
                 });
             }
 
