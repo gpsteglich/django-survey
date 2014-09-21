@@ -181,7 +181,19 @@ def submit_form_entry(request, slug, format=None):
             #if not validar:
                 #Enviar respuesta al front con el error
     '''
-    entry = FormEntry(form=Form.objects.get(slug=slug))
+    form = Form.objects.get(slug=slug)
+    form_versions = Version.objects.filter(form=form)
+    # Max will keep track of the highest published version
+    # of the form to be displayed
+    max = 0
+    final_version = ''
+    # FIXME: Si se agrega el status EXPIRED, deberia haber solo 1 version PUBLISHED
+    # asi que no seria necesario buscar el nro de version mas alto
+    for version in form_versions:
+        if version.number > max: #and version.status == PUBLISHED:
+            max = version.number
+            final_version = version
+    entry = FormEntry(version=final_version)
     entry.entry_time = datetime.now()
     entry.save() 
     for field in request.DATA:
