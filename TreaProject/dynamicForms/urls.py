@@ -48,7 +48,7 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^number$', TemplateView.as_view(template_name='question_num.html')),
     url(r'^identityDoc$', TemplateView.as_view(template_name='field_identityDoc.html')),
     url(r'^combobox$', TemplateView.as_view(template_name='field_combobox.html')),
-    url(r'^mail$', TemplateView.as_view(template_name='field_mail.html'))
+    url(r'^mail$', TemplateView.as_view(template_name='field_mail.html')),
     url(r'^palette$', TemplateView.as_view(template_name='palette.html')),
     url(r'^modify_input$', TemplateView.as_view(template_name='modifyInput.html')),
     url(r'^visor/publishVersion/(?P<slug>[a-z,0-9,\-,\_]+)/$', views.FillForm.as_view()),
