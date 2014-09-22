@@ -54,7 +54,7 @@
             newField.field_id = editor.questions.length;
             newField.field_type = type || 'text';
             editor.questions.push(newField);
-            editor.selectedField = angular.copy(editor.newField);
+            editor.selectedField = editor.questions[editor.questions.length];
         };
        
         editor.clearSelectedField = function(){
