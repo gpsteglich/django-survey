@@ -26,7 +26,7 @@
                                     <input  class="form-control" type="text" ng-model="visor.form.title"/>
                                 </h1>
                             </div>
-                            <form role="form" class="panel-body" >                                                   
+                            <form role="form" class="panel-body" novalidate>                                                   
                                 <div  ng-repeat="question in visor.questions"  ng-click="visor.selectField($index)" > 
                                    <div class="form-group" >
                                         <div ng-include="question.field_type"></div>
