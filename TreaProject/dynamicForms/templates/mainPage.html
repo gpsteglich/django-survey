@@ -3,7 +3,6 @@
 <html lang="en">
 {%block content%}
         <div id="page-wrapper">
-
             <div class="container-fluid">
 
                 <!-- Page Heading -->
@@ -14,49 +13,61 @@
                         </h1>
                     </div>
                 </div>
+
                 <div class="row">
 				    <div class="col-sm-10">
 				        <div class="list-group">
 			            {% for form in formList %}
                             <div class="panel-group" id="accordion">
                               <div class="panel panel-default">
-                                <div class="panel-heading">
-                                  <h4 class="panel-title">
-                                    <a data-toggle="collapse" data-parent="#selector" href="#collapse{{ form.id }}">
-                                      {{ form.id }} - {{ form.title }}
-                                    </a>
-                                  </h4>
+                                <div class="panel-heading bg-primary">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#selector" href="#collapse{{ form.id }}">
+                                            {{ form.id }} - {{ form.title }} 
+                                            <a type="button" class="btn btn-danger btn-xs pull-right">
+                                                <span class="glyphicon glyphicon-trash"></span> DELETE
+                                            </a>
+                                        </a>
+                                    </h4>
                                 </div>
                                 <div id="collapse{{ form.id }}" class="panel-collapse collapse in">
-                                  <div class="panel-body">
-                                    {% for v in form.versions %}
-                                        <li>Version: {{ v.number }}
-                                            <a type="button" class="btn btn-default btn-xs" href= "/dynamicForms/editor#?form={{form.id}}&ver={{v.number}}"
-                                                {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
-                                                <span class="glyphicon glyphicon-pencil"></span>Edit
-                                            </a>
-                                            <a type="button" class="btn btn-default btn-xs" target="_blank" href= "/dynamicForms/visor/{{form.slug}}/" 
-                                                {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
-                                                <span class="glyphicon glyphicon-eye-open"></span>View
-                                            </a>
-                                            <a type="button" class="btn btn-default btn-xs" href = "/dynamicForms/version/{{form.id}}/{{v.number}}/new" 
-                                            {% ifnotequal v.status 1 %} disabled {% endifnotequal %}>
-                                                <span class="glyphicon glyphicon-plus"></span>New Version
-                                            </a>
-                                            <a type="button" class="btn btn-default btn-xs" href = "/dynamicForms/version/{{form.id}}/{{v.number}}/duplicate"
-                                                {% ifequal v.status 0 %} disabled {% endifequal %}>    
-                                                <span class="glyphicon glyphicon-forward"></span>Duplicate
-                                            </a>
-                                            <a type="button" class="btn btn-default btn-xs"
-                                                {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
-                                                <span class="glyphicon glyphicon-remove-circle"></span>Discard
-                                            </a>
-                                            <a type="button" class="btn btn-default btn-xs">
-                                                <span class="glyphicon glyphicon-trash"></span>Delete
-                                            </a>
-
-                                            </li>
-                                    {% endfor %}
+                                    <div class="panel-body">
+                                        <table class="table table-hover">
+                                            <tbody>
+                                            {% for v in form.versions %}
+                                                <tr class = {% ifequal v.status 0 %}"info" {% else %} 
+                                                            {% ifequal v.status 1 %}"success" {% else %}
+                                                            {% ifequal v.status 2 %}"danger" {% endifequal %}
+                                                            {% endifequal %}{% endifequal %}>
+                                                    <th>Version: {{ v.number }}</th>
+                                                    <th>{% ifequal v.status 0 %}DRAFT{% else %} 
+                                                            {% ifequal v.status 1 %}PUBLISHED{% else %}
+                                                            {% ifequal v.status 2 %}EXPIRED{% endifequal %}
+                                                            {% endifequal %}{% endifequal %}</th>
+                                                    <th><a type="button" class="btn btn-default btn-xs" href= "/dynamicForms/editor#?form={{form.id}}&ver={{v.number}}"
+                                                        {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
+                                                        <span class="glyphicon glyphicon-pencil"></span>EDIT
+                                                    </a></th>
+                                                    <th><a type="button" class="btn btn-default btn-xs" target="_blank" href= "/dynamicForms/visor/{{form.slug}}/" 
+                                                        {% ifequal v.status 0 %} disabled {% endifequal %}>
+                                                        <span class="glyphicon glyphicon-eye-open"></span>VIEW
+                                                    </a></th>
+                                                    <th><a type="button" class="btn btn-default btn-xs" href = "/dynamicForms/version/{{form.id}}/{{v.number}}/new" 
+                                                    {% ifequal form.lastStatus 0 %} disabled {% endifequal %}>
+                                                        <span class="glyphicon glyphicon-plus"></span>NEW VERSION
+                                                    </a></th>
+                                                    <th><a type="button" class="btn btn-default btn-xs" href = "/dynamicForms/version/{{form.id}}/{{v.number}}/duplicate"
+                                                        {% ifequal v.status 0 %} disabled {% endifequal %}>    
+                                                        <span class="glyphicon glyphicon-forward"></span>DUPLICATE
+                                                    </a></th>
+                                                    <th><a type="button" class="btn btn-default btn-xs"
+                                                        {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
+                                                        <span class="glyphicon glyphicon-remove-circle"></span>DISCARD
+                                                    </a></th>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
                                   </div>
                                 </div>
                               </div>
@@ -70,3 +81,4 @@
 
           
 {%endblock%}
+

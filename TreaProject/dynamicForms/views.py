@@ -212,6 +212,13 @@ def submit_form_entry(request, slug, format=None):
 def formList(request):
     forms = Form.objects.values()
     for f in forms:
-        vers = Form.objects.get(slug=f['slug']).versions.values()
-        f["versions"] = vers
+        #Obtain the list of versions of the form f ordered by version number (descendant)
+        #FIX ME: improve get versions
+        querySet = Form.objects.get(slug=f['slug']).versions.order_by('number').reverse()
+        vers_dict = querySet.values()
+        #Assign the dict of versions to the form dict
+        f["versions"] = vers_dict
+        #Get the status of the last version, to know if there is already a draft in this form
+        last_version = vers_dict[0]
+        f["lastStatus"] = last_version['status']
     return render_to_response('mainPage.html', {"formList": forms})
