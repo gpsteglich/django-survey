@@ -118,10 +118,10 @@ class NewVersion(APIView):
             new_version.save()
             
         elif action == "duplicate":
-            new_form = Form(title=form.title)
+            new_form = Form(title=form.title, owner=form.owner)
             new_form.title += "/duplicated/" + str(new_form.id)
             new_form.save()
-            new_version = Version(json=version.jason, form=new_form.id)
+            new_version = Version(json=version.json, form=new_form)
             new_version.save()
         return Response(status=status.HTTP_201_CREATED)
             
