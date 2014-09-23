@@ -123,12 +123,13 @@ class NewVersion(APIView):
         if action == "new":
             #create version and save it on database
             new_version = Version(json=version.json, form=form)
-            new_version.save()
-            
+            new_version.save()           
         elif action == "duplicate":
-            new_form = Form(title=form.title, owner=form.owner)
-            new_form.title += "/duplicated/" + str(new_form.id)
+             #create a copy of the form and save it on database
+            new_form = Form(title=form.title, owner=request.user)
+            new_form.title += "/duplicated/"
             new_form.save()
+             #create a copy of the version and save it on database
             new_version = Version(json=version.json, form=new_form)
             new_version.save()
         return Response(status=status.HTTP_201_CREATED)
@@ -246,3 +247,8 @@ def formList(request):
             last_version = vers_dict[0]
             f["lastStatus"] = last_version['status']
     return render_to_response('mainPage.html', {"formList": forms})
+
+@login_required
+def editor(request):
+    return render_to_response('editor.html', {})
+    
