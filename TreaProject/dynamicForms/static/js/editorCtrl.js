@@ -103,7 +103,15 @@
             return !(Boolean(editor.formIdParam) && Boolean(editor.versionIdParam));
         };
         
-        
+          var tmpList = [];
+          for (var i = 1; i <= 6; i++){
+            tmpList.push({
+              text: 'Item ' + i,
+              value: i
+            });
+          }
+  
+            $scope.list = tmpList;
         /*
         * Load or create a new Form
         */
@@ -204,5 +212,41 @@
         };
         
     }]);
+    
+    app.directive("ngSortable", function(exp, el) {
+    return function(el) {
+        var scope = this;
+        var startParent = null;
+        var stopParent = null;
+        alert("llegue");
+        
+        $(el).sortable({
+            items: 'li:not(:has(div.complete))',
+            start: function(event, ui) {
+                startParent = $(ui.item).parent();
+                alert("tamo");
+            },
+            stop: function(event, ui) {
+                stopParent = $(ui.item).parent();
+                var stopData = scope.data.lists[stopParent.attr('lid')];
+                var tasks = [];
+                stopParent.children('li').each(function(index) {
+                    var liItem = scope.$eval($(this).attr('obj'));
+                    liItem.field_id = index;
+                    tasks.push(liItem);
+                });
+                stopData.tasks  = tasks;
+                scope.$eval();
+                
+
+            },
+            connectWith: '.sortable-linked',
+            placeholder: 'ui-state-highlight',
+            forcePlaceholderSize: true,
+            axis: 'y',
+            dropOnEmpty: true
+        });
+    }
+});
     
 })()
