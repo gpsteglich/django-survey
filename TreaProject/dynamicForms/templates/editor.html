@@ -4,7 +4,7 @@
 <html>
 	<head>
 	    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'css/visorTest.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 	</head>
 	{%block content%}
 	<body ng-app="dynamicFormsFramework">
@@ -26,17 +26,20 @@
                                     <input  class="form-control" type="text" ng-model="visor.form.title"/>
                                 </h1>
                             </div>
-                            <form role="form" class="panel-body" >                                                   
-                                <div  ng-repeat="question in visor.questions"  ng-click="visor.selectField($index)" > 
-                                   <div class="form-group" >
-                                        <div ng-include="question.field_type"></div>
+                            
+                            <ul ui-sortable ng-model="visor.questions" class="panel-body list-body" style="list-style-type: none;">                                                   
+                                <li  ng-repeat="question in visor.questions" class="list-item field-color" > 
+                                   <div class="form-group" >                                      
+                                            <div ng-include="question.field_type"></div>                                    
                                     </div>
-                                </div>
-                                <div class="text-right">
+                                </li>
+                               
+                            </ul>
+           
+                             <div class="text-right">
                                     <button type="submit" ng-click="visor.submitForm()" class="btn btn-default">Publish</button>
                                     <button type="submit" ng-click="visor.saveForm()" class="btn btn-default">Save</button>
                                 </div>
-                            </form>
                             <pre>isNewForm: {{visor.isNewForm()}}</pre>
                             <pre>form: {{visor.form|json}}</pre>
                             <pre>version: {{visor.version|json}}</pre>
@@ -51,6 +54,7 @@
             <script src={% static "jquery/js/jquery-2.1.1.min.js" %}></script>
             <script src={% static "jquery/js/jquery-ui.min.js" %}></script>
 		    <script src={% static "angular/angular.min.js" %}></script>
+            <script src={% static "angular/sortable.js" %}></script>
 		    <script src={% static "js/app.js" %}></script>
             <script src={% static "js/editorCtrl.js" %}></script>
 		</div> <!-- div de page-wrapper -->
