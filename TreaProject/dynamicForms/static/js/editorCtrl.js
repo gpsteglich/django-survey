@@ -19,6 +19,7 @@
         
         editor.questions = [];
 
+
         /*
          *  'selectedField' holds the current field that is being edited.
          */
@@ -34,7 +35,8 @@
             'textarea',
             'combobox',
             'mail',
-            'identityDoc'
+            'identityDoc',
+            'checkbox',        
         ];
 
         editor.deleteField = function(index){
@@ -51,6 +53,11 @@
         
         editor.addField = function(type) {
             var newField = angular.copy(editor.newField);
+            if (type === editor.FieldTypes[6]){
+              
+                newField.options =['first option', 'second option', 'third option'];
+
+            }
             newField.field_id = editor.questions.length;
             newField.field_type = type || 'text';
             editor.questions.push(newField);
