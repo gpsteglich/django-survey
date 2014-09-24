@@ -13,11 +13,12 @@ from rest_framework.views import APIView
 
 from django.shortcuts import render_to_response
 from dynamicForms.models import Form,FormEntry, Version, FieldEntry
-from dynamicForms.fields import PUBLISHED
+from dynamicForms.fields import PUBLISHED, DRAFT
 from dynamicForms.serializers import FormSerializer, UserSerializer
 from dynamicForms.serializers import FieldEntrySerializer
 from dynamicForms.serializers import VersionSerializer
 from datetime import datetime
+from django.http.response import HttpResponseRedirect
 
 
 class FormList(generics.ListCreateAPIView):
@@ -97,9 +98,16 @@ class VersionDetail(generics.RetrieveUpdateDestroyAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request,  pk, number, format=None):
-        #version = self.get_object(slug, number)
-        #version.delete()
-        return Response(status=status.HTTP_403_FORBIDDEN)
+        #get related form of the version that is going to be deleted
+        form = Form.objects.get(id=pk)
+        #get version 
+        version = Version.objects.get(form=form, number=number)
+        #only draft versions can be deleted this way
+        if version.status == DRAFT:
+            version.delete()
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
     
     
 class NewVersion(APIView):
@@ -124,6 +132,18 @@ class NewVersion(APIView):
             new_version = Version(json=version.json, form=new_form)
             new_version.save()
         return Response(status=status.HTTP_201_CREATED)
+    
+class DeleteForm(APIView):
+    """
+     APIView to delete a form
+    """
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    
+    def get(self, request, pk):
+        #get form and delete it
+        form = Form.objects.get(id=pk)
+        form.delete()
+        return HttpResponseRedirect("/dynamicForms/main/")
             
             
 class FillForm(generics.RetrieveUpdateDestroyAPIView):
