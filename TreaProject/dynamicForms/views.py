@@ -1,7 +1,11 @@
 
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404    
+from django.views.generic import TemplateView
+from django.shortcuts import redirect
+from django.core.exceptions import ObjectDoesNotExist
+
 
 from rest_framework.decorators import api_view
 from rest_framework import generics
@@ -13,10 +17,10 @@ from rest_framework.views import APIView
 
 from django.shortcuts import render_to_response
 from dynamicForms.models import Form,FormEntry, Version, FieldEntry
-from dynamicForms.fields import PUBLISHED
+from dynamicForms.fields import PUBLISHED, DRAFT
 from dynamicForms.serializers import FormSerializer, UserSerializer
 from dynamicForms.serializers import FieldEntrySerializer
-from dynamicForms.serializers import VersionSerializer
+from dynamicForms.serializers import VersionSerializer, FormEntrySerializer
 from datetime import datetime
 
 
@@ -137,6 +141,7 @@ class FillForm(generics.RetrieveUpdateDestroyAPIView):
         form_versions = Version.objects.filter(form=form)
         # Max will keep track of the highest published version
         # of the form to be displayed
+        # This can be done with aggregation (max(Number))
         max = 0
         final_version = ''
         for version in form_versions:
@@ -222,3 +227,43 @@ def formList(request):
         last_version = vers_dict[0]
         f["lastStatus"] = last_version['status']
     return render_to_response('mainPage.html', {"formList": forms})
+
+@api_view(['GET'])
+def get_responses(request, slug, number, format=None):
+    """
+    APIView to get all the entries for a particular form.
+    """
+    try:
+        form = Form.objects.get(slug=slug)
+        v = form.versions.get(number=number)
+        if (v.status == DRAFT):
+            content = {"error": "This version's status is Draft."}
+            return Response(content, status=status.HTTP_406_NOT_ACCEPTABLE)
+        queryset = v.entries.all()
+        serializer = FormEntrySerializer(queryset, many=True)
+        return Response(serializer.data)
+    except ObjectDoesNotExist:
+        content = {"error": "There is no form with that slug or the corresponding"
+                   " form has no version with that number"}
+        return Response(content, status=status.HTTP_404_NOT_FOUND)
+    
+
+
+class SimpleStaticView(TemplateView):
+    def get_template_names(self):
+        return [self.kwargs.get('template_name') + ".html"]
+    
+    def get(self, request, *args, **kwargs):
+        from django.contrib.auth import authenticate, login
+        if request.user.is_anonymous():
+            # Auto-login the User for Demonstration Purposes
+            user = authenticate()
+            login(request, user)
+        return super(SimpleStaticView, self).get(request, *args, **kwargs)
+        
+        
+        
+        
+        
+        
+    
