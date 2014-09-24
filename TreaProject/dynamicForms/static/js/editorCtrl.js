@@ -16,6 +16,11 @@
     	$scope.editorMode = true;
     	
         var editor = this;
+        var checkboxOption = {
+            label : 'new option',
+        }
+
+
         
         editor.questions = [];
 
@@ -28,6 +33,15 @@
         editor.selectField = function(index) {
             editor.selectedField = editor.questions[index];
         };
+
+        editor.addOption = function() {
+            var option = angular.copy(checkboxOption);   
+            editor.selectedField.options.push(option);
+        };
+
+        editor.deleteOption = function (index){
+            editor.selectedField.options.splice(index,1);
+        }
         
         editor.FieldTypes = [
             'text',
@@ -49,13 +63,23 @@
             text: '',
             required: false,
             answer: '',
+            options: [] 
         };
+
+
         
         editor.addField = function(type) {
             var newField = angular.copy(editor.newField);
+           
             if (type === editor.FieldTypes[6]){
               
-                newField.options =['first option', 'second option', 'third option'];
+                 var option1 = angular.copy(checkboxOption);
+                 option1.label ='first option';
+                 var option2 = angular.copy(checkboxOption);
+                 option2.label ='second option';
+                 var option3 = angular.copy(checkboxOption);
+                 option3.label ='third option';
+                newField.options= [option1,option2,option3];
 
             }
             newField.field_id = editor.questions.length;
