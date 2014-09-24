@@ -5,6 +5,7 @@ from django.http import HttpResponse, Http404
 from django.views.generic import TemplateView
 from django.shortcuts import redirect
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Max
 
 
 from rest_framework.decorators import api_view
@@ -58,9 +59,14 @@ class VersionList(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     
     def get(self, request, pk, format=None):
-        versions = Form.objects.get(id=pk).versions.all()
-        serializer = VersionSerializer(versions, many=True)
-        return Response(serializer.data)
+        try:
+            versions = Form.objects.get(id=pk).versions.all()
+            serializer = VersionSerializer(versions, many=True)
+            return Response(serializer.data)
+        except Form.DoesNotExist:
+            content = {"error": "There is no form with that slug"}
+            return Response(content, status=status.HTTP_404_NOT_FOUND)
+    
 
     def post(self, request, pk, format=None):
         serializer = VersionSerializer(data=request.DATA)
@@ -84,8 +90,11 @@ class VersionDetail(generics.RetrieveUpdateDestroyAPIView):
         try:
             form = Form.objects.get(id=pk)
             return form.versions.get(number=number)
-        except Version.DoesNotExist or Form.DoesNotExist:
-            raise Http404
+        except ObjectDoesNotExist:
+            content = {"error": "There is no form with that slug or the corresponding"
+                       " form has no version with that number"}
+            return Response(content, status=status.HTTP_404_NOT_FOUND)
+    
 
     def get(self, request, pk, number, format=None):
         version = self.get_object(pk, number)
@@ -114,20 +123,26 @@ class NewVersion(APIView):
     
     def get(self, request, pk, number, action):
         #get version of form that is going to be duplicated
-        form = Form.objects.get(id=pk)
-        version = Version.objects.get(form=form, number=number)
-        if action == "new":
-            #create version and save it on database
-            new_version = Version(json=version.json, form=form)
-            new_version.save()
-            
-        elif action == "duplicate":
-            new_form = Form(title=form.title, owner=form.owner)
-            new_form.title += "/duplicated/" + str(new_form.id)
-            new_form.save()
-            new_version = Version(json=version.json, form=new_form)
-            new_version.save()
-        return Response(status=status.HTTP_201_CREATED)
+        try:    
+            form = Form.objects.get(id=pk)
+            version = Version.objects.get(form=form, number=number)
+            if action == "new":
+                #create version and save it on database
+                new_version = Version(json=version.json, form=form)
+                new_version.save()
+                
+            elif action == "duplicate":
+                new_form = Form(title=form.title, owner=form.owner)
+                new_form.title += "/duplicated/" + str(new_form.id)
+                new_form.save()
+                new_version = Version(json=version.json, form=new_form)
+                new_version.save()
+            return Response(status=status.HTTP_201_CREATED)
+        except ObjectDoesNotExist:
+            content = {"error": "There is no form with that slug or the corresponding"
+                       " form has no version with that number"}
+            return Response(content, status=status.HTTP_404_NOT_FOUND)
+    
             
             
 class FillForm(generics.RetrieveUpdateDestroyAPIView):
@@ -141,13 +156,12 @@ class FillForm(generics.RetrieveUpdateDestroyAPIView):
         form_versions = Version.objects.filter(form=form)
         # Max will keep track of the highest published version
         # of the form to be displayed
-        # This can be done with aggregation (max(Number))
-        max = 0
-        final_version = ''
-        for version in form_versions:
-            if version.number > max: #and version.status == PUBLISHED:
-                max = version.number
-                final_version = version
+        max = form_versions.filter(status=PUBLISHED).aggregate(Max('number'))
+        final_version = form_versions.get(number=max['number__max'])
+#         for version in form_versions:
+#             if version.number > max: #and version.status == PUBLISHED:
+#                 max = version.number
+#                 final_version = version
         serializer = VersionSerializer(final_version)
         return Response(serializer.data)
 
@@ -191,14 +205,14 @@ def submit_form_entry(request, slug, format=None):
     form_versions = Version.objects.filter(form=form)
     # Max will keep track of the highest published version
     # of the form to be displayed
-    max = 0
-    final_version = ''
+    max = form_versions.filter(status=PUBLISHED).aggregate(Max('number'))
+    final_version = form_versions.get(number=max['number__max'])
     # FIXME: Si se agrega el status EXPIRED, deberia haber solo 1 version PUBLISHED
     # asi que no seria necesario buscar el nro de version mas alto
-    for version in form_versions:
-        if version.number > max: #and version.status == PUBLISHED:
-            max = version.number
-            final_version = version
+    #for version in form_versions:
+    #    if version.number > max: #and version.status == PUBLISHED:
+    #        max = version.number
+    #        final_version = version
     entry = FormEntry(version=final_version)
     entry.entry_time = datetime.now()
     entry.save() 
