@@ -28,7 +28,7 @@
                             </div>
                             
                             <ul ui-sortable ng-model="visor.questions" class="panel-body list-body" style="list-style-type: none;">                                                   
-                                <li  ng-repeat="question in visor.questions" class="list-item field-color" > 
+                                <li  ng-repeat="question in visor.questions" class="list-item field-color" ng-click="visor.selectField($index)" > 
                                    <div class="form-group" >                                      
                                             <div ng-include="question.field_type"></div>                                    
                                     </div>
