@@ -20,6 +20,23 @@
         editor.questions = [];
 
         /*
+        * 'selectedPage' holds the current page that's being edited
+        */
+        editor.selectedPage;
+        
+        editor.selectPage = function(index) {
+            editor.selectedPage = editor.form.pages[index];   
+        };
+        editor.addPage = function() {
+            editor.form.pages.push(editor.form.pages.length);   
+        };
+        editor.removePage = function(index){
+            //TODO: Add modal asking confirmation..
+            editor.form.pages.splice(index,1);
+            
+        };
+        
+        /*
          *  'selectedField' holds the current field that is being edited.
          */
         editor.selectedField;
@@ -85,6 +102,7 @@
                 'slug' : '',
             };
             editor.version = {
+                'pages' : [0],
                 'status' :0 ,
                 'publish_date' : '2014-06-06',
                 'expiry_date' : '2014-06-06',
