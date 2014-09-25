@@ -1,0 +1,47 @@
+{%extends 'base.html' %}
+{% load staticfiles %}
+<!DOCTYPE html>
+{%block content%}
+    {% verbatim %}
+    <div id="page-wrapper" ng-controller="MainPageCtrl as mainPage">
+            <div class="container-fluid">
+                {{mainPage.json}}
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Responses: {{mainPage.slug}} - version: {{mainPage.ver}}
+                        </h1>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-10">
+                        <div class="list-group">
+                            <ul>
+                                <li ng-repeat="response in mainPage.json">
+                                    <p>Entry: {{response.entry_time}}</p>
+                                    <ul>
+                                        <li ng-repeat="field in response.fields">
+                                        {{field}}
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    {% endverbatim %}
+    <script src={% static "jquery/js/jquery-2.1.1.min.js" %}></script>
+    <script src={% static "bootstrap/js/bootstrap.js" %}></script>
+    <script src={% static "angular/angular.min.js" %}></script>
+    <script src={% static "js/app.js" %}></script>
+    <script src={% static "js/mainpageCtrl.js" %}></script>
+{%endblock%}
