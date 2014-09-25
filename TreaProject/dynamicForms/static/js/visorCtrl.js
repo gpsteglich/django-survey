@@ -27,10 +27,14 @@
                 alert('error cargando formulario: ' + status);
             })
             // Load Version
+        visor.questions = [];
         $http.get('/dynamicForms/visor/publishVersion/'+visor.slug)
             .success(function(data){
                 visor.version = data;
-                visor.questions = JSON.parse(data.json).Fields;
+                visor.pages = JSON.parse(data.json).pages;
+                for (var i=0; i<visor.pages.length; i++) {
+                    visor.questions = visor.questions.concat(visor.pages[i].fields);
+                };
             })
             .error(function(data, status, headers, config){
                 alert('error cargando las preguntas: ' + status);

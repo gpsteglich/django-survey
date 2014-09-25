@@ -17,22 +17,27 @@
     	
         var editor = this;
         
-        editor.questions = [];
+        editor.newPage = {'fields':[], 'subTitle':''};
+        
+        editor.pages = [angular.copy(editor.newPage)];
+        //editor.questions = [];
+        //editor.pages[0].fields = editor.questions;
 
         /*
         * 'selectedPage' holds the current page that's being edited
         */
-        editor.selectedPage;
+        editor.selectedPage = editor.pages[0];
         
         editor.selectPage = function(index) {
-            editor.selectedPage = editor.form.pages[index];   
+            editor.selectedPage = editor.pages[index];   
         };
         editor.addPage = function() {
-            editor.form.pages.push(editor.form.pages.length);   
+            newPage = angular.copy(editor.newPage);
+            editor.pages.push(newPage);   
         };
-        editor.removePage = function(index){
+        editor.deletePage = function(index){
             //TODO: Add modal asking confirmation..
-            editor.form.pages.splice(index,1);
+            editor.pages.splice(index,1);
             
         };
         
@@ -41,8 +46,9 @@
          */
         editor.selectedField;
         
-        editor.selectField = function(index) {
-            editor.selectedField = editor.questions[index];
+        editor.selectField = function(page, index) {
+            editor.selectedPage = editor.pages[page];   
+            editor.selectedField = editor.selectedPage.fields[index];
         };
         
         editor.FieldTypes = [
@@ -54,8 +60,8 @@
             'identityDoc'
         ];
 
-        editor.deleteField = function(index){
-            editor.questions.splice(index,1);        
+        editor.deleteField = function(page, index){
+            editor.pages[page].fields.splice(index,1);        
         };
 
         editor.newField =  {
@@ -66,12 +72,13 @@
             answer: '',
         };
         
+        //TODO: asegurar identificador de pregunta único
         editor.addField = function(type) {
             var newField = angular.copy(editor.newField);
-            newField.field_id = editor.questions.length;
+            newField.field_id = editor.selectedPage.fields.length;
             newField.field_type = type || 'text';
-            editor.questions.push(newField);
-            editor.selectedField = editor.questions[editor.questions.length];
+            editor.selectedPage.fields.push(newField);
+            editor.selectedField = editor.selectedPage.fields[editor.selectedPage.fields.length];
         };
        
         editor.clearSelectedField = function(){
@@ -102,13 +109,12 @@
                 'slug' : '',
             };
             editor.version = {
-                'pages' : [0],
+                'json' : '',
                 'status' :0 ,
                 'publish_date' : '2014-06-06',
                 'expiry_date' : '2014-06-06',
                 'number' : 0,
                 'owner' : '',
-                'json' : '',
                 'form' : '',
             }
         } else {
@@ -124,7 +130,7 @@
                 $http.get('version/'+editor.formIdParam+'/'+editor.versionIdParam)
                 .success(function(data){
                     editor.version = data;
-                    editor.questions = JSON.parse(data.json).Fields
+                    editor.pages = JSON.parse(data.json).pages
 
                 })
                 .error(function(data, status, headers, config){
@@ -139,6 +145,7 @@
         /*
         * Save and publish form
         */
+        //TODO: usar variables globales para PUBLISH, DRAFT
         editor.saveForm = function(){
             editor.persistForm(0);
         }
@@ -154,7 +161,7 @@
                     editor.form = data;
                     editor.formIdParam = data.id;
                     editor.version.form = data.id;
-                    editor.version.json = JSON.stringify({'Fields' : editor.questions});
+                    editor.version.json = angular.toJson({'pages':editor.pages});
                     $http.post('version/'+editor.formIdParam+'/', editor.version)
                     .success( function(data, status, headers, config){
                         editor.versionIdParam = data.number;
@@ -174,7 +181,7 @@
                 $http.put('forms/'+ editor.formIdParam + '/', editor.form)
                 .success( function(data, status, headers, config){
                     editor.form = data;
-                    editor.version.json = JSON.stringify({'Fields' : editor.questions});
+                    editor.version.json = angular.toJson({'pages':editor.pages});
                     $http.put('version/'+editor.formIdParam+'/'+editor.versionIdParam+"/", editor.version)
                     .success( function(data, status, headers, config){
                         editor.version = data;
@@ -190,6 +197,17 @@
 
         };
         
-    }]);
+    }])
+    .directive('itemcell', function () {
+        return {
+        restrict: 'A',
+            link: function ($scope, iElement, iAttrs) { 
+                if (!$scope.$parent.$parent.totalCount) {
+                $scope.$parent.$parent.totalCount = 0;
+            }
+            $scope.$parent.$parent.totalCount++;
+        }
+    }
+    });
     
 })()
