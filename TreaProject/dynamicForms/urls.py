@@ -45,7 +45,8 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^visor/(?P<slug>[a-z,0-9,\-,\_]+)/textarea$', views.TemplateView.as_view(template_name='question_text_area.html')),
     url(r'^visor/(?P<slug>[a-z,0-9,\-,\_]+)/number$', views.TemplateView.as_view(template_name='question_num.html')),
     url(r'^visor/(?P<slug>[a-z,0-9,\-,\_]+)/$', views.TemplateView.as_view(template_name='visor.html')),
-    url(r'^responses/(?P<slug>[a-z,0-9,\-,\_]+)/(?P<number>[0-9]+)/$', 'get_responses'),
+    url(r'^responses/(?P<slug>[a-z,0-9,\-,\_]+)/(?P<number>[0-9]+)/d$', 'get_responses'),
+    url(r'^responses/(?P<slug>[a-z,0-9,\-,\_]+)/(?P<number>[0-9]+)/$', views.TemplateView.as_view(template_name='responses.html')),
     
 )
 
