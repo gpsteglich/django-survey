@@ -17,6 +17,8 @@
     	
         var editor = this;
         
+        editor.max_id = 0;
+        
         editor.newPage = {'fields':[], 'subTitle':''};
         
         editor.pages = [angular.copy(editor.newPage)];
@@ -75,7 +77,7 @@
         //TODO: asegurar identificador de pregunta único
         editor.addField = function(type) {
             var newField = angular.copy(editor.newField);
-            newField.field_id = editor.selectedPage.fields.length;
+            newField.field_id = ++editor.max_id;
             newField.field_type = type || 'text';
             editor.selectedPage.fields.push(newField);
             editor.selectedField = editor.selectedPage.fields[editor.selectedPage.fields.length];
@@ -130,8 +132,14 @@
                 $http.get('version/'+editor.formIdParam+'/'+editor.versionIdParam)
                 .success(function(data){
                     editor.version = data;
-                    editor.pages = JSON.parse(data.json).pages
-
+                    editor.pages = JSON.parse(data.json).pages;
+                    editor.questions = [];
+                    for (var i=0; i<editor.pages.length; i++) {
+                        editor.questions = editor.questions.concat(editor.pages[i].fields);
+                    };
+                    editor.max_id = Math.max.apply(Math,editor.questions.map(function(o){
+                        return o.field_id;
+                    }));
                 })
                 .error(function(data, status, headers, config){
                     alert('error cargando version: ' + status);
@@ -197,17 +205,6 @@
 
         };
         
-    }])
-    .directive('itemcell', function () {
-        return {
-        restrict: 'A',
-            link: function ($scope, iElement, iAttrs) { 
-                if (!$scope.$parent.$parent.totalCount) {
-                $scope.$parent.$parent.totalCount = 0;
-            }
-            $scope.$parent.$parent.totalCount++;
-        }
-    }
-    });
+    }]);
     
 })()
