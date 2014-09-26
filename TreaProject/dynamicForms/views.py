@@ -126,15 +126,15 @@ class NewVersion(APIView):
         #if action new version
         if action == "new":
             #create version and save it on database
-            new_version = Version(json=version.json, form=form)          
+            new_version = Version(json=version.json, form=form)
             new_version.save()    
         #if action duplicate a version       
         elif action == "duplicate":
-             #create a copy of the form related to selected version
+            #create a copy of the form related to selected version
             new_form = Form(title=form.title, owner=request.user)
             new_form.title += "(duplicated)"
             new_form.save()
-             #create a copy of the version and save it on database
+            #create a copy of the version and save it on database
             new_version = Version(json=version.json, form=new_form)
             new_version.save()
         return HttpResponseRedirect("/dynamicForms/main/")
@@ -171,6 +171,7 @@ class FillForm(generics.RetrieveUpdateDestroyAPIView):
                 final_version = version
         serializer = VersionSerializer(final_version)
         return Response(serializer.data)
+
 
 
 class GetTitle(generics.RetrieveUpdateDestroyAPIView):
