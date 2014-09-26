@@ -7,18 +7,14 @@
     /*
      * This controller handles the logic to display the list of forms
      */    
-    app.controller('MainPageCtrl', ['$scope','$http', function ($scope, $http) {
+    app.controller('MainPageCtrl', ['$scope','$http','$location', function ($scope, $http, $location) {
     	
     	var mainPage = this;
 
-        //FIXME: corregir la manera de obtener el slug
-        var pattern = location.pathname.match(/\/responses\/([\w]*)\/(\w*)/);
-        
-        mainPage.slug = pattern[1];
-        mainPage.ver = pattern[2];
+        mainPage.formSlugParam = ($location.search()).form;
+        mainPage.versionIdParam = ($location.search()).ver;
 
-
-        $http.get('/dynamicForms/responses/'+mainPage.slug+'/'+ mainPage.ver+ '/d')
+        $http.get('/dynamicForms/responses/'+mainPage.formSlugParam+'/'+ mainPage.versionIdParam+'/')
             .success(function(data){
                 mainPage.json = data;
             })
