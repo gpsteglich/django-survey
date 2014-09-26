@@ -4,5 +4,5 @@
             style="background-color:transparent;padding:0;">
         <span class="glyphicon glyphicon-remove"></span>
     </button>
-    <textarea class="form-control" type="text" ng-model="question.answer"  ng-required="question.required"/>   
+    <textarea class="form-control" type="text" ng-model="question.answer"  ng-required="question.validations.required" ng-maxlength = "{{question.validations.max_len_text}}"/>   
 {% endverbatim %} 
