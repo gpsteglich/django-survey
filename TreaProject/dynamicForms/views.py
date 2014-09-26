@@ -172,6 +172,7 @@ class FillForm(generics.RetrieveUpdateDestroyAPIView):
         serializer = VersionSerializer(final_version)
         return Response(serializer.data)
 
+
 class GetTitle(generics.RetrieveUpdateDestroyAPIView):
     """
     APIView to get form title, since it is not included in version
