@@ -1,7 +1,7 @@
 
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 
 from rest_framework.decorators import api_view
 from rest_framework import generics
@@ -117,22 +117,27 @@ class NewVersion(APIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     
     def get(self, request, pk, number, action):
-        #get version of form that is going to be duplicated
-        form = Form.objects.get(id=pk)
-        version = Version.objects.get(form=form, number=number)
+        try:
+            #get version of form that is going to be duplicated-
+            form = Form.objects.get(id=pk)
+            version = Version.objects.get(form=form, number=number)
+        except Version.DoesNotExist or Form.DoesNotExist:
+            raise Http404
+        #if action new version
         if action == "new":
             #create version and save it on database
-            new_version = Version(json=version.json, form=form)
-            new_version.save()           
+            new_version = Version(json=version.json, form=form)          
+            new_version.save()    
+        #if action duplicate a version       
         elif action == "duplicate":
-             #create a copy of the form and save it on database
+             #create a copy of the form related to selected version
             new_form = Form(title=form.title, owner=request.user)
-            new_form.title += "/duplicated/"
+            new_form.title += "(duplicated)"
             new_form.save()
              #create a copy of the version and save it on database
             new_version = Version(json=version.json, form=new_form)
             new_version.save()
-        return Response(status=status.HTTP_201_CREATED)
+        return HttpResponseRedirect("/dynamicForms/main/")
     
 class DeleteForm(APIView):
     """
