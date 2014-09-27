@@ -83,6 +83,7 @@ class FormEntry(models.Model):
     entry_time = models.DateField(blank=True)
 
 
+
 class FieldEntry(models.Model):
     field_id = models.IntegerField()
     field_type = models.CharField(max_length=200)
@@ -91,3 +92,5 @@ class FieldEntry(models.Model):
     answer = models.CharField(max_length=200)
     entry = models.ForeignKey("FormEntry", related_name="fields", blank=True, null=True)
 
+    def __str__(self):
+        return '%s : %s' % (self.text, self.answer)

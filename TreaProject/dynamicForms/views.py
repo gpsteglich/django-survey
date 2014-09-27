@@ -2,6 +2,11 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import HttpResponse, Http404    
+from django.views.generic import TemplateView
+from django.shortcuts import redirect
+from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Max
 
 from rest_framework.decorators import api_view
 from rest_framework import generics
@@ -16,7 +21,7 @@ from dynamicForms.models import Form,FormEntry, Version, FieldEntry
 from dynamicForms.fields import PUBLISHED, DRAFT
 from dynamicForms.serializers import FormSerializer, UserSerializer
 from dynamicForms.serializers import FieldEntrySerializer
-from dynamicForms.serializers import VersionSerializer
+from dynamicForms.serializers import VersionSerializer, FormEntrySerializer
 from datetime import datetime
 from django.http.response import HttpResponseRedirect
 
@@ -55,9 +60,14 @@ class VersionList(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     
     def get(self, request, pk, format=None):
-        versions = Form.objects.get(id=pk).versions.all()
-        serializer = VersionSerializer(versions, many=True)
-        return Response(serializer.data)
+        try:
+            versions = Form.objects.get(id=pk).versions.all()
+            serializer = VersionSerializer(versions, many=True)
+            return Response(serializer.data)
+        except Form.DoesNotExist:
+            content = {"error": "There is no form with that slug"}
+            return Response(content, status=status.HTTP_404_NOT_FOUND)
+    
 
     def post(self, request, pk, format=None):
         serializer = VersionSerializer(data=request.DATA)
@@ -81,8 +91,11 @@ class VersionDetail(generics.RetrieveUpdateDestroyAPIView):
         try:
             form = Form.objects.get(id=pk)
             return form.versions.get(number=number)
-        except Version.DoesNotExist or Form.DoesNotExist:
-            raise Http404
+        except ObjectDoesNotExist:
+            content = {"error": "There is no form with that slug or the corresponding"
+                       " form has no version with that number"}
+            return Response(content, status=status.HTTP_404_NOT_FOUND)
+    
 
     def get(self, request, pk, number, format=None):
         version = self.get_object(pk, number)
@@ -122,7 +135,9 @@ class NewVersion(APIView):
             form = Form.objects.get(id=pk)
             version = Version.objects.get(form=form, number=number)
         except Version.DoesNotExist or Form.DoesNotExist:
-            raise Http404
+            content = {"error": "There is no form with that slug or the corresponding"
+                       " form has no version with that number"}
+            return Response(content, status=status.HTTP_404_NOT_FOUND)
         #if action new version
         if action == "new":
             #create version and save it on database
@@ -163,16 +178,14 @@ class FillForm(generics.RetrieveUpdateDestroyAPIView):
         form_versions = Version.objects.filter(form=form)
         # Max will keep track of the highest published version
         # of the form to be displayed
-        max = 0
-        final_version = ''
-        for version in form_versions:
-            if version.number > max: #and version.status == PUBLISHED:
-                max = version.number
-                final_version = version
+        max = form_versions.filter(status=PUBLISHED).aggregate(Max('number'))
+        final_version = form_versions.get(number=max['number__max'])
+#         for version in form_versions:
+#             if version.number > max: #and version.status == PUBLISHED:
+#                 max = version.number
+#                 final_version = version
         serializer = VersionSerializer(final_version)
         return Response(serializer.data)
-
-
 
 class GetTitle(generics.RetrieveUpdateDestroyAPIView):
     """
@@ -214,14 +227,14 @@ def submit_form_entry(request, slug, format=None):
     form_versions = Version.objects.filter(form=form)
     # Max will keep track of the highest published version
     # of the form to be displayed
-    max = 0
-    final_version = ''
+    max = form_versions.filter(status=PUBLISHED).aggregate(Max('number'))
+    final_version = form_versions.get(number=max['number__max'])
     # FIXME: Si se agrega el status EXPIRED, deberia haber solo 1 version PUBLISHED
     # asi que no seria necesario buscar el nro de version mas alto
-    for version in form_versions:
-        if version.number > max: #and version.status == PUBLISHED:
-            max = version.number
-            final_version = version
+    #for version in form_versions:
+    #    if version.number > max: #and version.status == PUBLISHED:
+    #        max = version.number
+    #        final_version = version
     entry = FormEntry(version=final_version)
     entry.entry_time = datetime.now()
     entry.save() 
@@ -258,4 +271,44 @@ def formList(request):
 @login_required
 def editor(request):
     return render_to_response('editor.html', {})
+    
+
+@api_view(['GET'])
+def get_responses(request, slug, number, format=None):
+    """
+    APIView to get all the entries for a particular form.
+    """
+    try:
+        form = Form.objects.get(slug=slug)
+        v = form.versions.get(number=number)
+        if (v.status == DRAFT):
+            content = {"error": "This version's status is Draft."}
+            return Response(content, status=status.HTTP_406_NOT_ACCEPTABLE)
+        queryset = v.entries.all()
+        serializer = FormEntrySerializer(queryset, many=True)
+        return Response(serializer.data)
+    except ObjectDoesNotExist:
+        content = {"error": "There is no form with that slug or the corresponding"
+                   " form has no version with that number"}
+        return Response(content, status=status.HTTP_404_NOT_FOUND)
+    
+
+
+class SimpleStaticView(TemplateView):
+    def get_template_names(self):
+        return [self.kwargs.get('template_name') + ".html"]
+    
+    def get(self, request, *args, **kwargs):
+        from django.contrib.auth import authenticate, login
+        if request.user.is_anonymous():
+            # Auto-login the User for Demonstration Purposes
+            user = authenticate()
+            login(request, user)
+        return super(SimpleStaticView, self).get(request, *args, **kwargs)
+        
+        
+        
+        
+        
+        
     

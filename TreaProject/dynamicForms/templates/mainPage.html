@@ -64,6 +64,10 @@
                                                         {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
                                                         <span class="glyphicon glyphicon-remove-circle"></span>DISCARD
                                                     </a></th>
+                                                    <th><a type="button" class="btn btn-default btn-xs" href= "/dynamicForms/responses#?form={{form.slug}}&ver={{v.number}}"
+                                                        {% ifequal v.status 0 %} disabled {% endifequal %}>
+                                                        <span class="glyphicon glyphicon-pencil"></span>VIEW RESPONSES
+                                                    </a></th>
                                                 </tr>
                                             {% endfor %}
                                             </tbody>
