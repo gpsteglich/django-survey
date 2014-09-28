@@ -12,7 +12,6 @@ from django.contrib import admin
 
 admin.autodiscover()
 
-
 urlpatterns = patterns('dynamicForms.views',
     url(r'^forms/(?P<pk>[a-z,0-9,\-,\_]+)/$', views.FormDetail.as_view()),
     url(r'^form/(?P<slug>[a-z,0-9,\-,\_]+)/$', views.GetTitle.as_view()),
