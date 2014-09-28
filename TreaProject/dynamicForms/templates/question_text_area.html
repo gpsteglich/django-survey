@@ -1,4 +1,7 @@
 {% verbatim %} 
     <label ng-hide="editorMode">{{$index + 1}}. {{question.text}}</label>
-    <textarea class="form-control" type="text" ng-model="question.answer"  ng-required="question.required"/>   
+    <textarea class="form-control" type="text" ng-model="question.answer"
+        ng-required="question.validations.required"
+    	ng-maxlength="{{question.validations.max_len_text}}"
+              />   
 {% endverbatim %} 

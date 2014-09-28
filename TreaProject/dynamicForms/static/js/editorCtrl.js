@@ -70,8 +70,13 @@
         	field_id : 0,
             field_type:'' ,
             text: '',
-            required: false,
             answer: '',
+            validations: {
+                required: false,
+                min_number: 0,
+                max_number: 100,
+                max_len_text: 255,
+            }
         };
         
         //TODO: asegurar identificador de pregunta único
@@ -98,7 +103,17 @@
             return !(Boolean(editor.formIdParam) && Boolean(editor.versionIdParam));
         };
         
-        
+        editor.checkValidations = function(field){
+            var val = field.validations;
+            if (val.min_number > val.max_number) {
+                alert("Minimum can't exceed maximum");
+                val.min_number = val.max_number;
+            };
+            if (val.max_len_text < 0){
+                alert("Maximum length can't be less than 0");
+                val.max_len_text = 0;
+            };
+        };
         /*
         * Load or create a new Form
         */
