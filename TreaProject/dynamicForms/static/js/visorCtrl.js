@@ -7,7 +7,7 @@
         /*
          * The VisorCtrl holds the logic to display, validate and submit the form.
          */
-        .controller('VisorCtrl', ['$scope','$http','$stateParams','$state', function ($scope, $http, $stateParams, $state) {
+        .controller('VisorCtrl', ['$scope','$http','$stateParams', function ($scope, $http, $stateParams) {
 
             /*
             *  This controller is initialiced by ui-router, so it cant be used with ng-controller
