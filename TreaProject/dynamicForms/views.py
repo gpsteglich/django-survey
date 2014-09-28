@@ -110,7 +110,7 @@ class VersionDetail(generics.RetrieveUpdateDestroyAPIView):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
     
     
-class NewVersion(APIView):
+class NewVersion(generics.CreateAPIView):
     """
     APIView to create a new version of a form or duplicate a form
     """
@@ -139,7 +139,25 @@ class NewVersion(APIView):
             new_version.save()
         return HttpResponseRedirect("/dynamicForms/main/")
     
-class DeleteForm(APIView):
+class DeleteVersion(generics.DestroyAPIView):
+    """
+     APIView to delete a form
+    """
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    
+    def get(self, request,  pk, number, format=None):
+        ##get related form of the version that is going to be deleted
+        form = Form.objects.get(id=pk)
+        #get version 
+        version = Version.objects.get(form=form, number=number)
+        #only draft versions can be deleted this way
+        if version.status == DRAFT:
+            version.delete()
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+    
+class DeleteForm(generics.DestroyAPIView):
     """
      APIView to delete a form
     """
