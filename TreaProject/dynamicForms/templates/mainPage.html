@@ -48,8 +48,8 @@
                                                         {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
                                                         <span class="glyphicon glyphicon-pencil"></span>EDIT
                                                     </a></th>
-                                                    <th><a type="button" class="btn btn-default btn-xs" target="_blank" href= "/dynamicForms/visor/{{form.slug}}/" 
-                                                        {% ifequal v.status 0 %} disabled {% endifequal %}>
+                                                    <th><a type="button" class="btn btn-default btn-xs" target="_blank" href= "/dynamicForms/preview#?form={{form.id}}&ver={{v.number}}" 
+                                                        {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
                                                         <span class="glyphicon glyphicon-eye-open"></span>VIEW
                                                     </a></th>
                                                     <th><a type="button" class="btn btn-default btn-xs" href = "/dynamicForms/version/{{form.id}}/{{v.number}}/new" 
