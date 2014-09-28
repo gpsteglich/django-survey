@@ -50,14 +50,15 @@
             
                 // Persist form
             visor.save = function(){
-                var questions = [];
+                visor.questions = [];
                 for (var i=0; i< visor.pages.length; i++) {
-                    questions = questions.concat(visor.pages[i].fields);
+                    visor.questions = visor.questions.concat(angular.copy(visor.pages[i].fields));
                 };
-                for (var j=0; i< questions.length; i++) {
-                    //questions[j] = questions[j].remove('validations');
+                for (var j=0; j< visor.questions.length; j++) {
+                    delete visor.questions[j]['validations'];
+                    visor.questions[j].required = false;
                 };
-                $http.post('/dynamicForms/visorPub/'+visor.form.slug+'/submit/',questions)
+                $http.post('/dynamicForms/visorPub/'+visor.form.slug+'/submit/',visor.questions)
                     .success( function(data, status, headers, config){
 
                     })
