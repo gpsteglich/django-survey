@@ -19,6 +19,26 @@
             </button>
         </div>  
         
+        <div class="form-group" ng-show= "visor.selectedField.field_type == 'checkbox'">
+            <label for="FieldType">Checkbox Options:</label>
+            <div ng-repeat = "option in visor.selectedField.options">
+                <div class="form-group">
+                    <div class="input-group">
+                         <span class="input-group-btn">
+                            <button class="btn pull-right" ng-click = "visor.deleteOption($index)">
+                                 <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                         </span>
+                         <input  class="form-control"  ng-model="visor.selectedField.options[visor.selectedField.options.indexOf(option)].label" required>
+                    </div>  
+                </div>               
+            </div>
+            <button type="button" class="btn btn-default btn-xs" ng-click = "visor.addOption()" >
+                    <span class="glyphicon glyphicon-star"></span> Add Options
+            </button>
+            
+        </div>
+        
         <div ng-show="visor.selectedField.field_type=='number'" class="form-group">
             Min: <input type="number" ng-model="visor.selectedField.validations.min_number" ng-value="true" ng-blur="visor.checkValidations(visor.selectedField)">
             Max: <input type="number" ng-model="visor.selectedField.validations.max_number" ng-value="true" ng-blur="visor.checkValidations(visor.selectedField)">

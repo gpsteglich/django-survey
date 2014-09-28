@@ -16,6 +16,9 @@
     	$scope.editorMode = true;
         
         var editor = this;
+        var checkboxOption = {
+            label : 'new option',
+        }
         
         editor.max_id = 0;
         
@@ -52,6 +55,15 @@
             editor.selectedPage = editor.pages[page];   
             editor.selectedField = editor.selectedPage.fields[index];
         };
+
+        editor.addOption = function() {
+            var option = angular.copy(checkboxOption);   
+            editor.selectedField.options.push(option);
+        };
+
+        editor.deleteOption = function (index){
+            editor.selectedField.options.splice(index,1);
+        }
         
         editor.FieldTypes = [
             'text',
@@ -59,7 +71,8 @@
             'textarea',
             'combobox',
             'mail',
-            'identityDoc'
+            'identityDoc',
+            'checkbox',        
         ];
 
         editor.deleteField = function(page, index){
@@ -76,7 +89,8 @@
                 min_number: 0,
                 max_number: 100,
                 max_len_text: 255,
-            }
+            },
+            options: ''
         };
         
         //TODO: asegurar identificador de pregunta único
@@ -84,6 +98,15 @@
             var newField = angular.copy(editor.newField);
             newField.field_id = ++editor.max_id;
             newField.field_type = type || 'text';
+            if (type === editor.FieldTypes[6]){
+                 var option1 = angular.copy(checkboxOption);
+                 option1.label ='first option';
+                 var option2 = angular.copy(checkboxOption);
+                 option2.label ='second option';
+                 var option3 = angular.copy(checkboxOption);
+                 option3.label ='third option';
+                newField.options= [option1,option2,option3];
+            }
             editor.selectedPage.fields.push(newField);
             editor.selectedField = editor.selectedPage.fields[editor.selectedPage.fields.length];
         };
@@ -114,6 +137,17 @@
                 val.max_len_text = 0;
             };
         };
+        
+        var tmpList = [];
+        for (var i = 1; i <= 6; i++){
+           	tmpList.push({
+           		text: 'Item ' + i,
+        		value: i
+           	});
+        }
+  
+        $scope.list = tmpList;
+        
         /*
         * Load or create a new Form
         */
@@ -148,11 +182,11 @@
                 .success(function(data){
                     editor.version = data;
                     editor.pages = JSON.parse(data.json).pages;
-                    editor.questions = [];
+                    var questions = [];
                     for (var i=0; i<editor.pages.length; i++) {
-                        editor.questions = editor.questions.concat(editor.pages[i].fields);
+                        questions = questions.concat(editor.pages[i].fields);
                     };
-                    editor.max_id = Math.max.apply(Math,editor.questions.map(function(o){
+                    editor.max_id = Math.max.apply(Math,questions.map(function(o){
                         return o.field_id;
                     }));
                 })
