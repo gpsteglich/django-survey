@@ -60,6 +60,7 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^visor/(?P<slug>[a-z,0-9,\-,\_]+)/textarea$', TemplateView.as_view(template_name='question_text_area.html')),
     url(r'^visor/(?P<slug>[a-z,0-9,\-,\_]+)/number$', TemplateView.as_view(template_name='question_num.html')),
     url(r'^visor/(?P<slug>[a-z,0-9,\-,\_]+)/formTemplate.html(.*)$', TemplateView.as_view(template_name='formTemplate.html')),
+    url(r'^visor/(?P<slug>[a-z,0-9,\-,\_]+)/test2.html$', TemplateView.as_view(template_name='test2.html')),
     url(r'^visor/(?P<slug>[a-z,0-9,\-,\_]+)/$', TemplateView.as_view(template_name='visor.html')),
 )
 

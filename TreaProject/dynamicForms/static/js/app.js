@@ -12,18 +12,15 @@
     
         $stateProvider
 	
-            // route to show our basic form (/form)
+            // state to show form in visor
             .state('visor', {
                 url: '/visor/{paramPage}',
-                templateUrl: 'formTemplate.html'+'?' + new Date().getTime(),
+                templateUrl: 'formTemplate.html',
                 controller: 'VisorCtrl',
-                reloadOnSearch: true,
             });
             
-
-           
         // catch all route
-        // send users to the form page 
+        // send users to the form's first page 
         $urlRouterProvider.otherwise('/visor/0');
         });
     

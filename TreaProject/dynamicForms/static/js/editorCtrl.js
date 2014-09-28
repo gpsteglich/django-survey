@@ -14,7 +14,7 @@
     	 * form on the fields templates. 
     	 */
     	$scope.editorMode = true;
-    	
+    	console.log('iniciando editor');
         var editor = this;
         
         editor.max_id = 0;

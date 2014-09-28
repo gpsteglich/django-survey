@@ -9,9 +9,11 @@
          */
         .controller('VisorCtrl', ['$scope','$http','$stateParams','$state', function ($scope, $http, $stateParams, $state) {
 
-            
-            
-            var visor = this;
+            /*
+            *  This controller is initialiced by ui-router, so it cant be used with ng-controller
+            *  It uses $scope to make variables available for the page.
+            */
+            var visor = $scope;
             
             /*
              * To get the form the slug is catched form the path.
@@ -19,6 +21,11 @@
              */
             //FIXME: corregir la manera de obtener el slug
             visor.slug = location.pathname.match(/\/visor\/(.*)/)[1];
+            
+            visor.selectPage = function(page){
+                visor.selectedPage = visor.pages[page];
+            }
+            
                 // Load Form
             $http.get('/dynamicForms/form/'+visor.slug)
                 .success(function(data){
@@ -28,34 +35,20 @@
                 .error(function(data, status, headers, config){
                     alert('error cargando formulario: ' + status);
                 })
+            
                 // Load Version
-            visor.pages = [];
             $http.get('/dynamicForms/visor/publishVersion/'+visor.slug)
                 .success(function(data){
                     visor.version = data;
                     visor.pages = JSON.parse(data.json).pages;
-                    //visor.selectedPage = visor.pages[0];
                     visor.selectPage($stateParams.paramPage);
                 })
                 .error(function(data, status, headers, config){
                     alert('error cargando las preguntas: ' + status);
                 });
 
-            visor.reload = function(page){
-                //$state.go('visor',{ "paramPage": page}, { reload : true });
-                visor.selectPage(page);
-                //$state.reload();
-                
-            }
             
-            visor.selectPage = function(page){
-                visor.selectedPage = visor.pages[page];
-            }
-            
-            // Parameters are only visible inside ui-view scope
-            visor.routerParam = $stateParams;
-            visor.param = $stateParams.paramPage;
-            
+                // Persist form
             visor.save = function(){
                 $http.post('/dynamicForms/visorPub/'+visor.form.slug+'/submit/',visor.questions)
                     .success( function(data, status, headers, config){

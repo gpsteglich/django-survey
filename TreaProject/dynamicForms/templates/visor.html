@@ -10,16 +10,9 @@
 	</head>
 	<body class="radial-center" ng-app="dynamicFormsFramework">
         {% verbatim %}
-        <div class="container" style="padding: 0px" ng-controller="VisorCtrl as VisorCtrl">
+        <div class="container" style="padding: 0px">
             <div class="row">
-                <div class="col-md-10 col-md-offset-1">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading text-center">
-                            <h1 class="text-center"><span class="glyphicon glyphicon-list"></span> {{VisorCtrl.form.title}}</h1>
-                        </div>
-                        <div ui-view></div>
-                    </div>
-                </div>
+                <div ui-view>Cargando formulario</div>
             </div>
         </div>
         {% endverbatim %}
@@ -29,6 +22,7 @@
         <script src={% static "angular/angular-ui-router.js" %}></script>
 	    <script src={% static "js/app.js" %}></script>
         <script src={% static "js/visorCtrl.js" %}></script>
+        <script src={% static "js/editorCtrl.js" %}></script>
     </body>
     
 </html>
