@@ -50,7 +50,14 @@
             
                 // Persist form
             visor.save = function(){
-                $http.post('/dynamicForms/visorPub/'+visor.form.slug+'/submit/',visor.questions)
+                var questions = [];
+                for (var i=0; i< visor.pages.length; i++) {
+                    questions = questions.concat(visor.pages[i].fields);
+                };
+                for (var j=0; i< questions.length; i++) {
+                    //questions[j] = questions[j].remove('validations');
+                };
+                $http.post('/dynamicForms/visorPub/'+visor.form.slug+'/submit/',questions)
                     .success( function(data, status, headers, config){
 
                     })
