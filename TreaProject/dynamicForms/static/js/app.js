@@ -14,14 +14,14 @@
 	
             // state to show form in visor
             .state('visor', {
-                url: '/visor/{paramPage}',
+                url: '/{paramPage}',
                 templateUrl: 'formTemplate.html',
                 controller: 'VisorCtrl',
             });
             
         // catch all route
         // send users to the form's first page 
-        $urlRouterProvider.otherwise('/visor/0');
+        $urlRouterProvider.otherwise('/0');
         });
     
 })();
