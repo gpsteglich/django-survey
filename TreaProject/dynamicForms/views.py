@@ -5,7 +5,8 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.http import HttpResponse, Http404    
 from django.views.generic import TemplateView
 from django.shortcuts import redirect
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.core.validators import validate_email
 from django.db.models import Max
 
 from rest_framework.decorators import api_view
@@ -22,6 +23,7 @@ from dynamicForms.fields import PUBLISHED, DRAFT
 from dynamicForms.serializers import FormSerializer, UserSerializer
 from dynamicForms.serializers import FieldEntrySerializer
 from dynamicForms.serializers import VersionSerializer, FormEntrySerializer
+from dynamicForms.validators import validate_number, validate_id
 from datetime import datetime
 from django.http.response import HttpResponseRedirect
 
@@ -234,13 +236,36 @@ def submit_form_entry(request, slug, format=None):
     """
     # TODO: agregar primera iteracion por las respuestas
     # para hacer la validacion, antes de crear el entry
-    '''
+    error_log = ''
     for field in request.DATA:
-            serializer = FieldEntrySerializer(data=field)
-            #Validar campo
-            #if not validar:
-                #Enviar respuesta al front con el error
-    '''
+        serializer = FieldEntrySerializer(data=field)
+        if serializer.is_valid():
+            if serializer.object.required == 'true' and serializer.object.answer.__str__() == '':
+                error_log += "'text':" + serializer.object.text + "'This field is required'"
+            elif serializer.object.field_type == 'text':
+                print("Algo")
+            elif serializer.object.field_type == 'number':
+                try:
+                    validate_number(serializer.object.answer.__str__())
+                except (ValidationError):
+                    error_log += "'text':" + serializer.object.text + "'Please enter a valid number'"
+            elif serializer.object.field_type == 'mail':
+                try:
+                    print("En el mail")
+                    validate_email(serializer.object.answer.__str__())
+                except (ValidationError):
+                    error_log += "'text':" + serializer.object.text + "'Please enter a valid email address'"
+            elif serializer.object.field_type == 'identityDoc':
+                try:
+                    validate_id(serializer.object.answer.__str__())
+                except (ValidationError):
+                    error_log += "'text':" + serializer.object.text + "'Please enter a valid CI'"
+        else:
+            return Response(status = status.HTTP_406_NOT_ACCEPTABLE)
+    # FIXME: Error log sent to client side is handmade, find a better way to make the dictionary
+    if error_log != '':
+        error_log = "{" + error_log + "}"
+        return Response(status = status.HTTP_406_NOT_ACCEPTABLE, data=error_log)
     form = Form.objects.get(slug=slug)
     form_versions = Version.objects.filter(form=form)
     # Max will keep track of the highest published version
