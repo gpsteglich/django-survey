@@ -60,7 +60,7 @@
                                                         {% ifequal v.status 0 %} disabled {% endifequal %}>    
                                                         <span class="glyphicon glyphicon-forward"></span>DUPLICATE
                                                     </a></th>
-                                                    <th><a type="button" class="btn btn-default btn-xs"
+                                                    <th><a type="button" class="btn btn-default btn-xs" href="/dynamicForms/version/delete/{{form.id}}/{{v.number}}"
                                                         {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
                                                         <span class="glyphicon glyphicon-remove-circle"></span>DISCARD
                                                     </a></th>
