@@ -170,7 +170,7 @@ class DeleteVersion(generics.DestroyAPIView):
         #only draft versions can be deleted this way
         if version.status == DRAFT:
             version.delete()
-            return Response(status=status.HTTP_200_OK)
+            return HttpResponseRedirect("/dynamicForms/main/")
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
     
