@@ -7,6 +7,7 @@
     */
     var app = angular.module('dynamicFormsFramework', ['ui.router','ui.sortable'])
     
+    /*
     //configuring routes for app
     .config(function($stateProvider, $urlRouterProvider) {
     
@@ -23,6 +24,6 @@
         // send users to the form's first page 
         $urlRouterProvider.otherwise('/0');
         });
-    
+    */
 })();
 

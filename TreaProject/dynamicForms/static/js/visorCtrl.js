@@ -7,13 +7,32 @@
         /*
          * The VisorCtrl holds the logic to display, validate and submit the form.
          */
-        .controller('VisorCtrl', ['$scope','$http','$stateParams', function ($scope, $http, $stateParams) {
+        .controller('VisorCtrl', ['$scope','$http','$stateParams','$location', function ($scope, $http, $stateParams, $location) {
 
             /*
             *  This controller is initialiced by ui-router, so it cant be used with ng-controller
             *  It uses $scope to make variables available for the page.
             */
             var visor = $scope;
+            
+            visor.actualUrl = $location.path();
+            
+            console.log("Inicio Visor");
+            visor.changePage = function(page){
+                console.log("cambio a pagina "+page);
+                visor.selectPage(page);
+                $location.path('/'+page);
+            }
+            
+            $scope.$on('$locationChangeSuccess', function(event) {
+                console.log('$locationChangeSuccess dentro del controlador, pag: ', $location.search().pag);
+                $scope.num = $location.search().pag;
+                if (IsNumeric($scope.num){
+                    console.log($scope.num);    
+                }
+            });
+            
+           
             
             /*
              * To get the form the slug is catched form the path.
@@ -41,7 +60,8 @@
                 .success(function(data){
                     visor.version = data;
                     visor.pages = JSON.parse(data.json).pages;
-                    visor.selectPage($stateParams.paramPage);
+                    visor.selectPage(0);
+                    //visor.selectPage($stateParams.paramPage);
                 })
                 .error(function(data, status, headers, config){
                     alert('error cargando las preguntas: ' + status);
