@@ -21,15 +21,11 @@
             visor.changePage = function(page){
                 console.log("cambio a pagina "+page);
                 visor.selectPage(page);
-                $location.path('/'+page);
+                $location.search('pag', page);
             }
             
             $scope.$on('$locationChangeSuccess', function(event) {
-                console.log('$locationChangeSuccess dentro del controlador, pag: ', $location.search().pag);
-                $scope.num = $location.search().pag;
-                if (IsNumeric($scope.num){
-                    console.log($scope.num);    
-                }
+                console.log('$locationChangeSuccess dentro del controlador, pag: ', $location.search());
             });
             
            
