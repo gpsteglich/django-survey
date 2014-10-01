@@ -5,6 +5,7 @@
     * Module dynamicFormsFramework
     * This module encapsulates the logic that will handle the form.
     */
+    
     var app = angular.module('dynamicFormsFramework', ['ui.router','ui.sortable'])
     
     //configuring routes for app

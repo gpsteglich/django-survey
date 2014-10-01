@@ -200,10 +200,7 @@ class FillForm(generics.RetrieveUpdateDestroyAPIView):
         # of the form to be displayed
         max = form_versions.filter(status=PUBLISHED).aggregate(Max('number'))
         final_version = form_versions.get(number=max['number__max'])
-#         for version in form_versions:
-#             if version.number > max: #and version.status == PUBLISHED:
-#                 max = version.number
-#                 final_version = version
+        
         serializer = VersionSerializer(final_version)
         return Response(serializer.data)
 
@@ -274,10 +271,6 @@ def submit_form_entry(request, slug, format=None):
     final_version = form_versions.get(number=max['number__max'])
     # FIXME: Si se agrega el status EXPIRED, deberia haber solo 1 version PUBLISHED
     # asi que no seria necesario buscar el nro de version mas alto
-    #for version in form_versions:
-    #    if version.number > max: #and version.status == PUBLISHED:
-    #        max = version.number
-    #        final_version = version
     entry = FormEntry(version=final_version)
     entry.entry_time = datetime.now()
     entry.save() 
@@ -338,11 +331,13 @@ def get_responses(request, slug, number, format=None):
 
 
 class SimpleStaticView(TemplateView):
+    
     def get_template_names(self):
         return [self.kwargs.get('template_name') + ".html"]
     
-    def get(self, request, *args, **kwargs):
+    def get(self, request,  *args, **kwargs):
         from django.contrib.auth import authenticate, login
+        #kwargs['template_name'] = template + '.html'
         if request.user.is_anonymous():
             # Auto-login the User for Demonstration Purposes
             user = authenticate()

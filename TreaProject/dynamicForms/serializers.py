@@ -21,7 +21,7 @@ class VersionSerializer(serializers.ModelSerializer):
     """
     Complete serializer for the forms used for the REST framework
     """
-    owner = serializers.Field(source='form.title')
+    form = serializers.Field(source='form.title')
     json = serializers.CharField(required=False)
     
     class Meta:
