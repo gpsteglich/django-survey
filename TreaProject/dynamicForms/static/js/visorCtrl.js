@@ -17,16 +17,7 @@
             
             visor.actualUrl = $location.path();
             
-            console.log("Inicio Visor");
-            visor.changePage = function(page){
-                console.log("cambio a pagina "+page);
-                visor.selectPage(page);
-                $location.search('pag', page);
-            }
             
-            $scope.$on('$locationChangeSuccess', function(event) {
-                console.log('$locationChangeSuccess dentro del controlador, pag: ', $location.search());
-            });
             
            
             
@@ -82,6 +73,22 @@
                         alert('Error guardando las respuestas: ' + status);
                     });
             };
+            
+            console.log("Inicio Visor");
+            visor.changePage = function(page){
+                console.log("cambio a pagina "+page);
+                //visor.selectPage(page);
+                $location.search('pag', page);
+            }
+            
+            $scope.$on('$locationChangeSuccess', function(event) {
+                console.log('$locationChangeSuccess dentro del controlador, pag: ',($location.search()).pag);
+                $scope.num = parseInt(($location.search()).pag) || 0;
+                console.log($scope.num);
+                if (visor.pages){
+                    visor.selectPage($scope.num);
+                }
+            });
 
         }]);
 })();
