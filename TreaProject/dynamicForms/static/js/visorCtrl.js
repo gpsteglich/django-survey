@@ -78,11 +78,11 @@
             * This function watches any change in the url and updates the selected page.
             */
             $scope.$on('$locationChangeSuccess', function(event) {
-                console.log('path: '+$location.path());
-                console.log('hash: '+$location.hash());
-                //var changePage = parseInt($location.hash().substring(1)) || 0;
                 var changePage = $location.hash() || 0;
                 if (visor.pages){
+                    if (changePage > visor.pages.size){
+                        changePage = 0;   
+                    }
                     visor.selectPage(changePage);
                 }
             });

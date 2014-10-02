@@ -27,17 +27,17 @@
 }
     
     /* Form fields style */
-.dyn-form input.ng-invalid.ng-dirty {
+.dyn-form input.ng-invalid {
     background-color: #ffdfe1;
 }
-.dyn-form input.ng-valid.ng-dirty {
-    background-color: #d6ffd9;
+.dyn-form input.ng-valid {
+    /*background-color: #d6ffd9;*/
 }
-.dyn-form textarea.ng-invalid.ng-dirty {
+.dyn-form textarea.ng-invalid {
     background-color: #ffdfe1;
 }
-.dyn-form textarea.ng-valid.ng-dirty {
-    background-color: #d6ffd9;
+.dyn-form textarea.ng-valid {
+    /*background-color: #d6ffd9;*/
 }
 
 .list-wrapper { font-family: courier; }
