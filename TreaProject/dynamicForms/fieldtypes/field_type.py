@@ -50,7 +50,7 @@ CLASSES = {
 
 FIELD_FILES = {
     TEXT: 'TextField',
-    TEXTAREA: 'CharField',
+    TEXTAREA: 'TextField',
     EMAIL: 'EmailField',
     CHECKBOX: 'BooleanField',
     CHECKBOX_MULTIPLE: 'MultipleChoiceField',
@@ -58,7 +58,7 @@ FIELD_FILES = {
     SELECT_MULTIPLE: 'MultipleChoiceField',
     RADIO_MULTIPLE: 'ChoiceField',
     DATE: 'DateField',
-    NUMBER: 'FloatField',
+    NUMBER: 'NumberField',
     URL: 'URLField',
     CEDULA: 'CIField',
 }

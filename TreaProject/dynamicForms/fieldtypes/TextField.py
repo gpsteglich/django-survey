@@ -12,8 +12,7 @@ class Validator(Field.Validator):
             
     def validate(self, value, restrictions):
         #default validation or pass
-        if not value:
-            raise ValidationError("Problem with the answer.")
+        super(Validator,self).validate(value,restrictions)
         if (restrictions['max_len_text']):
             self.check_length(value, restrictions['max_len_text'])
         return True

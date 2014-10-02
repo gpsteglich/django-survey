@@ -6,6 +6,8 @@ class Validator(object):
     """
     def validate(self, value, restrictions):
         #default validation or pass
+        if not value:
+            raise ValidationError("Problem with the answer.")
         return True
     
     def get_validations(self, json, id):

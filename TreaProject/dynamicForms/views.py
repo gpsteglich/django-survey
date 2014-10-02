@@ -271,21 +271,29 @@ def submit_form_entry(request, slug, format=None):
                 except ValidationError as e:
                     error_log += e.message
             elif serializer.object.field_type == 'number':
+                file = FIELD_FILES[10]
+                field_validator = __import__("dynamicForms.fieldtypes.%s" % file , fromlist=["Validator"])
                 try:
-                    validate_number(serializer.object.answer.__str__())
-                except (ValidationError):
-                    error_log += "'text':" + serializer.object.text + "'Please enter a valid number'"
+                    x = field_validator.Validator()
+                    x.validate(serializer.object.answer, x.get_validations(json.loads(final_version.json), serializer.object.field_id))
+                except ValidationError as e:
+                    error_log += e.message
             elif serializer.object.field_type == 'mail':
+                file = FIELD_FILES[3]
+                field_validator = __import__("dynamicForms.fieldtypes.%s" % file , fromlist=["Validator"])
                 try:
-                    print("En el mail")
-                    validate_email(serializer.object.answer.__str__())
-                except (ValidationError):
-                    error_log += "'text':" + serializer.object.text + "'Please enter a valid email address'"
+                    x = field_validator.Validator()
+                    x.validate(serializer.object.answer, x.get_validations(json.loads(final_version.json), serializer.object.field_id))
+                except ValidationError as e:
+                    error_log += e.message
             elif serializer.object.field_type == 'identityDoc':
+                file = FIELD_FILES[12]
+                field_validator = __import__("dynamicForms.fieldtypes.%s" % file , fromlist=["Validator"])
                 try:
-                    validate_id(serializer.object.answer.__str__())
-                except (ValidationError):
-                    error_log += "'text':" + serializer.object.text + "'Please enter a valid CI'"
+                    x = field_validator.Validator()
+                    x.validate(serializer.object.answer, x.get_validations(json.loads(final_version.json), serializer.object.field_id))
+                except ValidationError as e:
+                    error_log += e.message
         else:
             return Response(status = status.HTTP_406_NOT_ACCEPTABLE)
     # FIXME: Error log sent to client side is handmade, find a better way to make the dictionary
