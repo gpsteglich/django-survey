@@ -20,7 +20,7 @@
              * This should be handled by $routerprovider
              */
             //FIXME: corregir la manera de obtener el slug
-            visor.slug = location.pathname.match(/\/visor\/(.*)/)[1];
+            visor.slug = $location.absUrl().match(/\/visor\/([^/]*)/)[1];
             
             visor.selectPage = function(page){
                 visor.selectedPage = visor.pages[page];
@@ -67,20 +67,22 @@
                     });
             };
             
+            /*
+            * The page selection is fired by the change of the url
+            */
             visor.changePage = function(page){
                 $location.path('/'+ page);
             }
             
             /*
-            * 
+            * This function watches any change in the url and updates the selected page.
             */
-            /*
             $scope.$on('$locationChangeSuccess', function(event) {
-                var changePage = parseInt(($location.search()).pag) || 0;
+                var changePage = parseInt($location.path().substring(1)) || 0;
                 if (visor.pages){
                     visor.selectPage(changePage);
                 }
-            });*/
+            });
 
         }]);
 })();
