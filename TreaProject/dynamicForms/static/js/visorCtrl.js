@@ -71,14 +71,17 @@
             * The page selection is fired by the change of the url
             */
             visor.changePage = function(page){
-                $location.path('/'+ page);
+                $location.hash(page);
             }
             
             /*
             * This function watches any change in the url and updates the selected page.
             */
             $scope.$on('$locationChangeSuccess', function(event) {
-                var changePage = parseInt($location.path().substring(1)) || 0;
+                console.log('path: '+$location.path());
+                console.log('hash: '+$location.hash());
+                //var changePage = parseInt($location.hash().substring(1)) || 0;
+                var changePage = $location.hash() || 0;
                 if (visor.pages){
                     visor.selectPage(changePage);
                 }

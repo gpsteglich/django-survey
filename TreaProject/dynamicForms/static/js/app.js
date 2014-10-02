@@ -7,10 +7,7 @@
     */
     var app = angular.module('dynamicFormsFramework', ['ui.sortable'])
     .config(['$locationProvider', function ($locationProvider) {
-        /*$locationProvider.html5Mode({
-            enabled: true,
-            requireBase: false
-        });*/
+        $locationProvider.html5Mode(true);
     }]);
     
 })();
