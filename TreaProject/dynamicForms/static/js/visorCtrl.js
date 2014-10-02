@@ -7,19 +7,13 @@
         /*
          * The VisorCtrl holds the logic to display, validate and submit the form.
          */
-        .controller('VisorCtrl', ['$scope','$http','$stateParams','$location', function ($scope, $http, $stateParams, $location) {
+        .controller('VisorCtrl', ['$scope','$http','$location', function ($scope, $http, $location) {
 
             /*
             *  This controller is initialiced by ui-router, so it cant be used with ng-controller
             *  It uses $scope to make variables available for the page.
             */
             var visor = $scope;
-            
-            visor.actualUrl = $location.path();
-            
-            
-            
-           
             
             /*
              * To get the form the slug is catched form the path.
@@ -48,7 +42,6 @@
                     visor.version = data;
                     visor.pages = JSON.parse(data.json).pages;
                     visor.selectPage(0);
-                    //visor.selectPage($stateParams.paramPage);
                 })
                 .error(function(data, status, headers, config){
                     alert('error cargando las preguntas: ' + status);
@@ -74,21 +67,20 @@
                     });
             };
             
-            console.log("Inicio Visor");
             visor.changePage = function(page){
-                console.log("cambio a pagina "+page);
-                //visor.selectPage(page);
-                $location.search('pag', page);
+                $location.path('/'+ page);
             }
             
+            /*
+            * 
+            */
+            /*
             $scope.$on('$locationChangeSuccess', function(event) {
-                console.log('$locationChangeSuccess dentro del controlador, pag: ',($location.search()).pag);
-                $scope.num = parseInt(($location.search()).pag) || 0;
-                console.log($scope.num);
+                var changePage = parseInt(($location.search()).pag) || 0;
                 if (visor.pages){
-                    visor.selectPage($scope.num);
+                    visor.selectPage(changePage);
                 }
-            });
+            });*/
 
         }]);
 })();
