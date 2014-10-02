@@ -9,7 +9,5 @@
     .config(['$locationProvider', function ($locationProvider) {
         //$locationProvider.html5Mode(true).hashPrefix('!');
     }]);
-    
->>>>>>> branch 'Refactoring' of https://github.com/trea-uy/django-survey.git
 })();
 
