@@ -1,6 +1,6 @@
 
-
-
+from django.utils.translation import ugettext_lazy as _
+from django import forms
 #field type constants
 # TODO these are not necessarily those we need. 
 TEXT = 1
@@ -14,6 +14,7 @@ RADIO_MULTIPLE = 8
 DATE = 9
 NUMBER = 10
 URL = 11
+CEDULA = 12
 
 
 #These are the field types.
@@ -29,6 +30,7 @@ NAMES = (
     (SELECT_MULTIPLE, _("Multi select")),
     (RADIO_MULTIPLE, _("Radio buttons")),
     (DATE, _("Date")),
+    (CEDULA, _("Cedula")),
 )
 
 # Corresponding classes for each field type
@@ -58,5 +60,20 @@ FIELD_FILES = {
     DATE: 'DateField',
     NUMBER: 'FloatField',
     URL: 'URLField',
+    CEDULA: 'CIField',
 }
 
+TEMPLATES = {
+    TEXT: 'question_char.html',
+    TEXTAREA: 'question_text_area.html',
+    EMAIL: 'field_mail.html',
+    CHECKBOX: 'BooleanField',
+    CHECKBOX_MULTIPLE: 'MultipleChoiceField',
+    SELECT: 'field_combobox.html',
+    SELECT_MULTIPLE: 'field_combobox.html',
+    RADIO_MULTIPLE: 'ChoiceField',
+    DATE: 'DateField',
+    NUMBER: 'question_num.html',
+    URL: 'URLField',
+    CEDULA: 'field_identityDoc.html',
+}

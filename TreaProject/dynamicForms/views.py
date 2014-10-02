@@ -17,9 +17,12 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+import json
+
 from django.shortcuts import render_to_response
 from dynamicForms.models import Form,FormEntry, Version, FieldEntry
 from dynamicForms.fields import PUBLISHED, DRAFT
+from dynamicForms.fieldtypes.field_type import TEMPLATES, FIELD_FILES
 from dynamicForms.serializers import FormSerializer, UserSerializer
 from dynamicForms.serializers import FieldEntrySerializer
 from dynamicForms.serializers import VersionSerializer, FormEntrySerializer
@@ -35,10 +38,25 @@ class FormList(generics.ListCreateAPIView):
     model = Form
     queryset = Form.objects.all()
     serializer_class =  FormSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticated,)
     
     def pre_save(self, obj):
         obj.owner = self.request.user
+    
+    def get(self, request):
+        forms = Form.objects.values()
+        for f in forms:
+            #Obtain the list of versions of the form f ordered by version number (descendant)
+            #FIX ME: improve get versions
+            query_set = Form.objects.get(slug=f['slug']).versions.order_by('number').reverse()
+            vers_dict = query_set.values()
+            #Assign the dict of versions to the form dict
+            f["versions"] = vers_dict
+            #Get the status of the last version, to know if there is already a draft in this form
+            if len(vers_dict) > 0:
+                last_version = vers_dict[0]
+                f["lastStatus"] = last_version['status']
+        return render_to_response('mainPage.html', {"formList": forms})
       
 
 class FormDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -129,7 +147,7 @@ class NewVersion(generics.CreateAPIView):
     """
     APIView to create a new version of a form or duplicate a form
     """
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticated,)
     
     def get(self, request, pk, number, action):
         try:
@@ -234,13 +252,24 @@ def submit_form_entry(request, slug, format=None):
     # TODO: agregar primera iteracion por las respuestas
     # para hacer la validacion, antes de crear el entry
     error_log = ''
+    form = Form.objects.get(slug=slug)
+    form_versions = Version.objects.filter(form=form)
+    max = form_versions.filter(status=PUBLISHED).aggregate(Max('number'))
+    final_version = form_versions.get(number=max['number__max'])
     for field in request.DATA:
         serializer = FieldEntrySerializer(data=field)
         if serializer.is_valid():
             if serializer.object.required == 'true' and serializer.object.answer.__str__() == '':
                 error_log += "'text':" + serializer.object.text + "'This field is required'"
             elif serializer.object.field_type == 'text':
-                print("Algo")
+                file = FIELD_FILES[1]
+                #int(self.kwargs.get('type'))
+                field_validator = __import__("dynamicForms.fieldtypes.%s" % file , fromlist=["Validator"])
+                try:
+                    x = field_validator.Validator()
+                    x.validate(serializer.object.answer, x.get_validations(json.loads(final_version.json), serializer.object.field_id))
+                except ValidationError as e:
+                    error_log += e.message
             elif serializer.object.field_type == 'number':
                 try:
                     validate_number(serializer.object.answer.__str__())
@@ -263,12 +292,6 @@ def submit_form_entry(request, slug, format=None):
     if error_log != '':
         error_log = "{" + error_log + "}"
         return Response(status = status.HTTP_406_NOT_ACCEPTABLE, data=error_log)
-    form = Form.objects.get(slug=slug)
-    form_versions = Version.objects.filter(form=form)
-    # Max will keep track of the highest published version
-    # of the form to be displayed
-    max = form_versions.filter(status=PUBLISHED).aggregate(Max('number'))
-    final_version = form_versions.get(number=max['number__max'])
     # FIXME: Si se agrega el status EXPIRED, deberia haber solo 1 version PUBLISHED
     # asi que no seria necesario buscar el nro de version mas alto
     entry = FormEntry(version=final_version)
@@ -285,24 +308,6 @@ def submit_form_entry(request, slug, format=None):
                 field_entry.save()
     return Response(status = status.HTTP_200_OK)
 
-@login_required
-def formList(request):
-    """
-        Gets the list of all forms and versions from the database, and renders the template to show them
-    """
-    forms = Form.objects.values()
-    for f in forms:
-        #Obtain the list of versions of the form f ordered by version number (descendant)
-        #FIX ME: improve get versions
-        query_set = Form.objects.get(slug=f['slug']).versions.order_by('number').reverse()
-        vers_dict = query_set.values()
-        #Assign the dict of versions to the form dict
-        f["versions"] = vers_dict
-        #Get the status of the last version, to know if there is already a draft in this form
-        if len(vers_dict) > 0:
-            last_version = vers_dict[0]
-            f["lastStatus"] = last_version['status']
-    return render_to_response('mainPage.html', {"formList": forms})
 
 @login_required
 def editor(request):
@@ -334,18 +339,13 @@ class SimpleStaticView(TemplateView):
     
     def get_template_names(self):
         return [self.kwargs.get('template_name') + ".html"]
+        
+        
+class FieldTemplateView(SimpleStaticView):
     
-    def get(self, request,  *args, **kwargs):
-        from django.contrib.auth import authenticate, login
-        #kwargs['template_name'] = template + '.html'
-        if request.user.is_anonymous():
-            # Auto-login the User for Demonstration Purposes
-            user = authenticate()
-            login(request, user)
-        return super(SimpleStaticView, self).get(request, *args, **kwargs)
-        
-        
-        
+    def get_template_names(self):
+        return TEMPLATES[int(self.kwargs.get('type'))]
+#         
         
         
         
