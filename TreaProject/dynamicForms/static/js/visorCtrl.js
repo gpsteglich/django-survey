@@ -7,7 +7,7 @@
         /*
          * The VisorCtrl holds the logic to display, validate and submit the form.
          */
-        .controller('VisorCtrl', ['$scope','$http','$stateParams', function ($scope, $http, $stateParams) {
+        .controller('VisorCtrl', ['$scope','$http','$location', function ($scope, $http, $location) {
 
             /*
             *  This controller is initialiced by ui-router, so it cant be used with ng-controller
@@ -20,7 +20,7 @@
              * This should be handled by $routerprovider
              */
             //FIXME: corregir la manera de obtener el slug
-            visor.slug = location.pathname.match(/\/visor\/(.*)/)[1];
+            visor.slug = $location.absUrl().match(/\/visor\/([^/]*)/)[1];
             
             visor.selectPage = function(page){
                 visor.selectedPage = visor.pages[page];
@@ -41,7 +41,7 @@
                 .success(function(data){
                     visor.version = data;
                     visor.pages = JSON.parse(data.json).pages;
-                    visor.selectPage($stateParams.paramPage);
+                    visor.selectPage(0);
                 })
                 .error(function(data, status, headers, config){
                     alert('error cargando las preguntas: ' + status);
@@ -66,6 +66,26 @@
                         alert('Error guardando las respuestas: ' + status);
                     });
             };
+            
+            /*
+            * The page selection is fired by the change of the url
+            */
+            visor.changePage = function(page){
+                $location.hash(page);
+            }
+            
+            /*
+            * This function watches any change in the url and updates the selected page.
+            */
+            $scope.$on('$locationChangeSuccess', function(event) {
+                var changePage = $location.hash() || 0;
+                if (visor.pages){
+                    if (changePage > visor.pages.size){
+                        changePage = 0;   
+                    }
+                    visor.selectPage(changePage);
+                }
+            });
 
         }]);
 })();
