@@ -285,7 +285,7 @@ def submit_form_entry(request, slug, format=None):
                     x = field_validator.Validator()
                     x.validate(serializer.object.answer, x.get_validations(json.loads(final_version.json), serializer.object.field_id))
                 except ValidationError as e:
-                    error_log += e.message
+                    error_log += e.__str__()
             elif serializer.object.field_type == 'identityDoc':
                 file = FIELD_FILES[12]
                 field_validator = __import__("dynamicForms.fieldtypes.%s" % file , fromlist=["Validator"])
