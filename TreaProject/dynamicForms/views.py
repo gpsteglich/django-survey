@@ -3,8 +3,10 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.http import HttpResponse, Http404    
+from django.http.response import HttpResponseRedirect
 from django.views.generic import TemplateView
 from django.shortcuts import redirect
+from django.shortcuts import render_to_response
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.validators import validate_email
 from django.db.models import Max
@@ -18,8 +20,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 import json
+from datetime import datetime
 
-from django.shortcuts import render_to_response
 from dynamicForms.models import Form,FormEntry, Version, FieldEntry
 from dynamicForms.fields import PUBLISHED, DRAFT
 from dynamicForms.fieldtypes.field_type import TEMPLATES, FIELD_FILES, NAMES
@@ -27,8 +29,6 @@ from dynamicForms.serializers import FormSerializer, UserSerializer
 from dynamicForms.serializers import FieldEntrySerializer
 from dynamicForms.serializers import VersionSerializer, FormEntrySerializer
 from dynamicForms.validators import validate_number, validate_id
-from datetime import datetime
-from django.http.response import HttpResponseRedirect
 
 
 class FormList(generics.ListCreateAPIView):
@@ -39,10 +39,10 @@ class FormList(generics.ListCreateAPIView):
     queryset = Form.objects.all()
     serializer_class =  FormSerializer
     permission_classes = (permissions.IsAuthenticated,)
-    
+
     def pre_save(self, obj):
         obj.owner = self.request.user
-    
+
     def get(self, request):
         forms = Form.objects.values()
         for f in forms:
@@ -57,7 +57,7 @@ class FormList(generics.ListCreateAPIView):
                 last_version = vers_dict[0]
                 f["lastStatus"] = last_version['status']
         return render_to_response('mainPage.html', {"formList": forms})
-      
+
 
 class FormDetail(generics.RetrieveUpdateDestroyAPIView):
     """
@@ -70,7 +70,7 @@ class FormDetail(generics.RetrieveUpdateDestroyAPIView):
     def pre_save(self, obj):
         obj.owner = self.request.user
 
-        
+
 class VersionList(generics.ListCreateAPIView):
     """
     APIView where the version of the selected form are listed and a new version can be added.
@@ -87,7 +87,6 @@ class VersionList(generics.ListCreateAPIView):
         except Form.DoesNotExist:
             content = {"error": "There is no form with that slug"}
             return Response(content, status=status.HTTP_404_NOT_FOUND)
-    
 
     def post(self, request, pk, format=None):
         serializer = VersionSerializer(data=request.DATA)
@@ -106,7 +105,7 @@ class VersionDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Version.objects.all()
     serializer_class = VersionSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    
+
     def get_object(self, pk, number):
         try:
             form = Form.objects.get(id=pk)
@@ -115,7 +114,7 @@ class VersionDetail(generics.RetrieveUpdateDestroyAPIView):
             content = {"error": "There is no form with that slug or the corresponding"
                        " form has no version with that number"}
             return Response(content, status=status.HTTP_404_NOT_FOUND)
-    
+
 
     def get(self, request, pk, number, format=None):
         version = self.get_object(pk, number)
@@ -141,14 +140,14 @@ class VersionDetail(generics.RetrieveUpdateDestroyAPIView):
             return Response(status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-    
-    
+
+
 class NewVersion(generics.CreateAPIView):
     """
     APIView to create a new version of a form or duplicate a form
     """
     permission_classes = (permissions.IsAuthenticated,)
-    
+
     def get(self, request, pk, number, action):
         try:
             #get version of form that is going to be duplicated-
@@ -173,13 +172,14 @@ class NewVersion(generics.CreateAPIView):
             new_version = Version(json=version.json, form=new_form)
             new_version.save()
         return HttpResponseRedirect("/dynamicForms/main/")
-    
+
+
 class DeleteVersion(generics.DestroyAPIView):
     """
      APIView to delete a form
     """
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    
+
     def get(self, request,  pk, number, format=None):
         ##get related form of the version that is going to be deleted
         form = Form.objects.get(id=pk)
@@ -191,20 +191,21 @@ class DeleteVersion(generics.DestroyAPIView):
             return HttpResponseRedirect("/dynamicForms/main/")
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-    
+
+
 class DeleteForm(generics.DestroyAPIView):
     """
      APIView to delete a form
     """
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    
+
     def get(self, request, pk):
         #get form and delete it
         form = Form.objects.get(id=pk)
         form.delete()
         return HttpResponseRedirect("/dynamicForms/main/")
-            
-            
+
+
 class FillForm(generics.RetrieveUpdateDestroyAPIView):
     """
     APIView to retrieve current version of a form to be filled
@@ -218,9 +219,10 @@ class FillForm(generics.RetrieveUpdateDestroyAPIView):
         # of the form to be displayed
         max = form_versions.filter(status=PUBLISHED).aggregate(Max('number'))
         final_version = form_versions.get(number=max['number__max'])
-        
+
         serializer = VersionSerializer(final_version)
         return Response(serializer.data)
+
 
 class GetTitle(generics.RetrieveUpdateDestroyAPIView):
     """
@@ -297,7 +299,8 @@ def submit_form_entry(request, slug, format=None):
 @login_required
 def editor(request):
     return render_to_response('editor.html', {})
-    
+
+
 @login_required
 @api_view(['GET'])
 def get_responses(request, slug, number, format=None):
@@ -318,6 +321,7 @@ def get_responses(request, slug, number, format=None):
                    " form has no version with that number"}
         return Response(content, status=status.HTTP_404_NOT_FOUND)
 
+
 @login_required  
 @api_view(['GET'])
 def get_constants(request, format=None):
@@ -325,17 +329,13 @@ def get_constants(request, format=None):
 
 
 class SimpleStaticView(TemplateView):
-    
+
     def get_template_names(self):
         return [self.kwargs.get('template_name') + ".html"]
-        
-        
+
+
 class FieldTemplateView(SimpleStaticView):
-    
+
     def get_template_names(self):
         return TEMPLATES[int(self.kwargs.get('type'))]
-#         
-        
-        
-        
-    
+
