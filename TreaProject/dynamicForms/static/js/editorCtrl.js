@@ -7,7 +7,7 @@
     /*
      * This controller handles the logic to create, edit and save a form.
      */    
-    app.controller('EditorCtrl', ['$scope','$http','$location', function ($scope, $http, $location) {
+    app.controller('EditorCtrl', ['$scope','$http','$location', '$window', function ($scope, $http, $location, $window) {
         
     	/*
     	 * editorMode variable determines if the context is for editing or showing the
@@ -151,53 +151,57 @@
         /*
         * Load or create a new Form
         */
-        if (editor.isNewForm()){
-            /*
-            * New Form Case
-            */
-            editor.form = {
-                'title' : '',
-                'slug' : '',
-            };
-            editor.version = {
-                'json' : '',
-                'status' :0 ,
-                'publish_date' : '2014-06-06',
-                'expiry_date' : '2014-06-06',
-                'number' : 0,
-                'owner' : '',
-                'form' : '',
-            }
-        } else {
-            /*
-            * Edit Form Case
-            */
-                //Load Form
-            $http.get('forms/'+editor.formIdParam)
-            .success(function(data){
-                editor.form = data;
-                 
-                 //Load version
-                $http.get('version/'+editor.formIdParam+'/'+editor.versionIdParam)
+        editor.loadForm = function(){
+            if (editor.isNewForm()){
+                /*
+                * New Form Case
+                */
+                editor.form = {
+                    'title' : '',
+                    'slug' : '',
+                };
+                editor.version = {
+                    'json' : '',
+                    'status' :0 ,
+                    'publish_date' : '2014-06-06',
+                    'expiry_date' : '2014-06-06',
+                    'number' : 0,
+                    'owner' : '',
+                    'form' : '',
+                }
+            } else {
+                /*
+                * Edit Form Case
+                */
+                    //Load Form
+                $http.get('forms/'+editor.formIdParam)
                 .success(function(data){
-                    editor.version = data;
-                    editor.pages = JSON.parse(data.json).pages;
-                    var questions = [];
-                    for (var i=0; i<editor.pages.length; i++) {
-                        questions = questions.concat(editor.pages[i].fields);
-                    };
-                    editor.max_id = Math.max.apply(Math,questions.map(function(o){
-                        return o.field_id;
-                    }));
+                    editor.form = data;
+
+                     //Load version
+                    $http.get('version/'+editor.formIdParam+'/'+editor.versionIdParam)
+                    .success(function(data){
+                        editor.version = data;
+                        editor.pages = JSON.parse(data.json).pages;
+                        var questions = [];
+                        for (var i=0; i<editor.pages.length; i++) {
+                            questions = questions.concat(editor.pages[i].fields);
+                        };
+                        editor.max_id = Math.max.apply(Math,questions.map(function(o){
+                            return o.field_id;
+                        }));
+                    })
+                    .error(function(data, status, headers, config){
+                        alert('error cargando version: ' + status);
+                    })
                 })
                 .error(function(data, status, headers, config){
-                    alert('error cargando version: ' + status);
+                    alert('error cargando formulario: ' + status);
                 })
-            })
-            .error(function(data, status, headers, config){
-                alert('error cargando formulario: ' + status);
-            })
+            };
         };
+        // Call to loadForm function on control initialization
+        editor.loadForm(); 
         
         /*
         * Save and publish form
@@ -253,7 +257,7 @@
             }
 
         };
-        
+
     }]);
     
 })()
