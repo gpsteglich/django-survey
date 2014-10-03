@@ -1,59 +1,23 @@
 {% load staticfiles %}
 <!DOCTYPE html>
-<html>
+<html ng-app="dynamicFormsFramework" ng-controller="VisorCtrl">
 	<head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Formulario din.a.mico</title>
+        {% verbatim %}
+        <title>Django surveys - {{title}}</title>
+        {% endverbatim %}
         <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
         <base href="dynamicForms">
 	</head>
-	<body class="radial-center" ng-app="dynamicFormsFramework" ng-controller="VisorCtrl as visor">
-        {% verbatim %}
-        <div class="container" style="padding: 0px">
-            <div class="row">
-                <div class="col-md-10 col-md-offset-1">
-        <div class="panel panel-primary">
-            <div class="panel-heading text-center">
-                <h1 class="text-center"><span class="glyphicon glyphicon-list"></span> {{title}}</h1>
-            </div>
-            <form role="form" name="dynForm" ng-submit="save(dynForm.$valid)" class="dyn-form panel-body">
-                <div style="padding-top:30px;" ng-class="{ 'has-error' : userFieldForm.email.$invalid }">
-                    <div ng-repeat="question in selectedPage.fields" class="form-group">
-                        <div ng-include="question.field_type"></div>
-                        <!--ng-form name="questionForm">
-                            <p class="help-block" ng-show="questionForm.answer.$invalid">Alerta!!!</p>
-                        </ng-form-->
-                    </div>
-                </div>
-                <div class="text-center">
-                    <ul class="pagination">
-                        <li>
-                            <a class="list-group-item"
-                                ng-repeat="item in pages"
-                                ng-click="changePage($index)">{{$index}}</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="text-right">
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                </div>    
-            </form>
-            <footer class="text-center">
-                <span class="glyphicon glyphicon-chevron-right "></span> Fomularios dinámicos _ django-survey _ 2014
-                <span class="glyphicon glyphicon-chevron-left"></span>
-            </footer>
-        </div>
-    </div>
-            </div>
-        </div>
-        {% endverbatim %}
+	<body class="radial-center">
+        <div ng-include="'/dynamicForms/visor_template'"></div>
+        
         <script src={% static "jquery/js/jquery-2.1.1.min.js" %}></script>
         <script src={% static "bootstrap/js/bootstrap.js" %}></script>
         <script src={% static "angular/angular.min.js" %}></script>
-        <script src={% static "angular/sortable.js" %}></script>
-	    <script src={% static "js/app.js" %}></script>
+	    <script src={% static "js/appVisor.js" %}></script>
         <script src={% static "js/visorCtrl.js" %}></script>
         <script src={% static "js/editorCtrl.js" %}></script>
     </body>
