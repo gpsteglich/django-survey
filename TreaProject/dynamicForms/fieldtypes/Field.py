@@ -1,4 +1,4 @@
-
+from django.core.exceptions import ValidationError
 
 class Validator(object):
     """
@@ -19,3 +19,6 @@ class Validator(object):
     def check_consistency(self, restrictions):
         #When a field is created check if the restrictions are consistent
         pass
+    
+    class Meta:
+        abstract = True

@@ -33,20 +33,6 @@ NAMES = (
     (CEDULA, _("Cedula")),
 )
 
-# Corresponding classes for each field type
-CLASSES = {
-    TEXT: forms.CharField,
-    TEXTAREA: forms.CharField,
-    EMAIL: forms.EmailField,
-    CHECKBOX: forms.BooleanField,
-    CHECKBOX_MULTIPLE: forms.MultipleChoiceField,
-    SELECT: forms.ChoiceField,
-    SELECT_MULTIPLE: forms.MultipleChoiceField,
-    RADIO_MULTIPLE: forms.ChoiceField,
-    DATE: forms.DateField,
-    NUMBER: forms.FloatField,
-    URL: forms.URLField,
-}
 
 FIELD_FILES = {
     TEXT: 'dynamicForms.fieldtypes.TextField',

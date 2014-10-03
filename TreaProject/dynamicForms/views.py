@@ -259,14 +259,16 @@ def submit_form_entry(request, slug, format=None):
     for field in request.DATA:
         serializer = FieldEntrySerializer(data=field)
         if serializer.is_valid():
-            if serializer.object.required == 'true' and serializer.object.answer.__str__() == '':
+            if serializer.object.required and serializer.object.answer.__str__() == '':
                 error_log += "'text':" + serializer.object.text + "'This field is required'"
+            elif not serializer.object.required and serializer.object.answer.__str__() == '':
+                pass
             else:
                 file = FIELD_FILES[int(serializer.object.field_type)]
                 field_validator = __import__( file , fromlist=["Validator"])
                 try:
-                    x = field_validator.Validator()
-                    x.validate(serializer.object.answer, x.get_validations(json.loads(final_version.json), serializer.object.field_id))
+                    val = field_validator.Validator()
+                    val.validate(serializer.object.answer, val.get_validations(json.loads(final_version.json), serializer.object.field_id))
                 except ValidationError as e:
                     error_log += e.message
         else:

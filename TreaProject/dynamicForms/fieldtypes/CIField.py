@@ -31,5 +31,5 @@ class Validator(Field.Validator):
             int(intvalue)
         except (ValueError, TypeError):
             raise ValidationError('Enter a valid integer.', code='invalid')
-        self.check_id(value)
+        self.check_id(intvalue)
         return True

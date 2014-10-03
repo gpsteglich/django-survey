@@ -32,3 +32,6 @@ class Validator(Field.Validator):
         if (restrictions['min_number'] and restrictions['max_number']):
             if (restrictions['min_number'] > restrictions['max_number']):
                 raise ValidationError("The min value might not be below the max value.")
+            
+            
+            
