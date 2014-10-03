@@ -21,7 +21,7 @@
             <form role="form" name="dynForm" ng-submit="save(dynForm.$valid)" class="dyn-form panel-body">
                 <div style="padding-top:30px;" ng-class="{ 'has-error' : userFieldForm.email.$invalid }">
                     <div ng-repeat="question in selectedPage.fields" class="form-group">
-                        <div ng-include="question.field_type"></div>
+                        <div ng-include="'/dynamicForms/field/' + question.field_type"></div>
                         <!--ng-form name="questionForm">
                             <p class="help-block" ng-show="questionForm.answer.$invalid">Alerta!!!</p>
                         </ng-form-->

@@ -1,6 +1,9 @@
 from django.contrib.auth.models import User
+import json
 
 from dynamicForms.models import Form, FieldEntry, Version, FormEntry
+from dynamicForms.fieldtypes.field_type import FIELD_FILES
+
 from rest_framework import serializers
 
 
@@ -24,6 +27,17 @@ class VersionSerializer(serializers.ModelSerializer):
     form = serializers.Field(source='form.title')
     json = serializers.CharField(required=False)
     
+    def validate_json(self, attrs, source):
+        value = json.loads(attrs[source])
+        for page in value['pages']:
+            for field in page['fields']:
+                file = FIELD_FILES[int(field['field_type'])]
+                field_validator = __import__( file , fromlist=["Validator"])
+                x = field_validator.Validator()
+                x.check_consistency(field['validations'])
+        return attrs
+        
+        
     class Meta:
         model = Version
         fields = ('number', 'status', 'publish_date', 'expiry_date', 'json', 'form')

@@ -49,18 +49,18 @@ CLASSES = {
 }
 
 FIELD_FILES = {
-    TEXT: 'TextField',
-    TEXTAREA: 'TextField',
-    EMAIL: 'EmailField',
-    CHECKBOX: 'BooleanField',
-    CHECKBOX_MULTIPLE: 'MultipleChoiceField',
-    SELECT: 'ChoiceField',
-    SELECT_MULTIPLE: 'MultipleChoiceField',
-    RADIO_MULTIPLE: 'ChoiceField',
-    DATE: 'DateField',
-    NUMBER: 'NumberField',
-    URL: 'URLField',
-    CEDULA: 'CIField',
+    TEXT: 'dynamicForms.fieldtypes.TextField',
+    TEXTAREA: 'dynamicForms.fieldtypes.TextField',
+    EMAIL: 'dynamicForms.fieldtypes.EmailField',
+    CHECKBOX: 'dynamicForms.fieldtypes.BooleanField',
+    CHECKBOX_MULTIPLE: 'dynamicForms.fieldtypes.MultipleChoiceField',
+    SELECT: 'dynamicForms.fieldtypes.ChoiceField',
+    SELECT_MULTIPLE: 'dynamicForms.fieldtypes.MultipleChoiceField',
+    RADIO_MULTIPLE: 'dynamicForms.fieldtypes.ChoiceField',
+    DATE: 'dynamicForms.fieldtypes.DateField',
+    NUMBER: 'dynamicForms.fieldtypes.NumberField',
+    URL: 'dynamicForms.fieldtypes.URLField',
+    CEDULA: 'dynamicForms.fieldtypes.CIField',
 }
 
 TEMPLATES = {

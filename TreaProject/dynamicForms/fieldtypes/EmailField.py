@@ -9,4 +9,7 @@ class Validator(Field.Validator):
 
     def validate(self, value, restrictions):
         #default validation or pass
-        validate_email(value)
+        try:
+            validate_email(value)
+        except ValidationError as e:
+            raise ValidationError(e.__str__())

@@ -17,4 +17,8 @@ class Validator(Field.Validator):
             self.check_length(value, restrictions['max_len_text'])
         return True
     
-    
+    def check_consistency(self, restrictions):
+        #When a field is created check if the restrictions are consistent
+        if (restrictions['max_len_text']):
+            if (restrictions['max_len_text'] < 0):
+                raise ValidationError("Max length might not be less than 0.")

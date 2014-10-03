@@ -15,3 +15,7 @@ class Validator(object):
             for field in page['fields']:
                 if (field['field_id'] == id):
                     return field['validations']
+                
+    def check_consistency(self, restrictions):
+        #When a field is created check if the restrictions are consistent
+        pass

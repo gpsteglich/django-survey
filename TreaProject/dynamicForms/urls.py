@@ -54,6 +54,7 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^visor/(?P<slug>[a-z,0-9,\-,\_]+)/formTemplate.html(.*)$', views.TemplateView.as_view(template_name='formTemplate.html')),
     url(r'^responses/(?P<slug>[a-z,0-9,\-,\_]+)/(?P<number>[0-9]+)/$', 'get_responses'),
     url(r'^responses/$', views.TemplateView.as_view(template_name='responses.html')),
+    url(r'^constants/$', 'get_constants'),
     
 )
 

@@ -22,7 +22,7 @@ import json
 from django.shortcuts import render_to_response
 from dynamicForms.models import Form,FormEntry, Version, FieldEntry
 from dynamicForms.fields import PUBLISHED, DRAFT
-from dynamicForms.fieldtypes.field_type import TEMPLATES, FIELD_FILES
+from dynamicForms.fieldtypes.field_type import TEMPLATES, FIELD_FILES, NAMES
 from dynamicForms.serializers import FormSerializer, UserSerializer
 from dynamicForms.serializers import FieldEntrySerializer
 from dynamicForms.serializers import VersionSerializer, FormEntrySerializer
@@ -92,7 +92,7 @@ class VersionList(generics.ListCreateAPIView):
     def post(self, request, pk, format=None):
         serializer = VersionSerializer(data=request.DATA)
         form = Form.objects.get(id=pk)
-        serializer.form = form
+        serializer.object.form = form
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -261,34 +261,9 @@ def submit_form_entry(request, slug, format=None):
         if serializer.is_valid():
             if serializer.object.required == 'true' and serializer.object.answer.__str__() == '':
                 error_log += "'text':" + serializer.object.text + "'This field is required'"
-            elif serializer.object.field_type == 'text':
-                file = FIELD_FILES[1]
-                #int(self.kwargs.get('type'))
-                field_validator = __import__("dynamicForms.fieldtypes.%s" % file , fromlist=["Validator"])
-                try:
-                    x = field_validator.Validator()
-                    x.validate(serializer.object.answer, x.get_validations(json.loads(final_version.json), serializer.object.field_id))
-                except ValidationError as e:
-                    error_log += e.message
-            elif serializer.object.field_type == 'number':
-                file = FIELD_FILES[10]
-                field_validator = __import__("dynamicForms.fieldtypes.%s" % file , fromlist=["Validator"])
-                try:
-                    x = field_validator.Validator()
-                    x.validate(serializer.object.answer, x.get_validations(json.loads(final_version.json), serializer.object.field_id))
-                except ValidationError as e:
-                    error_log += e.message
-            elif serializer.object.field_type == 'mail':
-                file = FIELD_FILES[3]
-                field_validator = __import__("dynamicForms.fieldtypes.%s" % file , fromlist=["Validator"])
-                try:
-                    x = field_validator.Validator()
-                    x.validate(serializer.object.answer, x.get_validations(json.loads(final_version.json), serializer.object.field_id))
-                except ValidationError as e:
-                    error_log += e.__str__()
-            elif serializer.object.field_type == 'identityDoc':
-                file = FIELD_FILES[12]
-                field_validator = __import__("dynamicForms.fieldtypes.%s" % file , fromlist=["Validator"])
+            else:
+                file = FIELD_FILES[int(serializer.object.field_type)]
+                field_validator = __import__( file , fromlist=["Validator"])
                 try:
                     x = field_validator.Validator()
                     x.validate(serializer.object.answer, x.get_validations(json.loads(final_version.json), serializer.object.field_id))
@@ -321,7 +296,7 @@ def submit_form_entry(request, slug, format=None):
 def editor(request):
     return render_to_response('editor.html', {})
     
-
+@login_required
 @api_view(['GET'])
 def get_responses(request, slug, number, format=None):
     """
@@ -340,7 +315,11 @@ def get_responses(request, slug, number, format=None):
         content = {"error": "There is no form with that slug or the corresponding"
                    " form has no version with that number"}
         return Response(content, status=status.HTTP_404_NOT_FOUND)
-    
+
+@login_required  
+@api_view(['GET'])
+def get_constants(request, format=None):
+    return Response(status = status.HTTP_200_OK, data=NAMES)
 
 
 class SimpleStaticView(TemplateView):

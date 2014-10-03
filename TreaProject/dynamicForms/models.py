@@ -3,6 +3,7 @@ from django.db import models
 from django.template.defaultfilters import slugify
 
 from dynamicForms.fields import JSONField, STATUS, DRAFT, PUBLISHED
+from dynamicForms.fieldtypes.field_type import NAMES
 from datetime import date
 
 
@@ -31,7 +32,6 @@ class Form(models.Model):
             if (self.pk != f1.pk):
                 raise ValidationError("Slug already exists. Choose another title.")
         super(Form,self).save(*args, **kwargs)
-        
         
     class Meta:
         ordering = ('title',)
@@ -80,13 +80,12 @@ class Version(models.Model):
 
 class FormEntry(models.Model):
     version = models.ForeignKey("Version", related_name="entries")
-    entry_time = models.DateField(blank=True)
-
+    entry_time = models.DateTimeField(blank=True)
 
 
 class FieldEntry(models.Model):
     field_id = models.IntegerField()
-    field_type = models.CharField(max_length=200)
+    field_type = models.IntegerField(choices=NAMES, default=1)
     text = models.CharField(max_length=200)
     required = models.BooleanField()
     answer = models.CharField(max_length=200, blank=True, null=True)

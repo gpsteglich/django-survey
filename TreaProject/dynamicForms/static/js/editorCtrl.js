@@ -66,13 +66,13 @@
         }
         
         editor.FieldTypes = [
-            'text',
-            'number',
-            'textarea',
-            'combobox',
-            'mail',
-            'identityDoc',
-            'checkbox',        
+            1,
+            10,
+            2,
+            6,
+            3,
+            12,
+            4,        
         ];
 
         editor.deleteField = function(page, index){
@@ -97,7 +97,7 @@
         editor.addField = function(type) {
             var newField = angular.copy(editor.newField);
             newField.field_id = ++editor.max_id;
-            newField.field_type = type || 'text';
+            newField.field_type = type || 1;
             if (type === editor.FieldTypes[6]){
                  var option1 = angular.copy(checkboxOption);
                  option1.label ='first option';
