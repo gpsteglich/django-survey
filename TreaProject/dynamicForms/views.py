@@ -58,7 +58,7 @@ class FormList(generics.ListCreateAPIView):
                 f["lastStatus"] = last_version['status']
         return render_to_response('mainPage.html', {"formList": forms})
       
-
+      
 class FormDetail(generics.RetrieveUpdateDestroyAPIView):
     """
     APIView to see details, modify or delete a form.
@@ -92,8 +92,8 @@ class VersionList(generics.ListCreateAPIView):
     def post(self, request, pk, format=None):
         serializer = VersionSerializer(data=request.DATA)
         form = Form.objects.get(id=pk)
-        serializer.object.form = form
         if serializer.is_valid():
+            serializer.object.form = form
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
@@ -238,8 +238,8 @@ class JSONResponse(HttpResponse):
     """
     An HttpResponse that renders its content into JSON.
     """
-    def __init__(self, data, **kwargs):
-        content = JSONRenderer().render(data)
+    def __init__(self, data, status, **kwargs):
+        content = JSONRenderer().render(data, status=status)
         kwargs['content_type'] = 'application/json'
         super(JSONResponse, self).__init__(content, **kwargs)
 
