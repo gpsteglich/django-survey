@@ -26,17 +26,7 @@
                 visor.selectedPage = visor.pages[page];
             }
             
-                // Load Form
-            $http.get('/dynamicForms/form/'+visor.slug)
-                .success(function(data){
-                    visor.title = data.title;
-                    visor.form = data;
-                })
-                .error(function(data, status, headers, config){
-                    alert('error cargando formulario: ' + status);
-                })
-            
-                // Load Version
+                // Load last published Version
             $http.get('/dynamicForms/visor/publishVersion/'+visor.slug)
                 .success(function(data){
                     visor.version = data;
@@ -44,7 +34,7 @@
                     visor.selectPage(0);
                 })
                 .error(function(data, status, headers, config){
-                    alert('error cargando las preguntas: ' + status);
+                    alert('error loading form: ' + status);
                 });
 
             
@@ -56,14 +46,15 @@
                 };
                 for (var j=0; j< visor.questions.length; j++) {
                     delete visor.questions[j]['validations'];
+                    delete visor.questions[j]['options'];
                     visor.questions[j].required = false;
                 };
-                $http.post('/dynamicForms/visorPub/'+visor.form.slug+'/submit/',visor.questions)
+                $http.post('/dynamicForms/visor/submit/'+visor.slug,visor.questions)
                     .success( function(data, status, headers, config){
-
+                        alert('The data was saved correctly');
                     })
                     .error(function(data, status, headers, config) {
-                        alert('Error guardando las respuestas: ' + status);
+                        alert('Error saving the form: ' + status + '\n data: ' + data)
                     });
             };
             

@@ -223,17 +223,6 @@ class FillForm(generics.RetrieveUpdateDestroyAPIView):
         serializer = VersionSerializer(final_version)
         return Response(serializer.data)
 
-class GetTitle(generics.RetrieveUpdateDestroyAPIView):
-    """
-    APIView to get form title, since it is not included in version
-    """
-    serializer_class = FormSerializer
-
-    def get(self, request, slug, format=None):
-        form = Form.objects.get(slug=slug)
-        serializer = FormSerializer(form)
-        return Response(serializer.data)
-
 
 class JSONResponse(HttpResponse):
     """
