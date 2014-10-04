@@ -322,7 +322,10 @@ def get_responses(request, slug, number, format=None):
 @login_required  
 @api_view(['GET'])
 def get_constants(request, format=None):
-    return Response(status = status.HTTP_200_OK, data=NAMES)
+    keys = []
+    for i in range(0, len(NAMES)):
+        keys.append(NAMES[i])
+    return Response(status = status.HTTP_200_OK, data=dict(keys))
 
 
 class SimpleStaticView(TemplateView):

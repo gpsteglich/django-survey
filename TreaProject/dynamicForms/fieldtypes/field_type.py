@@ -19,18 +19,18 @@ CEDULA = 12
 
 #These are the field types.
 NAMES = (
-    (TEXT, _("Single line text")),
-    (TEXTAREA, _("Multi line text")),
-    (EMAIL, _("Email")),
-    (NUMBER, _("Number")),
-    (URL, _("URL")),
-    (CHECKBOX, _("Check box")),
-    (CHECKBOX_MULTIPLE, _("Check boxes")),
-    (SELECT, _("Drop down")),
-    (SELECT_MULTIPLE, _("Multi select")),
-    (RADIO_MULTIPLE, _("Radio buttons")),
-    (DATE, _("Date")),
-    (CEDULA, _("Cedula")),
+    (TEXT, "Single line text"),
+    (TEXTAREA, "Multi line text"),
+    (EMAIL, "Email"),
+    (NUMBER, "Number"),
+    (URL, "URL"),
+    (CHECKBOX, "Check box"),
+    (CHECKBOX_MULTIPLE, "Check boxes"),
+    (SELECT, "Drop down"),
+    (SELECT_MULTIPLE, "Multi select"),
+    (RADIO_MULTIPLE, "Radio buttons"),
+    (DATE, "Date"),
+    (CEDULA, "Cedula"),
 )
 
 
