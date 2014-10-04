@@ -23,7 +23,7 @@ import json
 from django.shortcuts import render_to_response
 from dynamicForms.models import Form,FormEntry, Version, FieldEntry
 from dynamicForms.fields import PUBLISHED, DRAFT
-from dynamicForms.fieldtypes.field_type import TEMPLATES, FIELD_FILES, NAMES
+from dynamicForms.fieldtypes.field_type import TEMPLATES, FIELD_FILES, NAMES, FIELD_PRP_TEMP
 from dynamicForms.serializers import FormSerializer, UserSerializer
 from dynamicForms.serializers import FieldEntrySerializer
 from dynamicForms.serializers import VersionSerializer, FormEntrySerializer
@@ -338,8 +338,10 @@ class FieldTemplateView(SimpleStaticView):
     
     def get_template_names(self):
         return TEMPLATES[int(self.kwargs.get('type'))]
-#         
-        
-        
+
+class FieldPrpTemplateView(SimpleStaticView):
+    
+    def get_template_names(self):
+        return FIELD_PRP_TEMP[int(self.kwargs.get('type'))]        
         
     

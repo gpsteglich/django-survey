@@ -16,6 +16,16 @@
     	$scope.editorMode = true;
         
         var editor = this;
+        
+        editor.FieldTypes = [];
+        
+        $http.get('constants/')
+                .success(function(data){
+                    editor.FieldTypes = data;
+                }).error(function(status, data){
+                    alert(status+' data:'+data);
+                });
+        
         var checkboxOption = {
             label : 'new option',
         }
@@ -50,6 +60,13 @@
          *  'selectedField' holds the current field that is being edited.
          */
         editor.selectedField;
+        editor.getSelectedField = function(){
+            if (editor.selectedField){
+                return editor.selectedField.field_type || 1;
+            } else {
+                return 1;
+            };
+        };
         
         editor.selectField = function(page, index) {
             editor.selectedPage = editor.pages[page];   
@@ -64,16 +81,6 @@
         editor.deleteOption = function (index){
             editor.selectedField.options.splice(index,1);
         }
-        
-        editor.FieldTypes = [
-            1,
-            10,
-            2,
-            6,
-            3,
-            12,
-            4,        
-        ];
 
         editor.deleteField = function(page, index){
             editor.pages[page].fields.splice(index,1);        
@@ -177,7 +184,6 @@
                 $http.get('forms/'+editor.formIdParam)
                 .success(function(data){
                     editor.form = data;
-
                      //Load version
                     $http.get('version/'+editor.formIdParam+'/'+editor.versionIdParam)
                     .success(function(data){

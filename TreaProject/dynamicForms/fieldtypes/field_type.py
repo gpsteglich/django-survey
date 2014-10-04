@@ -23,13 +23,13 @@ NAMES = (
     (TEXTAREA, "Multi line text"),
     (EMAIL, "Email"),
     (NUMBER, "Number"),
-    (URL, "URL"),
+    #(URL, "URL"),
     (CHECKBOX, "Check box"),
-    (CHECKBOX_MULTIPLE, "Check boxes"),
+    #(CHECKBOX_MULTIPLE, "Check boxes"),
     (SELECT, "Drop down"),
-    (SELECT_MULTIPLE, "Multi select"),
-    (RADIO_MULTIPLE, "Radio buttons"),
-    (DATE, "Date"),
+    #(SELECT_MULTIPLE, "Multi select"),
+    #(RADIO_MULTIPLE, "Radio buttons"),
+    #(DATE, "Date"),
     (CEDULA, "Cedula"),
 )
 
@@ -50,16 +50,31 @@ FIELD_FILES = {
 }
 
 TEMPLATES = {
-    TEXT: 'question_char.html',
-    TEXTAREA: 'question_text_area.html',
-    EMAIL: 'field_mail.html',
-    CHECKBOX: 'BooleanField',
+    TEXT: 'fields/text/template.html',
+    TEXTAREA: 'fields/text_area/template.html',
+    EMAIL: 'fields/email/template.html',
+    CHECKBOX: 'fields/checkbox/template.html',
     CHECKBOX_MULTIPLE: 'MultipleChoiceField',
-    SELECT: 'field_combobox.html',
-    SELECT_MULTIPLE: 'field_combobox.html',
+    SELECT: 'fields/combobox/template.html',
+    SELECT_MULTIPLE: 'fields/combobox/template.html',
     RADIO_MULTIPLE: 'ChoiceField',
     DATE: 'DateField',
-    NUMBER: 'question_num.html',
+    NUMBER: 'fields/number/template.html',
     URL: 'URLField',
-    CEDULA: 'field_identityDoc.html',
+    CEDULA: 'fields/identity_doc/template.html',
+}
+
+FIELD_PRP_TEMP = {
+    TEXT: 'fields/text/properties.html',
+    TEXTAREA: 'fields/text_area/properties.html',
+    EMAIL: 'fields/email/properties.html',
+    CHECKBOX: 'fields/checkbox/properties.html',
+    CHECKBOX_MULTIPLE: 'MultipleChoiceField',
+    SELECT: 'fields/combobox/properties.html',
+    SELECT_MULTIPLE: 'fields/combobox/properties.html',
+    RADIO_MULTIPLE: 'ChoiceField',
+    DATE: 'DateField',
+    NUMBER: 'fields/number/properties.html',
+    URL: 'URLField',
+    CEDULA: 'fields/identity_doc/properties.html',
 }

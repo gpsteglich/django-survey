@@ -1,0 +1,12 @@
+{%extends 'fields/field_properties_base.html' %}
+{%block validations%}
+    <div ng-show="visor.selectedField.field_type=='combobox'" class="form-group">
+        <button type="button" class="btn btn-default btn-xs" 
+                data-toggle="modal" 
+                data-target="#myModal">
+            <span class="glyphicon glyphicon-star"></span>
+            Add Options
+        </button>
+    </div>
+    <div ng-include="'select_modal'"></div>
+{%endblock%}
