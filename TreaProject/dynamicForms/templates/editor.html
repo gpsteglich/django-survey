@@ -41,15 +41,16 @@
                                     </div>
                                     <ul ui-sortable ng-model="page.fields" class="panel-body list-body" style="list-style-type: none;">
 	                                    <li  ng-repeat="question in page.fields"  ng-click="visor.selectField($parent.$index, $index)"
-	                                            style="padding:10px;" itemcell class="field-color"> 
-	                                        <label>{{$index + 1}}. {{question.text}}</label>
+	                                            style="padding:10px;" itemcell class="field-color"> 	                                     
 	                                        <button class="btn pull-right" ng-show="editorMode" ng-click="visor.deleteField($parent.$index, $index)"
 	                                                style="background-color:transparent;padding:0;">
 	                                            <span class="glyphicon glyphicon-remove"></span>
 	                                        </button>
+<!--
                                              <button style="border:none;background:none" ng-show="question.tooltip!=undefined && question.tooltip!=''" tooltip="{{question.tooltip}}">
 	                                            <span class="glyphicon glyphicon-info-sign"></span>
 	                                        </button>
+-->
 	                                        <div class="form-group" >
 	                                            <div ng-include="question.field_type"></div>
 	                                        </div>

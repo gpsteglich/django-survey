@@ -1,5 +1,9 @@
-{% verbatim %} 
-    <label ng-hide="editorMode">{{$index + 1}}. {{question.text}}</label>
+{% verbatim %}     
+    <label >{{$index + 1}}. {{question.text}}</label>
+    <button style="border:none;background:none" ng-show="question.tooltip!=undefined && question.tooltip!=''" tooltip="{{question.tooltip}}">
+        <span class="glyphicon glyphicon-info-sign"></span>
+    </button>
+    
     <input  class="form-control" type="text" ng-model="question.answer"  
     	ng-required="question.validations.required"
     	ng-maxlength="{{question.validations.max_len_text}}"
