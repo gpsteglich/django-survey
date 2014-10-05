@@ -40,13 +40,13 @@
         </div>
         
         <div ng-show="visor.selectedField.field_type=='number'" class="form-group">
-            Min: <input type="number" ng-model="visor.selectedField.validations.min_number" ng-value="true" ng-blur="visor.checkValidations(visor.selectedField)">
-            Max: <input type="number" ng-model="visor.selectedField.validations.max_number" ng-value="true" ng-blur="visor.checkValidations(visor.selectedField)">
+            Min: <input type="number" class="form-control" ng-model="visor.selectedField.validations.min_number" ng-value="true" ng-blur="visor.checkValidations(visor.selectedField)">
+            Max: <input type="number" class="form-control" ng-model="visor.selectedField.validations.max_number" ng-value="true" ng-blur="visor.checkValidations(visor.selectedField)">
         </div>
 
 
         <div ng-show="visor.selectedField.field_type=='text' || visor.selectedField.field_type=='textarea'" class="form-group">
-            Length: <input type="number" ng-model="visor.selectedField.validations.max_len_text" ng-value="true" ng-blur="visor.checkValidations(visor.selectedField)">
+            Length: <input type="number" class="form-control"  ng-model="visor.selectedField.validations.max_len_text" ng-value="true" ng-blur="visor.checkValidations(visor.selectedField)">
         </div>
 
         <div class="form-group">
@@ -62,8 +62,15 @@
             </div>
         </div>
         
+        
+         <div class="form-group">
+            <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myToolTipModal">
+              <span class="glyphicon glyphicon-star"></span> Add ToolTip
+            </button>
+        </div>  
+        
         <div ng-include="'select_modal'"></div>
-     
+        <div ng-include="'tooltip_modal'"></div>
         
     </div>
 </div>

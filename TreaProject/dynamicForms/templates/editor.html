@@ -47,6 +47,9 @@
 	                                                style="background-color:transparent;padding:0;">
 	                                            <span class="glyphicon glyphicon-remove"></span>
 	                                        </button>
+                                             <button style="border:none;background:none" ng-show="question.tooltip!=undefined && question.tooltip!=''" tooltip="{{question.tooltip}}">
+	                                            <span class="glyphicon glyphicon-info-sign"></span>
+	                                        </button>
 	                                        <div class="form-group" >
 	                                            <div ng-include="question.field_type"></div>
 	                                        </div>
@@ -54,6 +57,7 @@
                                     </ul>
                                     <hr/>
                                 </div>
+                                
                                 <div class="text-right">
                                     <button type="submit" ng-click="visor.submitForm()" class="btn btn-default">Publish</button>
                                     <button type="submit" ng-click="visor.saveForm()" class="btn btn-default">Save</button>
@@ -65,14 +69,19 @@
 	                     <div  ng-include="'modify_input'"></div>      
 	                </div>
 	            </div>
+                <pre>{{visor.selectedField.tooltip==undefined|json}}</pre>
 	        </div>
 	    {%endverbatim%}
             <script src={% static "jquery/js/jquery-2.1.1.min.js" %}></script>
-            <script src={% static "jquery/js/jquery-ui.min.js" %}></script>
+            <script src={% static "jquery/js/jquery-ui.min.js" %}></script>           
 		    <script src={% static "angular/angular.min.js" %}></script>
+             <script src={% static "bootstrap/js/ui-bootstrap.min.js" %}></script>
             <script src={% static "angular/sortable.js" %}></script>
 		    <script src={% static "js/app.js" %}></script>
             <script src={% static "js/editorCtrl.js" %}></script>
+            
+            
+            
 		</div> <!-- div de page-wrapper -->
 	    {%endblock%}
 	</body>

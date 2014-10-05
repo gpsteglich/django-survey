@@ -90,7 +90,8 @@
                 max_number: 100,
                 max_len_text: 255,
             },
-            options: ''
+            options: '',
+            tooltip:''
         };
         
         //TODO: asegurar identificador de pregunta único
