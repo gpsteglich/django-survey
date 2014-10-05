@@ -55,8 +55,6 @@ class FormList(generics.ListCreateAPIView):
             f1 = f1.reverse()
         forms = f1.values()
         index = 1
-    #ordenar la lista o hacer la consulta ya ordenada usando parametros nuevos en formList
-    #mainPage/id/asc
         for f in forms:
         #Obtain the list of versions of the form f ordered by version number (descendant)
         #FIX ME: improve get versions
@@ -65,6 +63,8 @@ class FormList(generics.ListCreateAPIView):
         #Assign the dict of versions to the form dict
             f["versions"] = vers_dict
             f["index"] = index
+            f["username"] = User.objects.get(id=f['owner_id'])
+            
             index += 1
         #Get the status of the last version, to know if there is already a draft in this form
             if len(vers_dict) > 0:
