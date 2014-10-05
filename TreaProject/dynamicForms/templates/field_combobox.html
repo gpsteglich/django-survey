@@ -1,6 +1,7 @@
 {% verbatim %} 
     <label ng-hide="editorMode">{{$index + 1}}. {{question.text}}</label>
-    <select  class="form-control"   ng-model="question.answer"  ng-required="question.required" ng-options="options for options in question.options">
-        
+    <select  class="form-control"   ng-model="question.answer"  ng-required="question.required" 
+    	ng-options="options for options in question.options"
+    	ng-disabled="disabled">
     <select/>   
 {% endverbatim %} 

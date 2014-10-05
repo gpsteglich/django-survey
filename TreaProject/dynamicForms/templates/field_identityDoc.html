@@ -1,4 +1,7 @@
 {% verbatim %} 
     <label ng-hide="editorMode">{{$index + 1}}. {{question.text}}</label>
-    <input  class="form-control"  type="text" pattern="[0-9]{8}"  ng-model="question.answer"  ng-required="question.required"/>   
+    <input  class="form-control"  type="text" pattern="[0-9]{8}"  ng-model="question.answer"  
+    	ng-required="question.required"
+    	ng-disabled = "disabled"	
+    />   
 {% endverbatim %} 

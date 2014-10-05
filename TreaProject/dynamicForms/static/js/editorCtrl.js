@@ -14,6 +14,7 @@
     	 * form on the fields templates. 
     	 */
     	$scope.editorMode = true;
+    	$scope.disable = true;     //disables all input fields
         
         var editor = this;
         var checkboxOption = {
