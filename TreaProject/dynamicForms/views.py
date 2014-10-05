@@ -152,7 +152,11 @@ class VersionDetail(generics.RetrieveUpdateDestroyAPIView):
         version = Version.objects.get(form=form, number=number)
         #only draft versions can be deleted this way
         if version.status == DRAFT:
-            version.delete()
+            #if selected form has only a draft and no previous versions
+            if len(Version.objects.filter(form=form))== 1:
+                 form.delete() 
+            else: 
+                version.delete()
             return Response(status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
@@ -202,7 +206,11 @@ class DeleteVersion(generics.DestroyAPIView):
         version = Version.objects.get(form=form, number=number)
         #only draft versions can be deleted this way
         if version.status == DRAFT:
-            version.delete()
+            #if selected form has only a draft and no previous versions
+            if len(Version.objects.filter(form=form))== 1:
+                 form.delete() 
+            else: 
+                version.delete()
             return HttpResponseRedirect("/dynamicForms/main/")
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
