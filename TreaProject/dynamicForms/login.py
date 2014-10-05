@@ -22,7 +22,7 @@ def user_login(request):
             if _user.is_active:
                 #login and send user to mainpage 
                 login(request, _user)
-                return HttpResponseRedirect("/dynamicForms/main/")
+                return HttpResponseRedirect("/dynamicForms/main/id/asc")
             else:
                 #an inactive account was used- no login in.
                 return HttpResponse("Your account is disabled.")

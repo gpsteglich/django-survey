@@ -1,8 +1,11 @@
 {%extends 'base.html' %}
+{% load staticfiles %}
+
 <!DOCTYPE html>
 <html lang="en">
 {%block content%}
-        <div id="page-wrapper">
+    <body>
+        <div id="page-wrapper" ng-controller="MainPageCtrl as mainPage">
             <div class="container-fluid">
 
                 <!-- Page Heading -->
@@ -14,21 +17,68 @@
                     </div>
                 </div>
 
+                    {% verbatim %} 
+
+                    <div class="combo_order col-md-2 col-md-push-8">
+                        <div>
+                            <select ng-model="myOrder" ng-init="myOrder = mainPage.orders[0]" 
+                                    ng-options="order.name for order in mainPage.orders" class="form-control"></select>
+                        </div>
+                        <div class = "btn-group" name="rbtn_ascdsc">
+                            <input type="radio" ng-click="mainPage.selectascdsc('asc')" name="ascdsc" value="ASC" checked>
+                            <span class="glyphicon glyphicon-arrow-up"></span>ASC
+                            <input type="radio" ng-click="mainPage.selectascdsc('dsc')" name="ascdsc" value="DSC">
+                            <span class="glyphicon glyphicon-arrow-down"></span>DSC
+                        </div>
+                        <a href="/dynamicForms/main/{{myOrder.value}}/{{mainPage.ascdsc}}" type="button">Ordenar</a>
+                
+                    </div>
+                    {% endverbatim %} 
+
+                    
+                </br>
                 <div class="row">
-				    <div class="col-sm-10">
+				    <div class="col-sm-11">
 				        <div class="list-group">
+                        <div class="panel-heading bg-primary">
+                            <div class = "row">
+                                <h4 class="panel-title">
+                                        <div class="col-md-1">
+                                            #
+                                        </div>
+                                        <div class="col-md-1">
+                                            Id 
+                                        </div>
+                                        <div class="col-md-8">
+                                            Title 
+                                        </div>
+                                    </a>
+                                </h4>
+                            </div>
+                        </div>
 			            {% for form in formList %}
                             <div class="panel-group" id="accordion">
                               <div class="panel panel-default">
                                 <div class="panel-heading bg-primary">
-                                    <h4 class="panel-title">
-                                        <a data-toggle="collapse" data-parent="#selector" href="#collapse{{ form.id }}">
-                                            {{ form.id }} - {{ form.title }} 
-                                            <a type="button" class="btn btn-danger btn-xs pull-right". href="/dynamicForms/forms/delete/{{form.id}}">
-                                                <span class="glyphicon glyphicon-trash"></span> DELETE
+                                    <div class = "row">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#selector" href="#collapse{{ form.id }}">
+                                                <div class="col-md-1">
+                                                    {{ form.index }}
+                                                </div>
+                                                <div class="col-md-1">
+                                                    {{ form.id }} 
+                                                </div>
+                                                <div class="col-md-8">
+                                                    {{ form.title }} 
+                                                </div>
                                             </a>
+                                        </h4>
+                                        <a type="button" class="col-xs-1 btn btn-danger btn-xs".                                                                                          href="/dynamicForms/forms/delete/{{form.id}}">
+                                            <span class="glyphicon glyphicon-trash"></span> DELETE
                                         </a>
-                                    </h4>
+                                    </div>
+                                    
                                 </div>
                                 <div id="collapse{{ form.id }}" class="panel-collapse collapse in">
                                     <div class="panel-body">
@@ -44,30 +94,32 @@
                                                             {% ifequal v.status 1 %}PUBLISHED{% else %}
                                                             {% ifequal v.status 2 %}EXPIRED{% endifequal %}
                                                             {% endifequal %}{% endifequal %}</th>
-                                                    <th><a type="button" class="btn btn-default btn-xs" href= "/dynamicForms/editor#?form={{form.id}}&ver={{v.number}}"
+                                                    <th><div class="btn-group">
+                                                    <a type="button" class="btn btn-default" href= "/dynamicForms/editor#?form={{form.id}}&ver={{v.number}}"
                                                         {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
                                                         <span class="glyphicon glyphicon-pencil"></span>EDIT
-                                                    </a></th>
-                                                    <th><a type="button" class="btn btn-default btn-xs" target="_blank" href= "/dynamicForms/preview#?form={{form.id}}&ver={{v.number}}" 
+                                                    </a>
+                                                    <a type="button" class="btn btn-default" target="_blank" href= "/dynamicForms/preview#?form={{form.id}}&ver={{v.number}}" 
                                                         {% ifnotequal v.status 1 %} disabled {% endifnotequal %}>
                                                         <span class="glyphicon glyphicon-eye-open"></span>VIEW
-                                                    </a></th>
-                                                    <th><a type="button" class="btn btn-default btn-xs" href = "/dynamicForms/version/{{form.id}}/{{v.number}}/new" 
+                                                    </a>
+                                                    <a type="button" class="btn btn-default" href = "/dynamicForms/version/{{form.id}}/{{v.number}}/new" 
                                                     {% ifequal form.lastStatus 0 %} disabled {% endifequal %}>
                                                         <span class="glyphicon glyphicon-plus"></span>NEW VERSION
-                                                    </a></th>
-                                                    <th><a type="button" class="btn btn-default btn-xs" href = "/dynamicForms/version/{{form.id}}/{{v.number}}/duplicate"
+                                                    </a>
+                                                    <a type="button" class="btn btn-default" href = "/dynamicForms/version/{{form.id}}/{{v.number}}/duplicate"
                                                         {% ifequal v.status 0 %} disabled {% endifequal %}>    
                                                         <span class="glyphicon glyphicon-forward"></span>DUPLICATE
-                                                    </a></th>
-                                                    <th><a type="button" class="btn btn-default btn-xs" href="/dynamicForms/version/delete/{{form.id}}/{{v.number}}"
+                                                    </a>
+                                                    <a type="button" class="btn btn-default" href="/dynamicForms/version/delete/{{form.id}}/{{v.number}}"
                                                         {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
                                                         <span class="glyphicon glyphicon-remove-circle"></span>DISCARD
-                                                    </a></th>
-                                                    <th><a type="button" class="btn btn-default btn-xs" href= "/dynamicForms/responses#?form={{form.slug}}&ver={{v.number}}"
+                                                    </a>
+                                                    <a type="button" class="btn btn-default" href= "/dynamicForms/responses#?form={{form.slug}}&ver={{v.number}}"
                                                         {% ifequal v.status 0 %} disabled {% endifequal %}>
                                                         <span class="glyphicon glyphicon-pencil"></span>VIEW RESPONSES
-                                                    </a></th>
+                                                    </a>
+                                                    </div></th><!-- btn-group-->
                                                 </tr>
                                             {% endfor %}
                                             </tbody>
@@ -82,7 +134,14 @@
     				</div>
              </div>
           </div>
-
+            
+            <script src={% static "bootstrap/js/bootstrap.js" %}></script>
+            <script src={% static "angular/angular.min.js" %}></script>
+            <script src={% static "angular/angular-ui-router.js" %}></script>
+            <script src={% static "angular/sortable.js" %}></script>
+            <script src={% static "js/app.js" %}></script>
+            <script src={% static "js/mainpageCtrl.js" %}></script>
+      </body>                                                 
           
 {%endblock%}
 

@@ -40,6 +40,39 @@ class FormList(generics.ListCreateAPIView):
     def pre_save(self, obj):
         obj.owner = self.request.user
       
+    @login_required
+    def formList(request, order = "id", ad = "asc"):
+        """
+        Gets the list of all forms and versions from the database, and renders the template to show them
+        """
+        #User.objects.order_by('username')
+
+        if order == "owner":
+            f1 = Form.objects.all().order_by('owner__username')
+        else:
+            f1 = Form.objects.all().order_by(order)
+        if (ad == 'dsc'):
+            f1 = f1.reverse()
+        forms = f1.values()
+        index = 1
+    #ordenar la lista o hacer la consulta ya ordenada usando parametros nuevos en formList
+    #mainPage/id/asc
+        for f in forms:
+        #Obtain the list of versions of the form f ordered by version number (descendant)
+        #FIX ME: improve get versions
+            query_set = Form.objects.get(slug=f['slug']).versions.order_by('number').reverse()
+            vers_dict = query_set.values()
+        #Assign the dict of versions to the form dict
+            f["versions"] = vers_dict
+            f["index"] = index
+            index += 1
+        #Get the status of the last version, to know if there is already a draft in this form
+            if len(vers_dict) > 0:
+                last_version = vers_dict[0]
+                f["lastStatus"] = last_version['status']
+            
+        return render_to_response('mainPage.html', {"formList": forms})
+    
 
 class FormDetail(generics.RetrieveUpdateDestroyAPIView):
     """
@@ -292,24 +325,6 @@ def submit_form_entry(request, slug, format=None):
                 field_entry.save()
     return Response(status = status.HTTP_200_OK)
 
-@login_required
-def formList(request):
-    """
-        Gets the list of all forms and versions from the database, and renders the template to show them
-    """
-    forms = Form.objects.values()
-    for f in forms:
-        #Obtain the list of versions of the form f ordered by version number (descendant)
-        #FIX ME: improve get versions
-        query_set = Form.objects.get(slug=f['slug']).versions.order_by('number').reverse()
-        vers_dict = query_set.values()
-        #Assign the dict of versions to the form dict
-        f["versions"] = vers_dict
-        #Get the status of the last version, to know if there is already a draft in this form
-        if len(vers_dict) > 0:
-            last_version = vers_dict[0]
-            f["lastStatus"] = last_version['status']
-    return render_to_response('mainPage.html', {"formList": forms})
 
 @login_required
 def editor(request):
