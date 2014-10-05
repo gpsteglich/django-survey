@@ -213,12 +213,9 @@ class FillForm(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = VersionSerializer
 
     def get(self, request, slug, format=None):
-        form = Form.objects.get(slug=slug)
-        form_versions = Version.objects.filter(form=form)
-        # Max will keep track of the highest published version
-        # of the form to be displayed
-        max = form_versions.filter(status=PUBLISHED).aggregate(Max('number'))
-        final_version = form_versions.get(number=max['number__max'])
+        form_versions = Form.objects.get(slug=slug).versions.all()
+        # We assume there is only one published version at any given time
+        final_version = form_versions.filter(status=PUBLISHED).first()
         
         serializer = VersionSerializer(final_version)
         return Response(serializer.data)
@@ -242,10 +239,8 @@ def submit_form_entry(request, slug, format=None):
     # TODO: agregar primera iteracion por las respuestas
     # para hacer la validacion, antes de crear el entry
     error_log = ''
-    form = Form.objects.get(slug=slug)
-    form_versions = Version.objects.filter(form=form)
-    max = form_versions.filter(status=PUBLISHED).aggregate(Max('number'))
-    final_version = form_versions.get(number=max['number__max'])
+    form_versions = Form.objects.get(slug=slug).versions.all()
+    final_version = form_versions.filter(status=PUBLISHED).first()
     for field in request.DATA:
         serializer = FieldEntrySerializer(data=field)
         if serializer.is_valid():
@@ -267,8 +262,6 @@ def submit_form_entry(request, slug, format=None):
     if error_log != '':
         error_log = "{" + error_log + "}"
         return Response(status = status.HTTP_406_NOT_ACCEPTABLE, data=error_log)
-    # FIXME: Si se agrega el status EXPIRED, deberia haber solo 1 version PUBLISHED
-    # asi que no seria necesario buscar el nro de version mas alto
     entry = FormEntry(version=final_version)
     entry.entry_time = datetime.now()
     entry.save() 

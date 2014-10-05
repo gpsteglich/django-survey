@@ -1,8 +1,8 @@
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.db import models
 from django.template.defaultfilters import slugify
 
-from dynamicForms.fields import JSONField, STATUS, DRAFT, PUBLISHED
+from dynamicForms.fields import JSONField, STATUS, DRAFT, PUBLISHED, EXPIRED
 from dynamicForms.fieldtypes.field_type import NAMES
 from datetime import date
 
@@ -73,8 +73,18 @@ class Version(models.Model):
                 if (all_versions.get(number=count).status == DRAFT):
                     raise ValidationError('There is a previous draft pending for this Form')
                 self.number = all_versions.count() + 1
-        if (self.status == PUBLISHED):
+        if (self.status == PUBLISHED) and (self.publish_date is None):
             self.publish_date = date.today()
+            # If there is a previous published version, its status is changed to expired.
+            prev_versions = self.form.versions.filter(status=PUBLISHED)
+            if len(prev_versions) > 0:
+                # We assume there can only be one published version at any given time
+                prev = prev_versions.first()
+                prev.status = EXPIRED
+                prev.expiry_date = date.today()
+                super(Version,prev).save()
+        elif (self.publish_date is not None):
+            raise ValidationError('You cannot edit a published form')
         super(Version,self).save(*args, **kwargs)
 
 
