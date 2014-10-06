@@ -15,5 +15,5 @@ class ValidationErrorToHttpErrorMiddleware(object):
      def process_exception(self, request, exception):
         if isinstance(exception, ValidationError):
             content = {'error': exception.message}
-            return JSONResponse(content, status=status.HTTP_400_BAD_REQUEST)
+            return JSONResponse(content)
 
