@@ -48,7 +48,7 @@
 	                                            <span class="glyphicon glyphicon-remove"></span>
 	                                        </button>
 	                                        <div class="form-group" >
-	                                            <div ng-include="'field/' + question.field_type"></div>
+	                                            <div ng-include="'field/'+ question.field_type"></div>
 	                                        </div>
 	                                    </li>
                                     </ul>
@@ -62,7 +62,7 @@
 	                    </div>
 	                </div>  
 	                <div class="col-md-3" style= " margin-left:2%" >                  
-	                     <div  ng-include="'modify_input'"></div>      
+	                     <div  ng-include="'field_prp_temp/'+ visor.getSelectedField()"></div>      
 	                </div>
 	            </div>
 	        </div>

@@ -4,7 +4,7 @@
         <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-primary">
                 <div class="panel-heading text-center">
-                    <h1 class="text-center"><span class="glyphicon glyphicon-list"></span> {{title}}</h1>
+                    <h1 class="text-center"><span class="glyphicon glyphicon-list"></span> {{version.form}}</h1>
                 </div>
                 <form role="form" name="dynForm" ng-submit="save(dynForm.$valid)" class="dyn-form panel-body">
                     <div style="padding-top:30px;" ng-class="{ 'has-error' : userFieldForm.email.$invalid }">
@@ -23,7 +23,7 @@
                     </div>
                     <div class="text-right">
                         <button type="submit" class="btn btn-primary">Guardar</button>
-                    </div>    
+                    </div>
                 </form>
                 <footer class="text-center">
                     <span class="glyphicon glyphicon-chevron-right "></span> Fomularios dinámicos _ django-survey _ 2014

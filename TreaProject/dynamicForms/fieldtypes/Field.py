@@ -22,3 +22,14 @@ class Validator(object):
     
     class Meta:
         abstract = True
+
+
+class Renderer(object):
+    """
+    Default Renderer method for field templates
+    """
+    def render(self):
+        pass
+
+    def render_properties(self):
+        pass
