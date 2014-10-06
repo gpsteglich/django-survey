@@ -1,30 +1,16 @@
 from django.core.exceptions import ValidationError
 
-from dynamicForms.fieldtypes import Field
+from dynamicForms.fieldtypes import TextField
 
-class Validator(Field.Validator):
+class Validator(TextField.Validator):
     """
-    Default validator
+    Validator for text area is the same as simple TextField
     """
-    def check_length(self, value, length):
-            if (len(value) > length):
-                raise ValidationError("Text is too long")
-            
+
     def validate(self, value, restrictions):
-        #default validation or pass
         super(Validator,self).validate(value,restrictions)
-        if (restrictions['max_len_text']):
-            self.check_length(value, restrictions['max_len_text'])
-        return True
-    
-    def check_consistency(self, restrictions):
-        #When a field is created check if the restrictions are consistent
-        if (restrictions['max_len_text']):
-            if (restrictions['max_len_text'] < 0):
-                raise ValidationError("Max length might not be less than 0.")
 
-
-class Renderer(Field.Renderer):
+class Renderer(TextField.Renderer):
     """
     Renderer for TextAreaField template
     """

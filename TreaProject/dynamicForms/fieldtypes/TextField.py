@@ -4,7 +4,7 @@ from dynamicForms.fieldtypes import Field
 
 class Validator(Field.Validator):
     """
-    Default validator
+    Text validator
     """
     def check_length(self, value, length):
             if (len(value) > length):

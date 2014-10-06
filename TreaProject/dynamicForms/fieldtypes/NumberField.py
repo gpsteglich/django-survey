@@ -4,7 +4,7 @@ from dynamicForms.fieldtypes import Field
 
 class Validator(Field.Validator):
     """
-    Default validator
+    Number validator.
     """
     def check_min(self, value, min):
         if (value < min):
@@ -15,7 +15,6 @@ class Validator(Field.Validator):
             raise ValidationError("Value above the maximum acceptable.") 
               
     def validate(self, value, restrictions):
-        #default validation or pass
         super(Validator,self).validate(value,restrictions)
         try:
             value = int(value)

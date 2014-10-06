@@ -5,7 +5,7 @@ from dynamicForms.fieldtypes import Field
 
 class Validator(Field.Validator):
     """
-    Default validator
+    CI validator
     """
     def check_id(self, value):
         digits = [int(i) for i in value]

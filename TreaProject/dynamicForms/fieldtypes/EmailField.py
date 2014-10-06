@@ -1,17 +1,18 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
-from dynamicForms.fieldtypes import Field
+from dynamicForms.fieldtypes import TextField
 
-class Validator(Field.Validator):
+class Validator(TextField.Validator):
     """
-    Default validator
+    Email validator using django's validation
     """
 
     def validate(self, value, restrictions):
-        #default validation or pass
+        super(Validator,self).validate(value,restrictions)
         try:
             validate_email(value)
         except ValidationError as e:
+            #transform the message to be cathed later.
             raise ValidationError(e.__str__())
 
 
