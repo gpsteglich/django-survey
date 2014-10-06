@@ -322,7 +322,7 @@ class FieldTemplateView(SimpleStaticView):
         print(file.__str__())
         field = __import__( file , fromlist=["Renderer"])
         renderer = field.Renderer()
-        return renderer.render_type()
+        return renderer.render()
         #return TEMPLATES[int(self.kwargs.get('type'))]
 
 class FieldPrpTemplateView(SimpleStaticView):
