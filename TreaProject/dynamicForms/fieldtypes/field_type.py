@@ -36,7 +36,7 @@ NAMES = (
 
 FIELD_FILES = {
     TEXT: 'dynamicForms.fieldtypes.TextField',
-    TEXTAREA: 'dynamicForms.fieldtypes.TextField',
+    TEXTAREA: 'dynamicForms.fieldtypes.TextAreaField',
     EMAIL: 'dynamicForms.fieldtypes.EmailField',
     CHECKBOX: 'dynamicForms.fieldtypes.BooleanField',
     CHECKBOX_MULTIPLE: 'dynamicForms.fieldtypes.MultipleChoiceField',
@@ -48,7 +48,7 @@ FIELD_FILES = {
     URL: 'dynamicForms.fieldtypes.URLField',
     CEDULA: 'dynamicForms.fieldtypes.CIField',
 }
-
+'''
 TEMPLATES = {
     TEXT: 'fields/text/template.html',
     TEXTAREA: 'fields/text_area/template.html',
@@ -78,3 +78,4 @@ FIELD_PRP_TEMP = {
     URL: 'URLField',
     CEDULA: 'fields/identity_doc/properties.html',
 }
+'''

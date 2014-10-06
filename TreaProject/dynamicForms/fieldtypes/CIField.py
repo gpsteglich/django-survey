@@ -33,3 +33,14 @@ class Validator(Field.Validator):
             raise ValidationError('Enter a valid integer.', code='invalid')
         self.check_id(intvalue)
         return True
+
+
+class Renderer(Field.Renderer):
+    """
+    Renderer for CIField template
+    """
+    def render(self):
+        return 'fields/identity_doc/template.html'
+
+    def render_properties(self):
+        return 'fields/identity_doc/properties.html'

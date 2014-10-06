@@ -13,3 +13,14 @@ class Validator(Field.Validator):
             validate_email(value)
         except ValidationError as e:
             raise ValidationError(e.__str__())
+
+
+class Renderer(Field.Renderer):
+    """
+    Renderer for EmailField template
+    """
+    def render(self):
+        return 'fields/email/template.html'
+
+    def render_properties(self):
+        return 'fields/email/properties.html'

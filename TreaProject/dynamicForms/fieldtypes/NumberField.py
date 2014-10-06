@@ -32,6 +32,14 @@ class Validator(Field.Validator):
         if (restrictions['min_number'] and restrictions['max_number']):
             if (restrictions['min_number'] > restrictions['max_number']):
                 raise ValidationError("The min value might not be below the max value.")
-            
-            
-            
+
+
+class Renderer(Field.Renderer):
+    """
+    Renderer for NumberField template
+    """
+    def render(self):
+        return 'fields/number/template.html'
+
+    def render_properties(self):
+        return 'fields/number/properties.html'

@@ -22,3 +22,14 @@ class Validator(Field.Validator):
         if (restrictions['max_len_text']):
             if (restrictions['max_len_text'] < 0):
                 raise ValidationError("Max length might not be less than 0.")
+
+
+class Renderer(Field.Renderer):
+    """
+    Renderer for TextField template
+    """
+    def render(self):
+        return 'fields/text/template.html'
+
+    def render_properties(self):
+        return 'fields/text/properties.html'
