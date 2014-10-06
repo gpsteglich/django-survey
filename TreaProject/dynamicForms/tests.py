@@ -8,21 +8,18 @@ import datetime;
 
 from dynamicForms import login
 from dynamicForms.fields import PUBLISHED, DRAFT
-from dynamicForms import models
+from dynamicForms.models import Form,Version,FormEntry,FieldEntry
 
 
 class FormTestCase(TestCase):
     
     def setUp(self):
-        
-        #testing client
-        self.c = Client()
-       
+                    
         #testing user
         self.user = User.objects.create_user('user', 'user@mail.com', 'password')
         
         #login user
-        self.c.login(username='user', password='password')
+        self.client.login(username='user', password='password')
         
         #create some testing forms
         self.f1 = models.Form.objects.create(title = "new form1", owner= user)
@@ -33,7 +30,7 @@ class FormTestCase(TestCase):
     def test_new_version_form(self):
         
         #create-new-version-for-form-f1
-        self.c.get("/dynamicForms/version/"+self.f1.id+"/"+self.v1.number+"/new", follow=True)
+        self.client.get("/dynamicForms/version/"+self.f1.id+"/"+self.v1.number+"/new", follow=True)
         
         #check-if-new-version-was-created
         new_version = models.Version.objects.get(number=self.v1.number+1)
@@ -47,7 +44,8 @@ class FormTestCase(TestCase):
     def test_duplicate_form(self):
         
         #duplicate-form-f1
-        self.c.get("/dynamicForms/version/"+self.f1.id+"/"+self.v1.number+"/duplicate", follow=True)
+        resp.self.client.get("/dynamicForms/version/"+self.f1.id+"/"+self.v1.number+"/duplicate", follow=True)
+        self.assertEqual(resp.status_code, 200)
         
         #check-if-form-was-correctly-duplicated
         f1_duplicated = models.Form.objects.get(title=self.f1.title+"(duplicated)")
@@ -64,7 +62,7 @@ class FormTestCase(TestCase):
     def test_delete_form(self):
         
         #delete-form-f1
-        self.c.get("/dynamicForms/form/delete/"+self.f2.id, follow=True)
+        self.client.get("/dynamicForms/form/delete/"+self.f2.id, follow=True)
         
         #check-if-form-was-correctly-deleted
         try:
@@ -75,7 +73,7 @@ class FormTestCase(TestCase):
     def test_delete_version(self):
         
         #delete-version1-form-f1
-        self.c.get("/dynamicForms/version/delete/"+self.f1.id+"/"+self.v1.number, follow=True)
+        self.client.get("/dynamicForms/version/delete/"+self.f1.id+"/"+self.v1.number, follow=True)
         
         #check-if-form-was-correctly-deleted
         try:
