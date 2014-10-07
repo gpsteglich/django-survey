@@ -1,18 +1,37 @@
 {%verbatim%}
- <div class="panel panel-danger" ng-model="visor.selectedField">
-    <div class="panel-heading">
-        Field Properties
-    </div>
-    <div class="panel-body">
-        <div class="form-group">
+<div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Field</h3>
+                    <span class="pull-right">
+                        <!-- Tabs -->
+                        <ul id="myTab" class="nav panel-tabs">
+                            <li><a href="#tab1" data-toggle="tab">Palette</a></li>
+                            <li class="active"><a href="#tab2" data-toggle="tab">Properties</a></li>
+                            <li><a href="#tab3" data-toggle="tab">Config</a></li>
+                           
+                        </ul>
+                    </span>
+                </div>
+                <div class="panel-body">
+                    <div class="tab-content">
+                        <div class="tab-pane" id="tab1">
+                            <div  ng-include="'palette'"></div>
+                        </div>
+                        <div class="tab-pane active" id="tab2">
+                             <div class="form-group">
             <label for="FieldLabel">Field Label</label>
-            <input  class="form-control"  ng-model="visor.selectedField.text">
+             <div class="form-group">
+                    <div class="input-group">
+                         <span class="input-group-btn">
+                            <button class="btn pull-right" disabled >
+                                 <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                         </span>
+                         <input  class="form-control"  ng-model="visor.selectedField.text">
+                    </div>  
+                </div>
+            
         </div>
-        <div class="form-group">
-            <label for="FieldType">Field Type</label>
-            <select class="form-control" ng-model="visor.selectedField.field_type"  ng-options="types for types in visor.FieldTypes"></select>
-        </div>   
-        
         <div ng-show="visor.selectedField.field_type=='combobox'" class="form-group">
             <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal">
               <span class="glyphicon glyphicon-star"></span> Add Options
@@ -62,10 +81,19 @@
             </div>
         </div>
         
-        <div ng-include="'select_modal'"></div>
-     
+       
         
-    </div>
-</div>
+            
+           </div>
+                        <div class="tab-pane" id="tab3">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myToolTipModal" ng-disabled="visor.selectedField.tooltip==undefined">
+                                  <span class="glyphicon glyphicon-star"></span> Configure ToolTip
+                                </button>
+                             </div> 
+                             
+                        </div>
+                    </div>
+                </div>
+            </div>
 {%endverbatim%}
-

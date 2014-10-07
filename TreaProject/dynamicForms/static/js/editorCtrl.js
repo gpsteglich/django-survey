@@ -91,7 +91,8 @@
                 max_number: 100,
                 max_len_text: 255,
             },
-            options: ''
+            options: '',
+            tooltip:''
         };
         
         //TODO: asegurar identificador de pregunta único
@@ -229,7 +230,8 @@
                         editor.versionIdParam = data.number;
                         editor.version = data;
                         // update the url parameters
-                        $location.search({form:editor.formIdParam, ver:editor.versionIdParam});
+                       // $location.search({form:editor.formIdParam, ver:editor.versionIdParam});
+                       $window.location.href = '/dynamicForms/main';
                     })
                     .error(function(data, status, headers, config) {
                         var errors = data.error;
@@ -247,6 +249,7 @@
                     $http.put('version/'+editor.formIdParam+'/'+editor.versionIdParam+"/", editor.version)
                     .success( function(data, status, headers, config){
                         editor.version = data;
+                        $window.location.href = '/dynamicForms/main';
                     })
                     .error(function(data, status, headers, config) {
                         alert('error saving version: ' + status);
