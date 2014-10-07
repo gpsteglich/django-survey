@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {%block content%}
+
     <body>
         <div id="page-wrapper" ng-controller="MainPageCtrl as mainPage">
             <div class="container-fluid">
@@ -90,10 +91,11 @@
                                                 
                                             </a>
                                         </h4>
-                                        <a type="button" class="col-md-1 btn btn-danger btn-xs"
-                                            href="/dynamicForms/forms/delete/{{form.id}}">
-                                            <span class="glyphicon glyphicon-trash"></span> DELETE
-                                        </a>
+                                            <a type="button" class="btn btn-danger btn-xs col-md-1" 
+                                                href="/dynamicForms/forms/delete/{{form.id}}" 
+                                                onclick="return confirmation();">
+                                                <span class="glyphicon glyphicon-trash"></span> DELETE
+                                            </a>
                                     </div>
                                     
                                 </div>
@@ -158,6 +160,15 @@
             <script src={% static "angular/sortable.js" %}></script>
             <script src={% static "js/app.js" %}></script>
             <script src={% static "js/mainpageCtrl.js" %}></script>
+            <script type="text/javascript">
+                function confirmation(){
+                    if (confirm("Are you sure you want to delete this form?")){
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            </script>
       </body>                                                 
           
 {%endblock%}
