@@ -1,9 +1,9 @@
 {% verbatim %} 
-    <label>{{$index + 1}}. {{question.text}}</label>
-    <button class="btn pull-right" ng-show="editorMode" ng-click="visor.deleteField($index)"
-            style="background-color:transparent;padding:0;">
-        <span class="glyphicon glyphicon-remove"></span>
+   <label >{{$index + 1}}. {{question.text}}</label>
+    <button style="border:none;background:none" ng-show="question.tooltip!=undefined && question.tooltip!=''" tooltip="{{question.tooltip}}">
+        <span class="glyphicon glyphicon-info-sign"></span>
     </button>
+    
 
     <div ng-repeat ="option in question.options" >
 	    <div class="checkbox"  ng-required="question.required">

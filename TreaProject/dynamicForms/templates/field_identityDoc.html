@@ -1,6 +1,9 @@
 {% verbatim %} 
-    <label ng-hide="editorMode">{{$index + 1}}. {{question.text}}</label>
-    <input  class="form-control"  type="text" pattern="[0-9]{8}"  ng-model="question.answer"  
+ <label >{{$index + 1}}. {{question.text}}</label>
+        <button style="border:none;background:none" ng-show="question.tooltip!=undefined && question.tooltip!=''" tooltip="{{question.tooltip}}">
+            <span class="glyphicon glyphicon-info-sign"></span>
+        </button>
+     <input  class="form-control"  type="text" pattern="[0-9]{8}"  ng-model="question.answer"  
     	ng-required="question.required"
     	ng-disabled = "disabled"	
     />   
