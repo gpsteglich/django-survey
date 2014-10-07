@@ -48,34 +48,4 @@ FIELD_FILES = {
     URL: 'dynamicForms.fieldtypes.URLField',
     CEDULA: 'dynamicForms.fieldtypes.CIField',
 }
-'''
-TEMPLATES = {
-    TEXT: 'fields/text/template.html',
-    TEXTAREA: 'fields/text_area/template.html',
-    EMAIL: 'fields/email/template.html',
-    CHECKBOX: 'fields/checkbox/template.html',
-    CHECKBOX_MULTIPLE: 'MultipleChoiceField',
-    SELECT: 'fields/combobox/template.html',
-    SELECT_MULTIPLE: 'fields/combobox/template.html',
-    RADIO_MULTIPLE: 'ChoiceField',
-    DATE: 'DateField',
-    NUMBER: 'fields/number/template.html',
-    URL: 'URLField',
-    CEDULA: 'fields/identity_doc/template.html',
-}
 
-FIELD_PRP_TEMP = {
-    TEXT: 'fields/text/properties.html',
-    TEXTAREA: 'fields/text_area/properties.html',
-    EMAIL: 'fields/email/properties.html',
-    CHECKBOX: 'fields/checkbox/properties.html',
-    CHECKBOX_MULTIPLE: 'MultipleChoiceField',
-    SELECT: 'fields/combobox/properties.html',
-    SELECT_MULTIPLE: 'fields/combobox/properties.html',
-    RADIO_MULTIPLE: 'ChoiceField',
-    DATE: 'DateField',
-    NUMBER: 'fields/number/properties.html',
-    URL: 'URLField',
-    CEDULA: 'fields/identity_doc/properties.html',
-}
-'''
