@@ -17,19 +17,46 @@
             {name: "Owner", value: "owner"},
             {name: "Title", value: "title"},
             //{name: "Publish Date", value: "publish_date"},
-        ];
-        mainPage.ascdsc='asc';
-        mainPage.selectascdsc = function(ascdsc) {
+        ]
+
+        mainPage.selectascdsc = function(ascdsc){
             mainPage.ascdsc = ascdsc;
-        };
+        }
+
+        mainPage.url = function(){
+            var parser = $location.absUrl();
+            var arr = parser.split('/');
+            var crit = arr[arr.length - 3];
+            var sent = arr[arr.length - 2];
+            return ([crit, sent]);
+        }
+
+        mainPage.actualOrder = function(){
+            if (mainPage.url()[0] == 'owner'){
+                return mainPage.orders[1];
+            } else if (mainPage.url()[0] == 'title'){
+                return mainPage.orders[2];
+            } else { //default: id
+                return mainPage.orders[0];
+            }
+        }
+
+        if (mainPage.url()[1] == 'dsc'){
+            mainPage.selectascdsc('dsc');
+            mainPage.actualascdsc = 'DSC';
+        } else {
+            mainPage.selectascdsc('asc');
+            mainPage.actualascdsc = 'ASC';
+        }
             
-            
-        $http.get('/dynamicForms/responses/'+mainPage.formSlugParam+'/'+ mainPage.versionIdParam+'/')
+        mainPage.getResponses = function(){
+            $http.get('/dynamicForms/responses/'+mainPage.formSlugParam+'/'+ mainPage.versionIdParam+'/')
             .success(function(data){
                 mainPage.json = data;
             })
             .error(function(data, status, headers, config){
-               // alert('error cargando respuestas: ' + status);
+                alert('error cargando respuestas: ' + status);
             })
+        }
     }]);
 })();

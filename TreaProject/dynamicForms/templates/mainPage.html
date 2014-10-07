@@ -17,48 +17,57 @@
                     </div>
                 </div>
 
-                    {% verbatim %} 
-
-                    <div class="combo_order col-md-2 col-md-push-8">
-                        <div>
-                            <select ng-model="myOrder" ng-init="myOrder = mainPage.orders[0]" 
-                                    ng-options="order.name for order in mainPage.orders" class="form-control"></select>
+                    {% verbatim %}                    
+                <!--forms sorting menu-->
+                <div class="row">
+                    <div class="combo_order">
+                        <div class = "col-md-3">
+                            <select ng-model="myOrder" ng-init="myOrder = mainPage.actualOrder()" 
+                                    ng-options="order.name for order in mainPage.orders" class="form-control">
+                            </select>
+                                    
                         </div>
-                        <div class = "btn-group" name="rbtn_ascdsc">
-                            <input type="radio" ng-click="mainPage.selectascdsc('asc')" name="ascdsc" value="ASC" checked>
-                            <span class="glyphicon glyphicon-arrow-up"></span>ASC
-                            <input type="radio" ng-click="mainPage.selectascdsc('dsc')" name="ascdsc" value="DSC">
-                            <span class="glyphicon glyphicon-arrow-down"></span>DSC
+                        <div class = "btn-group col-md-2" name="rbtn_ascdsc">
+                            <input type="radio" ng-click="mainPage.selectascdsc('asc')" name="ascdsc" 
+                                    value="ASC" ng-checked="mainPage.actualascdsc() == 'ASC'">
+                            <span class="glyphicon glyphicon-arrow-up"></span>Asc
+                            <input type="radio" ng-click="mainPage.selectascdsc('dsc')" name="ascdsc"
+                                    value="DSC" ng-checked="mainPage.actualascdsc() == 'DSC'">
+                            <span class="glyphicon glyphicon-arrow-down"></span>Dsc
                         </div>
-                        <a href="/dynamicForms/main/{{myOrder.value}}/{{mainPage.ascdsc}}" type="button">Ordenar</a>
-                
+                        <div class = "col-md-1">
+                            <a href="/dynamicForms/main/{{myOrder.value}}/{{mainPage.ascdsc}}" 
+                                class="btn btn-default" type="button">Sort</a>
+                        </div>
                     </div>
+                </div>
                     {% endverbatim %} 
+                <!--List of forms heading-->
 
-                    
-                </br>
+                <hr>
                 <div class="row">
 				    <div class="col-sm-11">
 				        <div class="list-group">
                         <div class="panel-heading bg-primary">
                             <div class = "row">
                                 <h4 class="panel-title">
-                                        <div class="col-md-1">
-                                            #
-                                        </div>
-                                        <div class="col-md-1">
-                                            Id 
-                                        </div>
-                                        <div class="col-md-2">
-                                            Username 
-                                        </div>
-                                        <div class="col-md-7">
-                                            Title 
-                                        </div>
-                                    </a>
+                                    <div class="col-md-1">
+                                        #
+                                    </div>
+                                    <div class="col-md-1">
+                                        Id 
+                                    </div>
+                                    <div class="col-md-2">
+                                        Username 
+                                    </div>
+                                    <div class="col-md-7">
+                                        Title 
+                                    </div>
                                 </h4>
                             </div>
                         </div>
+                        <!--List of forms-->
+
 			            {% for form in formList %}
                             <div class="panel-group" id="accordion">
                               <div class="panel panel-default">
@@ -102,27 +111,27 @@
                                                             {% ifequal v.status 2 %}EXPIRED{% endifequal %}
                                                             {% endifequal %}{% endifequal %}</th>
                                                     <th><div class="btn-group">
-                                                    <a type="button" class="btn btn-default" href= "/dynamicForms/editor#?form={{form.id}}&ver={{v.number}}"
+                                                    <a type="button" class="btn btn-default btn-sm" href= "/dynamicForms/editor#?form={{form.id}}&ver={{v.number}}"
                                                         {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
                                                         <span class="glyphicon glyphicon-pencil"></span>EDIT
                                                     </a>
-                                                    <a type="button" class="btn btn-default" target="_blank" href= "/dynamicForms/preview#?form={{form.id}}&ver={{v.number}}" 
+                                                    <a type="button" class="btn btn-default btn-sm" target="_blank" href= "/dynamicForms/preview#?form={{form.id}}&ver={{v.number}}" 
                                                         {% ifnotequal v.status 1 %} disabled {% endifnotequal %}>
                                                         <span class="glyphicon glyphicon-eye-open"></span>VIEW
                                                     </a>
-                                                    <a type="button" class="btn btn-default" href = "/dynamicForms/version/{{form.id}}/{{v.number}}/new" 
+                                                    <a type="button" class="btn btn-default btn-sm" href = "/dynamicForms/version/{{form.id}}/{{v.number}}/new" 
                                                     {% ifequal form.lastStatus 0 %} disabled {% endifequal %}>
                                                         <span class="glyphicon glyphicon-plus"></span>NEW VERSION
                                                     </a>
-                                                    <a type="button" class="btn btn-default" href = "/dynamicForms/version/{{form.id}}/{{v.number}}/duplicate"
+                                                    <a type="button" class="btn btn-default btn-sm" href = "/dynamicForms/version/{{form.id}}/{{v.number}}/duplicate"
                                                         {% ifequal v.status 0 %} disabled {% endifequal %}>    
                                                         <span class="glyphicon glyphicon-forward"></span>DUPLICATE
                                                     </a>
-                                                    <a type="button" class="btn btn-default" href="/dynamicForms/version/delete/{{form.id}}/{{v.number}}"
+                                                    <a type="button" class="btn btn-default btn-sm" href="/dynamicForms/version/delete/{{form.id}}/{{v.number}}"
                                                         {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
                                                         <span class="glyphicon glyphicon-remove-circle"></span>DISCARD
                                                     </a>
-                                                    <a type="button" class="btn btn-default" href= "/dynamicForms/responses#?form={{form.slug}}&ver={{v.number}}"
+                                                    <a type="button" class="btn btn-default btn-sm" href= "/dynamicForms/responses#?form={{form.slug}}&ver={{v.number}}"
                                                         {% ifequal v.status 0 %} disabled {% endifequal %}>
                                                         <span class="glyphicon glyphicon-pencil"></span>VIEW RESPONSES
                                                     </a>
