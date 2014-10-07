@@ -20,28 +20,28 @@
                     {% verbatim %}                    
                 <!--forms sorting menu-->
                 <div class="row">
-                    <div class="combo_order">
-                        <div class = "col-md-3">
+                    <ul class="combo_order col-md-pull-1">
+                        <li class="col-md-3">
                             <select ng-model="myOrder" ng-init="myOrder = mainPage.actualOrder()" 
                                     ng-options="order.name for order in mainPage.orders" class="form-control">
                             </select>
                                     
-                        </div>
-                        <div class = "btn-group col-md-2" name="rbtn_ascdsc">
+                        </li>
+                        <li class = "btn-group" name="rbtn_ascdsc">
                             <input type="radio" ng-click="mainPage.selectascdsc('asc')" name="ascdsc" 
-                                    value="ASC" ng-checked="mainPage.actualascdsc() == 'ASC'">
+                                    value="ASC" ng-checked="mainPage.actualascdsc == 'ASC'">
                             <span class="glyphicon glyphicon-arrow-up"></span>Asc
                             <input type="radio" ng-click="mainPage.selectascdsc('dsc')" name="ascdsc"
-                                    value="DSC" ng-checked="mainPage.actualascdsc() == 'DSC'">
+                                    value="DSC" ng-checked="mainPage.actualascdsc == 'DSC'">
                             <span class="glyphicon glyphicon-arrow-down"></span>Dsc
-                        </div>
-                        <div class = "col-md-1">
+                        </li>
+                        <li>
                             <a href="/dynamicForms/main/{{myOrder.value}}/{{mainPage.ascdsc}}" 
                                 class="btn btn-default" type="button">Sort</a>
-                        </div>
-                    </div>
+                        </li>
+                    </ul>
                 </div>
-                    {% endverbatim %} 
+                {% endverbatim %} 
                 <!--List of forms heading-->
 
                 <hr>
@@ -84,13 +84,14 @@
                                                 <div class="col-md-2">
                                                     {{ form.username }} 
                                                 </div>
-                                                <div class="col-md-7">
+                                                <div class="col-md-6">
                                                     {{ form.title }} 
                                                 </div>
                                                 
                                             </a>
                                         </h4>
-                                        <a type="button" class="col-xs-1 btn btn-danger btn-xs".                                                                                          href="/dynamicForms/forms/delete/{{form.id}}">
+                                        <a type="button" class="col-md-1 btn btn-danger btn-xs"
+                                            href="/dynamicForms/forms/delete/{{form.id}}">
                                             <span class="glyphicon glyphicon-trash"></span> DELETE
                                         </a>
                                     </div>

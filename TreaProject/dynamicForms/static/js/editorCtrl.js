@@ -212,7 +212,25 @@
             editor.persistForm(0);
         }
         editor.submitForm = function(){
-            editor.persistForm(1);
+            if (editor.validateForm()){
+                editor.persistForm(1);
+            }
+        }
+    
+        editor.validateForm = function(){
+            for (pageNum in editor.pages){
+                page = editor.pages[pageNum];
+                for (fieldIndex in page.fields){
+                    field = page.fields[fieldIndex];
+                    if (field.text == null || field.text == ''){
+                        f = parseInt(fieldIndex, 10) + 1;
+                        p = parseInt(pageNum, 10) + 1;
+                        alert ("Field labels can't be empty. Check field " + f + " on page " + p);
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
         
         editor.persistForm = function(status){

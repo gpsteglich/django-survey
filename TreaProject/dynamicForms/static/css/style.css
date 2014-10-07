@@ -53,3 +53,8 @@
         transition: background 0.25s linear;
 }
 .field-color:hover { background-color: #CECEF6; color:#000;  }
+.selected-field { background-color: #CECEF6; }
+.selected-page { background-color: #F2F2F2; }
+
+
+ul.combo_order li{ display: inline; }

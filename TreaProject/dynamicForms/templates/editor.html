@@ -27,7 +27,8 @@
                                 </h1>
                             </div>
                             <form role="form" class="panel-body" >
-                                <div  ng-repeat="page in visor.pages"  ng-click="visor.selectPage($index)"> 
+                                <div  ng-repeat="page in visor.pages"  ng-click="visor.selectPage($index)"
+                                        ng-class="{'selected-page': page == visor.selectedPage}"> 
                                     <div class="pull-right">
                                         <label>Page {{$index + 1}}</label>
                                         <button class="btn" ng-show="editorMode" ng-click="visor.deletePage($index)"
@@ -40,8 +41,10 @@
                                         <input type="text" ng-model="page.subTitle"/>   
                                     </div>
                                     <ul ui-sortable ng-model="page.fields" class="panel-body list-body" style="list-style-type: none;">
-	                                    <li  ng-repeat="question in page.fields"  ng-click="visor.selectField($parent.$index, $index)"
-	                                            style="padding:10px;" itemcell class="field-color"> 
+	                                    <li ng-repeat="question in page.fields"
+                                    		ng-click="visor.selectField($parent.$index, $index)"
+                                            style="padding:10px;" itemcell class="field-color"
+                                            ng-class="{'selected-field': question == visor.selectedField}"> 
 	                                        <label>{{$index + 1}}. {{question.text}}</label>
 	                                        <button class="btn pull-right" ng-show="editorMode" ng-click="visor.deleteField($parent.$index, $index)"
 	                                                style="background-color:transparent;padding:0;">

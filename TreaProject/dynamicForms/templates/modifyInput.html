@@ -39,9 +39,13 @@
             
         </div>
         
+         <div ng-show="visor.selectedField.field_type=='number'" class="form-group">
+            Min: <input type="number" ng-model="visor.selectedField.validations.min_number" ng-value="true"
+                        ng-blur="visor.checkValidations(visor.selectedField)">
+        </div>
         <div ng-show="visor.selectedField.field_type=='number'" class="form-group">
-            Min: <input type="number" ng-model="visor.selectedField.validations.min_number" ng-value="true" ng-blur="visor.checkValidations(visor.selectedField)">
-            Max: <input type="number" ng-model="visor.selectedField.validations.max_number" ng-value="true" ng-blur="visor.checkValidations(visor.selectedField)">
+            Max: <input type="number" ng-model="visor.selectedField.validations.max_number" ng-value="true"
+                        ng-blur="visor.checkValidations(visor.selectedField)">
         </div>
 
 
