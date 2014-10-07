@@ -164,8 +164,8 @@
                 editor.version = {
                     'json' : '',
                     'status' :0 ,
-                    'publish_date' : '2014-06-06',
-                    'expiry_date' : '2014-06-06',
+                    'publish_date' : '',
+                    'expiry_date' : '',
                     'number' : 0,
                     'owner' : '',
                     'form' : '',

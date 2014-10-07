@@ -107,8 +107,8 @@ class VersionList(generics.ListCreateAPIView):
     def post(self, request, pk, format=None):
         serializer = VersionSerializer(data=request.DATA)
         form = Form.objects.get(id=pk)
-        serializer.form = form
         if serializer.is_valid():
+            serializer.object.form = form
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
@@ -235,16 +235,10 @@ class FillForm(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = VersionSerializer
 
     def get(self, request, slug, format=None):
-        form = Form.objects.get(slug=slug)
-        form_versions = Version.objects.filter(form=form)
-        # Max will keep track of the highest published version
-        # of the form to be displayed
-        max = form_versions.filter(status=PUBLISHED).aggregate(Max('number'))
-        final_version = form_versions.get(number=max['number__max'])
-#         for version in form_versions:
-#             if version.number > max: #and version.status == PUBLISHED:
-#                 max = version.number
-#                 final_version = version
+        form_versions = Form.objects.get(slug=slug).versions.all()
+        # We assume there is only one published version at any given time
+        final_version = form_versions.filter(status=PUBLISHED).first()
+        
         serializer = VersionSerializer(final_version)
         return Response(serializer.data)
 
