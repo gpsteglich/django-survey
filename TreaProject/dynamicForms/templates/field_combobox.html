@@ -3,7 +3,7 @@
         <button style="border:none;background:none" ng-show="question.tooltip!=undefined && question.tooltip!=''" tooltip="{{question.tooltip}}">
             <span class="glyphicon glyphicon-info-sign"></span>
         </button>  
-    <select  class="form-control"   ng-model="question.answer"  ng-required="question.required" 	ng-options="options for options in question.options"
+    <select  class="form-control"   ng-model="question.answer[0]"  ng-required="question.required" 	ng-options="options for options in question.options"
     	ng-disabled="disabled">
     <select/>   
 {% endverbatim %} 

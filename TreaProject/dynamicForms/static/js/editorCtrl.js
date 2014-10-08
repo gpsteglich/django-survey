@@ -84,14 +84,14 @@
         	field_id : 0,
             field_type:'' ,
             text: '',
-            answer: '',
+            answer: [],
             validations: {
                 required: false,
                 min_number: 0,
                 max_number: 100,
                 max_len_text: 255,
             },
-            options: '',
+            options: [],
             tooltip:''
         };
         

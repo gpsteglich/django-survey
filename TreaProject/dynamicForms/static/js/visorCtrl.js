@@ -50,14 +50,49 @@
             
                 // Persist form
             visor.save = function(){
+             
+            
+            
                 visor.questions = [];
                 for (var i=0; i< visor.pages.length; i++) {
                     visor.questions = visor.questions.concat(angular.copy(visor.pages[i].fields));
                 };
+                
+                
+               
+                for ( var i = 0; i < visor.questions.length; i++) { 
+                    if (visor.questions[i].field_type == 'checkbox'){
+                        var respuesta = '';
+                         for ( var x = 0; x < visor.questions[i].options.length-1; x++){
+                            respuesta += visor.questions[i].options[x].label + '#';
+                         }
+                        respuesta += visor.questions[i].options[visor.questions[i].options.length-1].label;
+                        visor.questions[i].options = respuesta;
+                         alert("question " + i + " options:  " + visor.questions[i].options); //take out when finished
+                    }else{
+                        visor.questions[i].options= visor.questions[i].options.join('#');
+                         alert("question " + i + " options:  " + visor.questions[i].options); //take out when finished
+                    }
+                    visor.questions[i].answer = visor.questions[i].answer.join('#');
+                    alert('question ' + i + ' answer: ' + visor.questions[i].answer); //take out when finished
+
+                }
+
+                
+                
+                
+                
+                
                 for (var j=0; j< visor.questions.length; j++) {
                     delete visor.questions[j]['validations'];
                     visor.questions[j].required = false;
                 };
+                
+                
+                
+                
+                
+                
                 $http.post('/dynamicForms/visorPub/'+visor.form.slug+'/submit/',visor.questions)
                     .success( function(data, status, headers, config){
 

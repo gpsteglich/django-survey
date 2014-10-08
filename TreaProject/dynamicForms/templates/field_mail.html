@@ -2,7 +2,7 @@
 <label >{{$index + 1}}. {{question.text}}</label>
     <button style="border:none;background:none" ng-show="question.tooltip!=undefined && question.tooltip!=''" tooltip="{{question.tooltip}}">
         <span class="glyphicon glyphicon-info-sign"></span>
-    </button>    <input  class="form-control"  type="email" ng-model="question.answer"  
+    </button>    <input  class="form-control"  type="email" ng-model="question.answer[0]"  
     	ng-required="question.required"
     	ng-disabled = "disabled"
     />   
