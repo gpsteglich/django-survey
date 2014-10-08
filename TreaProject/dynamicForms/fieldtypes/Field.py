@@ -1,9 +1,10 @@
 from django.core.exceptions import ValidationError
 
-class Validator(object):
+class Field(object):
     """
-    Default validator
+    Default abstract field type class
     """
+    
     def validate(self, value, restrictions):
         #default validation or pass
         if not value:
@@ -20,16 +21,14 @@ class Validator(object):
         #When a field is created check if the restrictions are consistent
         pass
     
-    class Meta:
-        abstract = True
-
-
-class Renderer(object):
     """
-    Default Renderer method for field templates
+    Default Render methods for field templates
     """
     def render(self):
         pass
 
     def render_properties(self):
         pass
+    
+    class Meta:
+        abstract = True

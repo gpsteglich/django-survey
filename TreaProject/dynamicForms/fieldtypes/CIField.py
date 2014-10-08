@@ -2,10 +2,11 @@ from django.core.exceptions import ValidationError
 import re
 
 from dynamicForms.fieldtypes import Field
+from dynamicForms.fieldtypes import FieldFactory
 
-class Validator(Field.Validator):
+class CIField(Field.Field):
     """
-    CI validator
+    CI field type class
     """
     def check_id(self, value):
         digits = [int(i) for i in value]
@@ -25,7 +26,7 @@ class Validator(Field.Validator):
             
     def validate(self, value, restrictions):
         #default validation or pass
-        super(Validator,self).validate(value,restrictions)
+        super(CIField,self).validate(value,restrictions)
         intvalue = re.sub('[.-]', '', value)
         try:
             int(intvalue)
@@ -35,12 +36,17 @@ class Validator(Field.Validator):
         return True
 
 
-class Renderer(Field.Renderer):
     """
-    Renderer for CIField template
+    Render methods for CIField template
     """
     def render(self):
         return 'fields/identity_doc/template.html'
 
     def render_properties(self):
         return 'fields/identity_doc/properties.html'
+    
+    def __str__():
+        return "Cedula"
+    
+    
+FieldFactory.FieldFactory.register('CIField', CIField)

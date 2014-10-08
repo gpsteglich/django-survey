@@ -1,10 +1,11 @@
 from django.core.exceptions import ValidationError
 
 from dynamicForms.fieldtypes import Field
+from dynamicForms.fieldtypes import FieldFactory
 
-class Validator(Field.Validator):
+class NumberField(Field.Field):
     """
-    Number validator.
+    Number field type class.
     """
     def check_min(self, value, min):
         if (value < min):
@@ -15,7 +16,7 @@ class Validator(Field.Validator):
             raise ValidationError("Value above the maximum acceptable.") 
               
     def validate(self, value, restrictions):
-        super(Validator,self).validate(value,restrictions)
+        super(NumberField,self).validate(value,restrictions)
         try:
             value = int(value)
         except (ValueError, TypeError):
@@ -32,13 +33,16 @@ class Validator(Field.Validator):
             if (restrictions['min_number'] > restrictions['max_number']):
                 raise ValidationError("The min value might not be below the max value.")
 
-
-class Renderer(Field.Renderer):
     """
-    Renderer for NumberField template
+    Render methods for NumberField template
     """
     def render(self):
         return 'fields/number/template.html'
 
     def render_properties(self):
         return 'fields/number/properties.html'
+    
+    def __str__():
+        return "Number"    
+    
+FieldFactory.FieldFactory.register('NumberField', NumberField)

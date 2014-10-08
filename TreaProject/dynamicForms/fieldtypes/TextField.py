@@ -1,17 +1,18 @@
 from django.core.exceptions import ValidationError
 
 from dynamicForms.fieldtypes import Field
+from dynamicForms.fieldtypes import FieldFactory
 
-class Validator(Field.Validator):
+class TextField(Field.Field):
     """
-    Text validator
+    Text field validator, render and analize methods
     """
     def check_length(self, value, length):
             if (len(value) > length):
                 raise ValidationError("Text is too long")
             
     def validate(self, value, restrictions):
-        super(Validator,self).validate(value,restrictions)
+        super(TextField,self).validate(value,restrictions)
         if (restrictions['max_len_text']):
             self.check_length(value, restrictions['max_len_text'])
         return True
@@ -23,12 +24,18 @@ class Validator(Field.Validator):
                 raise ValidationError("Max length might not be less than 0.")
 
 
-class Renderer(Field.Renderer):
     """
-    Renderer for TextField template
+    Render methods for TextField template
     """
     def render(self):
         return 'fields/text/template.html'
 
     def render_properties(self):
         return 'fields/text/properties.html'
+
+    def __str__():
+        return "Single Line Text"
+    
+    
+FieldFactory.FieldFactory.register('TextField', TextField)
+    

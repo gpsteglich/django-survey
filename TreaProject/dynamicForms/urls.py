@@ -8,9 +8,12 @@ Created on 30/8/2014
 from django.conf.urls import patterns, url
 from rest_framework.urlpatterns import format_suffix_patterns
 from dynamicForms import views, login,logout
+from dynamicForms.fieldtypes.field_type import on_startup  
 from django.contrib import admin
 
 admin.autodiscover()
+
+on_startup()
 
 urlpatterns = patterns('dynamicForms.views',
     
@@ -29,8 +32,8 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^preview$', views.TemplateView.as_view(template_name='preview.html')),
     url(r'^editor$', views.TemplateView.as_view(template_name='editor.html')),
     
-    url(r'^field/(?P<type>[0-9]+)/$', views.FieldTemplateView.as_view()),
-    url(r'^field_prp_temp/(?P<type>[0-9]+)/$', views.FieldPrpTemplateView.as_view()),
+    url(r'^field/(?P<type>[A-Z,a-z,0-9,\-,\_]+)/$', views.FieldTemplateView.as_view()),
+    url(r'^field_prp_temp/(?P<type>[A-Z,a-z,0-9,\-,\_]+)/$', views.FieldPrpTemplateView.as_view()),
     url(r'^palette$', views.TemplateView.as_view(template_name='palette.html')),
     url(r'^select_modal$', views.TemplateView.as_view(template_name='select_modal.html')),
     

@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 import json
 
 from dynamicForms.models import Form, FieldEntry, Version, FormEntry
-from dynamicForms.fieldtypes.field_type import FIELD_FILES
+from dynamicForms.fieldtypes.FieldFactory import FieldFactory as Factory 
 
 from rest_framework import serializers
 
@@ -31,10 +31,8 @@ class VersionSerializer(serializers.ModelSerializer):
         value = json.loads(attrs[source])
         for page in value['pages']:
             for field in page['fields']:
-                file = FIELD_FILES[int(field['field_type'])]
-                field_validator = __import__( file , fromlist=["Validator"])
-                x = field_validator.Validator()
-                x.check_consistency(field['validations'])
+                type = Factory.get_class(field['field_type'])
+                type().check_consistency(field['validations'])
         return attrs
         
         

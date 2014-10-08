@@ -1,4 +1,4 @@
-from django.core.exceptions import Exception
+from django.core.exceptions import ValidationError
 
 
 class FieldFactory():
@@ -8,12 +8,18 @@ class FieldFactory():
     
 
     def get_class(id):
-        return fields[id] 
+        return FieldFactory.fields[id] 
     
     def register(id, type):
-        if not fields[id]:
-            fields[id] = type
+        if id not in FieldFactory.fields:
+            FieldFactory.fields[id] = type
         else:
-            raise Exception("invalid ID.")
+            raise ValidationError("invalid ID.")
+        
+    def get_strings():
+        l = {}
+        for key in FieldFactory.fields:
+            l[key] = FieldFactory.fields[key].__str__()
+        return l
        
     

@@ -3,7 +3,6 @@ from django.db import models
 from django.template.defaultfilters import slugify
 
 from dynamicForms.fields import JSONField, STATUS, DRAFT, PUBLISHED, EXPIRED
-from dynamicForms.fieldtypes.field_type import NAMES
 from datetime import date
 
 
@@ -95,7 +94,7 @@ class FormEntry(models.Model):
 
 class FieldEntry(models.Model):
     field_id = models.IntegerField()
-    field_type = models.IntegerField(choices=NAMES, default=1)
+    field_type = models.CharField(max_length=100)
     text = models.CharField(max_length=200)
     required = models.BooleanField()
     answer = models.CharField(max_length=200, blank=True, null=True)

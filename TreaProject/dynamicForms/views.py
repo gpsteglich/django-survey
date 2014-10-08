@@ -19,17 +19,18 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 import json
+from datetime import datetime
 
 from django.shortcuts import render_to_response
 from dynamicForms.models import Form,FormEntry, Version, FieldEntry
 from dynamicForms.fields import PUBLISHED, DRAFT
-from dynamicForms.fieldtypes.field_type import FIELD_FILES, NAMES
 from dynamicForms.serializers import FormSerializer, UserSerializer
 from dynamicForms.serializers import FieldEntrySerializer
 from dynamicForms.serializers import VersionSerializer, FormEntrySerializer
-from dynamicForms.validators import validate_number, validate_id
-from datetime import datetime
-from django.http.response import HttpResponseRedirect
+from dynamicForms.fieldtypes.FieldFactory import FieldFactory as Factory 
+
+
+
 
 
 class FormList(generics.ListCreateAPIView):
@@ -249,11 +250,9 @@ def submit_form_entry(request, slug, format=None):
             elif not serializer.object.required and serializer.object.answer.__str__() == '':
                 pass
             else:
-                file = FIELD_FILES[int(serializer.object.field_type)]
-                field_validator = __import__( file , fromlist=["Validator"])
+                field = (Factory.get_class(serializer.object.field_type))()
                 try:
-                    val = field_validator.Validator()
-                    val.validate(serializer.object.answer, val.get_validations(json.loads(final_version.json), serializer.object.field_id))
+                    field.validate(serializer.object.answer, field.get_validations(json.loads(final_version.json), serializer.object.field_id))
                 except ValidationError as e:
                     error_log += e.message
         else:
@@ -304,10 +303,8 @@ def get_responses(request, slug, number, format=None):
 @login_required  
 @api_view(['GET'])
 def get_constants(request, format=None):
-    keys = []
-    for i in range(0, len(NAMES)):
-        keys.append(NAMES[i])
-    return Response(status = status.HTTP_200_OK, data=dict(keys))
+    data = Factory.get_strings()
+    return Response(status = status.HTTP_200_OK, data=data)
 
 
 class SimpleStaticView(TemplateView):
@@ -318,21 +315,14 @@ class SimpleStaticView(TemplateView):
         
 class FieldTemplateView(SimpleStaticView):
     def get_template_names(self):
-        file = FIELD_FILES[int(self.kwargs.get('type'))]
-        print(file.__str__())
-        field = __import__( file , fromlist=["Renderer"])
-        renderer = field.Renderer()
-        return renderer.render()
-        #return TEMPLATES[int(self.kwargs.get('type'))]
-
+        field = Factory.get_class(self.kwargs.get('type'))
+        return field().render()
+        
+        
 class FieldPrpTemplateView(SimpleStaticView):
     
     def get_template_names(self):
-        file = FIELD_FILES[int(self.kwargs.get('type'))]
-        print(file.__str__())
-        field = __import__( file , fromlist=["Renderer"])
-        renderer = field.Renderer()
-        return renderer.render_properties()
-        #return FIELD_PRP_TEMP[int(self.kwargs.get('type'))]        
+        field = Factory.get_class(self.kwargs.get('type'))
+        return field().render_properties()
         
     
