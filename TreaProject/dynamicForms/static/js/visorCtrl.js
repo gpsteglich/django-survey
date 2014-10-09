@@ -85,6 +85,8 @@
                 
                 for (var j=0; j< visor.questions.length; j++) {
                     delete visor.questions[j]['validations'];
+                    delete visor.questions[j]['tooltip'];
+                    delete visor.questions[j]['options'];
                     visor.questions[j].required = false;
                 };
                 

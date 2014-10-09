@@ -278,7 +278,7 @@ def submit_form_entry(request, slug, format=None):
             if serializer.object.required == 'true' and serializer.object.answer.__str__() == '':
                 error_log += "'text':" + serializer.object.text + "'This field is required'"
             elif serializer.object.field_type == 'text':
-                print("Algo")
+                pass
             elif serializer.object.field_type == 'number':
                 try:
                     validate_number(serializer.object.answer.__str__())
@@ -286,7 +286,6 @@ def submit_form_entry(request, slug, format=None):
                     error_log += "'text':" + serializer.object.text + "'Please enter a valid number'"
             elif serializer.object.field_type == 'mail':
                 try:
-                    print("En el mail")
                     validate_email(serializer.object.answer.__str__())
                 except (ValidationError):
                     error_log += "'text':" + serializer.object.text + "'Please enter a valid email address'"
@@ -301,18 +300,8 @@ def submit_form_entry(request, slug, format=None):
     if error_log != '':
         error_log = "{" + error_log + "}"
         return Response(status = status.HTTP_406_NOT_ACCEPTABLE, data=error_log)
-    form = Form.objects.get(slug=slug)
-    form_versions = Version.objects.filter(form=form)
-    # Max will keep track of the highest published version
-    # of the form to be displayed
-    max = form_versions.filter(status=PUBLISHED).aggregate(Max('number'))
-    final_version = form_versions.get(number=max['number__max'])
-    # FIXME: Si se agrega el status EXPIRED, deberia haber solo 1 version PUBLISHED
-    # asi que no seria necesario buscar el nro de version mas alto
-    #for version in form_versions:
-    #    if version.number > max: #and version.status == PUBLISHED:
-    #        max = version.number
-    #        final_version = version
+    form_versions = Form.objects.get(slug=slug).versions.all()
+    final_version = form_versions.filter(status=PUBLISHED).first()
     entry = FormEntry(version=final_version)
     entry.entry_time = datetime.now()
     entry.save() 
