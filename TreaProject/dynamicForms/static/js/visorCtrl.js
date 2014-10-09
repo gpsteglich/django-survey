@@ -14,7 +14,7 @@
             *  It uses $scope to make variables available for the page.
             */
             var visor = $scope;
-            
+            visor.template = '/dynamicForms/visor_template';
             /*
              * To get the form the slug is catched form the path.
              * This should be handled by $routerprovider
@@ -33,7 +33,7 @@
                     visor.form = data;
                 })
                 .error(function(data, status, headers, config){
-                    alert('error cargando formulario: ' + status);
+                    alert('Error loading form: ' + status);
                 })
             
                 // Load Version
@@ -44,7 +44,7 @@
                     visor.selectPage(0);
                 })
                 .error(function(data, status, headers, config){
-                    alert('error cargando las preguntas: ' + status);
+                    alert('Error loading data: ' + status);
                 });
 
             
@@ -95,10 +95,11 @@
                 
                 $http.post('/dynamicForms/visorPub/'+visor.form.slug+'/submit/',visor.questions)
                     .success( function(data, status, headers, config){
+                        visor.template = '/dynamicForms/visor/form/submitted'
 
                     })
                     .error(function(data, status, headers, config) {
-                        alert('Error guardando las respuestas: ' + status);
+                        alert('Error saving data: ' + status);
                     });
             };
             

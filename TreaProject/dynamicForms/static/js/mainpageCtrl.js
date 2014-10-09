@@ -55,7 +55,7 @@
                 mainPage.json = data;
             })
             .error(function(data, status, headers, config){
-                alert('error cargando respuestas: ' + status);
+                alert('Error loading form data: ' + status);
             })
         }
     }]);
