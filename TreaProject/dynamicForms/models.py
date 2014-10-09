@@ -41,8 +41,8 @@ class Version(models.Model):
     number = models.IntegerField(default=1)
     json = JSONField(default="", blank=True)
     status = models.IntegerField(choices=STATUS, default=DRAFT)
-    publish_date = models.DateField(blank=True, null=True)
-    expiry_date = models.DateField(blank=True, null=True)
+    publish_date = models.DateTimeField(blank=True, null=True)
+    expiry_date = models.DateTimeField(blank=True, null=True)
     form = models.ForeignKey("Form", related_name="versions")
     
     def __str__(self):
@@ -74,14 +74,14 @@ class Version(models.Model):
                     raise ValidationError('There is a previous draft pending for this Form')
                 self.number = all_versions.count() + 1
         if (self.status == PUBLISHED) and (self.publish_date is None):
-            self.publish_date = date.today()
+            self.publish_date = datetime.now()
             # If there is a previous published version, its status is changed to expired.
             prev_versions = self.form.versions.filter(status=PUBLISHED)
             if len(prev_versions) > 0:
                 # We assume there can only be one published version at any given time
                 prev = prev_versions.first()
                 prev.status = EXPIRED
-                prev.expiry_date = date.today()
+                prev.expiry_date = datetime.now()
                 super(Version,prev).save()
         elif (self.publish_date is not None):
             raise ValidationError('You cannot edit a published form')
@@ -90,7 +90,7 @@ class Version(models.Model):
 
 class FormEntry(models.Model):
     version = models.ForeignKey("Version", related_name="entries")
-    entry_time = models.DateField(blank=True)
+    entry_time = models.DateTimeField(blank=True)
 
 
 class FieldEntry(models.Model):
