@@ -7,14 +7,14 @@
         /*
          * The VisorCtrl holds the logic to display, validate and submit the form.
          */
-        .controller('VisorCtrl', ['$scope','$http','$location', function ($scope, $http, $location) {
+        app.controller('VisorCtrl', ['$scope','$http','$location', '$window', function ($scope, $http, $location, $window) {
 
             /*
             *  This controller is initialiced by ui-router, so it cant be used with ng-controller
             *  It uses $scope to make variables available for the page.
             */
             var visor = $scope;
-            visor.template = '/dynamicForms/visor_template';
+       
             /*
              * To get the form the slug is catched form the path.
              * This should be handled by $routerprovider
@@ -97,7 +97,8 @@
                 
                 $http.post('/dynamicForms/visorPub/'+visor.form.slug+'/submit/',visor.questions)
                     .success( function(data, status, headers, config){
-                        visor.template = '/dynamicForms/visor/form/submitted'
+                       
+                        $window.location.href = '/dynamicForms/visor/form/submitted';
 
                     })
                     .error(function(data, status, headers, config) {

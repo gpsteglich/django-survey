@@ -116,7 +116,7 @@ class VersionList(generics.ListCreateAPIView):
 
 class VersionDetail(generics.RetrieveUpdateDestroyAPIView):
     """
-    APIView to see details, modify or delete a form.
+    APIView to see details, modify or delete a version.
     """
     queryset = Version.objects.all()
     serializer_class = VersionSerializer

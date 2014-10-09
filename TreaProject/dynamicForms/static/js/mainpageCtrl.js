@@ -7,7 +7,7 @@
     /*
      * This controller handles the logic to display the list of forms
      */
-    app.controller('MainPageCtrl', ['$scope','$http','$location', function ($scope, $http, $location) {
+    app.controller('MainPageCtrl', ['$scope','$http','$location', '$window', function ($scope, $http, $location, $window) {
     	
     	var mainPage = this;
         mainPage.formSlugParam = ($location.search()).form;
@@ -30,6 +30,20 @@
             var sent = arr[arr.length - 2];
             return ([crit, sent]);
         }
+
+        //deletes draft version of form
+        /* HAS AN ERROR
+        mainPage.discardVersion = function(formId, versionNum){
+            $http.delete('dynamicForms/version/'+formId+'/'+versionNum)
+                .success( function(data, status, headers, config){
+                    $window.location.href = '/dynamicForms/main';
+                })
+                .error(function(data, status, headers, config) {
+                    alert('Error discarding version/'+formId+'/'+versionNum + '. Status: ' + status );
+                });
+
+        }
+        */
 
         mainPage.actualOrder = function(){
             if (mainPage.url()[0] == 'owner'){
