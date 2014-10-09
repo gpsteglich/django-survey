@@ -192,6 +192,9 @@
                         editor.max_id = Math.max.apply(Math,questions.map(function(o){
                             return o.field_id;
                         }));
+                        if (!isNaN(editor.max_id)){
+                            editor.max_id = 0;
+                        }
                     })
                     .error(function(data, status, headers, config){
                         alert('error cargando version: ' + status);
