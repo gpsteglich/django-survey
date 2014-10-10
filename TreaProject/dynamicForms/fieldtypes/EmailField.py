@@ -8,8 +8,8 @@ class EmailField(TextField.TextField):
     Email validator using django's validation
     """
 
-    def validate(self, value, restrictions):
-        super(EmailField,self).validate(value,restrictions)
+    def validate(self, value, **kwargs):
+        super(EmailField,self).validate(value,**kwargs)
         try:
             validate_email(value)
         except ValidationError as e:

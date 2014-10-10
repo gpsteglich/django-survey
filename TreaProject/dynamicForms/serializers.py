@@ -32,7 +32,10 @@ class VersionSerializer(serializers.ModelSerializer):
         for page in value['pages']:
             for field in page['fields']:
                 type = Factory.get_class(field['field_type'])
-                type().check_consistency(field['validations'])
+                kw = {}
+                kw['restrictions'] = field['validations']
+                kw['options'] = field['options']
+                type().check_consistency(**kw)
         return attrs
         
         

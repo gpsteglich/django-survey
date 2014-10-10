@@ -15,8 +15,9 @@ class NumberField(Field.Field):
         if (value > max):
             raise ValidationError("Value above the maximum acceptable.") 
               
-    def validate(self, value, restrictions):
-        super(NumberField,self).validate(value,restrictions)
+    def validate(self, value, **kwargs):
+        super(NumberField,self).validate(value,**kwargs)
+        restrictions = kwargs['restrictions']
         try:
             value = int(value)
         except (ValueError, TypeError):
@@ -27,8 +28,9 @@ class NumberField(Field.Field):
             self.check_max(value, restrictions['max_number'])    
         return True
     
-    def check_consistency(self, restrictions):
+    def check_consistency(self, **kwargs):
         #When a field is created check if the restrictions are consistent
+        restrictions = kwargs['restrictions']
         if (restrictions['min_number'] and restrictions['max_number']):
             if (restrictions['min_number'] > restrictions['max_number']):
                 raise ValidationError("The min value might not be below the max value.")

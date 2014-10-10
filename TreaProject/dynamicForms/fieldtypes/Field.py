@@ -5,7 +5,7 @@ class Field(object):
     Default abstract field type class
     """
     
-    def validate(self, value, restrictions):
+    def validate(self, value, **kwargs):
         #default validation or pass
         if not value:
             raise ValidationError("Problem with the answer.")
@@ -17,7 +17,13 @@ class Field(object):
                 if (field['field_id'] == id):
                     return field['validations']
                 
-    def check_consistency(self, restrictions):
+    def get_options(self, json, id):
+        for page in json['pages']:
+            for field in page['fields']:
+                if (field['field_id'] == id):
+                    return field['options']
+                
+    def check_consistency(self, **kwargs):
         #When a field is created check if the restrictions are consistent
         pass
     

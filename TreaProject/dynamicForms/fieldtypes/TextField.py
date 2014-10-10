@@ -11,14 +11,16 @@ class TextField(Field.Field):
             if (len(value) > length):
                 raise ValidationError("Text is too long")
             
-    def validate(self, value, restrictions):
-        super(TextField,self).validate(value,restrictions)
+    def validate(self, value, **kwargs):
+        super(TextField,self).validate(value,**kwargs)
+        restrictions = kwargs['restrictions']
         if (restrictions['max_len_text']):
             self.check_length(value, restrictions['max_len_text'])
         return True
     
-    def check_consistency(self, restrictions):
+    def check_consistency(self, **kwargs):
         #When a field is created check if the restrictions are consistent
+        restrictions = kwargs['restrictions']
         if (restrictions['max_len_text']):
             if (restrictions['max_len_text'] < 0):
                 raise ValidationError("Max length might not be less than 0.")

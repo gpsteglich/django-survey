@@ -252,7 +252,12 @@ def submit_form_entry(request, slug, format=None):
             else:
                 field = (Factory.get_class(serializer.object.field_type))()
                 try:
-                    field.validate(serializer.object.answer, field.get_validations(json.loads(final_version.json), serializer.object.field_id))
+                    loaded = json.loads(final_version.json)
+                    f_id =  serializer.object.field_id
+                    kw = {}
+                    kw['restrictions'] = field.get_validations(loaded,f_id)
+                    kw['options'] = field.get_options(loaded, f_id)
+                    field.validate(serializer.object.answer, **kw)
                 except ValidationError as e:
                     error_log += e.message
         else:

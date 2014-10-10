@@ -24,9 +24,9 @@ class CIField(Field.Field):
         if ((10 - m) % 10) != digits[len(digits) - 1]:
             raise ValidationError('Enter a valid ID.', code='invalid')
             
-    def validate(self, value, restrictions):
+    def validate(self, value, **kwargs):
         #default validation or pass
-        super(CIField,self).validate(value,restrictions)
+        super(CIField,self).validate(value,**kwargs)
         intvalue = re.sub('[.-]', '', value)
         try:
             int(intvalue)

@@ -8,8 +8,6 @@ class TextAreaField(TextField.TextField):
     Validator for text area is the same as simple TextField
     """
 
-    def validate(self, value, restrictions):
-        super(TextAreaField,self).validate(value,restrictions)
 
     """
     Render methods for TextAreaField template
