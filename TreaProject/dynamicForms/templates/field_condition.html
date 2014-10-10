@@ -1,0 +1,20 @@
+         <div class="col-md-5">
+              <select  class="form-control"  ng-options="option.field_id as option.text for option in visor.questions" ng-model="condition.field">                  
+               </select> 
+        </div>
+        <div class="col-md-3">
+            <select  class="form-control" >
+                <option>operatdor1</option>
+                <option>operatdor2</option>
+                <option>operatdor3</option>
+                <option>operatdor4</option>
+            <select/>  
+        </div>
+        <div class="col-md-3">
+            <input  class="form-control"  type="text" ng-model="condition.values" ng-list =","   /> 
+        </div>
+        <div class="col-md-1">
+            <button ng-click="visor.removeLogicCondition($index,visor.selectedField.field_id)" class="btn btn-primary pull-right" >
+              <span class="glyphicon glyphicon-minus-sign" ></span>
+            </button> 
+       </div>

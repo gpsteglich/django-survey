@@ -105,3 +105,10 @@ ul.combo_order li{ display: inline; }
    text-align: center;
 
 }
+
+
+/**buttons styles*/
+
+.tridimensonal-button{
+    text-shadow: black 5px 3px 3px
+}

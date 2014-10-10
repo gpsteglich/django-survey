@@ -9,11 +9,12 @@
 	{%block content%}
 		<div id="page-wrapper">
 	        {% verbatim %} 
+	          
 	        <div class="content" ng-controller="EditorCtrl as visor">
-	            
-	            <div class="row">
-	           		 <div ng-include="'select_modal'"></div> 	<!-- checkbox option modal and tooltip -->											
-           			 <div ng-include="'tooltip_modal'"></div>    	<!--modal goes here to skip affix property-->
+	          	<div ng-include="'select_modal'"></div> 	<!-- checkbox option modal and tooltip -->
+	          	<div ng-include="'logic_modal'"></div>    	<!--modal goes here to skip affix property-->
+			  	<div ng-include="'tooltip_modal'"></div>    	<!--modal goes here to skip affix property-->
+	            <div class="row">	           		 
 	                <div class=" col-md-7">
 		                <div class="row" style="margin-left:8%">
 		                    <form class="panel panel-primary" form role="form" name="userForm">
@@ -63,8 +64,11 @@
 	                                </div>
 	                            </div>
 		                    </form>
+		                    </br> 
+			                </br>
+			                </br>
 		                    </div> 
-	                </div>  
+	                </div>
 	                <div class="col-md-4"  >     
 	                <div data-spy="affix"> 
 				                <div class="row">                  
@@ -73,7 +77,9 @@
 				            </div>   
 	                </div>
 	            </div>
-                <pre>{{visor.selectedField.tooltip==undefined|json}}</pre>
+             <!--    <pre>{{visor.questions|json}}</pre> -->
+                
+
 	         </div>
 	    {%endverbatim%}
 	   {%endblock%}

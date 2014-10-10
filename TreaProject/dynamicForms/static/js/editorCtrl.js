@@ -26,7 +26,8 @@
         editor.newPage = {'fields':[], 'subTitle':''};
         
         editor.pages = [angular.copy(editor.newPage)];
-        //editor.questions = [];
+        //
+        editor.questions = [];
         //editor.pages[0].fields = editor.questions;
 
         /*
@@ -77,7 +78,9 @@
         ];
 
         editor.deleteField = function(page, index){
-            editor.pages[page].fields.splice(index,1);        
+            
+             editor.questions.splice(editor.questions.indexOf(editor.pages[page].fields[index]));  
+             editor.pages[page].fields.splice(index,1);  
         };
 
         editor.newField =  {
@@ -95,6 +98,10 @@
             tooltip:''
         };
         
+
+    
+
+
         //TODO: asegurar identificador de pregunta único
         editor.addField = function(type) {
             var newField = angular.copy(editor.newField);
@@ -185,6 +192,7 @@
                     .success(function(data){
                         editor.version = data;
                         editor.pages = JSON.parse(data.json).pages;
+                        editor.logic = JSON.parse(data.json).logic;
                         var questions = [];
                         for (var i=0; i<editor.pages.length; i++) {
                             questions = questions.concat(editor.pages[i].fields);
@@ -245,7 +253,7 @@
                     editor.form = data;
                     editor.formIdParam = data.id;
                     editor.version.form = data.id;
-                    editor.version.json = angular.toJson({'pages':editor.pages});
+                    editor.version.json = angular.toJson({'pages':editor.pages,'logic':editor.logic});
                     $http.post('version/'+editor.formIdParam+'/', editor.version)
                     .success( function(data, status, headers, config){
                         editor.versionIdParam = data.number;
@@ -266,7 +274,7 @@
                 $http.put('forms/'+ editor.formIdParam + '/', editor.form)
                 .success( function(data, status, headers, config){
                     editor.form = data;
-                    editor.version.json = angular.toJson({'pages':editor.pages});
+                    editor.version.json = angular.toJson({'pages':editor.pages,'logic':editor.logic});
                     $http.put('version/'+editor.formIdParam+'/'+editor.versionIdParam+"/", editor.version)
                     .success( function(data, status, headers, config){
                         editor.version = data;
@@ -282,6 +290,48 @@
             }
 
         };
+
+
+//------------------------------------------------LOGICA------------------------------------------------------------------------//
+        // logic structures  
+      
+        editor.newLogicField ={
+            operation : 'hide',
+            action : '',
+            conditions: [],
+        }
+
+        editor.newCondition = {
+            field:'',
+            comparator:'',
+            values:[],
+
+        }
+
+        editor.logic = {};
+        editor.questions = [];
+        editor.configLogicField = function (fieldId){
+            editor.questions = [];
+             for (var i=0; i< editor.pages.length; i++) {
+                    editor.questions = editor.questions.concat(editor.pages[i].fields);
+                };
+            if(editor.logic[fieldId]==undefined){
+                        var newLogicField = angular.copy(editor.newLogicField);
+                        editor.logic[fieldId] = newLogicField;
+            }
+
+               
+        }
+
+        editor.addNewLogicCondition = function (fieldId){
+            var newLogicCondition = angular.copy(editor.newCondition);
+            editor.logic[fieldId].conditions.push(newLogicCondition);
+        }
+
+        editor.removeLogicCondition= function(indexCond,field_id){
+                       editor.logic[field_id].conditions.splice(indexCond);
+
+        }
 
     }]);
     

@@ -1,103 +1,97 @@
 {%verbatim%}
 <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Field</h3>
-                    <span class="pull-right">
-                        <!-- Tabs -->
-                        <ul id="myTab" class="nav panel-tabs">
-                            <li><a href="#tab1" data-toggle="tab">Palette</a></li>
-                            <li class="active"><a href="#tab2" data-toggle="tab">Properties</a></li>
-                            <li><a href="#tab3" data-toggle="tab">Config</a></li>
-                           
-                        </ul>
-                    </span>
-                </div>
+    <div class="panel-heading">
+        <h3 class="panel-title">Field</h3>
+        <span class="pull-right">
+            <!-- Tabs -->
+            <ul id="myTab" class="nav panel-tabs">
+                <li><a href="#tab1" data-toggle="tab">Palette</a></li>
+                <li class="active"><a href="#tab2" data-toggle="tab">Properties</a></li>
+                <li><a href="#tab3" data-toggle="tab">Config</a></li>
+               
+            </ul>
+        </span>
+    </div>
                 <div class="panel-body">
                     <div class="tab-content">
                         <div class="tab-pane" id="tab1">
                             <div  ng-include="'palette'"></div>
                         </div>
                         <div class="tab-pane active" id="tab2">
-                             <div class="form-group">
-            <label for="FieldLabel">Field Label</label>
-             <div class="form-group">
-                    <div class="input-group">
-                         <span class="input-group-btn">
-                            <button class="btn pull-right" disabled >
-                                 <span class="glyphicon glyphicon-pencil"></span>
-                            </button>
-                         </span>
-                         <input  class="form-control"  ng-model="visor.selectedField.text">
-                    </div>  
-                </div>
-            
-        </div>
-        <div ng-show="visor.selectedField.field_type=='combobox'" class="form-group">
-            <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal">
-              <span class="glyphicon glyphicon-star"></span> Add Options
-            </button>
-        </div>  
-        
-        <div class="form-group" ng-show= "visor.selectedField.field_type == 'checkbox'">
-            <label for="FieldType">Checkbox Options:</label>
-            <div ng-repeat = "option in visor.selectedField.options">
-                <div class="form-group">
-                    <div class="input-group">
-                         <span class="input-group-btn">
-                            <button class="btn pull-right" ng-click = "visor.deleteOption($index)">
-                                 <span class="glyphicon glyphicon-remove"></span>
-                            </button>
-                         </span>
-                         <input  class="form-control"  ng-model="visor.selectedField.options[visor.selectedField.options.indexOf(option)].label" required>
-                    </div>  
-                </div>               
-            </div>
-            <button type="button" class="btn btn-default btn-xs" ng-click = "visor.addOption()" >
-                    <span class="glyphicon glyphicon-star"></span> Add Options
-            </button>
-            
-        </div>
-        
-         <div ng-show="visor.selectedField.field_type=='number'" class="form-group">
-            Min: <input type="number" ng-model="visor.selectedField.validations.min_number" ng-value="true"
-                        ng-blur="visor.checkValidations(visor.selectedField)">
-        </div>
-        <div ng-show="visor.selectedField.field_type=='number'" class="form-group">
-            Max: <input type="number" ng-model="visor.selectedField.validations.max_number" ng-value="true"
-                        ng-blur="visor.checkValidations(visor.selectedField)">
-        </div>
-
-
-        <div ng-show="visor.selectedField.field_type=='text' || visor.selectedField.field_type=='textarea'" class="form-group">
-            Max length: <input type="number" ng-model="visor.selectedField.validations.max_len_text" ng-value="true" ng-blur="visor.checkValidations(visor.selectedField)">
-        </div>
-
-        <div class="form-group">
-            <div class="radio-inline">
-                <lable>
-                    <input type="radio" ng-model="visor.selectedField.validations.required" ng-value="true"> Required
-                </lable>           
-            </div>
-            <div class="radio-inline">
-                <lable>
-                    <input type="radio" ng-model="visor.selectedField.validations.required" ng-value="false">Not Required
-                </lable>           
-            </div>
-        </div>
-        
-       
-        
-            
-           </div>
+                                     <div class="form-group">
+                                        <label for="FieldLabel">Field Label</label>
+                                         <div class="form-group">
+                                                <div class="input-group">
+                                                     <span class="input-group-btn">
+                                                        <button class="btn pull-right" disabled >
+                                                             <span class="glyphicon glyphicon-pencil"></span>
+                                                        </button>
+                                                     </span>
+                                                     <input  class="form-control"  ng-model="visor.selectedField.text">
+                                                </div>  
+                                            </div>
+                                    </div>
+                                    <div ng-show="visor.selectedField.field_type=='combobox'" class="form-group">
+                                        <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal">
+                                          <span class="glyphicon glyphicon-star"></span> Add Options
+                                        </button>
+                                    </div>  
+                                    <div class="form-group" ng-show= "visor.selectedField.field_type == 'checkbox'">
+                                        <label for="FieldType">Checkbox Options:</label>
+                                        <div ng-repeat = "option in visor.selectedField.options">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                     <span class="input-group-btn">
+                                                        <button class="btn pull-right" ng-click = "visor.deleteOption($index)">
+                                                             <span class="glyphicon glyphicon-remove"></span>
+                                                        </button>
+                                                     </span>
+                                                     <input  class="form-control"  ng-model="visor.selectedField.options[visor.selectedField.options.indexOf(option)].label" required>
+                                                </div>  
+                                            </div>               
+                                        </div>
+                                        <button type="button" class="btn btn-default btn-xs" ng-click = "visor.addOption()" >
+                                                <span class="glyphicon glyphicon-star"></span> Add Options
+                                        </button>    
+                                    </div>
+                                     <div ng-show="visor.selectedField.field_type=='number'" class="form-group">
+                                        Min: <input type="number" ng-model="visor.selectedField.validations.min_number" ng-value="true"
+                                                    ng-blur="visor.checkValidations(visor.selectedField)">
+                                    </div>
+                                    <div ng-show="visor.selectedField.field_type=='number'" class="form-group">
+                                        Max: <input type="number" ng-model="visor.selectedField.validations.max_number" ng-value="true"
+                                                    ng-blur="visor.checkValidations(visor.selectedField)">
+                                    </div>
+                                    <div ng-show="visor.selectedField.field_type=='text' || visor.selectedField.field_type=='textarea'" class="form-group">
+                                        Max length: <input type="number" ng-model="visor.selectedField.validations.max_len_text" ng-value="true" ng-blur="visor.checkValidations(visor.selectedField)">
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="radio-inline">
+                                            <lable>
+                                                <input type="radio" ng-model="visor.selectedField.validations.required" ng-value="true"> Required
+                                            </lable>           
+                                        </div>
+                                        <div class="radio-inline">
+                                            <lable>
+                                                <input type="radio" ng-model="visor.selectedField.validations.required" ng-value="false">Not Required
+                                            </lable>           
+                                        </div>
+                                    </div>
+                        </div>
                         <div class="tab-pane" id="tab3">
                             <div class="form-group">
-                                <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#myToolTipModal" ng-disabled="visor.selectedField.tooltip==undefined">
+                                <button type="button" class="btn btn-danger btn-md tridimensonal-button"  data-toggle="modal" data-target="#myToolTipModal" ng-disabled="visor.selectedField.tooltip==undefined">
                                   <span class="glyphicon glyphicon-star"></span> Configure ToolTip
                                 </button>
                              </div> 
-                             
+                              <div class="form-group">
+                                <button type="button" class="btn btn-danger btn-md tridimensonal-button"  ng-click="visor.configLogicField(visor.selectedField.field_id)" data-toggle="modal" data-target="#myLogicModal" ng-disabled="visor.selectedField.tooltip==undefined">
+                                  <span class="glyphicon glyphicon-star"></span> Configure Logic
+                                </button>
+                             </div>      
                         </div>
                     </div>
                 </div>
             </div>
 {%endverbatim%}
+
