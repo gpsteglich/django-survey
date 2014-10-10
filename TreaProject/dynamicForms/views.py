@@ -1,13 +1,11 @@
 
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect, Http404   
+from django.http import HttpResponse 
 from django.http.response import HttpResponseRedirect
 from django.views.generic import TemplateView
-from django.shortcuts import redirect
 from django.shortcuts import render_to_response
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
-from django.core.validators import validate_email
 from django.db.models import Max
 
 from rest_framework.decorators import api_view
@@ -21,12 +19,10 @@ from rest_framework.views import APIView
 import json
 from datetime import datetime
 
-from django.shortcuts import render_to_response
 from dynamicForms.models import Form,FormEntry, Version, FieldEntry
 from dynamicForms.fields import PUBLISHED, DRAFT
-from dynamicForms.serializers import FormSerializer, UserSerializer
-from dynamicForms.serializers import FieldEntrySerializer
-from dynamicForms.serializers import VersionSerializer, FormEntrySerializer
+from dynamicForms.serializers import FormSerializer, VersionSerializer
+from dynamicForms.serializers import FieldEntrySerializer, FormEntrySerializer
 from dynamicForms.fieldtypes.FieldFactory import FieldFactory as Factory 
 
 
@@ -245,19 +241,20 @@ def submit_form_entry(request, slug, format=None):
     for field in request.DATA:
         serializer = FieldEntrySerializer(data=field)
         if serializer.is_valid():
-            if serializer.object.required and serializer.object.answer.__str__() == '':
-                error_log += "'text':" + serializer.object.text + "'This field is required'"
-            elif not serializer.object.required and serializer.object.answer.__str__() == '':
+            obj = serializer.object
+            if obj.required and obj.answer.__str__() == '':
+                error_log += "'text':" + obj.text + "'This field is required'"
+            elif not obj.required and obj.answer.__str__() == '':
                 pass
             else:
-                field = (Factory.get_class(serializer.object.field_type))()
+                field = (Factory.get_class(obj.field_type))()
                 try:
                     loaded = json.loads(final_version.json)
-                    f_id =  serializer.object.field_id
+                    f_id =  obj.field_id
                     kw = {}
                     kw['restrictions'] = field.get_validations(loaded,f_id)
                     kw['options'] = field.get_options(loaded, f_id)
-                    field.validate(serializer.object.answer, **kw)
+                    field.validate(obj.answer, **kw)
                 except ValidationError as e:
                     error_log += e.message
         else:
@@ -280,16 +277,12 @@ def submit_form_entry(request, slug, format=None):
                 field_entry.save()
     return Response(status = status.HTTP_200_OK)
 
-
-@login_required
-def editor(request):
-    return render_to_response('editor.html', {})
     
 @login_required
 @api_view(['GET'])
 def get_responses(request, slug, number, format=None):
     """
-    APIView to get all the entries for a particular form.
+    View to get all the entries for a particular form.
     """
     try:
         form = Form.objects.get(slug=slug)
@@ -308,24 +301,26 @@ def get_responses(request, slug, number, format=None):
 @login_required  
 @api_view(['GET'])
 def get_constants(request, format=None):
+    """
+    View to get the available field type IDs.
+    """
     data = Factory.get_strings()
     return Response(status = status.HTTP_200_OK, data=data)
 
 
-class SimpleStaticView(TemplateView):
-    
-    def get_template_names(self):
-        return [self.kwargs.get('template_name') + ".html"]
-        
-        
-class FieldTemplateView(SimpleStaticView):
+class FieldTemplateView(TemplateView):
+    """
+    Renders the field type templates.
+    """
     def get_template_names(self):
         field = Factory.get_class(self.kwargs.get('type'))
         return field().render()
         
         
-class FieldPrpTemplateView(SimpleStaticView):
-    
+class FieldPrpTemplateView(TemplateView):
+    """
+    Renders the field type properties templates.
+    """
     def get_template_names(self):
         field = Factory.get_class(self.kwargs.get('type'))
         return field().render_properties()

@@ -7,7 +7,7 @@ Created on 30/8/2014
 
 from django.conf.urls import patterns, url
 from rest_framework.urlpatterns import format_suffix_patterns
-from dynamicForms import views, login,logout
+from dynamicForms import views, logging
 from dynamicForms.fieldtypes.field_type import on_startup  
 from django.contrib import admin
 
@@ -26,9 +26,8 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^version/delete/(?P<pk>[a-z,0-9,\-,\_]+)/(?P<number>[0-9]+)/$', views.DeleteVersion.as_view()),
     
     url(r'^main/', views.FormList.as_view()),
-    url(r'^login/$', login.user_login, name='login'),
-    url(r'^logout/$', logout.user_logout, name='logout'),
-    url(r'^templates/(?P<template_name>\w+)/$', views.SimpleStaticView.as_view()),
+    url(r'^login/$', logging.user_login, name='login'),
+    url(r'^logout/$', logging.user_logout, name='logout'),
     url(r'^preview$', views.TemplateView.as_view(template_name='preview.html')),
     url(r'^editor$', views.TemplateView.as_view(template_name='editor.html')),
     
@@ -44,7 +43,6 @@ urlpatterns = patterns('dynamicForms.views',
     
     url(r'^responses/(?P<slug>[a-z,0-9,\-,\_]+)/(?P<number>[0-9]+)/$', 'get_responses'),
     url(r'^responses/$', views.TemplateView.as_view(template_name='responses.html')),
-    
     url(r'^constants/$', 'get_constants'),
     
 )

@@ -1,8 +1,9 @@
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
 import json
-from django import forms
+
 from south.modelsinspector import add_introspection_rules
 
 

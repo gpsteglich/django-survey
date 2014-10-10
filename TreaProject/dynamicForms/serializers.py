@@ -54,10 +54,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class FieldEntrySerializer(serializers.ModelSerializer):
-    
+        
     class Meta:
         model = FieldEntry
         fields = ('field_id', 'field_type', 'text', 'required', 'answer')
+        
 
 class FormEntrySerializer(serializers.ModelSerializer):
     """
