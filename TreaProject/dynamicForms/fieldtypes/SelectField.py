@@ -7,7 +7,9 @@ class SelectField(Field):
     """
     
     def validate(self, value, **kwargs):
-        options = kwargs['options'].split('#')
+        options = []
+        for option in kwargs['options']:
+            options.append(option)
         if value not in options:
             raise ValidationError("Invalid value, not among options.")
 

@@ -7,7 +7,9 @@ class CheckboxField(Field):
     """
     
     def validate(self, value, **kwargs):
-        options = kwargs['options'].split('#')
+        options = []
+        for option in kwargs['options']:
+            options.append(option['label'])
         values = value.split('#')
         for val in values:
             if val not in options:
