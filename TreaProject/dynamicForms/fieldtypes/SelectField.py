@@ -6,6 +6,10 @@ class SelectField(Field):
     Combobox field validator, render and analize methods
     """
     
+    def validate(self, value, **kwargs):
+        options = kwargs['options'].split('#')
+        if value not in options:
+            raise ValidationError("Invalid value, not among options.")
 
     """
     Render methods for TextField template
