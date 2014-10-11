@@ -4,6 +4,7 @@
             <span class="glyphicon glyphicon-info-sign"></span>
         </button>  
     <select  class="form-control"   ng-model="question.answer[0]"  ng-required="question.required" 	ng-options="options for options in question.options"
+    	ng-change="updateDependencies(question.field_id)"
     	ng-disabled="disabled">
     </select>   
 {% endverbatim %} 
