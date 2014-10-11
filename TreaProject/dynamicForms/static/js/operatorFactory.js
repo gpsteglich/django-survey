@@ -8,7 +8,7 @@ var operatorFactory = (function () {
     return {
         getOperator: function ( operatorName ) {
             var Operator = operator[operatorName];
-            console.log('se creó una instancia de la clase '+operatorName);
+            //console.log('se creó una instancia de la clase '+operatorName);
             return Operator;
         },
  
@@ -18,11 +18,10 @@ var operatorFactory = (function () {
 
         registerOperator: function ( operatorName, Operator ) {
             // Register Operator Class
-            // console.log('Operator: ' + Operator.toSource());
             operator[operatorName] = Operator;
             // Register Operator's available methods
             operatorMethods[operatorName] = Operator.listMethods();
-            console.log('se registro la clase: ' + operatorName);
+            //console.log('se registro la clase: ' + operatorName);
             return operatorFactory;
         },
 

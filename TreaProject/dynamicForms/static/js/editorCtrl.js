@@ -19,7 +19,7 @@
         var editor = this;
         var checkboxOption = {
             label : 'new option',
-        }
+        };
         
         editor.max_id = 0;
         
@@ -51,7 +51,7 @@
         /*
          *  'selectedField' holds the current field that is being edited.
          */
-        editor.selectedField;
+        editor.selectedField = '';
         
         editor.selectField = function(page, index) {
             editor.selectedPage = editor.pages[page];   
@@ -65,7 +65,7 @@
 
         editor.deleteOption = function (index){
             editor.selectedField.options.splice(index,1);
-        }
+        };
         
         editor.FieldTypes = [
             'text',
@@ -101,12 +101,7 @@
                 pages: [],
             }
         };
-        
-
     
-
-
-        //TODO: asegurar identificador de pregunta único
         editor.addField = function(type) {
             var newField = angular.copy(editor.newField);
             newField.field_id = ++editor.max_id;
@@ -144,11 +139,11 @@
             if (val.min_number > val.max_number) {
                 alert("Minimum can't exceed maximum");
                 val.min_number = val.max_number;
-            };
+            }
             if (val.max_len_text < 0){
                 alert("Maximum length can't be less than 0");
                 val.max_len_text = 0;
-            };
+            }
         };
         
         var tmpList = [];
@@ -181,7 +176,7 @@
                     'number' : 0,
                     'owner' : '',
                     'form' : '',
-                }
+                };
             } else {
                 /*
                 * Edit Form Case
@@ -200,7 +195,7 @@
                         var questions = [];
                         for (var i=0; i<editor.pages.length; i++) {
                             questions = questions.concat(editor.pages[i].fields);
-                        };
+                        }
                         editor.max_id = Math.max.apply(Math,questions.map(function(o){
                             return o.field_id;
                         }));
@@ -210,12 +205,12 @@
                     })
                     .error(function(data, status, headers, config){
                         alert('error cargando version: ' + status);
-                    })
+                    });
                 })
                 .error(function(data, status, headers, config){
                     alert('error cargando formulario: ' + status);
-                })
-            };
+                });
+            }
         };
         // Call to loadForm function on control initialization
         editor.loadForm(); 
@@ -226,17 +221,17 @@
         //TODO: usar variables globales para PUBLISH, DRAFT
         editor.saveForm = function(){
             editor.persistForm(0);
-        }
+        };
         editor.submitForm = function(){
             if (editor.validateForm()){
                 editor.persistForm(1);
             }
-        }
+        };
     
         editor.validateForm = function(){
-            for (pageNum in editor.pages){
+            for (var pageNum in editor.pages){
                 page = editor.pages[pageNum];
-                for (fieldIndex in page.fields){
+                for (var fieldIndex in page.fields){
                     field = page.fields[fieldIndex];
                     if (field.text == null || field.text == ''){
                         f = parseInt(fieldIndex, 10) + 1;
@@ -247,7 +242,7 @@
                 }
             }
             return true;
-        }
+        };
         
         editor.persistForm = function(status){
             editor.version.status = status;
@@ -306,7 +301,7 @@
                     }
                 }
             }
-        }
+        };
 
 
 //------------------------------------------------LOGICA------------------------------------------------------------------------//
@@ -316,14 +311,14 @@
             operation : 'hide',
             action : '',
             conditions: [],
-        }
+        };
 
         editor.newCondition = {
             field:'',
             comparator:'',
-            values:[],
-
-        }
+            value:'',
+            operatorsList:[],
+        };
 
         editor.logic = {};
         editor.questions = [];
@@ -331,21 +326,21 @@
             editor.questions = [];
             for (var i=0; i< editor.pages.length; i++) {
                 editor.questions = editor.questions.concat(editor.pages[i].fields);
-            };
+            }
             if(editor.logic[fieldId]==undefined){
                 var newLogicField = angular.copy(editor.newLogicField);
                 editor.logic[fieldId] = newLogicField;
             }
-        }
+        };
 
         editor.addNewLogicCondition = function (fieldId){
             var newLogicCondition = angular.copy(editor.newCondition);
             editor.logic[fieldId].conditions.push(newLogicCondition);
-        }
+        };
 
         editor.removeLogicCondition= function(indexCond,field_id){
             editor.logic[field_id].conditions.splice(indexCond);
-        }
+        };
 
         editor.applyDependencies = function(){
             //clean dependecies of every field
@@ -358,17 +353,39 @@
                 }
             }
             //add dependencies
-            for (dest_id in editor.logic){
+            for (var dest_id in editor.logic){
                 var dest_field = editor.logic[dest_id];
-                for (var i = 0; i < dest_field.conditions.length; i++){
-                    origin_id = dest_field.conditions[i].field;
+                for (var k = 0; k < dest_field.conditions.length; k++){
+                    origin_id = dest_field.conditions[k].field;
                     origin = editor.getFieldById(origin_id);
                     origin.dependencies.fields.push(dest_id);
                     alert(origin.dependencies.fields);
                 }
             }
-        }
+        };
+
+        editor.selectFieldOnCondition = function(condition){
+            condition.field_type = angular.copy(editor.getFieldType(condition.field));
+            condition.operatorsList = editor.getOperatorsForField(condition.field_type);
+            if (!editor.operatorsList){
+                editor.operatorsList = [];
+            }
+        };
+
+        editor.getFieldType = function(field_id){
+            var fieldType = '';
+            for (var i=0; i<editor.questions.length; i++){
+                if (field_id == editor.questions[i].field_id){
+                    fieldType = editor.questions[i].field_type;
+                }
+            }
+            return fieldType;
+        };
+
+        editor.getOperatorsForField = function(field_type){
+            return operatorFactory.getOperatorMethods(field_type);
+        };
 
     }]);
     
-})()
+})();

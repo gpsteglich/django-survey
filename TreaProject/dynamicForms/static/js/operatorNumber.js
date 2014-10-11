@@ -29,4 +29,4 @@ OperatorNumber.less_than = function(a, b){
 	return (a < b);
 }
 
-operatorFactory.registerOperator('OperatorNumber', OperatorNumber);
+operatorFactory.registerOperator('number', OperatorNumber);
