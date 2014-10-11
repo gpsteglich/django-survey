@@ -95,7 +95,11 @@
                 max_len_text: 255,
             },
             options: [],
-            tooltip:''
+            tooltip:'',
+            dependencies: {
+                fields: [],
+                pages: [],
+            }
         };
         
 
@@ -291,6 +295,19 @@
 
         };
 
+        editor.getFieldById = function(id){
+            //precondition: Field with field_id == id exists
+            for(var i = 0; i < editor.pages.length; i++){
+                var page = editor.pages[i];
+                for(var j = 0; j < page.fields.length; j++){
+                    var field = page.fields[j];
+                    if(field.field_id == id){
+                        return field;
+                    }
+                }
+            }
+        }
+
 
 //------------------------------------------------LOGICA------------------------------------------------------------------------//
         // logic structures  
@@ -312,15 +329,13 @@
         editor.questions = [];
         editor.configLogicField = function (fieldId){
             editor.questions = [];
-             for (var i=0; i< editor.pages.length; i++) {
-                    editor.questions = editor.questions.concat(editor.pages[i].fields);
-                };
+            for (var i=0; i< editor.pages.length; i++) {
+                editor.questions = editor.questions.concat(editor.pages[i].fields);
+            };
             if(editor.logic[fieldId]==undefined){
-                        var newLogicField = angular.copy(editor.newLogicField);
-                        editor.logic[fieldId] = newLogicField;
+                var newLogicField = angular.copy(editor.newLogicField);
+                editor.logic[fieldId] = newLogicField;
             }
-
-               
         }
 
         editor.addNewLogicCondition = function (fieldId){
@@ -329,8 +344,29 @@
         }
 
         editor.removeLogicCondition= function(indexCond,field_id){
-                       editor.logic[field_id].conditions.splice(indexCond);
+            editor.logic[field_id].conditions.splice(indexCond);
+        }
 
+        editor.applyDependencies = function(){
+            //clean dependecies of every field
+            for(var i = 0; i < editor.pages.length; i++){
+                var page = editor.pages[i];
+                for(var j = 0; j < page.fields.length; j++){
+                    var field = page.fields[j];
+                    field.dependencies.fields = [];
+                    field.dependencies.pages = [];
+                }
+            }
+            //add dependencies
+            for (dest_id in editor.logic){
+                var dest_field = editor.logic[dest_id];
+                for (var i = 0; i < dest_field.conditions.length; i++){
+                    origin_id = dest_field.conditions[i].field;
+                    origin = editor.getFieldById(origin_id);
+                    origin.dependencies.fields.push(dest_id);
+                    alert(origin.dependencies.fields);
+                }
+            }
         }
 
     }]);

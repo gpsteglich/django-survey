@@ -49,11 +49,12 @@
                             <div class="modal-footer">
                               </br>
                                </br>
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" >Apply</button>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" 
+                                        ng-click="visor.applyDependencies()">Apply</button>
                             </div>
                 </div>
-              <!--   <pre>{{visor.logic|json}}</pre>
-                 <pre>{{visor.pages|json}}</pre> -->
+              <pre>{{visor.logic|json}}</pre>
+              <pre>{{visor.pages|json}}</pre>
         </div>
 
   {% endverbatim %} 
