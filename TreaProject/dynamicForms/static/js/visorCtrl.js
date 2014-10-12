@@ -149,6 +149,7 @@
                     delete visor.questions[j].validations;
                     delete visor.questions[j].tooltip;
                     delete visor.questions[j].options;
+                    delete visor.questions[j].dependencies;
                     visor.questions[j].required = false;
                 }
 
