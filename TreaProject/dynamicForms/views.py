@@ -319,12 +319,12 @@ def editor(request):
     
 
 @api_view(['GET'])
-def get_responses(request, slug, number, format=None):
+def get_responses(request, pk, number, format=None):
     """
     APIView to get all the entries for a particular form.
     """
     try:
-        form = Form.objects.get(slug=slug)
+        form = Form.objects.get(pk=pk)
         v = form.versions.get(number=number)
         if (v.status == DRAFT):
             content = {"error": "This version's status is Draft."}

@@ -134,7 +134,7 @@
                                                         {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
                                                         <span class="glyphicon glyphicon-remove-circle"></span>DISCARD
                                                     </a>
-                                                    <a type="button" class="btn btn-default btn-sm" href= "/dynamicForms/responses#?form={{form.slug}}&ver={{v.number}}"
+                                                    <a type="button" class="btn btn-default btn-sm" href= "/dynamicForms/responses#?form={{form.id}}&ver={{v.number}}"
                                                         {% ifequal v.status 0 %} disabled {% endifequal %}>
                                                         <span class="glyphicon glyphicon-pencil"></span>VIEW RESPONSES
                                                     </a>
