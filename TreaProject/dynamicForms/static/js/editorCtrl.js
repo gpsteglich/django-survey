@@ -386,6 +386,15 @@
             return operatorFactory.getOperatorMethods(field_type);
         };
 
+        // Por compatibilidad con los templates de visor
+        $scope.hideValues = [];
+        $scope.showValues = [];
+        var arraySize = 100;
+        while(arraySize--) {
+            $scope.showValues.push(true);
+            $scope.hideValues.push(false);
+        }
+
     }]);
     
 })();
