@@ -308,12 +308,8 @@ def submit_form_entry(request, slug, format=None):
     for field in request.DATA:
             serializer = FieldEntrySerializer(data=field)
             if serializer.is_valid():
+                serializer.object.entry = entry
                 serializer.save()
-                #FIXME: Improve foreing key setting
-                num = serializer.object.pk
-                field_entry = FieldEntry.objects.get(id=num)
-                field_entry.entry = entry
-                field_entry.save()
     return Response(status = status.HTTP_200_OK)
 
 
