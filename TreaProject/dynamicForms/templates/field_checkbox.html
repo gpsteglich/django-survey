@@ -5,7 +5,8 @@
     </button>
     
 
-    <div ng-repeat ="option in question.options" >
+    <div ng-show="showValues[question.field_id]"
+         ng-repeat ="option in question.options" >
 	    <div class="checkbox"  ng-required="question.required">
 		    <label>
 		      <input type="checkbox" checklist-model="question.answer" checklist-value="option.label" > {{option.label}}

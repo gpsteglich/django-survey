@@ -49,7 +49,7 @@
                     alert('Error loading data: ' + status);
                 });
 
-            visor.hideValues = [];
+            //visor.hideValues = [];
             visor.showValues = [];
 
             visor.initialiceConditions = function(){
@@ -59,18 +59,20 @@
                 }
                 for (var j=0; j< visor.questions.length; j++){
                     var field = visor.questions[j];
-                    visor.evaluateCondition(field.field_id, '');
+                    visor.evaluateCondition(field.field_id);
                 }
             };
 
             visor.updateDependencies = function(field_id){
-                var field = visor.getFieldById(field_id);
-                for (var k=0; k < field.dependencies.fields.length; k++){
-                    visor.evaluateCondition(field.dependencies.fields[k],field.answer);
+                var field_org = visor.getFieldById(field_id);
+                var field_dst;
+                for (var k=0; k < field_org.dependencies.fields.length; k++){
+                    field_dst = visor.getFieldById(field_org.dependencies.fields[k]);
+                    visor.evaluateCondition(field_dst.field_id);
                 }
             };
 
-            visor.evaluateCondition = function(field_id, data){
+            visor.evaluateCondition = function(field_id){
                 var logic = visor.logic[field_id];
                     if (logic){
                         var value = true;
@@ -78,6 +80,8 @@
                             value = true;
                             for (var condAll in logic.conditions){
                                 var condition = logic.conditions[condAll];
+                                var field_org = visor.getFieldById(condition.field);
+                                var data = field_org.answer; 
                                 var operator = eval('operatorFactory.getOperator("'+condition.field_type+'")');
                                 var funcStr = 'operator.'+ condition.comparator +'("'+data+'","'+ condition.value+'")';
                                 value &= eval(funcStr);
@@ -88,6 +92,8 @@
                             value = false;
                             for (var condAny in logic.conditions){
                                 var condition = logic.conditions[condAny];
+                                var field_org = visor.getFieldById(condition.field);
+                                var data = field_org.answer;
                                 var operator = eval('operatorFactory.getOperator("'+condition.field_type+'")');
                                 var funcStr = 'operator.'+ condition.comparator +'("'+data+'","'+ condition.value+'")';
                                 value |= eval(funcStr);
@@ -95,14 +101,11 @@
                             
                         }
                         if (logic.operation == 'Show'){
-                            visor.hideValues[field_id] = 0;
                             visor.showValues[field_id] = value;
                         } else {
-                            visor.hideValues[field_id] = value;
-                            visor.showValues[field_id] = 0;
+                            visor.showValues[field_id] = !value;
                         }
                     } else {
-                        visor.hideValues[field_id] = 0;
                         visor.showValues[field_id] = 1;
                     }
             };
@@ -135,13 +138,13 @@
                          }
                         respuesta += visor.questions[i].options[visor.questions[i].options.length-1].label;
                         visor.questions[i].options = respuesta;
-                         alert("question " + i + " options:  " + visor.questions[i].options); //take out when finished
+                         //alert("question " + i + " options:  " + visor.questions[i].options); //take out when finished
                     }else{
                         visor.questions[i].options= visor.questions[i].options.join('#');
-                         alert("question " + i + " options:  " + visor.questions[i].options); //take out when finished
+                         //alert("question " + i + " options:  " + visor.questions[i].options); //take out when finished
                     }
                     visor.questions[i].answer = visor.questions[i].answer.join('#');
-                    alert('question ' + i + ' answer: ' + visor.questions[i].answer); //take out when finished
+                    //alert('question ' + i + ' answer: ' + visor.questions[i].answer); //take out when finished
 
                 }
                 //FIXME: Ver si se puede emprolijar o es la única solución

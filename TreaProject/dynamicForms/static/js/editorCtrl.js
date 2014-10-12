@@ -359,7 +359,7 @@
                     origin_id = dest_field.conditions[k].field;
                     origin = editor.getFieldById(origin_id);
                     origin.dependencies.fields.push(dest_id);
-                    alert(origin.dependencies.fields);
+                    //alert(origin.dependencies.fields);
                 }
             }
         };
