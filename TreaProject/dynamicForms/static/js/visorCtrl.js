@@ -31,6 +31,8 @@
                 .success(function(data){
                     visor.version = data;
                     visor.pages = JSON.parse(data.json).pages;
+                    visor.logic = JSON.parse(data.json).logic;
+                    visor.initialiceConditions();
                     visor.selectPage(0);
                 })
                 .error(function(data, status, headers, config){
@@ -146,7 +148,7 @@
                 $http.post('/dynamicForms/visor/submit/'+visor.slug,visor.questions)
                     .success( function(data, status, headers, config){
                         $window.location.href = '/dynamicForms/visor/form/submitted';
-                        alert('The data was saved correctly');
+                        //alert('The data was saved correctly');
                     })
                     .error(function(data, status, headers, config) {
                         alert('Error saving data: ' + status);

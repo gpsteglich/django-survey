@@ -258,7 +258,7 @@
                     editor.form = data;
                     editor.formIdParam = data.id;
                     editor.version.form = data.id;
-                    editor.version.json = angular.toJson({'pages':editor.pages});
+                    editor.version.json = angular.toJson({'pages':editor.pages,'logic':editor.logic});
                     $http.post('version/'+editor.formIdParam+'/', editor.version)
                     .success( function(data, status, headers, config){
                         editor.versionIdParam = data.number;
