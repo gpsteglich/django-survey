@@ -2,12 +2,12 @@
 
 (function () {
 	
-    var app = angular.module('dynamicFormsFramework')
+    var app = angular.module('dynamicFormsFramework');
     
         /*
          * The VisorCtrl holds the logic to display, validate and submit the form.
          */
-        .controller('VisorCtrl', ['$scope','$http','$location', function ($scope, $http, $location) {
+        app.controller('VisorCtrl', ['$scope','$http','$location', '$window', function ($scope, $http, $location, $window) {
 
             /*
             *  This controller is initialiced by ui-router, so it cant be used with ng-controller
@@ -37,24 +37,119 @@
                     alert('error loading form: ' + status);
                 });
 
+            //visor.hideValues = [];
+            visor.showValues = [];
+
+            visor.initialiceConditions = function(){
+                visor.questions = [];
+                for (var i=0; i< visor.pages.length; i++) {
+                    visor.questions = visor.questions.concat(angular.copy(visor.pages[i].fields));
+                }
+                for (var j=0; j< visor.questions.length; j++){
+                    var field = visor.questions[j];
+                    visor.evaluateCondition(field.field_id);
+                }
+            };
+
+            visor.updateDependencies = function(field_id){
+                var field_org = visor.getFieldById(field_id);
+                var field_dst;
+                for (var k=0; k < field_org.dependencies.fields.length; k++){
+                    field_dst = visor.getFieldById(field_org.dependencies.fields[k]);
+                    visor.evaluateCondition(field_dst.field_id);
+                }
+            };
+
+            visor.evaluateCondition = function(field_id){
+                var logic = visor.logic[field_id];
+                    if (logic){
+                        var value = true;
+                        if (logic.action == 'All'){
+                            value = true;
+                            for (var condAll in logic.conditions){
+                                var condition = logic.conditions[condAll];
+                                var field_org = visor.getFieldById(condition.field);
+                                var data = field_org.answer; 
+                                var operator = eval('operatorFactory.getOperator("'+condition.field_type+'")');
+                                var funcStr = 'operator.'+ condition.comparator +'("'+data+'","'+ condition.value+'")';
+                                value &= eval(funcStr);
+                            }
+                            
+                        }
+                        if (logic.action == 'Any'){
+                            value = false;
+                            for (var condAny in logic.conditions){
+                                var condition = logic.conditions[condAny];
+                                var field_org = visor.getFieldById(condition.field);
+                                var data = field_org.answer;
+                                var operator = eval('operatorFactory.getOperator("'+condition.field_type+'")');
+                                var funcStr = 'operator.'+ condition.comparator +'("'+data+'","'+ condition.value+'")';
+                                value |= eval(funcStr);
+                            }
+                            
+                        }
+                        if (logic.operation == 'Show'){
+                            visor.showValues[field_id] = value;
+                        } else {
+                            visor.showValues[field_id] = !value;
+                        }
+                    } else {
+                        visor.showValues[field_id] = 1;
+                    }
+            };
             
+            visor.getFieldById = function(id){
+                //precondition: Field with field_id == id exists
+                for(var i = 0; i < visor.pages.length; i++){
+                    var page = visor.pages[i];
+                    for(var j = 0; j < page.fields.length; j++){
+                        var field = page.fields[j];
+                        if(field.field_id == id){
+                            return field;
+                        }
+                    }
+                }
+            };
+
                 // Persist form
             visor.save = function(){
                 visor.questions = [];
                 for (var i=0; i< visor.pages.length; i++) {
                     visor.questions = visor.questions.concat(angular.copy(visor.pages[i].fields));
-                };
+                }
+                
+                for ( var i = 0; i < visor.questions.length; i++) { 
+                    if (visor.questions[i].field_type == 'checkbox'){
+                        var respuesta = '';
+                         for ( var x = 0; x < visor.questions[i].options.length-1; x++){
+                            respuesta += visor.questions[i].options[x].label + '#';
+                         }
+                        respuesta += visor.questions[i].options[visor.questions[i].options.length-1].label;
+                        visor.questions[i].options = respuesta;
+                         //alert("question " + i + " options:  " + visor.questions[i].options); //take out when finished
+                    }else{
+                        visor.questions[i].options= visor.questions[i].options.join('#');
+                         //alert("question " + i + " options:  " + visor.questions[i].options); //take out when finished
+                    }
+                    visor.questions[i].answer = visor.questions[i].answer.join('#');
+                    //alert('question ' + i + ' answer: ' + visor.questions[i].answer); //take out when finished
+
+                }
+                //FIXME: Ver si se puede emprolijar o es la única solución
                 for (var j=0; j< visor.questions.length; j++) {
-                    delete visor.questions[j]['validations'];
-                    delete visor.questions[j]['options'];
+                    delete visor.questions[j].validations;
+                    delete visor.questions[j].tooltip;
+                    delete visor.questions[j].options;
+                    delete visor.questions[j].dependencies;
                     visor.questions[j].required = false;
                 };
                 $http.post('/dynamicForms/visor/submit/'+visor.slug,visor.questions)
                     .success( function(data, status, headers, config){
+                        $window.location.href = '/dynamicForms/visor/form/submitted';
                         alert('The data was saved correctly');
                     })
                     .error(function(data, status, headers, config) {
-                        alert('Error saving the form: ' + status + '\n data: ' + data)
+                        alert('Error saving data: ' + status);
                     });
             };
             
@@ -63,7 +158,7 @@
             */
             visor.changePage = function(page){
                 $location.hash(page);
-            }
+            };
             
             /*
             * This function watches any change in the url and updates the selected page.

@@ -9,10 +9,9 @@
         </div>
         <div class="form-group">
             <label for="FieldType">Field Type</label>
-            <select class="form-control" 
-                    ng-model="visor.selectedField.field_type"  
-                    ng-options="field_type_id as field_type_name for (field_type_id, field_type_name) in visor.FieldTypes">
-            </select>
+            {%verbatim%}
+            <span>{{visor.selectedField.field_type}}</span>
+            {%endverbatim%}
         </div>
         <div class="form-group">
             <div class="radio-inline">

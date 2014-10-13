@@ -1,8 +1,14 @@
 {% verbatim %}
-    <label ng-hide="editorMode">{{$index + 1}}. {{question.text}}</label>
-    <input type="number" class="form-control" ng-model="question.answer" 
-           ng-required="question.validations.required"
-           min="{{question.validations.min_number}}"
-           max="{{question.validations.max_number}}"
-           />
+    <label >{{$index + 1}}. {{question.text}}</label>
+        <button style="border:none;background:none" ng-show="question.tooltip!=undefined && question.tooltip!=''" tooltip="{{question.tooltip}}">
+            <span class="glyphicon glyphicon-info-sign"></span>
+        </button>
+    
+    <input type="number" class="form-control" ng-model="question.answer[0]" ng-change="updateDependencies(question.field_id)"
+    	ng-required="question.validations.required"
+        min="{{question.validations.min_number}}"
+        max="{{question.validations.max_number}}"
+        ng-disabled = "disabled"
+        ng-show="showValues[question.field_id]"
+    />
 {% endverbatim %} 

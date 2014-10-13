@@ -14,6 +14,7 @@
     	 * form on the fields templates. 
     	 */
     	$scope.editorMode = true;
+    	$scope.disabled = true;     //disables all input fields
         
         var editor = this;
         
@@ -35,7 +36,8 @@
         editor.newPage = {'fields':[], 'subTitle':''};
         
         editor.pages = [angular.copy(editor.newPage)];
-        //editor.questions = [];
+
+        editor.questions = [];
         //editor.pages[0].fields = editor.questions;
 
         /*
@@ -59,13 +61,14 @@
         /*
          *  'selectedField' holds the current field that is being edited.
          */
-        editor.selectedField;
+        editor.selectedField = '';
+        
         editor.getSelectedField = function(){
             if (editor.selectedField){
-                return editor.selectedField.field_type || 1;
+                return editor.selectedField.field_type || 'default';
             } else {
-                return 1;
-            };
+                return 'default';
+            }
         };
         
         editor.selectField = function(page, index) {
@@ -80,27 +83,32 @@
 
         editor.deleteOption = function (index){
             editor.selectedField.options.splice(index,1);
-        }
+        };
 
         editor.deleteField = function(page, index){
-            editor.pages[page].fields.splice(index,1);        
+             editor.questions.splice(editor.questions.indexOf(editor.pages[page].fields[index]));  
+             editor.pages[page].fields.splice(index,1);  
         };
 
         editor.newField =  {
         	field_id : 0,
             field_type:'' ,
             text: '',
-            answer: '',
+            answer: [],
             validations: {
                 required: false,
                 min_number: 0,
                 max_number: 100,
                 max_len_text: 255,
             },
-            options: ''
+            options: [],
+            tooltip:'',
+            dependencies: {
+                fields: [],
+                pages: [],
+            }
         };
-        
-        //TODO: asegurar identificador de pregunta único
+    
         editor.addField = function(type) {
             var newField = angular.copy(editor.newField);
             newField.field_id = ++editor.max_id;
@@ -175,7 +183,7 @@
                     'number' : 0,
                     'owner' : '',
                     'form' : '',
-                }
+                };
             } else {
                 /*
                 * Edit Form Case
@@ -189,22 +197,26 @@
                     .success(function(data){
                         editor.version = data;
                         editor.pages = JSON.parse(data.json).pages;
+                        editor.logic = JSON.parse(data.json).logic;
                         var questions = [];
                         for (var i=0; i<editor.pages.length; i++) {
                             questions = questions.concat(editor.pages[i].fields);
-                        };
+                        }
                         editor.max_id = Math.max.apply(Math,questions.map(function(o){
                             return o.field_id;
                         }));
+                        if (!isNaN(editor.max_id)){
+                            editor.max_id = 0;
+                        }
                     })
                     .error(function(data, status, headers, config){
                         alert('error cargando version: ' + status);
-                    })
+                    });
                 })
                 .error(function(data, status, headers, config){
                     alert('error cargando formulario: ' + status);
-                })
-            };
+                });
+            }
         };
         // Call to loadForm function on control initialization
         editor.loadForm(); 
@@ -215,10 +227,28 @@
         //TODO: usar variables globales para PUBLISH, DRAFT
         editor.saveForm = function(){
             editor.persistForm(0);
-        }
+        };
         editor.submitForm = function(){
-            editor.persistForm(1);
-        }
+            if (editor.validateForm()){
+                editor.persistForm(1);
+            }
+        };
+    
+        editor.validateForm = function(){
+            for (var pageNum in editor.pages){
+                page = editor.pages[pageNum];
+                for (var fieldIndex in page.fields){
+                    field = page.fields[fieldIndex];
+                    if (field.text == null || field.text == ''){
+                        f = parseInt(fieldIndex, 10) + 1;
+                        p = parseInt(pageNum, 10) + 1;
+                        alert ("Field labels can't be empty. Check field " + f + " on page " + p);
+                        return false;
+                    }
+                }
+            }
+            return true;
+        };
         
         editor.persistForm = function(status){
             editor.version.status = status;
@@ -234,7 +264,9 @@
                         editor.versionIdParam = data.number;
                         editor.version = data;
                         // update the url parameters
-                        $location.search({form:editor.formIdParam, ver:editor.versionIdParam});
+                        //$location.search({form:editor.formIdParam, ver:editor.versionIdParam});
+                        //TODO: solo redirigir si es Publish
+                        $window.location.href = '/dynamicForms/main';
                     })
                     .error(function(data, status, headers, config) {
                         var errors = data.error;
@@ -248,10 +280,12 @@
                 $http.put('forms/'+ editor.formIdParam + '/', editor.form)
                 .success( function(data, status, headers, config){
                     editor.form = data;
-                    editor.version.json = angular.toJson({'pages':editor.pages});
+                    editor.version.json = angular.toJson({'pages':editor.pages,'logic':editor.logic});
                     $http.put('version/'+editor.formIdParam+'/'+editor.versionIdParam+"/", editor.version)
                     .success( function(data, status, headers, config){
                         editor.version = data;
+                        //TODO: solo redirigir si es Publish
+                        $window.location.href = '/dynamicForms/main';
                     })
                     .error(function(data, status, headers, config) {
                         alert('error saving version: ' + status);
@@ -264,6 +298,111 @@
 
         };
 
+        editor.getFieldById = function(id){
+            //precondition: Field with field_id == id exists
+            for(var i = 0; i < editor.pages.length; i++){
+                var page = editor.pages[i];
+                for(var j = 0; j < page.fields.length; j++){
+                    var field = page.fields[j];
+                    if(field.field_id == id){
+                        return field;
+                    }
+                }
+            }
+        };
+
+
+//------------------------------------------------LOGICA------------------------------------------------------------------------//
+        // logic structures  
+      
+        editor.newLogicField ={
+            operation : 'hide',
+            action : '',
+            conditions: [],
+        };
+
+        editor.newCondition = {
+            field:'',
+            comparator:'',
+            value:'',
+            operatorsList:[],
+        };
+
+        editor.logic = {};
+        editor.questions = [];
+        editor.configLogicField = function (fieldId){
+            editor.questions = [];
+            for (var i=0; i< editor.pages.length; i++) {
+                editor.questions = editor.questions.concat(editor.pages[i].fields);
+            }
+            if(editor.logic[fieldId]==undefined){
+                var newLogicField = angular.copy(editor.newLogicField);
+                editor.logic[fieldId] = newLogicField;
+            }
+        };
+
+        editor.addNewLogicCondition = function (fieldId){
+            var newLogicCondition = angular.copy(editor.newCondition);
+            editor.logic[fieldId].conditions.push(newLogicCondition);
+        };
+
+        editor.removeLogicCondition= function(indexCond,field_id){
+            editor.logic[field_id].conditions.splice(indexCond);
+        };
+
+        editor.applyDependencies = function(){
+            //clean dependecies of every field
+            for(var i = 0; i < editor.pages.length; i++){
+                var page = editor.pages[i];
+                for(var j = 0; j < page.fields.length; j++){
+                    var field = page.fields[j];
+                    field.dependencies.fields = [];
+                    field.dependencies.pages = [];
+                }
+            }
+            //add dependencies
+            for (var dest_id in editor.logic){
+                var dest_field = editor.logic[dest_id];
+                for (var k = 0; k < dest_field.conditions.length; k++){
+                    origin_id = dest_field.conditions[k].field;
+                    origin = editor.getFieldById(origin_id);
+                    origin.dependencies.fields.push(dest_id);
+                    //alert(origin.dependencies.fields);
+                }
+            }
+        };
+
+        editor.selectFieldOnCondition = function(condition){
+            condition.field_type = angular.copy(editor.getFieldType(condition.field));
+            condition.operatorsList = editor.getOperatorsForField(condition.field_type);
+            if (!editor.operatorsList){
+                editor.operatorsList = [];
+            }
+        };
+
+        editor.getFieldType = function(field_id){
+            var fieldType = '';
+            for (var i=0; i<editor.questions.length; i++){
+                if (field_id == editor.questions[i].field_id){
+                    fieldType = editor.questions[i].field_type;
+                }
+            }
+            return fieldType;
+        };
+
+        editor.getOperatorsForField = function(field_type){
+            return operatorFactory.getOperatorMethods(field_type);
+        };
+
+        // Por compatibilidad con los templates de visor
+        $scope.hideValues = [];
+        $scope.showValues = [];
+        var arraySize = 100;
+        while(arraySize--) {
+            $scope.showValues.push(true);
+            $scope.hideValues.push(false);
+        }
+
     }]);
     
-})()
+})();

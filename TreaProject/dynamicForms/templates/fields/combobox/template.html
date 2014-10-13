@@ -1,6 +1,11 @@
-{% verbatim %} 
-    <label ng-hide="editorMode">{{$index + 1}}. {{question.text}}</label>
-    <select  class="form-control"   ng-model="question.answer"  ng-required="question.required" ng-options="options for options in question.options">
-        
-    <select/>   
+{% verbatim %}
+    <label >{{$index + 1}}. {{question.text}}</label>
+    <button style="border:none;background:none" ng-show="question.tooltip!=undefined && question.tooltip!=''" tooltip="{{question.tooltip}}">
+        <span class="glyphicon glyphicon-info-sign"></span>
+    </button>  
+    <select  class="form-control"   ng-model="question.answer[0]"  ng-required="question.required" 	ng-options="options for options in question.options"
+    	ng-change="updateDependencies(question.field_id)"
+    	ng-disabled="disabled"
+    	ng-show="showValues[question.field_id]">
+    </select>   
 {% endverbatim %} 

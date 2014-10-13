@@ -11,9 +11,7 @@
     <meta name="author" content="">
 
     <title> {%block tittle%}SB Admin - Bootstrap Admin Template {%endblock%} </title>
-    
-    
-    
+
       <!-- jQuery Version 1.11.0 -->
     <script src={% static 'bootstrap/jquery/js/jquery-2.1.1.min.js'%>></script>
 
@@ -21,60 +19,52 @@
     <script src={% static 'botstrap/js/bootstrap.min.js'%>></script>
     <link href= {% static 'bootstrap/css/bootstrap.min.css'%} rel="stylesheet">
     <link href={% static 'bootstrap/css/sb-admin.css'%} rel="stylesheet">
-    
 
-
-    
-    
 </head>
 
 <body>
-
-<div id="myModal" class="modal show" >
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-header"  align="Center">User access</h2>
-                <label>Please fill the fields:</label>
-            </div>
-            <div class="modal-body">
-            <form method="POST" action="/dynamicForms/login/">
-            {% csrf_token %}
-            <div class="form-group">
-                <div class="row">
-			        <div class="col-xs-11">
-			            <div class="input-group">
-			                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-			                <input name="username" type="text" class="form-control" size="50" placeholder="Username">
-			            </div>
-			        </div>
-			    </div>
-			</div>		 
-			<div class="form-group">
-                <div class="row">
-			        <div class="col-xs-11">
-			            <div class="input-group">
-			                <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
-			                <input name="password" type="password" class="form-control" size="50" placeholder="Password">
-			            </div>
-			        </div>
-			     </div>
-			     <input type="submit" value="Submit" class="btn btn-primary"/>
-			</div>	      
-		   </form>
-            {% if error %}
-                <p>Username/password incorrect</p>
-            {% endif %}
-		   </div>
-            
-            <div class="modal-footer">
+    <div id="myModal" class="modal show" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-header"  align="Center">User access</h2>
+                    <label>Please fill the fields:</label>
+                </div>
+                <form method="POST" action="/dynamicForms/login/">
+                    <div class="modal-body">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <div class="row">
+            			        <div class="col-xs-11">
+            			            <div class="input-group">
+            			                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+            			                <input name="username" type="text" class="form-control" size="50" placeholder="Username">
+            			            </div>
+            			        </div>
+            			    </div>
+            			</div>		 
+            			<div class="form-group">
+                            <div class="row">
+            			        <div class="col-xs-11">
+            			            <div class="input-group">
+            			                <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+            			                <input name="password" type="password" class="form-control" size="50" placeholder="Password">
+            			            </div>
+            			        </div>
+            			     </div>
+            			     
+            			</div>	      
+                        {% if error %}
+                            <p>Username/password incorrect</p>
+                        {% endif %}
+            		</div>
+                    <div class="modal-footer">
+                        <input type="submit" value="Submit" class="btn btn-primary pull-right"/>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-</div>
 </body>
    
-  
-</body>
-
 </html>

@@ -1,29 +1,26 @@
 {% load staticfiles %}
 <!DOCTYPE html>
-<html ng-app="dynamicFormsFramework" ng-controller="PreviewCtrl">
+<html ng-app="dynamicFormsFramework">
 	<head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        {% verbatim %}
-        <title>Preview - {{title}}</title>
-        {% endverbatim %}
+        <title>Django surveys - submitted</title>
         <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
         <base href="dynamicForms">
 	</head>
 	<body class="radial-center">
-        <div ng-include="'visor_template'"></div>
-        
+		<div class="success-message">
+    		<h1>Thanks! You succesfully filled the form! </h1>
+		</div>
+
         <script src={% static "jquery/js/jquery-2.1.1.min.js" %}></script>
         <script src={% static "bootstrap/js/bootstrap.js" %}></script>
         <script src={% static "angular/angular.min.js" %}></script>
-        <script src={% static "angular/sortable.js" %}></script>
-        <script src={% static "angular/checklist-model.js" %}></script>
-
-        <script src={% static "bootstrap/js/ui-bootstrap.min.js" %}></script>
-	    <script src={% static "js/app.js" %}></script>
-        <script src={% static "js/previewCtrl.js" %}></script>
-        <script src={% static "js/editorCtrl.js" %}></script>
+         <script src={% static "angular/checklist-model.js" %}></script>
+         <script src={% static "bootstrap/js/ui-bootstrap.min.js" %}></script>
     </body>
     
 </html>
+        
+   

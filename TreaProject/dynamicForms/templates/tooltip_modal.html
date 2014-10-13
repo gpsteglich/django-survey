@@ -1,16 +1,16 @@
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-lg">
+<div class="modal fade" id="myToolTipModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">Select Options</h4>
+        <h4 class="modal-title" id="myModalLabel">Add Field Tooltip</h4>
       </div>
       <div class="modal-body">
         <div>
-            Write down an option per line.
+            Write down tooltip text:
         </div>
         <div>
-           <textarea ng-model="visor.selectedField.options" ng-list="&#10;" ng-trim="false" class="form-control" rows="3">             
+           <textarea ng-model="visor.selectedField.tooltip"  class="form-control" rows="3">             
            </textarea>
         </div>
       </div>

@@ -56,6 +56,39 @@ class FormList(generics.ListCreateAPIView):
                 f["lastStatus"] = last_version['status']
         return render_to_response('mainPage.html', {"formList": forms})
       
+    @login_required
+    def formList(self, request, order = "id", ad = "asc"):
+        """
+        Gets the list of all forms and versions from the database, and renders the template to show them
+        """
+        #User.objects.order_by('username')
+
+        if order == "owner":
+            f1 = Form.objects.all().order_by('owner__username')
+        else:
+            f1 = Form.objects.all().order_by(order)
+        if (ad == 'dsc'):
+            f1 = f1.reverse()
+        forms = f1.values()
+        index = 1
+        for f in forms:
+        #Obtain the list of versions of the form f ordered by version number (descendant)
+        #FIX ME: improve get versions
+            query_set = Form.objects.get(slug=f['slug']).versions.order_by('number').reverse()
+            vers_dict = query_set.values()
+        #Assign the dict of versions to the form dict
+            f["versions"] = vers_dict
+            f["index"] = index
+            f["username"] = User.objects.get(id=f['owner_id'])
+            
+            index += 1
+        #Get the status of the last version, to know if there is already a draft in this form
+            if len(vers_dict) > 0:
+                last_version = vers_dict[0]
+                f["lastStatus"] = last_version['status']
+            
+        return render_to_response('mainPage.html', {"formList": forms})
+    
       
 class FormDetail(generics.RetrieveUpdateDestroyAPIView):
     """
@@ -99,7 +132,7 @@ class VersionList(generics.ListCreateAPIView):
 
 class VersionDetail(generics.RetrieveUpdateDestroyAPIView):
     """
-    APIView to see details, modify or delete a form.
+    APIView to see details, modify or delete a version.
     """
     queryset = Version.objects.all()
     serializer_class = VersionSerializer
@@ -135,7 +168,11 @@ class VersionDetail(generics.RetrieveUpdateDestroyAPIView):
         version = Version.objects.get(form=form, number=number)
         #only draft versions can be deleted this way
         if version.status == DRAFT:
-            version.delete()
+            #if selected form has only a draft and no previous versions
+            if len(Version.objects.filter(form=form))== 1:
+                 form.delete() 
+            else: 
+                version.delete()
             return Response(status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
@@ -185,7 +222,11 @@ class DeleteVersion(generics.DestroyAPIView):
         version = Version.objects.get(form=form, number=number)
         #only draft versions can be deleted this way
         if version.status == DRAFT:
-            version.delete()
+            #if selected form has only a draft and no previous versions
+            if len(Version.objects.filter(form=form))== 1:
+                 form.delete() 
+            else: 
+                version.delete()
             return HttpResponseRedirect("/dynamicForms/main/")
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
@@ -269,23 +310,26 @@ def submit_form_entry(request, slug, format=None):
     for field in request.DATA:
             serializer = FieldEntrySerializer(data=field)
             if serializer.is_valid():
-                serializer.save()
                 #FIXME: Improve foreing key setting
-                num = serializer.object.pk
-                field_entry = FieldEntry.objects.get(id=num)
-                field_entry.entry = entry
-                field_entry.save()
+                serializer.object.entry = entry
+                serializer.save()
     return Response(status = status.HTTP_200_OK)
 
+
+#TODO: esta función no se usa.
+@login_required
+def editor(request):
+    return render_to_response('editor.html', {})
+    
     
 @login_required
 @api_view(['GET'])
-def get_responses(request, slug, number, format=None):
+def get_responses(request, pk, number, format=None):
     """
     View to get all the entries for a particular form.
     """
     try:
-        form = Form.objects.get(slug=slug)
+        form = Form.objects.get(pk=pk)
         v = form.versions.get(number=number)
         if (v.status == DRAFT):
             content = {"error": "This version's status is Draft."}
@@ -322,6 +366,8 @@ class FieldPrpTemplateView(TemplateView):
     Renders the field type properties templates.
     """
     def get_template_names(self):
+        if (self.kwargs.get('type') == 'default'):
+            return 'fields/field_properties_base.html'
         field = Factory.get_class(self.kwargs.get('type'))
         return field().render_properties()
         
