@@ -1,11 +1,14 @@
+from django.core.exceptions import ValidationError
+
 from dynamicForms.fieldtypes.Field import Field
 from dynamicForms.fieldtypes import FieldFactory
+
 
 class CheckboxField(Field):
     """
     Checkbox field validator, render and analize methods
     """
-    
+
     def validate(self, value, **kwargs):
         options = []
         for option in kwargs['options']:
@@ -26,6 +29,6 @@ class CheckboxField(Field):
 
     def __str__():
         return "Checkbox"
-    
-    
+
+
 FieldFactory.FieldFactory.register('CheckboxField', CheckboxField)

@@ -1,9 +1,9 @@
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.template.defaultfilters import slugify
 
 from dynamicForms.fields import JSONField, STATUS, DRAFT, PUBLISHED, EXPIRED
-from datetime import datetime, date
+from datetime import datetime
 
 
 class Form(models.Model):
@@ -13,10 +13,10 @@ class Form(models.Model):
     title = models.CharField(max_length=100)
     slug = models.SlugField(unique=True)
     owner = models.ForeignKey('auth.User', related_name='forms', blank=True)
-    
+
     def __str__(self):
         return self.title
-    
+
     def save(self, *args, **kwargs):
         """
         Check if the slug is unique before saving a form.
@@ -29,13 +29,14 @@ class Form(models.Model):
             # Or if I try to create a new form with an conflicting slug
             f1 = Form.objects.get(slug=self.slug)
             if (self.pk != f1.pk):
-                raise ValidationError("Slug already exists. Choose another title.")
-        super(Form,self).save(*args, **kwargs)
-        
+                raise ValidationError("Slug already exists."
+                " Choose another title.")
+        super(Form, self).save(*args, **kwargs)
+
     class Meta:
         ordering = ('title',)
-        
-        
+
+
 class Version(models.Model):
     number = models.IntegerField(default=1)
     json = JSONField(default="", blank=True)
@@ -43,13 +44,13 @@ class Version(models.Model):
     publish_date = models.DateTimeField(blank=True, null=True)
     expiry_date = models.DateTimeField(blank=True, null=True)
     form = models.ForeignKey("Form", related_name="versions")
-    
+
     def __str__(self):
         return str(self.number)
     #'%d: %s' % (self.number, self.get_status_display())
-    
+
     def save(self, *args, **kwargs):
-        
+
         #if (self.number < 1):
         #   raise ValidationError("Version cannot be below 1.")
         if Version.objects.filter(pk=self.pk).exists():
@@ -60,31 +61,34 @@ class Version(models.Model):
             # if it is a new version of an existing form
             # check if there is no previous draft and
             # check that there exists a version less than the current
-            all_versions = self.form.versions.all()  
+            all_versions = self.form.versions.all()
             count = all_versions.count()
             if (count > 0):
                 #if it is the first version do not check any of these
                 if not all_versions.filter(number=count).exists():
                     # We consider all the previous versions have to exist.
-                    # There would be a severe problem if the admin touches the database to delete a old version.
-                    raise ValidationError("Oops. There is a problem with the version" 
-                                          "numbers. The previous version does not exist.")
+                    # There would be a severe problem if the admin
+                    # touches the database to delete a old version.
+                    raise ValidationError("Oops. There is a problem with the "
+                    "version numbers. The previous version does not exist.")
                 if (all_versions.get(number=count).status == DRAFT):
-                    raise ValidationError('There is a previous draft pending for this Form')
+                    raise ValidationError("There is a previous draft "
+                    "pending for this Form")
                 self.number = all_versions.count() + 1
         if (self.status == PUBLISHED) and (self.publish_date is None):
             self.publish_date = datetime.now()
-            # If there is a previous published version, its status is changed to expired.
+            # If there is a previous published version,
+            # its status is changed to expired.
             prev_versions = self.form.versions.filter(status=PUBLISHED)
             if len(prev_versions) > 0:
-                # We assume there can only be one published version at any given time
+                # We assume there can only be one published version at any time
                 prev = prev_versions.first()
                 prev.status = EXPIRED
                 prev.expiry_date = datetime.now()
-                super(Version,prev).save()
+                super(Version, prev).save()
         elif (self.publish_date is not None):
             raise ValidationError('You cannot edit a published form')
-        super(Version,self).save(*args, **kwargs)
+        super(Version, self).save(*args, **kwargs)
 
 
 class FormEntry(models.Model):
@@ -98,7 +102,8 @@ class FieldEntry(models.Model):
     text = models.CharField(max_length=200)
     required = models.BooleanField()
     answer = models.CharField(max_length=200, blank=True, null=True)
-    entry = models.ForeignKey("FormEntry", related_name="fields", blank=True, null=True)
+    entry = models.ForeignKey("FormEntry", related_name="fields",
+                             blank=True, null=True)
 
     def __str__(self):
         return '%s : %s' % (self.text, self.answer)

@@ -3,20 +3,21 @@ from django.core.exceptions import ValidationError
 from dynamicForms.fieldtypes import Field
 from dynamicForms.fieldtypes import FieldFactory
 
+
 class NumberField(Field.Field):
     """
     Number field type class.
     """
     def check_min(self, value, min):
         if (value < min):
-            raise ValidationError("Value below the minimum acceptable.")        
-      
+            raise ValidationError("Value below the minimum acceptable.")
+
     def check_max(self, value, max):
         if (value > max):
-            raise ValidationError("Value above the maximum acceptable.") 
-              
+            raise ValidationError("Value above the maximum acceptable.")
+
     def validate(self, value, **kwargs):
-        super(NumberField,self).validate(value,**kwargs)
+        super(NumberField, self).validate(value, **kwargs)
         restrictions = kwargs['restrictions']
         try:
             value = int(value)
@@ -25,15 +26,16 @@ class NumberField(Field.Field):
         if (restrictions['min_number']):
             self.check_min(value, restrictions['min_number'])
         if (restrictions['max_number']):
-            self.check_max(value, restrictions['max_number'])    
+            self.check_max(value, restrictions['max_number'])
         return True
-    
+
     def check_consistency(self, **kwargs):
         #When a field is created check if the restrictions are consistent
         restrictions = kwargs['restrictions']
         if (restrictions['min_number'] and restrictions['max_number']):
             if (restrictions['min_number'] > restrictions['max_number']):
-                raise ValidationError("The min value might not be below the max value.")
+                raise ValidationError("The min value might not "
+                "be below the max value.")
 
     """
     Render methods for NumberField template
@@ -43,8 +45,8 @@ class NumberField(Field.Field):
 
     def render_properties(self):
         return 'fields/number/properties.html'
-    
+
     def __str__():
-        return "Number"    
-    
+        return "Number"
+
 FieldFactory.FieldFactory.register('NumberField', NumberField)

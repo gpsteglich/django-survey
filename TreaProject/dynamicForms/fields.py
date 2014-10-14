@@ -20,6 +20,7 @@ STATUS = (
 
 add_introspection_rules([], ["^dynamicForms.fields.JSONField"])
 
+
 class JSONField(models.TextField):
     """JSONField is a generic textfield that neatly serializes/unserializes
     JSON objects seamlessly"""
@@ -44,9 +45,7 @@ class JSONField(models.TextField):
     def get_db_prep_save(self, value, connection, prepared=False):
         """Convert our JSON object to a string before we save"""
 
-
         if isinstance(value, dict):
             value = json.dumps(value, cls=DjangoJSONEncoder)
 
         return super(JSONField, self).get_db_prep_save(value, connection)
-

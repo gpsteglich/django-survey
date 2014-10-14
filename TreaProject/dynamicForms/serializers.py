@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 import json
 
 from dynamicForms.models import Form, FieldEntry, Version, FormEntry
-from dynamicForms.fieldtypes.FieldFactory import FieldFactory as Factory 
+from dynamicForms.fieldtypes.FieldFactory import FieldFactory as Factory
 
 from rest_framework import serializers
 
@@ -13,11 +13,11 @@ class FormSerializer(serializers.ModelSerializer):
     """
     owner = serializers.Field(source='owner.username')
     versions = serializers.RelatedField(many=True)
-    
+
     class Meta:
         model = Form
         fields = ('id', 'title', 'slug', 'versions', 'owner')
-        read_only_fields = ('slug','id',)
+        read_only_fields = ('slug', 'id', )
 
 
 class VersionSerializer(serializers.ModelSerializer):
@@ -26,24 +26,24 @@ class VersionSerializer(serializers.ModelSerializer):
     """
     form = serializers.Field(source='form.title')
     json = serializers.CharField(required=False)
-    
+
     def validate_json(self, attrs, source):
         value = json.loads(attrs[source])
         for page in value['pages']:
             for field in page['fields']:
-                type = Factory.get_class(field['field_type'])
+                f_type = Factory.get_class(field['field_type'])
                 kw = {}
                 kw['restrictions'] = field['validations']
                 kw['options'] = field['options']
-                type().check_consistency(**kw)
+                f_type().check_consistency(**kw)
         return attrs
-        
-        
+
     class Meta:
         model = Version
-        fields = ('number', 'status', 'publish_date', 'expiry_date', 'json', 'form')
+        fields = ('number', 'status', 'publish_date', 'expiry_date',
+                 'json', 'form')
         read_only_fields = ('number',)
-    
+
 
 class UserSerializer(serializers.ModelSerializer):
     forms = serializers.PrimaryKeyRelatedField(many=True)
@@ -54,20 +54,18 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class FieldEntrySerializer(serializers.ModelSerializer):
-        
+
     class Meta:
         model = FieldEntry
         fields = ('field_id', 'field_type', 'text', 'required', 'answer')
-        
+
 
 class FormEntrySerializer(serializers.ModelSerializer):
     """
     Serializer for the form entries
     """
     fields = serializers.RelatedField(many=True)
-    
+
     class Meta:
         model = FormEntry
         fields = ('entry_time', 'fields')
-        
-        
