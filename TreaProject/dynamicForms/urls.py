@@ -7,7 +7,7 @@ Created on 30/8/2014
 
 from django.conf.urls import patterns, url
 from rest_framework.urlpatterns import format_suffix_patterns
-from dynamicForms import views, logging
+from dynamicForms import views, auth
 from dynamicForms.fieldtypes.field_type import on_startup
 from django.contrib import admin
 
@@ -25,10 +25,10 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^version/(?P<pk>[a-z,0-9,\-,\_]+)/(?P<number>[0-9]+)/$', views.VersionDetail.as_view()),
     url(r'^version/delete/(?P<pk>[a-z,0-9,\-,\_]+)/(?P<number>[0-9]+)/$', views.DeleteVersion.as_view()),
 
-    url(r'^main/(?P<order>(id|owner|title|creation_date))/(?P<ad>(asc|dsc))/$', views.FormList.formList, name='main'),
+    url(r'^main/(?P<order>(id|owner|title|creation_date))/(?P<ad>(asc|dsc))/$', 'ordered_forms', name='main'),
     url(r'^main/$', views.FormList.as_view()),
-    url(r'^login/$', logging.user_login, name='login'),
-    url(r'^logout/$', logging.user_logout, name='logout'),
+    url(r'^login/$', auth.user_login, name='login'),
+    url(r'^logout/$', auth.user_logout, name='logout'),
     url(r'^preview$', views.TemplateView.as_view(template_name='preview.html')),
     url(r'^editor$', views.TemplateView.as_view(template_name='editor.html')),
 
