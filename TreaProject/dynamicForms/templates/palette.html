@@ -1,34 +1,24 @@
 {% verbatim %} 
-<div class= "panel panel-danger">
-    <div class= "panel-heading" align="Center">Palette</div>
-    <div class= "panel-body">
-        <div class="row" style ="margin-bottom:0.5%;" >
-            <!-- Creates a button for each field type -->
-            <div ng-repeat="(field_type_id, field_type_name) in visor.FieldTypes">
-                <div class=" col-md-3" style="margin-top:0.5%;">
-                    <button type="button" class="btn btn-info btn-block regular-link"
-                            ng-click="visor.addField(field_type_id)">
-                        {{field_type_name}}
-                    </button>
-                </div>
-            </div>
-        </div>
+<div class="container" style= "width:100%">
+    <div class="row" style ="margin-bottom:0.5%;" >
+        <!-- Creates a button for each field type -->
+        <button ng-repeat="(field_type_id, field_type_name) in visor.FieldTypes"
+            type="button" class="btn btn-info btn-block regular-link"
+            ng-click="visor.addField(field_type_id)">
+            {{field_type_name}}
+        </button>
         <hr/>
-        <div class="row" id="btnPalette">
-            <div class="col-md-3 pull-right" ng-hide="visor.isNewForm()">
-                <a class="btn btn-warning btn-block" target="_blank" 
-                   href= "/dynamicForms/preview#?form={{visor.form.id}}&ver={{visor.version.number}}">
-                    <span class="glyphicon glyphicon-eye-open"></span>
-                    Preview
-                </a>
-            </div>
-            <div class="col-md-3 pull-right">
-                <button type="button" class= "btn btn-info btn-block" ng-click="visor.addPage()">
-                    New Page
-                </button>
-            </div>
-        </div>
-
+        <!-- Permanent buttons -->
+        <a class="btn btn-warning btn-block" ng-hide="visor.isNewForm()" target="_blank" 
+            href= "/dynamicForms/preview#?form={{visor.form.id}}&ver={{visor.version.number}}">
+            <span class="glyphicon glyphicon-eye-open" />
+            Preview
+        </a>
+        <button type="button" 
+            class= "btn btn-info btn-block" 
+            ng-click="visor.addPage()">
+            New Page
+        </button>
     </div>
 </div>
 {% endverbatim %} 
