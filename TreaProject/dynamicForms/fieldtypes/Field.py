@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError
+from dynamicForms.models import Form, Version, FormEntry, FieldEntry 
 
 
 class Field(object):
@@ -28,6 +29,13 @@ class Field(object):
         #When a field is created check if the restrictions are consistent
         pass
 
+    def count_responses_pct(self, form_pk, version_num, field_id):
+        v = Version.objects.get(number=version_num, form_id=form_pk)
+        queryset = FieldEntry.objects.filter(field_id=field_id, entry__version_id=v.pk)
+        total = queryset.count()
+        responses = total - queryset.filter(answer="").count()
+        return (responses, total)
+    
     """
     Default Render methods for field templates
     """
