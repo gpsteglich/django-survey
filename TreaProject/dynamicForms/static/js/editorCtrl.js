@@ -288,7 +288,7 @@
                         $window.location.href = '/dynamicForms/main';
                     })
                     .error(function(data, status, headers, config) {
-                        alert('error saving version: ' + status);
+                        alert('error saving version: ' + data.json[0]);
                     });
                 })
                 .error(function(data, status, headers, config) {

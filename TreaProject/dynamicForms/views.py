@@ -278,7 +278,7 @@ def submit_form_entry(request, slug, format=None):
     """
     # TODO: agregar primera iteracion por las respuestas
     # para hacer la validacion, antes de crear el entry
-    error_log = ''
+    error_log = {"error": ""}
     form_versions = Form.objects.get(slug=slug).versions.all()
     final_version = form_versions.filter(status=PUBLISHED).first()
     for field in request.DATA:
@@ -286,7 +286,7 @@ def submit_form_entry(request, slug, format=None):
         if serializer.is_valid():
             obj = serializer.object
             if obj.required and obj.answer.__str__() == '':
-                error_log += "'text':" + obj.text + "'This field is required'"
+                error_log['error'] += obj.text + ': This field is required\n'
             elif not obj.required and obj.answer.__str__() == '':
                 pass
             else:
@@ -299,13 +299,12 @@ def submit_form_entry(request, slug, format=None):
                     kw['options'] = field.get_options(loaded, f_id)
                     field.validate(obj.answer, **kw)
                 except ValidationError as e:
-                    error_log += e.message
+                    error_log['error'] += e.message
         else:
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
     # FIXME: Error log sent to client side is handmade,
     # find a better way to make the dictionary
-    if error_log != '':
-        error_log = "{" + error_log + "}"
+    if error_log['error'] != "":
         return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data=error_log)
     entry = FormEntry(version=final_version)
     entry.entry_time = datetime.now()

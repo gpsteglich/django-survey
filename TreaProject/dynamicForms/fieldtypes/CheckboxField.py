@@ -1,15 +1,15 @@
 from django.core.exceptions import ValidationError
 
-from dynamicForms.fieldtypes.Field import Field
+from dynamicForms.fieldtypes.ListField import ListField
 from dynamicForms.fieldtypes import FieldFactory
 
 
-class CheckboxField(Field):
+class CheckboxField(ListField):
     """
     Checkbox field validator, render and analize methods
     """
-
     def validate(self, value, **kwargs):
+        #validates multiple choices
         options = []
         for option in kwargs['options']:
             options.append(option['label'])

@@ -139,11 +139,11 @@
                 }
                 //FIXME: Ver si se puede emprolijar o es la única solución
                 for (var j=0; j< visor.questions.length; j++) {
+                    visor.questions[j].required = visor.questions[j].validations['required'];
                     delete visor.questions[j].validations;
                     delete visor.questions[j].tooltip;
                     delete visor.questions[j].options;
                     delete visor.questions[j].dependencies;
-                    visor.questions[j].required = false;
                 };
                 $http.post('/dynamicForms/visor/submit/'+visor.slug,visor.questions)
                     .success( function(data, status, headers, config){
@@ -151,7 +151,7 @@
                         //alert('The data was saved correctly');
                     })
                     .error(function(data, status, headers, config) {
-                        alert('Error saving data: ' + status);
+                        alert('Error saving data: ' + data.error);
                     });
             };
             

@@ -1,10 +1,10 @@
 from django.core.exceptions import ValidationError
 
-from dynamicForms.fieldtypes.Field import Field
+from dynamicForms.fieldtypes.ListField import ListField
 from dynamicForms.fieldtypes import FieldFactory
 
 
-class SelectField(Field):
+class SelectField(ListField):
     """
     Combobox field validator, render and analize methods
     """
@@ -15,7 +15,7 @@ class SelectField(Field):
             options.append(option)
         if value not in options:
             raise ValidationError("Invalid value, not among options.")
-
+ 
     """
     Render methods for TextField template
     """
