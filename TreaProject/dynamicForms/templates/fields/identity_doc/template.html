@@ -1,5 +1,6 @@
-{% verbatim %}
-	<label >{{$index + 1}}. {{question.text}}</label>
+{%extends 'fields/field_template_base.html' %}
+{%block field%}
+    {% verbatim %}
     <button style="border:none;background:none" ng-show="question.tooltip!=undefined && question.tooltip!=''" tooltip="{{question.tooltip}}">
          <span class="glyphicon glyphicon-info-sign"></span>
      </button>
@@ -8,4 +9,5 @@
     	ng-disabled = "disabled"
     	ng-show="showValues[question.field_id]"
     	/>   
-{% endverbatim %} 
+	{% endverbatim %} 
+{%endblock%}
