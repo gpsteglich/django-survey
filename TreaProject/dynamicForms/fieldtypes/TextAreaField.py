@@ -11,7 +11,7 @@ class TextAreaField(TextField.TextField):
     """
     Render methods for TextAreaField template
     """
-    def render_type(self):
+    def render(self):
         return 'fields/text_area/template.html'
 
     def render_properties(self):

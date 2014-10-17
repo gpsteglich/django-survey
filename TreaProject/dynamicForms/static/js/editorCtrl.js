@@ -263,10 +263,12 @@
                     .success( function(data, status, headers, config){
                         editor.versionIdParam = data.number;
                         editor.version = data;
-                        // update the url parameters
-                        //$location.search({form:editor.formIdParam, ver:editor.versionIdParam});
-                        //TODO: solo redirigir si es Publish
-                        $window.location.href = '/dynamicForms/main';
+                        if (status == 1){
+                            $window.location.href = '/dynamicForms/main';
+                        } else {
+                            // update the url parameters
+                            $location.search({form:editor.formIdParam, ver:editor.versionIdParam});
+                        }
                     })
                     .error(function(data, status, headers, config) {
                         var errors = data.error;
@@ -284,8 +286,9 @@
                     $http.put('version/'+editor.formIdParam+'/'+editor.versionIdParam+"/", editor.version)
                     .success( function(data, status, headers, config){
                         editor.version = data;
-                        //TODO: solo redirigir si es Publish
-                        $window.location.href = '/dynamicForms/main';
+                        if (status == 1){
+                            $window.location.href = '/dynamicForms/main';
+                        }
                     })
                     .error(function(data, status, headers, config) {
                         alert('error saving version: ' + data.json[0]);

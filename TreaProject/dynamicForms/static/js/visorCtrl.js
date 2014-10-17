@@ -24,7 +24,8 @@
             
             visor.selectPage = function(page){
                 visor.selectedPage = visor.pages[page];
-            }
+                visor.selectedPageNum = page;
+            };
             
                 // Load last published Version
             $http.get('/dynamicForms/visor/publishVersion/'+visor.slug)
@@ -33,13 +34,12 @@
                     visor.pages = JSON.parse(data.json).pages;
                     visor.logic = JSON.parse(data.json).logic;
                     visor.initialiceConditions();
-                    visor.selectPage(0);
+                    visor.changePage(0);
                 })
                 .error(function(data, status, headers, config){
                     alert('error loading form: ' + status);
                 });
 
-            //visor.hideValues = [];
             visor.showValues = [];
 
             visor.initialiceConditions = function(){
@@ -165,7 +165,7 @@
             /*
             * This function watches any change in the url and updates the selected page.
             */
-            $scope.$on('$locationChangeSuccess', function(event) {
+            visor.$on('$locationChangeSuccess', function(event) {
                 var changePage = $location.hash() || 0;
                 if (visor.pages){
                     if (changePage > visor.pages.size){
@@ -174,6 +174,38 @@
                     visor.selectPage(changePage);
                 }
             });
+
+            /*
+            * Page navegation
+             */
+            
+            visor.canNext = function(){
+                var canNext = false;
+                if (visor.pages){
+                    canNext = (visor.selectedPageNum + 1 < visor.pages.length);
+                }
+                return canNext;
+            };
+
+            visor.next = function(){
+                if (visor.selectedPageNum + 1 < visor.pages.length){
+                    visor.changePage(visor.selectedPageNum + 1);
+                }
+            };
+
+            visor.canPrevious = function(){
+                var canPrevious = false;
+                if (visor.pages){
+                    canPrevious = (visor.selectedPageNum > 0);
+                }
+                return canPrevious;
+            };
+
+            visor.previous = function(){
+                if (visor.selectedPageNum > 0){
+                    visor.changePage(visor.selectedPageNum - 1);
+                }
+            };
 
         }]);
 })();
