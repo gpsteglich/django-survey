@@ -23,6 +23,9 @@ class CheckboxField(ListField):
     """
     def render(self):
         return 'fields/checkbox/template.html'
+    
+    def render_edit(self):
+        return 'fields/checkbox/template_edit.html'
 
     def render_properties(self):
         return 'fields/checkbox/properties.html'

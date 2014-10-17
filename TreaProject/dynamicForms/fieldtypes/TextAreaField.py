@@ -13,6 +13,9 @@ class TextAreaField(TextField.TextField):
     """
     def render(self):
         return 'fields/text_area/template.html'
+    
+    def render_edit(self):
+        return 'fields/text_area/template_edit.html'
 
     def render_properties(self):
         return 'fields/text_area/properties.html'

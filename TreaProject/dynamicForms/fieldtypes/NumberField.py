@@ -42,6 +42,9 @@ class NumberField(Field.Field):
     """
     def render(self):
         return 'fields/number/template.html'
+    
+    def render_edit(self):
+        return 'fields/number/template_edit.html'
 
     def render_properties(self):
         return 'fields/number/properties.html'

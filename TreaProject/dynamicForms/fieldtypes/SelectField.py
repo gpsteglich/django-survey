@@ -21,6 +21,9 @@ class SelectField(ListField):
     """
     def render(self):
         return 'fields/combobox/template.html'
+    
+    def render_edit(self):
+        return 'fields/combobox/template_edit.html'
 
     def render_properties(self):
         return 'fields/combobox/properties.html'

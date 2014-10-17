@@ -41,6 +41,9 @@ class CIField(Field.Field):
     """
     def render(self):
         return 'fields/identity_doc/template.html'
+    
+    def render_edit(self):
+        return 'fields/identity_doc/template_edit.html'
 
     def render_properties(self):
         return 'fields/identity_doc/properties.html'

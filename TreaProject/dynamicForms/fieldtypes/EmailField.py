@@ -22,6 +22,9 @@ class EmailField(TextField.TextField):
     """
     def render(self):
         return 'fields/email/template.html'
+    
+    def render_edit(self):
+        return 'fields/email/template_edit.html'
 
     def render_properties(self):
         return 'fields/email/properties.html'

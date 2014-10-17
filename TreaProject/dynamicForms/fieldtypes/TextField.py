@@ -31,6 +31,9 @@ class TextField(Field.Field):
     """
     def render(self):
         return 'fields/text/template.html'
+    
+    def render_edit(self):
+        return 'fields/text/template_edit.html'
 
     def render_properties(self):
         return 'fields/text/properties.html'

@@ -363,6 +363,14 @@ class FieldTemplateView(TemplateView):
         field = Factory.get_class(self.kwargs.get('type'))
         return field().render()
 
+class FieldEditTemplateView(TemplateView):
+    """
+    Renders the field type templates.
+    """
+    def get_template_names(self):
+        field = Factory.get_class(self.kwargs.get('type'))
+        return field().render_edit()
+
 
 class FieldPrpTemplateView(TemplateView):
     """
