@@ -15,13 +15,14 @@
             */
             var visor = $scope;
             
+            var separator = '/';
+
             /*
              * To get the form the slug is catched form the path.
              * This should be handled by $routerprovider
              */
-            //FIXME: corregir la manera de obtener el slug
-            visor.slug = $location.absUrl().match(/\/visor\/([^/]*)/)[1];
-            
+            visor.slug = $location.hash().split(separator)[0];
+
             visor.selectPage = function(page){
                 visor.selectedPage = visor.pages[page];
                 visor.selectedPageNum = page;
@@ -159,14 +160,19 @@
             * The page selection is fired by the change of the url
             */
             visor.changePage = function(page){
-                $location.hash(page);
+                $location.hash(visor.slug + separator + page);
             };
             
             /*
             * This function watches any change in the url and updates the selected page.
             */
             visor.$on('$locationChangeSuccess', function(event) {
-                var changePage = $location.hash() || 0;
+                var hash = $location.hash();
+                var changePage = $location.hash().split(separator)[1] || 0;
+                changePage = parseInt(changePage);
+                if (changePage.isNaN){
+                    changePage = 0;
+                }
                 if (visor.pages){
                     if (changePage > visor.pages.size){
                         changePage = 0;   

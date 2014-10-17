@@ -43,7 +43,7 @@ urlpatterns = patterns('dynamicForms.views',
 
     url(r'^visor_template', views.TemplateView.as_view(template_name='visor_template.html')),
     url(r'^visor/publishVersion/(?P<slug>[a-z,0-9,\-,\_]+)/$', views.FillForm.as_view()),
-    url(r'^visor/(?P<slug>[a-z,0-9,\-,\_]+)/$', views.TemplateView.as_view(template_name='visor.html')),
+    url(r'^visor$', views.TemplateView.as_view(template_name='visor.html')),
     url(r'^visor/submit/(?P<slug>[a-z,0-9,\-,\_]+)$', 'submit_form_entry'),
     url(r'^visor/form/submitted/$', views.TemplateView.as_view(template_name='form_submitted.html')),
 

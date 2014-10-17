@@ -7,7 +7,7 @@
     */
     var app = angular.module('dynamicFormsFramework', ['ui.bootstrap','checklist-model'])
     .config(['$locationProvider', function ($locationProvider) {
-        $locationProvider.html5Mode(true).hashPrefix('!');
+        $locationProvider.html5Mode(true);
     }]);
     
 })();
