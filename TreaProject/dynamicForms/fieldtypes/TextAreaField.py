@@ -7,18 +7,9 @@ class TextAreaField(TextField.TextField):
     """
     Validator for text area is the same as simple TextField
     """
-
-    """
-    Render methods for TextAreaField template
-    """
-    def render(self):
-        return 'fields/text_area/template.html'
-    
-    def render_edit(self):
-        return 'fields/text_area/template_edit.html'
-
-    def render_properties(self):
-        return 'fields/text_area/properties.html'
+    template_name = "text_area/template.html"
+    edit_template_name = "text_area/template_edit.html"
+    prp_template_name = "text_area/properties.html"
 
     def __str__():
         return "Multi Line Text"

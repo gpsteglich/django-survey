@@ -49,3 +49,19 @@ class JSONField(models.TextField):
             value = json.dumps(value, cls=DjangoJSONEncoder)
 
         return super(JSONField, self).get_db_prep_save(value, connection)
+    
+    
+class Validations():
+    """
+    Class for validation objects of the version json
+    """
+    required = models.BooleanField()
+    max_len_text = models.IntegerField(null=True, blank=True)
+    max_number = models.IntegerField(null=True, blank=True)
+    min_number = models.IntegerField(null=True, blank=True)
+    
+    def valid_number(self):
+        return self.max_number >= self.min_number
+    
+    def valid_text(self):
+        return self.max_len_text > 0

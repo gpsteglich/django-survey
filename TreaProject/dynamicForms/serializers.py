@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 import json
 
 from dynamicForms.models import Form, FieldEntry, Version, FormEntry
+from dynamicForms.fields import Validations
 from dynamicForms.fieldtypes.FieldFactory import FieldFactory as Factory
 
 from rest_framework import serializers
@@ -69,3 +70,12 @@ class FormEntrySerializer(serializers.ModelSerializer):
     class Meta:
         model = FormEntry
         fields = ('entry_time', 'fields')
+        
+
+class ValidationSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the validations in the versions json
+    """
+    class Meta:
+        model = Validations
+        fields = ('required', 'max_len_text', 'min_number', 'max_number')

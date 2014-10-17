@@ -8,7 +8,10 @@ class EmailField(TextField.TextField):
     """
     Email validator using django's validation
     """
-
+    template_name = "email/template.html"
+    edit_template_name = "email/template_edit.html"
+    prp_template_name = "email/properties.html"
+    
     def validate(self, value, **kwargs):
         super(EmailField, self).validate(value, **kwargs)
         try:
@@ -16,18 +19,6 @@ class EmailField(TextField.TextField):
         except ValidationError as e:
             #transform the message to be cathed later.
             raise ValidationError(e.__str__())
-
-    """
-    Render methods for EmailField template
-    """
-    def render(self):
-        return 'fields/email/template.html'
-    
-    def render_edit(self):
-        return 'fields/email/template_edit.html'
-
-    def render_properties(self):
-        return 'fields/email/properties.html'
 
     def __str__():
         return "Email"

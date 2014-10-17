@@ -9,6 +9,10 @@ class CIField(Field.Field):
     """
     CI field type class
     """
+    template_name = "identity_doc/template.html"
+    edit_template_name = "identity_doc/template_edit.html"
+    prp_template_name = "identity_doc/properties.html"
+    
     def check_id(self, value):
         digits = [int(i) for i in value]
         # If value has less than 8 digits, we complete with zeros on the left
@@ -35,18 +39,6 @@ class CIField(Field.Field):
             raise ValidationError('Enter a valid integer.', code='invalid')
         self.check_id(intvalue)
         return True
-
-    """
-    Render methods for CIField template
-    """
-    def render(self):
-        return 'fields/identity_doc/template.html'
-    
-    def render_edit(self):
-        return 'fields/identity_doc/template_edit.html'
-
-    def render_properties(self):
-        return 'fields/identity_doc/properties.html'
 
     def __str__():
         return "Cedula"

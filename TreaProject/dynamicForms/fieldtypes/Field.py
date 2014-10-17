@@ -6,6 +6,10 @@ class Field(object):
     """
     Default abstract field type class
     """
+    folder = "fields/"
+    template_name = "field_template_base.html"
+    edit_template_name = "fiel_template_edit_base.html"
+    prp_template_name = "field_properties_base.html" 
 
     def validate(self, value, **kwargs):
         #default validation or pass
@@ -40,10 +44,13 @@ class Field(object):
     Default Render methods for field templates
     """
     def render(self):
-        pass
+        return self.folder + self.template_name
 
     def render_properties(self):
-        pass
+        return self.folder + self.prp_template_name
+    
+    def render_edit(self):
+        return self.folder + self.edit_template_name
 
     class Meta:
         abstract = True

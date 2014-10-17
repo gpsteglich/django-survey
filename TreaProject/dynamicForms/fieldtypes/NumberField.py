@@ -8,6 +8,10 @@ class NumberField(Field.Field):
     """
     Number field type class.
     """
+    template_name = "number/template.html"
+    edit_template_name = "number/template_edit.html"
+    prp_template_name = "number/properties.html"
+    
     def check_min(self, value, min):
         if (value < min):
             raise ValidationError("Value below the minimum acceptable.")
@@ -36,18 +40,6 @@ class NumberField(Field.Field):
             if (restrictions['min_number'] > restrictions['max_number']):
                 raise ValidationError("The min value might not "
                 "be below the max value.")
-
-    """
-    Render methods for NumberField template
-    """
-    def render(self):
-        return 'fields/number/template.html'
-    
-    def render_edit(self):
-        return 'fields/number/template_edit.html'
-
-    def render_properties(self):
-        return 'fields/number/properties.html'
 
     def __str__():
         return "Number"
