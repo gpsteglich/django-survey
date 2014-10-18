@@ -333,27 +333,35 @@
 
         editor.logic = {};
         editor.questions = [];
+        editor.logicField;
         editor.configLogicField = function (fieldId){
             editor.questions = [];
             for (var i=0; i< editor.pages.length; i++) {
                 editor.questions = editor.questions.concat(editor.pages[i].fields);
             }
             if(editor.logic[fieldId]==undefined){
-                var newLogicField = angular.copy(editor.newLogicField);
-                editor.logic[fieldId] = newLogicField;
+                editor.logicField = angular.copy(editor.newLogicField);
+            }else{
+                editor.logicField=editor.logic[fieldId];
             }
         };
 
         editor.addNewLogicCondition = function (fieldId){
             var newLogicCondition = angular.copy(editor.newCondition);
-            editor.logic[fieldId].conditions.push(newLogicCondition);
+             editor.logicField.conditions.push(newLogicCondition);
         };
 
         editor.removeLogicCondition= function(indexCond,field_id){
-            editor.logic[field_id].conditions.splice(indexCond);
+            editor.logicField.conditions.splice(indexCond);
         };
 
-        editor.applyDependencies = function(){
+        editor.applyDependencies = function(fieldId){
+            
+             editor.logic[fieldId] = editor.logicField;
+
+            
+            
+            
             //clean dependecies of every field
             for(var i = 0; i < editor.pages.length; i++){
                 var page = editor.pages[i];
@@ -370,7 +378,6 @@
                     origin_id = dest_field.conditions[k].field;
                     origin = editor.getFieldById(origin_id);
                     origin.dependencies.fields.push(dest_id);
-                    //alert(origin.dependencies.fields);
                 }
             }
         };
@@ -378,6 +385,7 @@
         editor.selectFieldOnCondition = function(condition){
             condition.field_type = angular.copy(editor.getFieldType(condition.field));
             condition.operatorsList = editor.getOperatorsForField(condition.field_type);
+            alert(JSON.stringify(condition.operatorsList ));
             if (!editor.operatorsList){
                 editor.operatorsList = [];
             }
