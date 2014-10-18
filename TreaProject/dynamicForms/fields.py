@@ -51,7 +51,7 @@ class JSONField(models.TextField):
         return super(JSONField, self).get_db_prep_save(value, connection)
     
     
-class Validations():
+class Validations(models.Model):
     """
     Class for validation objects of the version json
     """
@@ -61,7 +61,9 @@ class Validations():
     min_number = models.IntegerField(null=True, blank=True)
     
     def valid_number(self):
-        return self.max_number >= self.min_number
+        if (self.max_number != None) and (self.min_number != None):
+            return self.max_number >= self.min_number
     
     def valid_text(self):
-        return self.max_len_text > 0
+        if self.max_len_text != None:
+            return self.max_len_text > 0

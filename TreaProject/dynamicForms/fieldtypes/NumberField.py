@@ -35,10 +35,9 @@ class NumberField(Field.Field):
 
     def check_consistency(self, **kwargs):
         #When a field is created check if the restrictions are consistent
-        restrictions = kwargs['restrictions']
-        if (restrictions['min_number'] and restrictions['max_number']):
-            if (restrictions['min_number'] > restrictions['max_number']):
-                raise ValidationError("The min value might not "
+        val = kwargs['restrictions']
+        if not val.valid_number():
+            raise ValidationError("The min value might not "
                 "be below the max value.")
 
     def __str__():

@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 import json
 
 from dynamicForms.models import Form, FieldEntry, Version, FormEntry
@@ -34,7 +35,12 @@ class VersionSerializer(serializers.ModelSerializer):
             for field in page['fields']:
                 f_type = Factory.get_class(field['field_type'])
                 kw = {}
-                kw['restrictions'] = field['validations']
+                val = Validations()
+                serializer = ValidationSerializer(val, field['validations'])
+                if serializer.is_valid():
+                    kw['restrictions'] = val
+                else:
+                    raise ValidationError("Validations not recognized.")
                 kw['options'] = field['options']
                 f_type().check_consistency(**kw)
         return attrs

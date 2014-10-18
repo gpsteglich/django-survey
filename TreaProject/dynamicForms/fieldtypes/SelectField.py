@@ -13,6 +13,7 @@ class SelectField(ListField):
     prp_template_name = "combobox/properties.html"
 
     def validate(self, value, **kwargs):
+        super(SelectField, self).validate(value, **kwargs)
         options = []
         for option in kwargs['options']:
             options.append(option)
