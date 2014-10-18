@@ -1,0 +1,39 @@
+{%extends 'base.html' %}
+{% load staticfiles %}
+
+<!DOCTYPE html>
+{%block content%}
+		<div>
+	        {% verbatim %} 
+	          
+	        <div class="content" ng-controller="statisticsCtrl as s">
+                Bueno..... {{s.mensaje}} 
+            </div>
+            
+             {%endverbatim%}
+
+     </div>
+   
+      
+{%endblock%} 
+{%block script%}
+
+<script src={% static "jquery/js/jquery-2.1.1.min.js" %}></script>
+<script src={% static "jquery/js/jquery-ui.min.js" %}></script>           
+<script src={% static "angular/angular.min.js" %}></script>
+<script src={% static "angular/d3.min.js" %}></script> 
+<script src={% static "angular/angular-charts.min.js"%}></script>   
+<script src={% static "bootstrap/js/ui-bootstrap.min.js" %}></script>
+<script src={% static "angular/sortable.js" %}></script>
+<script src={% static "js/app.js" %}></script>
+<script src={% static "js/statisticsCtrl.js" %}></script>
+
+<script src={% static "bootstrap/js/bootstrap.min.js"%}></script>    
+
+
+{%endblock%} 
+
+
+                                
+
+
