@@ -15,7 +15,7 @@
             */
             var visor = $scope;
             
-            var separator = '/';
+            var separator = '_';
 
             /*
              * To get the form the slug is catched form the path.
@@ -36,6 +36,7 @@
                     visor.logic = JSON.parse(data.json).logic;
                     visor.initialiceConditions();
                     visor.changePage(0);
+                    visor.selectPage(0);
                 })
                 .error(function(data, status, headers, config){
                     alert('error loading form: ' + status);
