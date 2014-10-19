@@ -383,13 +383,12 @@
             
             editor.logic.fields[fieldId] = editor.logicField;
   
-            //clean dependecies of every field
+            //clean field dependecies of every field
             for(var i = 0; i < editor.pages.length; i++){
                 var page = editor.pages[i];
                 for(var j = 0; j < page.fields.length; j++){
                     var field = page.fields[j];
                     field.dependencies.fields = [];
-                    field.dependencies.pages = [];
                 }
             }
             //add dependencies
@@ -407,12 +406,11 @@
             pageNum = editor.getPageNum(page);
             editor.logic.pages[pageNum] = editor.logicField;
 
-            //clean dependecies of every field
+            //clean page dependecies of every field
             for(var i = 0; i < editor.pages.length; i++){
                 var page = editor.pages[i];
                 for(var j = 0; j < page.fields.length; j++){
                     var field = page.fields[j];
-                    field.dependencies.fields = [];
                     field.dependencies.pages = [];
                 }
             }
