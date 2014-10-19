@@ -24,10 +24,7 @@ class Field(object):
                     return field['validations']
 
     def get_options(self, json, id):
-        for page in json['pages']:
-            for field in page['fields']:
-                if (field['field_id'] == id):
-                    return field['options']
+        pass
 
     def check_consistency(self, **kwargs):
         #When a field is created check if the restrictions are consistent

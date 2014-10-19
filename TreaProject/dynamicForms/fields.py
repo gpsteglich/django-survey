@@ -55,7 +55,6 @@ class Validations(models.Model):
     """
     Class for validation objects of the version json
     """
-    required = models.BooleanField()
     max_len_text = models.IntegerField(null=True, blank=True)
     max_number = models.IntegerField(null=True, blank=True)
     min_number = models.IntegerField(null=True, blank=True)
@@ -63,6 +62,7 @@ class Validations(models.Model):
     def valid_number(self):
         if (self.max_number != None) and (self.min_number != None):
             return self.max_number >= self.min_number
+        return True
     
     def valid_text(self):
         if self.max_len_text != None:

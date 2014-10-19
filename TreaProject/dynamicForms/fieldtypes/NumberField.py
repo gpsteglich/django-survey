@@ -13,19 +13,25 @@ class NumberField(Field.Field):
     prp_template_name = "number/properties.html"
     
     def check_min(self, value, min):
+        if (min == None):
+            return True
         if (value < min):
             raise ValidationError("Value below the minimum acceptable.")
 
     def check_max(self, value, max):
+        if (max == None):
+            return True
         if (value > max):
             raise ValidationError("Value above the maximum acceptable.")
 
     def validate(self, value, **kwargs):
+        print('validate')
         super(NumberField, self).validate(value, **kwargs)
         restrictions = kwargs['restrictions']
         try:
             value = int(value)
         except (ValueError, TypeError):
+            print('except (ValueError, TypeError):')
             raise ValidationError('Enter a valid integer.', code='invalid')
         if (restrictions['min_number']):
             self.check_min(value, restrictions['min_number'])
@@ -41,6 +47,6 @@ class NumberField(Field.Field):
                 "be below the max value.")
 
     def __str__():
-        return "Number"
+        return "NumberField"
 
 FieldFactory.FieldFactory.register('NumberField', NumberField)
