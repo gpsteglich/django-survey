@@ -314,6 +314,14 @@
             }
         };
 
+        editor.getPageNum = function(page){
+            for (var i = 0; i < editor.pages.length; i++){
+                if (editor.pages[i] == page){
+                    return i;
+                }
+            }
+        };
+
 
 //------------------------------------------------LOGICA------------------------------------------------------------------------//
         // logic structures  
@@ -331,7 +339,10 @@
             operatorsList:[],
         };
 
-        editor.logic = {};
+        editor.logic = {
+            fields: {},
+            pages: {},
+        };
         editor.questions = [];
         editor.logicField;
         editor.configLogicField = function (fieldId){
@@ -339,29 +350,39 @@
             for (var i=0; i< editor.pages.length; i++) {
                 editor.questions = editor.questions.concat(editor.pages[i].fields);
             }
-            if(editor.logic[fieldId]==undefined){
+            if(editor.logic.fields[fieldId]==undefined){
                 editor.logicField = angular.copy(editor.newLogicField);
             }else{
-                editor.logicField=editor.logic[fieldId];
+                editor.logicField=editor.logic.fields[fieldId];
             }
         };
 
-        editor.addNewLogicCondition = function (fieldId){
-            var newLogicCondition = angular.copy(editor.newCondition);
-             editor.logicField.conditions.push(newLogicCondition);
+        editor.configLogicPage = function (page){
+            editor.questions = [];
+            for (var i=0; i< editor.pages.length; i++) {
+                editor.questions = editor.questions.concat(editor.pages[i].fields);
+            }
+            var pageNum = editor.getPageNum(page);
+            if(editor.logic.pages[pageNum]==undefined){
+                editor.logicField = angular.copy(editor.newLogicField);
+            }else{
+                editor.logicField=editor.logic.pages[pageNum];
+            }
         };
 
-        editor.removeLogicCondition= function(indexCond,field_id){
+        editor.addNewLogicCondition = function (){
+            var newLogicCondition = angular.copy(editor.newCondition);
+            editor.logicField.conditions.push(newLogicCondition);
+        };
+
+        editor.removeLogicCondition= function(indexCond){
             editor.logicField.conditions.splice(indexCond);
         };
 
         editor.applyDependencies = function(fieldId){
             
-             editor.logic[fieldId] = editor.logicField;
-
-            
-            
-            
+            editor.logic.fields[fieldId] = editor.logicField;
+  
             //clean dependecies of every field
             for(var i = 0; i < editor.pages.length; i++){
                 var page = editor.pages[i];
@@ -372,13 +393,37 @@
                 }
             }
             //add dependencies
-            for (var dest_id in editor.logic){
-                var dest_field = editor.logic[dest_id];
+            for (var dest_id in editor.logic.fields){
+                var dest_field = editor.logic.fields[dest_id];
                 for (var k = 0; k < dest_field.conditions.length; k++){
                     origin_id = dest_field.conditions[k].field;
                     origin = editor.getFieldById(origin_id);
                     origin.dependencies.fields.push(dest_id);
                 }
+            }
+        };
+
+        editor.applyPageDependencies = function(page){
+            pageNum = editor.getPageNum(page);
+            editor.logic.pages[pageNum] = editor.logicField;
+
+            //clean dependecies of every field
+            for(var i = 0; i < editor.pages.length; i++){
+                var page = editor.pages[i];
+                for(var j = 0; j < page.fields.length; j++){
+                    var field = page.fields[j];
+                    field.dependencies.fields = [];
+                    field.dependencies.pages = [];
+                }
+            }
+  
+            //add dependencies
+            var dest_page = editor.logic.pages[pageNum];
+            for (var k = 0; k < dest_page.conditions.length; k++){
+                origin_id = dest_page.conditions[k].field;
+                origin = editor.getFieldById(origin_id);
+                origin.dependencies.pages.push(pageNum);
+                console.log(origin.dependencies.pages);
             }
         };
 
