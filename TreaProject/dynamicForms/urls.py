@@ -32,6 +32,7 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^preview$', views.TemplateView.as_view(template_name='preview.html')),
     url(r'^editor$', views.TemplateView.as_view(template_name='editor.html')),
 
+    
     url(r'^field_condition$', views.TemplateView.as_view(template_name='field_condition.html')),
     url(r'^logic_modal', views.TemplateView.as_view(template_name='logic_modal.html')),
     url(r'^field/(?P<type>[A-Z,a-z,0-9,\-,\_]+)/$', views.FieldTemplateView.as_view()),
@@ -41,7 +42,10 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^select_modal$', views.TemplateView.as_view(template_name='select_modal.html')),
     url(r'^tooltip_modal$', views.TemplateView.as_view(template_name='tooltip_modal.html')),
     url(r'^modify_input$', views.TemplateView.as_view(template_name='modifyInput.html')),
-    url(r'^statistics/$', views.TemplateView.as_view(template_name='statistics.html')),
+   
+    url(r'^statistics/$' ,views.TemplateView.as_view(template_name='statistics.html')),
+    url(r'^statistica/(?P<pk>[0-9]+)/(?P<number>[0-9]+)/$','getStatistics'), 
+    
     url(r'^visor_template', views.TemplateView.as_view(template_name='visor_template.html')),
     url(r'^visor/publishVersion/(?P<slug>[a-z,0-9,\-,\_]+)/$', views.FillForm.as_view()),
     url(r'^visor$', views.TemplateView.as_view(template_name='visor.html')),

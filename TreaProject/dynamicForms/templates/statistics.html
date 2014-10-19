@@ -10,9 +10,9 @@
 
     <div id="page-wrapper">
 	        {% verbatim %} 
-	          
-	        <div class="content" ng-controller="statisticsCtrl">
-                Bueno..... 
+            
+	        <div class="content" ng-controller="statisticsCtrl as s">
+                Bueno..... {{s.json}}
                <div ac-chart="'pie'" 
                     ac-data= "data"  
                     ac-config="config" 

@@ -9,21 +9,34 @@
      */    
     app.controller('statisticsCtrl', function ($scope, $http, $location, $window) {
     	
-    	//var stat = this;
-        /*
-        $http.get('/dynamicForms/statistics/'+)
+    	alert($location.absUrl());
+        //alert($location.path());
+        var separator = '/';
+        var stat = this;
+    	stat.formId = ($location.search()).form;
+        stat.versionNumber = ($location.search()).ver;
+        stat.json = "";
+        
+        stat.geeet= function(){
+        
+        $http.get('/dynamicForms/statistica/1/1/')
+        
                 .success(function(data){
-                    visor.version = data;
-                    visor.pages = JSON.parse(data.json).pages;
-                    visor.logic = JSON.parse(data.json).logic;
-                    visor.initialiceConditions();
-                    visor.changePage(0);
+                    console.log(data.mensaje);
+                    stat.json = data.mensaje;
+                    
                 })
                 .error(function(data, status, headers, config){
                     alert('error loading statistics: ' + status);
                 });
-        */
-        $scope.config = {
+        
+        };
+     
+     stat.geeet();
+      
+     console.log(stat.json);
+     
+     $scope.config = {
             title: 'Products',
             tooltips: true,
             labels: false,

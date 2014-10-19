@@ -390,3 +390,22 @@ def get_pct(request, pk, number, field_id, format=None):
     (t, r) = f.count_responses_pct(pk, number, field_id)
     data = {'responses': t , 'total': r}
     return Response(status=status.HTTP_200_OK, data=data)
+
+
+#class statistics(generics.RetrieveAPIView):
+@api_view(['GET'])
+def getStatistics(request, pk, number):
+    print("entre a la vista")
+        #data = { "estadistica": [{"id_field": {"id_tipo": "NUMBER","texto_pregunta": "NULL","valorquintil": "NULL","quintilY": "[y1,y2,y3,y4,y5]","promedio": "NULL","desviacion": "NULL"}}]};  
+    data={"mensaje":"prueba"}
+
+
+    #json = JSON.parse(data);
+    #return render_to_response('statistics.html', data)
+    #return Response(content, status=status.HTTP_404_NOT_FOUND)
+    return Response(data=data,status=status.HTTP_200_OK);
+            #return Response(data)
+
+
+    
+    
