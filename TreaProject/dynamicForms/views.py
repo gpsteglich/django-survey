@@ -18,8 +18,8 @@ import json
 from datetime import datetime
 
 from dynamicForms.models import Form, FormEntry, Version
-from dynamicForms.fields import PUBLISHED, DRAFT
-from dynamicForms.serializers import FormSerializer, VersionSerializer
+from dynamicForms.fields import PUBLISHED, DRAFT, Validations
+from dynamicForms.serializers import FormSerializer, VersionSerializer, ValidationSerializer
 from dynamicForms.serializers import FieldEntrySerializer, FormEntrySerializer
 from dynamicForms.fieldtypes.FieldFactory import FieldFactory as Factory
 
@@ -295,7 +295,12 @@ def submit_form_entry(request, slug, format=None):
                     loaded = json.loads(final_version.json)
                     f_id = obj.field_id
                     kw = {}
-                    kw['restrictions'] = field.get_validations(loaded, f_id)
+                    val = Validations()
+                    serializer = ValidationSerializer(val, field.get_validations(loaded, f_id))
+                    if serializer.is_valid():
+                        kw['restrictions'] = val
+                    else:
+                        raise ValidationError("Validations not recognized.")
                     kw['options'] = field.get_options(loaded, f_id)
                     field.validate(obj.answer, **kw)
                 except ValidationError as e:

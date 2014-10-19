@@ -12,14 +12,18 @@ class EmailField(TextField.TextField):
     edit_template_name = "email/template_edit.html"
     prp_template_name = "email/properties.html"
     
-    def validate(self, value, **kwargs):
-        super(EmailField, self).validate(value, **kwargs)
+    def mail_check(self, value, **kwargs):
         try:
             validate_email(value)
         except ValidationError as e:
             #transform the message to be cathed later.
             raise ValidationError(e.__str__())
 
+    def get_methods(self, **kwargs):
+        base = super(EmailField, self).get_methods(**kwargs)
+        base.append(self.mail_check)
+        return base
+        
     def __str__():
         return "Email"
 

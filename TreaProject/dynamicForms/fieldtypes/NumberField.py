@@ -12,27 +12,33 @@ class NumberField(Field.Field):
     edit_template_name = "number/template_edit.html"
     prp_template_name = "number/properties.html"
     
-    def check_min(self, value, min):
-        if (value < min):
+    def check_min(self, value, **kwargs):
+        val = kwargs['restrictions']
+        if (int(value) > val.min_number):
             raise ValidationError("Value below the minimum acceptable.")
 
-    def check_max(self, value, max):
-        if (value > max):
+    def check_max(self, value, **kwargs):
+        val = kwargs['restrictions']
+        if (int(value) > val.max_number):
             raise ValidationError("Value above the maximum acceptable.")
 
-    def validate(self, value, **kwargs):
-        super(NumberField, self).validate(value, **kwargs)
-        restrictions = kwargs['restrictions']
+    def int_check(self, value, **kwargs):
         try:
-            value = int(value)
+            int(value)
         except (ValueError, TypeError):
             raise ValidationError('Enter a valid integer.', code='invalid')
-        if (restrictions['min_number']):
-            self.check_min(value, restrictions['min_number'])
-        if (restrictions['max_number']):
-            self.check_max(value, restrictions['max_number'])
-        return True
-
+        
+    def get_methods(self, **kwargs):
+        #default validation or pass
+        base = super(NumberField, self).get_methods(**kwargs)
+        base.append(self.int_check)
+        restrictions = kwargs['restrictions']
+        if (restrictions.min_number != None):
+            base.append(self.check_min)
+        if (restrictions.max_number != None):
+            base.append(self.check_max)
+        return base
+    
     def check_consistency(self, **kwargs):
         #When a field is created check if the restrictions are consistent
         val = kwargs['restrictions']

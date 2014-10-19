@@ -12,9 +12,7 @@ class CheckboxField(ListField):
     edit_template_name = "checkbox/template_edit.html"
     prp_template_name = "checkbox/properties.html"
     
-    def validate(self, value, **kwargs):
-        #validates multiple choices
-        super(CheckboxField, self).validate(value, **kwargs)
+    def belong_check(self, value, **kwargs):
         options = []
         for option in kwargs['options']:
             options.append(option['label'])
@@ -22,7 +20,7 @@ class CheckboxField(ListField):
         for val in values:
             if val not in options:
                 raise ValidationError("Invalid value, not among options.")
-
+        
     def __str__():
         return "Checkbox"
 

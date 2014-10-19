@@ -13,7 +13,7 @@ class CIField(Field.Field):
     edit_template_name = "identity_doc/template_edit.html"
     prp_template_name = "identity_doc/properties.html"
     
-    def check_id(self, value):
+    def check_id(self, value, **kwargs):
         digits = [int(i) for i in value]
         # If value has less than 8 digits, we complete with zeros on the left
         if len(digits) < 8:
@@ -29,17 +29,18 @@ class CIField(Field.Field):
         if ((10 - m) % 10) != digits[len(digits) - 1]:
             raise ValidationError('Enter a valid ID.', code='invalid')
 
-    def validate(self, value, **kwargs):
+    def get_methods(self, **kwargs):
         #default validation or pass
-        super(CIField, self).validate(value, **kwargs)
-        intvalue = re.sub('[.-]', '', value)
+        base = super(CIField, self).get_methods(**kwargs)
+        base.extend([self.int_check, self.check_id])
+        return base
+
+    def int_check(self, value, **kwargs):
         try:
-            int(intvalue)
+            int(value)
         except (ValueError, TypeError):
             raise ValidationError('Enter a valid integer.', code='invalid')
-        self.check_id(intvalue)
-        return True
-
+        
     def __str__():
         return "Cedula"
 

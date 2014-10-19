@@ -13,10 +13,17 @@ class Field(object):
 
     def validate(self, value, **kwargs):
         #default validation or pass
+        checks = self.get_methods(**kwargs)
+        for method in checks:
+            method(value, **kwargs)
+
+    def get_methods(self, **kwargs):
+        return [self.null_check]
+    
+    def null_check(self, value, **kwargs):
         if not value:
             raise ValidationError("Problem with the answer.")
-        return True
-
+        
     def get_validations(self, json, id):
         for page in json['pages']:
             for field in page['fields']:
