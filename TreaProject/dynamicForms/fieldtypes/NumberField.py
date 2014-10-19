@@ -25,7 +25,6 @@ class NumberField(Field.Field):
             raise ValidationError("Value above the maximum acceptable.")
 
     def validate(self, value, **kwargs):
-        print('validate')
         super(NumberField, self).validate(value, **kwargs)
         restrictions = kwargs['restrictions']
         try:

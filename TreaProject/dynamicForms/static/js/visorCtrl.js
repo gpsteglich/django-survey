@@ -15,7 +15,7 @@
             */
             var visor = $scope;
             
-            var separator = '_';
+            var separator = '=';
 
             /*
              * To get the form the slug is catched form the path.
@@ -177,8 +177,7 @@
                         visor.questions[i].options = respuesta;
                          //alert("question " + i + " options:  " + visor.questions[i].options); //take out when finished
                     }else{
-                        visor.questions[i].options= visor.questions[i].options.join('#');
-                         //alert("question " + i + " options:  " + visor.questions[i].options); //take out when finished
+                        
                     }
                     visor.questions[i].answer = visor.questions[i].answer.join('#');
                     //alert('question ' + i + ' answer: ' + visor.questions[i].answer); //take out when finished
@@ -186,7 +185,6 @@
                 }
                 //FIXME: Ver si se puede emprolijar o es la única solución
                 for (var j=0; j< visor.questions.length; j++) {
-                    visor.questions[j].required = visor.questions[j].validations['required'];
                     delete visor.questions[j].validations;
                     delete visor.questions[j].tooltip;
                     delete visor.questions[j].options;
@@ -195,7 +193,6 @@
                 $http.post('/dynamicForms/visor/submit/'+visor.slug,visor.questions)
                     .success( function(data, status, headers, config){
                         $window.location.href = '/dynamicForms/visor/form/submitted';
-                        //alert('The data was saved correctly');
                     })
                     .error(function(data, status, headers, config) {
                         alert('Error saving data: ' + data.error);
