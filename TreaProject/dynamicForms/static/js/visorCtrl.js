@@ -220,7 +220,7 @@
                     changePage = 0;
                 }
                 if (visor.pages){
-                    if (changePage > visor.pages.size){
+                    if (changePage > visor.pages.size || changePage < 0){
                         changePage = 0;   
                     }
                     visor.selectPage(changePage);
