@@ -385,8 +385,9 @@ class FieldPrpTemplateView(TemplateView):
 
 @api_view(['GET'])
 def get_pct(request, pk, number, field_id, format=None):
+    # ALL TODO. This is just an usage example.
     from dynamicForms.fieldtypes.TextField import TextField
     f = TextField()
-    (t, r) = f.count_responses_pct(pk, number, field_id)
-    data = {'responses': t , 'total': r}
+    (r, t) = f.count_responses_pct(pk, number, field_id)
+    data = {'responses': r , 'total': t}
     return Response(status=status.HTTP_200_OK, data=data)

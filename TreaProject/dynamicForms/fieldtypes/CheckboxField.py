@@ -14,6 +14,7 @@ class CheckboxField(ListField):
     
     def validate(self, value, **kwargs):
         #validates multiple choices
+        super(CheckboxField, self).validate(value, **kwargs)
         options = []
         for option in kwargs['options']:
             options.append(option['label'])
