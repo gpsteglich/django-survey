@@ -43,16 +43,19 @@
                 });
 
             visor.showValues = [];
+            visor.showPageValues = [];
 
             visor.initialiceConditions = function(){
                 visor.questions = [];
                 for (var i=0; i< visor.pages.length; i++) {
                     visor.questions = visor.questions.concat(angular.copy(visor.pages[i].fields));
+                    visor.evaluatePageCondition(i);
                 }
                 for (var j=0; j< visor.questions.length; j++){
                     var field = visor.questions[j];
                     visor.evaluateCondition(field.field_id);
                 }
+                console.log(visor.showPageValues);
             };
 
             visor.updateDependencies = function(field_id){
@@ -62,44 +65,86 @@
                     field_dst = visor.getFieldById(field_org.dependencies.fields[k]);
                     visor.evaluateCondition(field_dst.field_id);
                 }
+                for (var j=0; j < field_org.dependencies.pages.length; j++){
+                    visor.evaluatePageCondition(field_org.dependencies.pages[j]);
+                }
+                console.log(visor.showPageValues);
             };
 
             visor.evaluateCondition = function(field_id){
-                var logic = visor.logic[field_id];
-                    if (logic){
-                        var value = true;
-                        if (logic.action == 'All'){
-                            value = true;
-                            for (var condAll in logic.conditions){
-                                var condition = logic.conditions[condAll];
-                                var field_org = visor.getFieldById(condition.field);
-                                var data = field_org.answer; 
-                                var operator = eval('operatorFactory.getOperator("'+condition.field_type+'")');
-                                var funcStr = 'operator.'+ condition.comparator +'("'+data+'","'+ condition.value+'")';
-                                value &= eval(funcStr);
-                            }
-                            
+                var logic = visor.logic.fields[field_id];
+                if (logic){
+                    var value = true;
+                    if (logic.action == 'All'){
+                        value = true;
+                        for (var condAll in logic.conditions){
+                            var condition = logic.conditions[condAll];
+                            var field_org = visor.getFieldById(condition.field);
+                            var data = field_org.answer; 
+                            var operator = eval('operatorFactory.getOperator("'+condition.field_type+'")');
+                            var funcStr = 'operator.'+ condition.comparator +'("'+data+'","'+ condition.value+'")';
+                            value &= eval(funcStr);
                         }
-                        if (logic.action == 'Any'){
-                            value = false;
-                            for (var condAny in logic.conditions){
-                                var condition = logic.conditions[condAny];
-                                var field_org = visor.getFieldById(condition.field);
-                                var data = field_org.answer;
-                                var operator = eval('operatorFactory.getOperator("'+condition.field_type+'")');
-                                var funcStr = 'operator.'+ condition.comparator +'("'+data+'","'+ condition.value+'")';
-                                value |= eval(funcStr);
-                            }
-                            
-                        }
-                        if (logic.operation == 'Show'){
-                            visor.showValues[field_id] = value;
-                        } else {
-                            visor.showValues[field_id] = !value;
-                        }
-                    } else {
-                        visor.showValues[field_id] = 1;
+                        
                     }
+                    if (logic.action == 'Any'){
+                        value = false;
+                        for (var condAny in logic.conditions){
+                            var condition = logic.conditions[condAny];
+                            var field_org = visor.getFieldById(condition.field);
+                            var data = field_org.answer;
+                            var operator = eval('operatorFactory.getOperator("'+condition.field_type+'")');
+                            var funcStr = 'operator.'+ condition.comparator +'("'+data+'","'+ condition.value+'")';
+                            value |= eval(funcStr);
+                        }
+                        
+                    }
+                    if (logic.operation == 'Show'){
+                        visor.showValues[field_id] = value;
+                    } else {
+                        visor.showValues[field_id] = !value;
+                    }
+                } else {
+                    visor.showValues[field_id] = 1;
+                }
+            };
+
+            visor.evaluatePageCondition = function(pageNum){
+                var logic = visor.logic.pages[pageNum];
+                if (logic){
+                    var value = true;
+                    if (logic.action == 'All'){
+                        value = true;
+                        for (var condAll in logic.conditions){
+                            var condition = logic.conditions[condAll];
+                            var field_org = visor.getFieldById(condition.field);
+                            var data = field_org.answer; 
+                            var operator = eval('operatorFactory.getOperator("'+condition.field_type+'")');
+                            var funcStr = 'operator.'+ condition.comparator +'("'+data+'","'+ condition.value+'")';
+                            value &= eval(funcStr);
+                        }
+                        
+                    }
+                    if (logic.action == 'Any'){
+                        value = false;
+                        for (var condAny in logic.conditions){
+                            var condition = logic.conditions[condAny];
+                            var field_org = visor.getFieldById(condition.field);
+                            var data = field_org.answer;
+                            var operator = eval('operatorFactory.getOperator("'+condition.field_type+'")');
+                            var funcStr = 'operator.'+ condition.comparator +'("'+data+'","'+ condition.value+'")';
+                            value |= eval(funcStr);
+                        }
+                        
+                    }
+                    if (logic.operation == 'Show'){
+                        visor.showPageValues[pageNum] = value;
+                    } else {
+                        visor.showPageValues[pageNum] = !value;
+                    }
+                } else {
+                    visor.showPageValues[pageNum] = 1;
+                }
             };
             
             visor.getFieldById = function(id){
@@ -185,32 +230,56 @@
             /*
             * Page navegation
              */
-            
+
+            visor.getNext = function(){
+                var next = visor.selectedPageNum + 1;
+                while (next < visor.pages.length && !visor.showPageValues[next]){
+                    next++;
+                }
+                if (next == visor.pages.length){
+                    return -1;
+                } else {
+                    return next;
+                }
+            }
+
+            visor.getPrevious = function(){
+                var prev = visor.selectedPageNum - 1;
+                while (prev >= 0 && !visor.showPageValues[prev]){
+                    prev--;
+                }
+                return prev;
+            }
+           
             visor.canNext = function(){
                 var canNext = false;
                 if (visor.pages){
-                    canNext = (visor.selectedPageNum + 1 < visor.pages.length);
+                    var next = visor.getNext();
+                    canNext = (next != -1);
                 }
                 return canNext;
             };
 
             visor.next = function(){
-                if (visor.selectedPageNum + 1 < visor.pages.length){
-                    visor.changePage(visor.selectedPageNum + 1);
+                var next = visor.getNext();
+                if (next != -1){
+                    visor.changePage(next);
                 }
             };
 
             visor.canPrevious = function(){
                 var canPrevious = false;
                 if (visor.pages){
-                    canPrevious = (visor.selectedPageNum > 0);
+                    var prev = visor.getPrevious();
+                    canPrevious = (prev != -1);
                 }
                 return canPrevious;
             };
 
             visor.previous = function(){
-                if (visor.selectedPageNum > 0){
-                    visor.changePage(visor.selectedPageNum - 1);
+                var prev = visor.getPrevious();
+                if (prev != -1){
+                    visor.changePage(prev);
                 }
             };
 

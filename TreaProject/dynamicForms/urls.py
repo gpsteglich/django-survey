@@ -34,6 +34,7 @@ urlpatterns = patterns('dynamicForms.views',
 
     url(r'^field_condition$', views.TemplateView.as_view(template_name='field_condition.html')),
     url(r'^logic_modal', views.TemplateView.as_view(template_name='logic_modal.html')),
+    url(r'^logic_page_modal', views.TemplateView.as_view(template_name='logic_page_modal.html')),
     url(r'^field/(?P<type>[A-Z,a-z,0-9,\-,\_]+)/$', views.FieldTemplateView.as_view()),
     url(r'^field_edit/(?P<type>[A-Z,a-z,0-9,\-,\_]+)/$', views.FieldEditTemplateView.as_view()),
     url(r'^field_properties/(?P<type>[A-Z,a-z,0-9,\-,\_]+)/$', views.FieldPrpTemplateView.as_view()),

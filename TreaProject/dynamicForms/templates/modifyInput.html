@@ -29,7 +29,12 @@
                  </div> 
                   <div class="form-group">
                     <button type="button" class="btn btn-danger btn-md tridimensonal-button"  ng-click="visor.configLogicField(visor.selectedField.field_id)" data-toggle="modal" data-target="#myLogicModal" ng-disabled="visor.selectedField.tooltip==undefined">
-                      <span class="glyphicon glyphicon-star"></span> Configure Logic
+                      <span class="glyphicon glyphicon-star"></span> Configure Field Logic
+                    </button>
+                 </div>  
+                 <div class="form-group">
+                    <button type="button" class="btn btn-danger btn-md tridimensonal-button"  ng-click="visor.configLogicPage(visor.selectedPage)" data-toggle="modal" data-target="#myLogicPageModal" ng-disabled="visor.selectedPage==undefined">
+                      <span class="glyphicon glyphicon-star"></span> Configure Page Logic
                     </button>
                  </div>      
             </div>
