@@ -88,5 +88,7 @@ class NumericStatisticsSerializer(serializers.Serializer):
     field_text = serializers.CharField() 
     mean       = serializers.FloatField()
     standard_deviation = serializers.FloatField()
+    total_mean  = serializers.FloatField()
+    total_standard_deviation = serializers.FloatField()
     quintilesY  = serializers.CharField()
     quintilesX  = serializers.CharField()

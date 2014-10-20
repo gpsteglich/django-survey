@@ -12,23 +12,31 @@ class NumericStatistics():
     def __init__(self, data_list, field_text):
            
         
-        list = []
+        listTotal = []    #null values are counted as 0
+        for data in data_list:
+            if data != "":
+                listTotal.append(int(data))
+            else:
+                listTotal.append(0)
+                
+        list = []     #without null values
         for data in data_list:
             if data != "":
                 list.append(int(data))
-            else:
-                list.append(0)
            
+        
         self.field_text = field_text
         self.mean       = mean(list)
         self.standard_deviation = pstdev(list, self.mean)
+        self.total_mean = mean(listTotal)
+        self.total_standard_deviation = pstdev(listTotal, self.total_mean)
         self.quintilesX  = []
         self.quintilesY = []
         
         minimum  = min(list)
         maximum  = max(list)
 
-        quintile_length  = math.ceil((maximum - minimum + 1) /5)
+        quintile_length  = math.floor((maximum - minimum + 1) /5)
         
         #first 4 quintiles
         first = minimum

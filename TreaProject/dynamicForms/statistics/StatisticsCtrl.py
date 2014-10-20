@@ -22,15 +22,18 @@ class StatisticsCtrl():
         for page in pages:
             nro = 1
             for field in page["fields"]:
-                fieldEntries = FieldEntry.objects.filter(field_id=field["field_id"], entry__version_id=version.pk)
-                data = []
-                for fieldEntry in fieldEntries:
-                    data.append(fieldEntry.answer)
-                print(field["field_type"])
-                fieldType = Factory.get_class(field["field_type"])
-                fieldStatistics = fieldType().get_statistics(data, field["text"])
-                fieldStatistics["field_type"] = field["field_type"]
-                statistics[field["field_id"]] = fieldStatistics
+                fieldEntries = FieldEntry.objects.filter(field_id=field["field_id"], entry__version_id=version.pk) 
+                if len(fieldEntries) != 0:
+                    data = []
+                    for fieldEntry in fieldEntries:
+                        data.append(fieldEntry.answer)
+                    print(field["field_type"])
+                    fieldType = Factory.get_class(field["field_type"])
+                    fieldStatistics = fieldType().get_statistics(data, field["text"])
+                    fieldStatistics["field_type"] = field["field_type"]
+                    statistics[field["field_id"]] = fieldStatistics
+                else:
+                    raise Exception("There are no field entries for this form.")
                 
         return statistics
                 

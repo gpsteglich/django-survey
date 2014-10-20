@@ -116,30 +116,30 @@
                                                     <th><div class="btn-group">
                                                     <a type="button" class="btn btn-default btn-sm" href= "/dynamicForms/editor#?form={{form.id}}&ver={{v.number}}"
                                                         {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
-                                                        <span class="glyphicon glyphicon-pencil"></span>EDIT
+                                                        <span class="glyphicon glyphicon-pencil"></span> EDIT
                                                     </a>
                                                     <a type="button" class="btn btn-default btn-sm" target="_blank" href= "/dynamicForms/preview#?form={{form.id}}&ver={{v.number}}" 
                                                         {% ifnotequal v.status 1 %} disabled {% endifnotequal %}>
-                                                        <span class="glyphicon glyphicon-eye-open"></span>VIEW
+                                                        <span class="glyphicon glyphicon-eye-open"></span> VIEW
                                                     </a>
                                                     <a type="button" class="btn btn-default btn-sm" href = "/dynamicForms/version/{{form.id}}/{{v.number}}/new" 
                                                     {% ifequal form.lastStatus 0 %} disabled {% endifequal %}>
-                                                        <span class="glyphicon glyphicon-plus"></span>NEW VERSION
+                                                        <span class="glyphicon glyphicon-plus"></span> NEW VERSION
                                                     </a>
                                                     <a type="button" class="btn btn-default btn-sm" href = "/dynamicForms/version/{{form.id}}/{{v.number}}/duplicate"
                                                         {% ifequal v.status 0 %} disabled {% endifequal %}>    
-                                                        <span class="glyphicon glyphicon-forward"></span>DUPLICATE
+                                                        <span class="glyphicon glyphicon-forward"></span> DUPLICATE
                                                     </a>
                                                     <a type="button" class="btn btn-default btn-sm" href="/dynamicForms/version/delete/{{form.id}}/{{v.number}}"
                                                         {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
-                                                        <span class="glyphicon glyphicon-remove-circle"></span>DISCARD
+                                                        <span class="glyphicon glyphicon-remove-circle"></span> DISCARD
                                                     </a>
                                                    <a type="button" class="btn btn-default btn-sm" href= "/dynamicForms/responses#?form={{form.id}}&ver={{v.number}}"
                                                         {% ifequal v.status 0 %} disabled {% endifequal %}>
-                                                        <span class="glyphicon glyphicon-pencil"></span>RESPONSES
+                                                        <span class="glyphicon glyphicon-pencil"></span> RESPONSES
                                                     </a>
 																	<a type="button" class="btn btn-default btn-sm" href= "/dynamicForms/statistics#?form={{form.id}}&ver={{v.number}}">
-                                                        <span class="glyphicon glyphicon-signal"></span>STATISTICS
+                                                        <span class="glyphicon glyphicon-signal"></span> STATISTICS
                                                     </a>
                                                                                                        
                                                     </div></th><!-- btn-group-->

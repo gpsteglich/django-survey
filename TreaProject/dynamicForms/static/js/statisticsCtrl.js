@@ -21,7 +21,7 @@
                   
               })
               .error(function(data, status, headers, config){
-                  alert('error loading statistics: ' + status);
+                  alert('error loading statistics: ' + data.message);
               });
       
       };
