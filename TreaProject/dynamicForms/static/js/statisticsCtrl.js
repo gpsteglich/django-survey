@@ -9,32 +9,25 @@
      */    
     app.controller('statisticsCtrl', function ($scope, $http, $location, $window) {
     	
-    	alert($location.absUrl());
-        //alert($location.path());
-        var separator = '/';
-        var stat = this;
-    	stat.formId = ($location.search()).form;
-        stat.versionNumber = ($location.search()).ver;
-        stat.json = "";
-        
-        stat.geeet= function(){
-        
-        $http.get('/dynamicForms/statistica/1/1/')
-        
-                .success(function(data){
-                    console.log(data.mensaje);
-                    stat.json = data.mensaje;
-                    
-                })
-                .error(function(data, status, headers, config){
-                    alert('error loading statistics: ' + status);
-                });
-        
-        };
-     
-     stat.geeet();
+      var stat = this;
+  	  stat.formId = ($location.search()).form;
+      stat.versionNumber = ($location.search()).ver;
+      stat.json = "";
       
-     console.log(stat.json);
+      stat.getStatistics= function(){
+        $http.get('/dynamicForms/statistics/'+stat.formId+'/'+stat.versionNumber+'/')
+              .success(function(data){
+                  stat.json = data;
+                  
+              })
+              .error(function(data, status, headers, config){
+                  alert('error loading statistics: ' + status);
+              });
+      
+      };
+   
+     stat.getStatistics();
+      
      
      $scope.config = {
             title: 'Products',

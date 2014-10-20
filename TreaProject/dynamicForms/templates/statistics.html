@@ -12,17 +12,23 @@
 	        {% verbatim %} 
             
 	        <div class="content" ng-controller="statisticsCtrl as s">
-                Bueno..... {{s.json}}
+                Bueno..... 
                <div ac-chart="'pie'" 
                     ac-data= "data"  
                     ac-config="config" 
-                    class="chart"></div>
+                    class="chart">
+                </div>
+
+                <div>
+                    {{s.json}}
+                </div>
+
+
             </div>
-            
+
              {%endverbatim%}
 
      </div>
-   
       
 {%endblock%} 
 
