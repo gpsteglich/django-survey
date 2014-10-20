@@ -79,3 +79,14 @@ class ValidationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Validations
         fields = ('required', 'max_len_text', 'min_number', 'max_number')
+
+class NumericStatisticsSerializer(serializers.Serializer):
+    
+    """
+    Serializer for NumericStatistics
+    """
+    field_text = serializers.CharField() 
+    mean       = serializers.FloatField()
+    standard_deviation = serializers.FloatField()
+    quintilesY  = serializers.CharField()
+    quintilesX  = serializers.CharField()

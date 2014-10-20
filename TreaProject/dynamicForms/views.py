@@ -22,6 +22,7 @@ from dynamicForms.fields import PUBLISHED, DRAFT
 from dynamicForms.serializers import FormSerializer, VersionSerializer
 from dynamicForms.serializers import FieldEntrySerializer, FormEntrySerializer
 from dynamicForms.fieldtypes.FieldFactory import FieldFactory as Factory
+from dynamicForms.statistics.StatisticsCtrl import StatisticsCtrl
 
 
 class FormList(generics.ListCreateAPIView):
@@ -392,19 +393,17 @@ def get_pct(request, pk, number, field_id, format=None):
     return Response(status=status.HTTP_200_OK, data=data)
 
 
-#class statistics(generics.RetrieveAPIView):
-@api_view(['GET'])
-def getStatistics(request, pk, number):
-    print("entre a la vista")
-        #data = { "estadistica": [{"id_field": {"id_tipo": "NUMBER","texto_pregunta": "NULL","valorquintil": "NULL","quintilY": "[y1,y2,y3,y4,y5]","promedio": "NULL","desviacion": "NULL"}}]};  
-    data={"mensaje":"prueba"}
+class StatisticsView(generics.RetrieveAPIView):
+    
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    
+    def get(self, request, pk, number):
+        """
+        Returns statistics for version (pk, number)
+        """
+        statistics = StatisticsCtrl().getStatistics(pk, number)
+        return Response(data=statistics,status=status.HTTP_200_OK);
 
-
-    #json = JSON.parse(data);
-    #return render_to_response('statistics.html', data)
-    #return Response(content, status=status.HTTP_404_NOT_FOUND)
-    return Response(data=data,status=status.HTTP_200_OK);
-            #return Response(data)
 
 
     
