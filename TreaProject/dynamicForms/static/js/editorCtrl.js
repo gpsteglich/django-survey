@@ -29,7 +29,7 @@
         
         var checkboxOption = {
             label : 'new option',
-        }
+        };
         
         editor.max_id = 0;
         
@@ -349,7 +349,6 @@
             pages: {},
         };
         editor.questions = [];
-        editor.logicField;
         editor.configLogicField = function (fieldId){
             editor.questions = [];
             for (var i=0; i< editor.pages.length; i++) {
@@ -413,9 +412,9 @@
 
             //clean page dependecies of every field
             for(var i = 0; i < editor.pages.length; i++){
-                var page = editor.pages[i];
-                for(var j = 0; j < page.fields.length; j++){
-                    var field = page.fields[j];
+                var pageTemp = editor.pages[i];
+                for(var j = 0; j < pageTemp.fields.length; j++){
+                    var field = pageTemp.fields[j];
                     field.dependencies.pages = [];
                 }
             }

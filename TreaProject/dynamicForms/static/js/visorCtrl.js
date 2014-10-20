@@ -15,7 +15,7 @@
             */
             var visor = $scope;
             
-            var separator = '=';
+            var separator = '/';
 
             /*
              * To get the form the slug is catched form the path.
@@ -189,7 +189,7 @@
                     delete visor.questions[j].tooltip;
                     delete visor.questions[j].options;
                     delete visor.questions[j].dependencies;
-                };
+                }
                 $http.post('/dynamicForms/visor/submit/'+visor.slug,visor.questions)
                     .success( function(data, status, headers, config){
                         $window.location.href = '/dynamicForms/visor/form/submitted';
@@ -211,6 +211,7 @@
             */
             visor.$on('$locationChangeSuccess', function(event) {
                 var hash = $location.hash();
+                var slugTemp = $location.hash().split(separator)[1];
                 var changePage = $location.hash().split(separator)[1] || 0;
                 changePage = parseInt(changePage);
                 if (changePage.isNaN){
@@ -238,7 +239,7 @@
                 } else {
                     return next;
                 }
-            }
+            };
 
             visor.getPrevious = function(){
                 var prev = visor.selectedPageNum - 1;
@@ -246,7 +247,7 @@
                     prev--;
                 }
                 return prev;
-            }
+            };
            
             visor.canNext = function(){
                 var canNext = false;
