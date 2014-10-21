@@ -41,7 +41,8 @@ class VersionSerializer(serializers.ModelSerializer):
                     kw['restrictions'] = val
                 else:
                     raise ValidationError("Validations not recognized.")
-                kw['options'] = field['options']
+                if 'options' in field:
+                    kw['options'] = field['options']
                 f_type().check_consistency(**kw)
         return attrs
 
@@ -84,4 +85,4 @@ class ValidationSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Validations
-        fields = ('required', 'max_len_text', 'min_number', 'max_number')
+        fields = ('max_len_text', 'min_number', 'max_number')

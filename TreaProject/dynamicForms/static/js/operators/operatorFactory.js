@@ -21,7 +21,7 @@ var operatorFactory = (function () {
             operator[operatorName] = Operator;
             // Register Operator's available methods
             operatorMethods[operatorName] = Operator.listMethods();
-            console.log('se registro la clase: ' + operatorName);
+            //console.log('se registro la clase: ' + operatorName);
             return operatorFactory;
         },
 

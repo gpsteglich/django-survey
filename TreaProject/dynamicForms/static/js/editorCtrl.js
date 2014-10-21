@@ -29,7 +29,7 @@
         
         var checkboxOption = {
             label : 'new option',
-        }
+        };
         
         editor.max_id = 0;
         
@@ -90,13 +90,13 @@
              editor.pages[page].fields.splice(index,1);  
         };
 
-        editor.newField =  {
+        /*editor.newField =  {
         	field_id : 0,
             field_type:'' ,
             text: '',
             answer: [],
+            required: false,
             validations: {
-                required: false,
                 min_number: 0,
                 max_number: 100,
                 max_len_text: 255,
@@ -107,10 +107,14 @@
                 fields: [],
                 pages: [],
             }
-        };
+        };*/
     
+        editor.createField = function(type){
+            return fieldFactory.getField(type).buildField();
+        };
+
         editor.addField = function(type) {
-            var newField = angular.copy(editor.newField);
+            var newField = editor.createField(type);//angular.copy(editor.newField);
             newField.field_id = ++editor.max_id;
             newField.field_type = type || 1;
             if (type === editor.FieldTypes[6]){
@@ -127,7 +131,7 @@
         };
        
         editor.clearSelectedField = function(){
-            editor.selectedField = angular.copy(editor.newField);            
+            editor.selectedField = editor.createField(type);            
         };
         
         /*
@@ -146,11 +150,11 @@
             if (val.min_number > val.max_number) {
                 alert("Minimum can't exceed maximum");
                 val.min_number = val.max_number;
-            };
+            }
             if (val.max_len_text < 0){
                 alert("Maximum length can't be less than 0");
                 val.max_len_text = 0;
-            };
+            }
         };
         
         var tmpList = [];
@@ -205,7 +209,7 @@
                         editor.max_id = Math.max.apply(Math,questions.map(function(o){
                             return o.field_id;
                         }));
-                        if (!isNaN(editor.max_id)){
+                        if (isNaN(editor.max_id)){
                             editor.max_id = 0;
                         }
                     })
@@ -250,8 +254,8 @@
             return true;
         };
         
-        editor.persistForm = function(status){
-            editor.version.status = status;
+        editor.persistForm = function(formStatus){
+            editor.version.status = formStatus;
             if (editor.isNewForm()){
                 $http.post('forms/', editor.form)
                 .success( function(data, status, headers, config){
@@ -259,11 +263,12 @@
                     editor.formIdParam = data.id;
                     editor.version.form = data.id;
                     editor.version.json = angular.toJson({'pages':editor.pages,'logic':editor.logic});
+                    console.log('aaaaaaaaa1');
                     $http.post('version/'+editor.formIdParam+'/', editor.version)
                     .success( function(data, status, headers, config){
                         editor.versionIdParam = data.number;
                         editor.version = data;
-                        if (status == 1){
+                        if (formStatus == 1){
                             $window.location.href = '/dynamicForms/main';
                         } else {
                             // update the url parameters
@@ -272,11 +277,11 @@
                     })
                     .error(function(data, status, headers, config) {
                         var errors = data.error;
-                        alert('error saving new version: ' + status);
+                        alert('error saving new version: ' + data.error);
                     });
                 })
                 .error(function(data, status, headers, config) {
-                    alert('error saving new form: ' + status);
+                    alert('error saving new form: ' + data.error);
                 });
             } else {
                 $http.put('forms/'+ editor.formIdParam + '/', editor.form)
@@ -286,16 +291,16 @@
                     $http.put('version/'+editor.formIdParam+'/'+editor.versionIdParam+"/", editor.version)
                     .success( function(data, status, headers, config){
                         editor.version = data;
-                        if (status == 1){
+                        if (formStatus == 1){
                             $window.location.href = '/dynamicForms/main';
                         }
                     })
                     .error(function(data, status, headers, config) {
-                        alert('error saving version: ' + data.json[0]);
+                        alert('error saving version: ' + data.error);
                     });
                 })
                 .error(function(data, status, headers, config) {
-                    alert('error saving form: ' + status);
+                    alert('error saving form: ' + data.error);
                 });
             }
 
@@ -344,7 +349,6 @@
             pages: {},
         };
         editor.questions = [];
-        editor.logicField;
         editor.configLogicField = function (fieldId){
             editor.questions = [];
             for (var i=0; i< editor.pages.length; i++) {
@@ -408,9 +412,9 @@
 
             //clean page dependecies of every field
             for(var i = 0; i < editor.pages.length; i++){
-                var page = editor.pages[i];
-                for(var j = 0; j < page.fields.length; j++){
-                    var field = page.fields[j];
+                var pageTemp = editor.pages[i];
+                for(var j = 0; j < pageTemp.fields.length; j++){
+                    var field = pageTemp.fields[j];
                     field.dependencies.pages = [];
                 }
             }

@@ -14,18 +14,19 @@ class NumberField(Field.Field):
     
     def check_min(self, value, **kwargs):
         val = kwargs['restrictions']
-        if (int(value) < val.min_number):
+        if ((val.min_number != None) and (int(value) < val.min_number)):
             raise ValidationError("Value below the minimum acceptable.")
 
     def check_max(self, value, **kwargs):
         val = kwargs['restrictions']
-        if (int(value) > val.max_number):
+        if ((val.max_number != None) and (int(value) > val.max_number)):
             raise ValidationError("Value above the maximum acceptable.")
-
+        
     def int_check(self, value, **kwargs):
         try:
             int(value)
         except (ValueError, TypeError):
+            print('except (ValueError, TypeError):')
             raise ValidationError('Enter a valid integer.', code='invalid')
         
     def get_methods(self, **kwargs):
@@ -47,6 +48,6 @@ class NumberField(Field.Field):
                 "be below the max value.")
 
     def __str__():
-        return "Number"
+        return "NumberField"
 
 FieldFactory.FieldFactory.register('NumberField', NumberField)
