@@ -98,7 +98,10 @@
                 return { label:o.toString(), id: 0   };
 
             });
-            alert(JSON.stringify(editor.optionsAdded));
+           
+            for(var i = 0;i<editor.optionsAdded.length; i++){
+                editor.optionsAdded[i].id = ++editor.selectedField.max_id;
+            }            
             editor.selectedField.options = editor.selectedField.options.concat(angular.copy(editor.optionsAdded));
             editor.optionsAdded = [];
         }

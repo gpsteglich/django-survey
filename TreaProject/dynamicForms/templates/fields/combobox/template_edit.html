@@ -6,8 +6,8 @@
     </button>  
     <select  class="form-control"   
     	ng-model="question.answer[0]"  
-    	ng-options="options for options in question.options">
-<!--    	ng-disabled="disabled">-->
+    	ng-options="option.id as option.label for option in question.options"
+     	ng-disabled="disabled">
     </select>   
 	{% endverbatim %} 
 {%endblock%}
