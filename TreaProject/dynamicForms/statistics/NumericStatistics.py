@@ -9,23 +9,18 @@ class NumericStatistics():
     Class with the statistics info of a number  field  
     """
     
-    def __init__(self, data_list, field_text):
+    def __init__(self, data_list):
            
         
         listTotal = []    #null values are counted as 0
+        list = []         #without null values
         for data in data_list:
             if data != "":
                 listTotal.append(int(data))
+                list.append(int(data))
             else:
                 listTotal.append(0)
-                
-        list = []     #without null values
-        for data in data_list:
-            if data != "":
-                list.append(int(data))
            
-        
-        self.field_text = field_text
         self.mean       = mean(list)
         self.standard_deviation = pstdev(list, self.mean)
         self.total_mean = mean(listTotal)

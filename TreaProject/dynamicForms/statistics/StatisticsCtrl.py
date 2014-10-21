@@ -29,8 +29,9 @@ class StatisticsCtrl():
                         data.append(fieldEntry.answer)
                     print(field["field_type"])
                     fieldType = Factory.get_class(field["field_type"])
-                    fieldStatistics = fieldType().get_statistics(data, field["text"])
+                    fieldStatistics = fieldType().get_statistics(data)
                     fieldStatistics["field_type"] = field["field_type"]
+                    fieldStatistics["field_text"] = field["text"]
                     statistics[field["field_id"]] = fieldStatistics
                 else:
                     raise Exception("There are no field entries for this form.")

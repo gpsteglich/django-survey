@@ -85,7 +85,6 @@ class NumericStatisticsSerializer(serializers.Serializer):
     """
     Serializer for NumericStatistics
     """
-    field_text = serializers.CharField() 
     mean       = serializers.FloatField()
     standard_deviation = serializers.FloatField()
     total_mean  = serializers.FloatField()
