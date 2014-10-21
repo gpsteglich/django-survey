@@ -27,8 +27,9 @@
                     alert(status+' data:'+data);
                 });
         
-        var checkboxOption = {
+        var option = {
             label : 'new option',
+            id : 0
         };
         
         editor.max_id = 0;
@@ -77,8 +78,8 @@
         };
 
         editor.addOption = function() {
-            var option = angular.copy(checkboxOption);   
-            editor.selectedField.options.push(option);
+            var option1 = angular.copy(option);   
+            editor.selectedField.options.push(option1);
         };
 
         editor.deleteOption = function (index){
@@ -89,8 +90,24 @@
              editor.questions.splice(editor.questions.indexOf(editor.pages[page].fields[index]));  
              editor.pages[page].fields.splice(index,1);  
         };
+        
+        editor.optionsAdded = [];
+        editor.applyOptions = function(){     
+            
+            editor.optionsAdded = editor.optionsAdded.map(function(o){
+                return { label:o.toString(), id: 0   };
 
-        /*editor.newField =  {
+            });
+            alert(JSON.stringify(editor.optionsAdded));
+            editor.selectedField.options = editor.selectedField.options.concat(angular.copy(editor.optionsAdded));
+            editor.optionsAdded = [];
+        }
+        
+        
+        
+        
+
+      /*  editor.newField =  {
         	field_id : 0,
             field_type:'' ,
             text: '',
