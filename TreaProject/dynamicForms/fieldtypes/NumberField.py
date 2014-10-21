@@ -14,7 +14,7 @@ class NumberField(Field.Field):
     
     def check_min(self, value, **kwargs):
         val = kwargs['restrictions']
-        if (int(value) > val.min_number):
+        if (int(value) < val.min_number):
             raise ValidationError("Value below the minimum acceptable.")
 
     def check_max(self, value, **kwargs):
