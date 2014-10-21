@@ -80,6 +80,7 @@
         editor.addOption = function() {
             var option1 = angular.copy(option);   
             editor.selectedField.options.push(option1);
+            option1.id =  ++editor.selectedField.max_id;
         };
 
         editor.deleteOption = function (index){
