@@ -53,7 +53,7 @@ class JSONField(models.TextField):
     
 class Validations(models.Model):
     """
-    Class for validation objects of the version json
+    Class for validation objects of the versions json
     """
     max_len_text = models.IntegerField(null=True, blank=True)
     max_number = models.IntegerField(null=True, blank=True)
