@@ -178,15 +178,15 @@
                       
                         visor.questions[i].options = respuesta;
                         //TODO: take out when finished
-                        alert("question " + i + " options:  " + visor.questions[i].options);
-                    }else{
+                        //alert("question " + i + " options:  " + visor.questions[i].options);
+                    }else if (visor.questions[i].field_type == 'SelectField'){
                         visor.questions[i].options= visor.questions[i].options.join('#');
                         //TODO: take out when finished
-                        alert("question " + i + " options:  " + visor.questions[i].options); 
+                        //alert("question " + i + " options:  " + visor.questions[i].options); 
                     }
                     visor.questions[i].answer = visor.questions[i].answer.join('#');
                     //TODO: take out when finished
-                    alert('question ' + i + ' answer: ' + visor.questions[i].answer);
+                    //alert('question ' + i + ' answer: ' + visor.questions[i].answer);
 
                 }
                 for (var j=0; j< visor.questions.length; j++) {
@@ -210,6 +210,8 @@
             	visor.pre_salvar();
                 $http.post('visor/submit/'+visor.slug,visor.questions)
                     .success( function(data, status, headers, config){
+                    	//FIXTHIS
+                    	visor.urlVisor = 'visor/';
                         $window.location.href = visor.urlVisor + 'form/submitted';
                     })
                     .error(function(data, status, headers, config) {

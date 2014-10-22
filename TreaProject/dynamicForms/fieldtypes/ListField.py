@@ -13,7 +13,11 @@ class ListField(Field):
         return base
     
     def belong_check(self, value, **kwargs):
-        pass
+        v = int(value)
+        top = int(kwargs['options'])
+        if not (v > 0 and v <= top):
+            raise ValidationError("Invalid value, not among options.")
+        
     
     def check_consistency(self, **kwargs):
         options = kwargs['options']
@@ -24,7 +28,7 @@ class ListField(Field):
         for page in json['pages']:
             for field in page['fields']:
                 if (field['field_id'] == f_id):
-                    return field['options']
+                    return field['max_id']
 
 
     class Meta:

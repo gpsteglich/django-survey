@@ -12,14 +12,6 @@ class SelectField(ListField):
     edit_template_name = "combobox/template_edit.html"
     prp_template_name = "combobox/properties.html"
 
-    def belong_check(self, value, **kwargs):
-        options = []
-        for option in kwargs['options']:
-            options.append(option)
-        if value not in options:
-            raise ValidationError("Invalid value, not among options.")
- 
-
     def __str__(self):
         return "Combo Box"
 

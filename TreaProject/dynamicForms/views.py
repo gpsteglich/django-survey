@@ -290,19 +290,19 @@ def submit_form_entry(request, slug, format=None):
             elif not obj.required and obj.answer.__str__() == '':
                 pass
             else:
-                field = (Factory.get_class(obj.field_type))()
+                fld = (Factory.get_class(obj.field_type))()
                 try:
                     loaded = json.loads(final_version.json)
                     f_id = obj.field_id
                     kw = {}
                     val = Validations()
-                    serializer = ValidationSerializer(val, field.get_validations(loaded, f_id))
+                    serializer = ValidationSerializer(val, fld.get_validations(loaded, f_id))
                     if serializer.is_valid():
                         kw['restrictions'] = val
                     else:
                         raise ValidationError("Validations not recognized.")
-                    kw['options'] = field.get_options(loaded, f_id)
-                    field.validate(obj.answer, **kw)
+                    kw['options'] = fld.get_options(loaded, f_id)
+                    fld.validate(obj.answer, **kw)
                 except ValidationError as e:
                     error_log['error'] += e.message
         else:

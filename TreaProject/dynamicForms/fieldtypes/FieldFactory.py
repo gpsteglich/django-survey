@@ -18,5 +18,5 @@ class FieldFactory():
     def get_strings():
         l = {}
         for key in FieldFactory.fields:
-            l[key] = FieldFactory.fields[key].__str__()
+            l[key] = FieldFactory.fields[key]().__str__()
         return l
