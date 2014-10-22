@@ -51,6 +51,9 @@ class Field(object):
     
     def render_edit(self):
         return self.folder + self.edit_template_name
-
+    
+    def render_statistic(self):
+        return self.folder + self.sts_template_name
+    
     class Meta:
         abstract = True

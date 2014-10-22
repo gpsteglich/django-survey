@@ -381,7 +381,15 @@ class FieldPrpTemplateView(TemplateView):
             return 'fields/field_properties_base.html'
         field = Factory.get_class(self.kwargs.get('type'))
         return field().render_properties()
-    
+
+class FieldStsTemplateView(TemplateView):
+    """
+    Renders the field type statistics templates.
+    """
+    def get_template_names(self):
+        field = Factory.get_class(self.kwargs.get('type'))
+        return field().render_statistic()
+   
 
 @api_view(['GET'])
 def get_pct(request, pk, number, field_id, format=None):
@@ -396,13 +404,36 @@ def get_pct(request, pk, number, field_id, format=None):
 @api_view(['GET'])
 def getStatistics(request, pk, number):
     print("entre a la vista")
-        #data = { "estadistica": [{"id_field": {"id_tipo": "NUMBER","texto_pregunta": "NULL","valorquintil": "NULL","quintilY": "[y1,y2,y3,y4,y5]","promedio": "NULL","desviacion": "NULL"}}]};  
-    data={"mensaje":"prueba"}
+        
+    #data= { "idfield":{"mensaje":"prueba", "mensaje2":"prueba2"}, "idfield2":{"mensaje":"prueba3", "mensaje2":"prueba4"} }
+    data = {
+        1: {
+            "field_type": "number",
+            "field_text": "Pregunta1",
+            "mean": 9,
+            "mean_total": 3,
+            "standard_deviation": 4,
+            "standard_deviation_total": 3,
+            "quintilesX": ["Primer quintil", "Segundo quintil", "Tercer quintil", "Cuarto quintil", "Quinto quintil"],
+            "quintilesY": [8,1,3,4,5]
+        },
+        2: {
+            "field_type": "number",
+            "field_text": "Pregunta2",
+            "mean": 12,
+            "mean_total": 5,
+            "standard_deviation": 3,
+            "standard_deviation_total": 7,
+            "quintilesX": ["Primer quintil", "Segundo quintil", "Tercer quintil", "Cuarto quintil", "Quinto quintil"],
+            "quintilesY": [4,5,1,2,3]
+        }
+    }
 
 
     #json = JSON.parse(data);
     #return render_to_response('statistics.html', data)
     #return Response(content, status=status.HTTP_404_NOT_FOUND)
+    
     return Response(data=data,status=status.HTTP_200_OK);
             #return Response(data)
 

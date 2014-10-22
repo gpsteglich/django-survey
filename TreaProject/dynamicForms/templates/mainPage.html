@@ -138,7 +138,7 @@
                                                         {% ifequal v.status 0 %} disabled {% endifequal %}>
                                                         <span class="glyphicon glyphicon-pencil"></span>VIEW RESPONSES
                                                     </a>
-																	<a type="button" class="btn btn-default btn-sm" href= "/dynamicForms/statistics#?form={{form.id}}&ver={{v.number}}">
+																	<a type="button" class="btn btn-default btn-sm" href= "/dynamicForms/statistics#?form={{form.id}}&ver={{v.number}}" {% ifequal v.status 0 %} disabled {% endifequal %}>
                                                         <span class="glyphicon glyphicon-signal"></span>VIEW STATISTICS
                                                     </a>
                                                                                                        

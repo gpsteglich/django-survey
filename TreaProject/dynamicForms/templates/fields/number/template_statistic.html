@@ -1,0 +1,36 @@
+{% verbatim %} 
+    <div ac-chart="field.chart" 
+          ac-data= "field.data" 
+          ac-config= "field.conf" 
+          class="chart col-md-6">
+    </div>
+    <div class="col-md-6">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td>Mean</td>
+                    <td>{{field.m}}</td>
+                <tr>
+                    <td>Mean Total</td>
+                    <td>{{field.mt}}</td>
+                </tr>
+                <tr>
+                    <td>Standard Deviation</td>
+                    <td>{{field.sd}}</td>
+                </tr>
+                <tr>
+                    <td>Standard Deviation Total</td>
+                    <td>{{field.sdt}}</td>
+                </tr>
+                <tr>
+                    <td>Coso 1</td>
+                    <td>{{field.tf}}</td>    
+                </tr>
+                <tr>
+                    <td>Coso 2</td>
+                    <td>{{field.tnf}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+{% endverbatim %}

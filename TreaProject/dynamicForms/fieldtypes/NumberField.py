@@ -11,6 +11,7 @@ class NumberField(Field.Field):
     template_name = "number/template.html"
     edit_template_name = "number/template_edit.html"
     prp_template_name = "number/properties.html"
+    sts_template_name = "number/template_statistic.html"
     
     def check_min(self, value, min):
         if (value < min):
@@ -44,4 +45,4 @@ class NumberField(Field.Field):
     def __str__():
         return "Number"
 
-FieldFactory.FieldFactory.register('NumberField', NumberField)
+FieldFactory.FieldFactory.register('number', NumberField)
