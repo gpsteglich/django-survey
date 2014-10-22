@@ -31,7 +31,7 @@ class TextField(Field.Field):
         if (not val.valid_text()):
             raise ValidationError("Max length might not be less than 0.")
 
-    def __str__():
+    def __str__(self):
         return "Single Line Text"
 
 

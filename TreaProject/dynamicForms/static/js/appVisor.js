@@ -1,5 +1,7 @@
 'use strict';
 
+var url = '/dynamicForms/';
+
 (function () {
     /*
     * Module dynamicFormsFramework
@@ -8,11 +10,17 @@
     var app = angular.module('dynamicFormsFramework', ['ui.bootstrap','checklist-model'])
     .config(['$locationProvider','$httpProvider', function ($locationProvider, $httpProvider) {
         
-        $locationProvider.html5Mode(true);
+        //$locationProvider.html5Mode(true);
+        $locationProvider.html5Mode({
+		enabled: true,
+		requireBase: false
+		});
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';
 		$httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 
-    }]);
-    
+    }]).run(function($rootScope) {
+      	$rootScope.urlBase = url;
+    });
+
 })();
 

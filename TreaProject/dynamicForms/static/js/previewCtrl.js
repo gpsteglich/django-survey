@@ -8,10 +8,13 @@
      * The PreviewCtrl holds the logic to display a preview of the form
      * with all its functionalities.
      */
-    app.controller('PreviewCtrl', ['$scope','$http','$location', function ($scope, $http, $location) {
+    app.controller('PreviewCtrl', ['$scope','$http','$location','$rootScope', 
+            function ($scope, $http, $location, $rootScope) {
 
         var preview = $scope;
         var separator = '_';
+
+        preview.urlBase = $rootScope.urlBase;
 
         /*
         * This controller expects as a query params the form and version to display

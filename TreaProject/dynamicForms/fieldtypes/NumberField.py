@@ -47,7 +47,7 @@ class NumberField(Field.Field):
             raise ValidationError("The min value might not "
                 "be below the max value.")
 
-    def __str__():
+    def __str__(self):
         return "NumberField"
 
 FieldFactory.FieldFactory.register('NumberField', NumberField)

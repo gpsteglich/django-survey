@@ -9,7 +9,6 @@
         {% endverbatim %}
         <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-        <base href="dynamicForms">
 	</head>
 	<body class="radial-center">
         <div ng-include="'visor_template'"></div>
@@ -19,14 +18,15 @@
         <script src={% static "angular/angular.js" %}></script>
         <script src={% static "angular/sortable.js" %}></script>
         <script src={% static "angular/checklist-model.js" %}></script>
-
         <script src={% static "bootstrap/js/ui-bootstrap.min.js" %}></script>
-	    <script src={% static "js/app.js" %}></script>
+        
         <script src={% static "js/operators/operatorFactory.js" %}></script>
         <script src={% static "js/operators/operatorField.js" %}></script>
         <script src={% static "js/operators/operatorList.js" %}></script>
         <script src={% static "js/operators/operatorChecks.js" %}></script>
         <script src={% static "js/operators/operatorNumber.js" %}></script>
+
+        <script src={% static "js/app.js" %}></script>
         <script src={% static "js/previewCtrl.js" %}></script>
     </body>
     

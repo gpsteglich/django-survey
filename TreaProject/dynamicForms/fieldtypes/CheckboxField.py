@@ -11,17 +11,8 @@ class CheckboxField(ListField):
     template_name = "checkbox/template.html"
     edit_template_name = "checkbox/template_edit.html"
     prp_template_name = "checkbox/properties.html"
-    
-    def belong_check(self, value, **kwargs):
-        options = []
-        for option in kwargs['options']:
-            options.append(option['label'])
-        values = value.split('#')
-        for val in values:
-            if val not in options:
-                raise ValidationError("Invalid value, not among options.")
         
-    def __str__():
+    def __str__(self):
         return "Checkbox"
 
 

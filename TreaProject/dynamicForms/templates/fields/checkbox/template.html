@@ -9,7 +9,7 @@
          ng-repeat ="option in question.options" >
 	    <div class="checkbox"  ng-required="question.required">
 		    <label>
-		      <input type="checkbox" checklist-model="question.answer" checklist-value="option.label" > {{option.label}}
+		      <input type="checkbox" checklist-model="question.answer" checklist-value="option.id" > {{option.label}}
 		    </label>
 	 	</div>
     </div>

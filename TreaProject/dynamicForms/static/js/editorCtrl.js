@@ -7,17 +7,20 @@
     /*
      * This controller handles the logic to create, edit and save a form.
      */    
-    app.controller('EditorCtrl', ['$scope','$http','$location', '$window', function ($scope, $http, $location, $window) {
+    app.controller('EditorCtrl', ['$scope','$http','$location', '$window', '$rootScope', 
+                function ($scope, $http, $location, $window, $rootScope) {
         
     	/*
     	 * editorMode variable determines if the context is for editing or showing the
     	 * form on the fields templates. 
     	 */
-    	$scope.editorMode = true;
+        
     	$scope.disabled = true;     //disables all input fields
         
         var editor = this;
         
+        editor.urlBase = $rootScope.urlBase;
+
         editor.FieldTypes = [];
         
         $http.get('constants/')
@@ -27,8 +30,9 @@
                     alert(status+' data:'+data);
                 });
         
-        var checkboxOption = {
+        var option = {
             label : 'new option',
+            id : 0
         };
         
         editor.max_id = 0;
@@ -77,8 +81,9 @@
         };
 
         editor.addOption = function() {
-            var option = angular.copy(checkboxOption);   
-            editor.selectedField.options.push(option);
+            var option1 = angular.copy(option);   
+            editor.selectedField.options.push(option1);
+            option1.id =  ++editor.selectedField.max_id;
         };
 
         editor.deleteOption = function (index){
@@ -89,25 +94,21 @@
              editor.questions.splice(editor.questions.indexOf(editor.pages[page].fields[index]));  
              editor.pages[page].fields.splice(index,1);  
         };
+        
+        editor.optionsAdded = [];
+        editor.applyOptions = function(){     
+            
+            editor.optionsAdded = editor.optionsAdded.map(function(o){
+                return { label:o.toString(), id: 0   };
 
-        /*editor.newField =  {
-        	field_id : 0,
-            field_type:'' ,
-            text: '',
-            answer: [],
-            required: false,
-            validations: {
-                min_number: 0,
-                max_number: 100,
-                max_len_text: 255,
-            },
-            options: [],
-            tooltip:'',
-            dependencies: {
-                fields: [],
-                pages: [],
-            }
-        };*/
+            });
+           
+            for(var i = 0;i<editor.optionsAdded.length; i++){
+                editor.optionsAdded[i].id = ++editor.selectedField.max_id;
+            }            
+            editor.selectedField.options = editor.selectedField.options.concat(angular.copy(editor.optionsAdded));
+            editor.optionsAdded = [];
+        };
     
         editor.createField = function(type){
             return fieldFactory.getField(type).buildField();
@@ -263,13 +264,12 @@
                     editor.formIdParam = data.id;
                     editor.version.form = data.id;
                     editor.version.json = angular.toJson({'pages':editor.pages,'logic':editor.logic});
-                    console.log('aaaaaaaaa1');
                     $http.post('version/'+editor.formIdParam+'/', editor.version)
                     .success( function(data, status, headers, config){
                         editor.versionIdParam = data.number;
                         editor.version = data;
                         if (formStatus == 1){
-                            $window.location.href = '/dynamicForms/main';
+                            $window.location.href = 'main';
                         } else {
                             // update the url parameters
                             $location.search({form:editor.formIdParam, ver:editor.versionIdParam});
@@ -292,7 +292,7 @@
                     .success( function(data, status, headers, config){
                         editor.version = data;
                         if (formStatus == 1){
-                            $window.location.href = '/dynamicForms/main';
+                            $window.location.href = 'main';
                         }
                     })
                     .error(function(data, status, headers, config) {
@@ -425,7 +425,6 @@
                 origin_id = dest_page.conditions[k].field;
                 origin = editor.getFieldById(origin_id);
                 origin.dependencies.pages.push(pageNum);
-                console.log(origin.dependencies.pages);
             }
         };
 
