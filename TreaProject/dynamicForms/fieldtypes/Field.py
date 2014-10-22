@@ -24,13 +24,13 @@ class Field(object):
         if not value:
             raise ValidationError("Problem with the answer.")
         
-    def get_validations(self, json, id):
+    def get_validations(self, json, f_id):
         for page in json['pages']:
             for field in page['fields']:
-                if (field['field_id'] == id):
+                if (field['field_id'] == f_id):
                     return field['validations']
 
-    def get_options(self, json, id):
+    def get_options(self, json, f_id):
         pass
 
     def check_consistency(self, **kwargs):

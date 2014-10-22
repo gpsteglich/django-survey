@@ -199,6 +199,7 @@
 
             // Persist form
             visor.save = function(){
+            	visor.pre_salvar();
                 $http.post('visor/submit/'+visor.slug,visor.questions)
                     .success( function(data, status, headers, config){
                         $window.location.href = visor.urlVisor + 'form/submitted';

@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate
 from django.test.client import Client
 import datetime;
 
-from dynamicForms import login
+from dynamicForms import auth
 from dynamicForms.fields import PUBLISHED, DRAFT
 from dynamicForms.models import Form,Version,FormEntry,FieldEntry
 
@@ -22,10 +22,10 @@ class FormTestCase(TestCase):
         self.client.login(username='user', password='password')
         
         #create some testing forms
-        self.f1 = models.Form.objects.create(title = "new form1", owner= user)
-        self.v1 = models.Version.objects.create(json='{"prueba":"valor"}', form=f1)
-        self.f2 = models.Form.objects.create(title = "new form2", owner= user)
-        self.v2 = models.Version.objects.create(json='{"prueba":"valor"}', form=f2)
+        self.f1 = Form.objects.create(title = "new form1", owner= user)
+        self.v1 = Version.objects.create(json='{"prueba":"valor"}', form=f1)
+        self.f2 = Form.objects.create(title = "new form2", owner= user)
+        self.v2 = Version.objects.create(json='{"prueba":"valor"}', form=f2)
                                       
     def test_new_version_form(self):
         

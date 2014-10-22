@@ -24,7 +24,7 @@ class EmailField(TextField.TextField):
         base.append(self.mail_check)
         return base
         
-    def __str__():
+    def __str__(self):
         return "Email"
 
 FieldFactory.FieldFactory.register('EmailField', EmailField)

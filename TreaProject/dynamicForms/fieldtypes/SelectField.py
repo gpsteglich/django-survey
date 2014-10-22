@@ -20,7 +20,7 @@ class SelectField(ListField):
             raise ValidationError("Invalid value, not among options.")
  
 
-    def __str__():
+    def __str__(self):
         return "Combo Box"
 
 

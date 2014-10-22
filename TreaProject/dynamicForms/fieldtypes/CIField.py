@@ -41,7 +41,7 @@ class CIField(Field.Field):
         except (ValueError, TypeError):
             raise ValidationError('Enter a valid integer.', code='invalid')
         
-    def __str__():
+    def __str__(self):
         return "Cedula"
 
 

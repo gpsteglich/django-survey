@@ -11,7 +11,7 @@ class TextAreaField(TextField.TextField):
     edit_template_name = "text_area/template_edit.html"
     prp_template_name = "text_area/properties.html"
 
-    def __str__():
+    def __str__(self):
         return "Multi Line Text"
 
 FieldFactory.FieldFactory.register('TextAreaField', TextAreaField)
