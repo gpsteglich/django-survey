@@ -208,7 +208,8 @@
             // Persist form
             visor.save = function(){
             	visor.pre_salvar();
-                $http.post('visor/submit/'+visor.slug,visor.questions)
+                console.log('saving');
+                $http.post('visor/submit/'+visor.slug+'/',visor.questions)
                     .success( function(data, status, headers, config){
                     	//FIXTHIS
                     	visor.urlVisor = 'visor/';
