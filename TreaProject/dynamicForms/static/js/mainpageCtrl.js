@@ -7,8 +7,11 @@
     /*
      * This controller handles the logic to display the list of forms
      */
-    app.controller('MainPageCtrl', ['$scope','$http','$location', '$window', function ($scope, $http, $location, $window) {
+    app.controller('MainPageCtrl', ['$scope','$http','$location', '$window','$rootScope', 
+            function ($scope, $http, $location, $window, $rootScope) {
     	
+        $scope.urlBase = $rootScope.urlBase;
+
     	var mainPage = this;
         mainPage.formSlugParam = ($location.search()).form;
         mainPage.versionIdParam = ($location.search()).ver;
@@ -64,7 +67,7 @@
         }
             
         mainPage.getResponses = function(){
-            $http.get('/dynamicForms/responses/'+mainPage.formSlugParam+'/'+ mainPage.versionIdParam+'/')
+            $http.get('responses/'+mainPage.formSlugParam+'/'+ mainPage.versionIdParam+'/')
             .success(function(data){
                 mainPage.json = data;
             })

@@ -1,5 +1,7 @@
 'use strict';
 
+var url = '/dynamicForms/';
+
 (function () {
     /*
     * Module dynamicFormsFramework
@@ -11,5 +13,7 @@
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';
 		$httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 
-    }]);
+    }]).run(function($rootScope) {
+      	$rootScope.urlBase = url;
+    });
 })();

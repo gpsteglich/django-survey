@@ -7,7 +7,8 @@
         /*
          * The VisorCtrl holds the logic to display, validate and submit the form.
          */
-        app.controller('VisorCtrl', ['$scope','$http','$location', '$window', function ($scope, $http, $location, $window) {
+        app.controller('VisorCtrl', ['$scope','$http','$location', '$window', '$rootScope',
+                function ($scope, $http, $location, $window, $rootScope) {
 
             /*
             *  This controller is initialiced by ui-router, so it cant be used with ng-controller
@@ -15,7 +16,10 @@
             */
             var visor = $scope;
             
-            var separator = '/';
+            var separator = '_';
+
+            visor.urlBase = $rootScope.urlBase;
+
 
             /*
              * To get the form the slug is catched form the path.
@@ -29,7 +33,7 @@
             };
             
                 // Load last published Version
-            $http.get('/dynamicForms/visor/publishVersion/'+visor.slug)
+            $http.get('visor/publishVersion/'+visor.slug)
                 .success(function(data){
                     visor.version = data;
                     visor.pages = JSON.parse(data.json).pages;
@@ -55,7 +59,6 @@
                     var field = visor.questions[j];
                     visor.evaluateCondition(field.field_id);
                 }
-                console.log(visor.showPageValues);
             };
 
             visor.updateDependencies = function(field_id){
@@ -68,7 +71,6 @@
                 for (var j=0; j < field_org.dependencies.pages.length; j++){
                     visor.evaluatePageCondition(field_org.dependencies.pages[j]);
                 }
-                console.log(visor.showPageValues);
             };
 
             visor.evaluateCondition = function(field_id){
@@ -160,8 +162,7 @@
                 }
             };
 
-                // Persist form
-              visor.save = function(){
+            visor.pre_salvar = function(){
                 visor.questions = [];
                 for (var i=0; i< visor.pages.length; i++) {
                     visor.questions = visor.questions.concat(angular.copy(visor.pages[i].fields));
@@ -176,26 +177,31 @@
                         respuesta += visor.questions[i].options[visor.questions[i].options.length-1].id;
                       
                         visor.questions[i].options = respuesta;
-                         alert("question " + i + " options:  " + visor.questions[i].options); //take out when finished
+                        //TODO: take out when finished
+                        alert("question " + i + " options:  " + visor.questions[i].options);
                     }else{
                         visor.questions[i].options= visor.questions[i].options.join('#');
-                         
-                         alert("question " + i + " options:  " + visor.questions[i].options); //take out when finished
+                        //TODO: take out when finished
+                        alert("question " + i + " options:  " + visor.questions[i].options); 
                     }
                     visor.questions[i].answer = visor.questions[i].answer.join('#');
-                    alert('question ' + i + ' answer: ' + visor.questions[i].answer); //take out when finished
+                    //TODO: take out when finished
+                    alert('question ' + i + ' answer: ' + visor.questions[i].answer);
 
                 }
-                //FIXME: Ver si se puede emprolijar o es la única solución
                 for (var j=0; j< visor.questions.length; j++) {
                     delete visor.questions[j].validations;
                     delete visor.questions[j].tooltip;
                     delete visor.questions[j].options;
                     delete visor.questions[j].dependencies;
                 }
-                $http.post('/dynamicForms/visor/submit/'+visor.slug,visor.questions)
+            };
+
+            // Persist form
+            visor.save = function(){
+                $http.post('visor/submit/'+visor.slug,visor.questions)
                     .success( function(data, status, headers, config){
-                        $window.location.href = '/dynamicForms/visor/form/submitted';
+                        $window.location.href = visor.urlVisor + 'form/submitted';
                     })
                     .error(function(data, status, headers, config) {
                         alert('Error saving data: ' + data.error);
@@ -213,8 +219,6 @@
             * This function watches any change in the url and updates the selected page.
             */
             visor.$on('$locationChangeSuccess', function(event) {
-                var hash = $location.hash();
-                var slugTemp = $location.hash().split(separator)[1];
                 var changePage = $location.hash().split(separator)[1] || 0;
                 changePage = parseInt(changePage);
                 if (changePage.isNaN){

@@ -12,11 +12,11 @@
                             <h3>{{selectedPage.subTitle}}</h3>
                         </div>
                         <div ng-repeat="question in selectedPage.fields" class="form-group">
-                            <div ng-include="'/dynamicForms/field/' + question.field_type"></div>
+                            <div ng-include="'field/' + question.field_type"></div>
                         </div>
                     </div>
                     <div style="padding-bottom:50px;">
-                    <!-- page navegation buttons -->
+                        <!-- page navegation buttons -->
                         <button type="button" ng-click="previous()" ng-show="canPrevious()"
                             class="btn btn-primary pull-left">
                             <span class="glyphicon glyphicon-arrow-left">
