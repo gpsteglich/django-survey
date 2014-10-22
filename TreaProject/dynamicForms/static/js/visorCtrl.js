@@ -190,10 +190,18 @@
 
                 }
                 for (var j=0; j< visor.questions.length; j++) {
-                    delete visor.questions[j].validations;
-                    delete visor.questions[j].tooltip;
-                    delete visor.questions[j].options;
-                    delete visor.questions[j].dependencies;
+                    if (visor.questions[j].validations){
+                    	delete visor.questions[j].validations;
+                    }
+                    if (visor.questions[j].tooltip){
+                    	delete visor.questions[j].tooltip;
+                    }
+                    if (visor.questions[j].options){
+                    	delete visor.questions[j].options;
+                    }
+                    if (visor.questions[j].dependencies){
+                    	delete visor.questions[j].dependencies;
+                    }
                 }
             };
 
