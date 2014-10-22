@@ -24,7 +24,7 @@ class UsuarioField(NumberField.NumberField):
         base.append(self.model_check)
         return base
     
-    def __str__():
+    def __str__(self):
         return "Usuario"
     
 FieldFactory.FieldFactory.register('UsuarioField', UsuarioField)
@@ -49,7 +49,7 @@ class MatriculaField(Field.Field):
         base.append(self.pattern_check)
         return base
     
-    def __str__():
+    def __str__(self):
         return "Matricula"
     
 FieldFactory.FieldFactory.register('MatriculaField', MatriculaField)

@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
 
 
 def user_login(request):
@@ -22,7 +23,7 @@ def user_login(request):
             if _user.is_active:
                 #login and send user to mainpage
                 login(request, _user)
-                return HttpResponseRedirect("/dynamicForms/main/")
+                return HttpResponseRedirect(settings.FORMS_BASE_URL + "main/")
             else:
                 #an inactive account was used- no login in.
                 return HttpResponse("Your account is disabled.")
@@ -40,4 +41,4 @@ def user_logout(request):
     logout(request)
 
     # Take the user back to the homepage.
-    return HttpResponseRedirect('/dynamicForms/login/')
+    return HttpResponseRedirect(settings.FORMS_BASE_URL + 'login/')

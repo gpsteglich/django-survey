@@ -102,3 +102,5 @@ FIELD_FILES = (
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+FORMS_BASE_URL = '/dyn/'

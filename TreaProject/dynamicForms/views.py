@@ -6,6 +6,7 @@ from django.http.response import HttpResponseRedirect
 from django.views.generic import TemplateView
 from django.shortcuts import render_to_response
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.conf import settings
 
 from rest_framework.decorators import api_view
 from rest_framework import generics
@@ -207,7 +208,7 @@ class NewVersion(generics.CreateAPIView):
             #create a copy of the version and save it on database
             new_version = Version(json=version.json, form=new_form)
             new_version.save()
-        return HttpResponseRedirect("/dynamicForms/main/")
+        return HttpResponseRedirect(settings.FORMS_BASE_URL + "main/")
 
 
 class DeleteVersion(generics.DestroyAPIView):
@@ -228,7 +229,7 @@ class DeleteVersion(generics.DestroyAPIView):
                 form.delete()
             else:
                 version.delete()
-            return HttpResponseRedirect("/dynamicForms/main/")
+            return HttpResponseRedirect(settings.FORMS_BASE_URL + "main/")
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
@@ -243,7 +244,7 @@ class DeleteForm(generics.DestroyAPIView):
         #get form and delete it
         form = Form.objects.get(id=pk)
         form.delete()
-        return HttpResponseRedirect("/dynamicForms/main/")
+        return HttpResponseRedirect(settings.FORMS_BASE_URL + "main/")
 
 
 class FillForm(generics.RetrieveUpdateDestroyAPIView):
