@@ -203,13 +203,14 @@
                         editor.version = data;
                         editor.pages = JSON.parse(data.json).pages;
                         editor.logic = JSON.parse(data.json).logic;
-                        var questions = [];
+                        editor.questions = [];
                         for (var i=0; i<editor.pages.length; i++) {
-                            questions = questions.concat(editor.pages[i].fields);
+                            editor.questions = editor.questions.concat(editor.pages[i].fields);
                         }
-                        editor.max_id = Math.max.apply(Math,questions.map(function(o){
+                        editor.max_id = Math.max.apply(Math,editor.questions.map(function(o){
                             return o.field_id;
                         }));
+
                         if (isNaN(editor.max_id)){
                             editor.max_id = 0;
                         }
@@ -348,7 +349,7 @@
             fields: {},
             pages: {},
         };
-        editor.questions = [];
+        
         editor.configLogicField = function (fieldId){
             editor.questions = [];
             for (var i=0; i< editor.pages.length; i++) {

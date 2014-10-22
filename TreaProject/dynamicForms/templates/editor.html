@@ -30,7 +30,7 @@
 	                                <div  ng-repeat="page in visor.pages"  ng-click="visor.selectPage($index)" ng-class="{'selected-page':page==visor.selectedPage}"> 
 	                                    <div class="pull-right">
 	                                        <label>Page {{$index + 1}}</label>
-	                                        <button class="btn" ng-show="editorMode" ng-click="visor.deletePage($index)"
+	                                        <button class="btn" ng-click="visor.deletePage($index)"
 	                                                style="background-color:transparent;padding:0;">
 	                                            <span class="glyphicon glyphicon-remove"></span>
 	                                        </button>
@@ -41,8 +41,8 @@
 	                                    </div>
 	                                    <ul ui-sortable ng-model="page.fields" class="panel-body list-body" style="list-style-type: none;">
 		                                    <li  ng-repeat="question in page.fields"  ng-class="{'selected-field':question==visor.selectedField}" ng-click="visor.selectField($parent.$index, $index)"
-		                                            style="padding:10px;" itemcell class="field-color"> 	                                     
-		                                        <button class="btn pull-right" ng-show="editorMode" ng-click="visor.deleteField($parent.$index, $index)"
+		                                            style="padding:10px;" itemcell class="field-color">
+		                                        <button class="btn pull-right" ng-click="visor.deleteField($parent.$index, $index)"
 		                                                style="background-color:transparent;padding:0;">
 		                                            <span class="glyphicon glyphicon-remove"></span>
 		                                        </button>
@@ -74,8 +74,6 @@
 			            </div>
 	                </div>
 	            </div>
-                <pre>{{visor.selectedField |json}}</pre>
-
 	         </div>
 	    {%endverbatim%}
 	   {%endblock%}
