@@ -1,9 +1,8 @@
-{% load staticfiles %}
+{% load staticfiles sekizai_tags %}
 <!DOCTYPE html>
 <html lang="en">
 
 <!-- variable global para setear url base -->
-{% with "/dynamicForms/" as urlBase %}
 
 <head>
     <!-- metadata-->
@@ -13,23 +12,31 @@
     <meta name="description" content="">
     <meta name="author" content="">
     
-    <!-- jQuery Version 1.11.0 -->
+    <!-- jQuery Version 1.11.0 ==>Que hace esto aca? -->
     <script src={% static 'jquery/js/jquery-2.1.1.min.js'%} ></script>
+    {% render_block "css" postprocessor "compressor.contrib.sekizai.compress" %}
+
+    {% addtoblock "css" %}
     <!-- css Styles-->
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    {% endaddtoblock %}
+    {% addtoblock "css" %}
      <!-- Bootstrap Core CSS -->
     <link href= {% static 'bootstrap/css/bootstrap.min.css'%} rel="stylesheet">
+    {% endaddtoblock %}
     <!-- Custom CSS -->
     <link href={% static 'bootstrap/css/sb-admin.css'%} rel="stylesheet">
+    {% addtoblock "css" %}
     <!-- Custom Fonts -->
     <link href={% static 'bootstrap/fonts/font-awesome-4.1.0/css/font-awesome.min.css' %} rel="stylesheet" type="text/css">
-    {%block styles%}{%endblock%} 
+    {% endaddtoblock %}
 
     {%block title%} <title> SB Admin - Bootstrap Admin Template </title> {%endblock%} 
     
 </head>
 
 <body ng-app="dynamicFormsFramework">
+{% with "/dynamicForms/" as urlBase %}
 
     <div id="wrapper">
         <!-- Navigation -->
@@ -72,13 +79,20 @@
         {%block content%} {%endblock%} <!-- Content goes here -->
     </div>
    
- <!-- Bootstrap Core JavaScript -->
+{% endwith %}
+    <!-- Bootstrap Core JavaScript -->
+    {% render_block "js" postprocessor "compressor.contrib.sekizai.compress" %}
+
+    {% addtoblock "js" %}
     <script src={% static 'jquery/js/jquery-2.1.1.min.js' %}></script>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
     <script src={% static 'bootstrap/js/bootstrap.min.js' %}></script>
-    {%block scripts%} {%endblock%}  
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
     <script type="text/javascript">
         $('.collapse').collapse()
     </script>
+    {% endaddtoblock %}
 </body>
-{% endwith %}
 </html>

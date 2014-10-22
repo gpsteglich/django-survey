@@ -1,12 +1,15 @@
 {%extends 'base.html' %}
-{% load staticfiles %}
+{% load staticfiles sekizai_tags %}
 
 <html>
-	<head>
-	    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'css/visorTest.css' %}">
-	</head>
 	{%block content%}
+		{% addtoblock "css" %}
+		<!-- Ya esta en el base, que hace aca? -->
+	    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+	    {% endaddtoblock %}
+        {% addtoblock "css" %}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/visorTest.css' %}">
+        {% endaddtoblock %}
 		<div id="page-wrapper">
 	        {% verbatim %} 
 	          
@@ -76,47 +79,94 @@
 	            </div>
 	         </div>
 	    {%endverbatim%}
-	   {%endblock%}
-
-	   {%block scripts%}
+			{% addtoblock "js" %}
             <script src={% static "jquery/js/jquery-2.1.1.min.js" %}></script>
+			{% endaddtoblock %}
+            {% addtoblock "js" %}
             <script src={% static "jquery/js/jquery-ui.min.js" %}></script>           
+			{% endaddtoblock %}
+		    {% addtoblock "js" %}
 		    <script src={% static "angular/angular.min.js" %}></script>
+			{% endaddtoblock %}
+            {% addtoblock "js" %}
             <script src={% static "bootstrap/js/ui-bootstrap.min.js" %}></script>
+			{% endaddtoblock %}
+            {% addtoblock "js" %}
             <script src={% static "angular/sortable.js" %}></script>
+			{% endaddtoblock %}
+            {% addtoblock "js" %}
             <script src={% static "angular/checklist-model.js" %}></script>
+			{% endaddtoblock %}
+		    {% addtoblock "js" %}
 		    <script src={% static "js/app.js" %}></script>
+			{% endaddtoblock %}
 		    <!-- operators -->
+		    {% addtoblock "js" %}
 		    <script src={% static "js/operators/operatorFactory.js" %}></script>
+		    {% endaddtoblock %}
+		    {% addtoblock "js" %}
 		    <script src={% static "js/operators/operatorField.js" %}></script>
+		    {% endaddtoblock %}
+		    {% addtoblock "js" %}
 		    <script src={% static "js/operators/operatorList.js" %}></script>
+		    {% endaddtoblock %}
+		    {% addtoblock "js" %}
 		    <script src={% static "js/operators/operatorChecks.js" %}></script>
+		    {% endaddtoblock %}
+		    {% addtoblock "js" %}
 		    <script src={% static "js/operators/operatorNumber.js" %}></script>
+		    {% endaddtoblock %}
 		    <!-- fields -->
+		    {% addtoblock "js" %}
 		    <script src={% static "js/fields/FieldFactory.js" %}></script>
+		    {% endaddtoblock %}
+		    {% addtoblock "js" %}
 		    <script src={% static "js/fields/FieldBase.js" %}></script>
+		    {% endaddtoblock %}
+		    {% addtoblock "js" %}
 		    <script src={% static "js/fields/TextField.js" %}></script>
+		    {% endaddtoblock %}
+		    {% addtoblock "js" %}
 		    <script src={% static "js/fields/TextAreaField.js" %}></script>
+		    {% endaddtoblock %}
+		    {% addtoblock "js" %}
 		    <script src={% static "js/fields/EmailField.js" %}></script>
+		    {% endaddtoblock %}
+		    {% addtoblock "js" %}
 		    <script src={% static "js/fields/CheckboxField.js" %}></script>
+		    {% endaddtoblock %}
+		    {% addtoblock "js" %}
 		    <script src={% static "js/fields/NumberField.js" %}></script>
+		    {% endaddtoblock %}
+		    {% addtoblock "js" %}
 		    <script src={% static "js/fields/SelectField.js" %}></script>
+		    {% endaddtoblock %}
+		    {% addtoblock "js" %}
 		    <script src={% static "js/fields/CIField.js" %}></script>
+			{% endaddtoblock %}
 
+			{% addtoblock "js" %}
             <script src={% static "js/editorCtrl.js" %}></script>
+            {% endaddtoblock %}
+            {% addtoblock "js" %}
             <script src={% static "bootstrap/js/bootstrap.min.js"%}></script>
-            // <script type="text/javascript">
-            // 	function changeTab() {
-            // 		 $("#myTab li:eq(1) a").tab('show');
-            // 	}
-            // </script>
+            {% endaddtoblock %}
+<!--
+            <script type="text/javascript">
+            	function changeTab() {
+            		 $("#myTab li:eq(1) a").tab('show');
+            	}
+            </script>
+-->
+			{% addtoblock "js" %}
             <script type="text/javascript">
 				$(document).ready(function(){ 
     				$("#myTab li:eq(1) a").tab('show');
     				
 					});
 			</script>
-        {%endblock%}   
+			{% endaddtoblock %}
+    {%endblock%}   
             
             
 		</div> <!-- div de page-wrapper -->

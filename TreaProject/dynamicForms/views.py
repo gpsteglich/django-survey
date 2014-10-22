@@ -6,6 +6,7 @@ from django.http.response import HttpResponseRedirect
 from django.views.generic import TemplateView
 from django.shortcuts import render_to_response
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.template import RequestContext
 
 from rest_framework.decorators import api_view
 from rest_framework import generics
@@ -51,7 +52,7 @@ class FormList(generics.ListCreateAPIView):
             if len(vers_dict) > 0:
                 last_version = vers_dict[0]
                 f["lastStatus"] = last_version['status']
-        return render_to_response('mainPage.html', {"formList": forms})
+        return render_to_response('mainPage.html', {"formList": forms}, context_instance=RequestContext(request))
 
 @login_required
 @api_view(['GET'])
@@ -88,7 +89,7 @@ def ordered_forms(request, order="id", ad="asc"):
             last_version = vers_dict[0]
             f["lastStatus"] = last_version['status']
 
-    return render_to_response('mainPage.html', {"formList": forms})
+    return render_to_response('mainPage.html', {"formList": forms}, context_instance=RequestContext(request))
 
 
 class FormDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -326,7 +327,7 @@ def submit_form_entry(request, slug, format=None):
 #TODO: esta función no se usa.
 @login_required
 def editor(request):
-    return render_to_response('editor.html', {})
+    return render_to_response('editor.html', {}, context_instance=RequestContext(request))
 
 
 @login_required
