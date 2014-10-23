@@ -35,7 +35,7 @@ class StatisticsCtrl():
                 else:
                     raise Exception("There are no field entries for this form.")
         
-        #print(statistics)        
+     
         return statistics
                 
                     

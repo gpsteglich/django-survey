@@ -409,8 +409,11 @@ class StatisticsView(generics.RetrieveAPIView):
         """
         Returns statistics for version (pk, number)
         """
-        statistics = StatisticsCtrl().getStatistics(pk, number)
-        return Response(data=statistics,status=status.HTTP_200_OK)
+        try:
+            statistics = StatisticsCtrl().getStatistics(pk, number)
+            return Response(data=statistics,status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
 
 
