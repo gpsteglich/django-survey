@@ -401,12 +401,8 @@ class StatisticsView(generics.RetrieveAPIView):
         """
         Returns statistics for version (pk, number)
         """
-        try:
-            statistics = StatisticsCtrl().getStatistics(pk, number)
-            return Response(data=statistics,status=status.HTTP_200_OK)
-        except:
-            message = {"message": "No statistics for this version."}
-            return Response(data=message, status=status.HTTP_400_BAD_REQUEST)
+        statistics = StatisticsCtrl().getStatistics(pk, number)
+        return Response(data=statistics,status=status.HTTP_200_OK)
 
 
 

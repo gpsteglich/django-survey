@@ -43,7 +43,7 @@ class NumberField(Field.Field):
                 raise ValidationError("The min value might not "
                 "be below the max value.")
                 
-    def get_statistics(self, data):
+    def get_statistics(self, data, options):
         """
         Receives a list of integers and the text associated with the field,
         returns a serialized NumericStatistics object containing statistical 

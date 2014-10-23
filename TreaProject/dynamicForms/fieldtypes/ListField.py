@@ -12,6 +12,9 @@ class ListField(Field):
         options = kwargs['options']
         if (options == []):
             raise ValidationError("List fields need at least one option.")
+    
+    def getStatistics(self, data_list, options):
+        return {}
        
     class Meta:
         abstract = True

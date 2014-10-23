@@ -40,7 +40,7 @@ class Field(object):
         responses = total - queryset.filter(answer="").count()
         return (responses, total)
     
-    def get_statistics(self, data_list):
+    def get_statistics(self, data_list, options):
         """
         returns a the statistics related to the data list. 
         """

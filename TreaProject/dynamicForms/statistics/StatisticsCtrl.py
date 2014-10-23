@@ -26,10 +26,9 @@ class StatisticsCtrl():
                 if len(fieldEntries) != 0:
                     data = []
                     for fieldEntry in fieldEntries:
-                        data.append(fieldEntry.answer)
-                    print(field["field_type"])
+                        data.append(fieldEntry.answer)                                      
                     fieldType = Factory.get_class(field["field_type"])
-                    fieldStatistics = fieldType().get_statistics(data)
+                    fieldStatistics = fieldType().get_statistics(data, field["options"])
                     fieldStatistics["field_type"] = field["field_type"]
                     fieldStatistics["field_text"] = field["text"]
                     statistics[field["field_id"]] = fieldStatistics

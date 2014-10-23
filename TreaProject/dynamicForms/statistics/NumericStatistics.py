@@ -14,12 +14,16 @@ class NumericStatistics():
         
         listTotal = []    #null values are counted as 0
         list = []         #without null values
+        self.total_filled = 0
+        self.total_not_filled = 0
         for data in data_list:
             if data != "":
                 listTotal.append(int(data))
                 list.append(int(data))
+                self.total_filled += 1 
             else:
                 listTotal.append(0)
+                self.total_not_filled += 1
            
         self.mean       = mean(list)
         self.standard_deviation = pstdev(list, self.mean)
