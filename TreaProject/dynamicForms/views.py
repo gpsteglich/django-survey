@@ -7,6 +7,7 @@ from django.views.generic import TemplateView
 from django.shortcuts import render_to_response
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.template import RequestContext
+from django.utils.decorators import method_decorator
 
 from rest_framework.decorators import api_view
 from rest_framework import generics
@@ -36,6 +37,10 @@ class FormList(generics.ListCreateAPIView):
 
     def pre_save(self, obj):
         obj.owner = self.request.user
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(FormList, self).dispatch(*args, **kwargs)
 
     def get(self, request):
         forms = Form.objects.values()
@@ -103,6 +108,9 @@ class FormDetail(generics.RetrieveUpdateDestroyAPIView):
     def pre_save(self, obj):
         obj.owner = self.request.user
 
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(FormDetail, self).dispatch(*args, **kwargs)
 
 class VersionList(generics.ListCreateAPIView):
     """
@@ -113,6 +121,10 @@ class VersionList(generics.ListCreateAPIView):
     serializer_class = VersionSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(VersionList, self).dispatch(*args, **kwargs)
+    
     def get(self, request, pk, format=None):
         try:
             versions = Form.objects.get(id=pk).versions.all()
@@ -140,6 +152,10 @@ class VersionDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = VersionSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(VersionDetail, self).dispatch(*args, **kwargs)
+    
     def get_object(self, pk, number):
         try:
             form = Form.objects.get(id=pk)
@@ -185,6 +201,10 @@ class NewVersion(generics.CreateAPIView):
     """
     permission_classes = (permissions.IsAuthenticated,)
 
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(NewVersion, self).dispatch(*args, **kwargs)
+    
     def get(self, request, pk, number, action):
         try:
             #get version of form that is going to be duplicated-
@@ -217,6 +237,10 @@ class DeleteVersion(generics.DestroyAPIView):
     """
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(DeleteVersion, self).dispatch(*args, **kwargs)
+    
     def get(self, request, pk, number, format=None):
         ##get related form of the version that is going to be deleted
         form = Form.objects.get(id=pk)
@@ -240,6 +264,10 @@ class DeleteForm(generics.DestroyAPIView):
     """
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(DeleteForm, self).dispatch(*args, **kwargs)
+    
     def get(self, request, pk):
         #get form and delete it
         form = Form.objects.get(id=pk)
