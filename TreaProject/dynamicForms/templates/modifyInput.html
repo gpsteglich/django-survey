@@ -18,22 +18,22 @@
                 <div  ng-include="'palette'"></div>
             </div>
             <div class="tab-pane active" id="tab2">
-                 <div  ng-include="'field_properties/'+ visor.getSelectedField()"></div>    
+                 <div  ng-include="'field_properties/'+ editor.getSelectedField()"></div>    
             </div>
             <div class="tab-pane" id="tab3">
                 <div class="form-group">
                     <button type="button" class="btn btn-danger btn-md tridimensonal-button"  
-                        data-toggle="modal" data-target="#myToolTipModal" ng-disabled="visor.selectedField.tooltip==undefined">
+                        data-toggle="modal" data-target="#myToolTipModal" ng-disabled="editor.selectedField.tooltip==undefined">
                       <span class="glyphicon glyphicon-star"></span> Configure ToolTip
                     </button>
                  </div> 
                   <div class="form-group">
-                    <button type="button" class="btn btn-danger btn-md tridimensonal-button"  ng-click="visor.configLogicField(visor.selectedField.field_id)" data-toggle="modal" data-target="#myLogicModal" ng-disabled="visor.selectedField.tooltip==undefined">
+                    <button type="button" class="btn btn-danger btn-md tridimensonal-button"  ng-click="editor.configLogicField(editor.selectedField.field_id)" data-toggle="modal" data-target="#myLogicModal" ng-disabled="editor.selectedField.tooltip==undefined">
                       <span class="glyphicon glyphicon-star"></span> Configure Field Logic
                     </button>
                  </div>  
                  <div class="form-group">
-                    <button type="button" class="btn btn-danger btn-md tridimensonal-button"  ng-click="visor.configLogicPage(visor.selectedPage)" data-toggle="modal" data-target="#myLogicPageModal" ng-disabled="visor.selectedPage==undefined">
+                    <button type="button" class="btn btn-danger btn-md tridimensonal-button"  ng-click="editor.configLogicPage(editor.selectedPage)" data-toggle="modal" data-target="#myLogicPageModal" ng-disabled="editor.selectedPage==undefined">
                       <span class="glyphicon glyphicon-star"></span> Configure Page Logic
                     </button>
                  </div>      

@@ -99,7 +99,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = '/home/veronica/Facultad/PIS/django-survey/TreaProject/dynamicForms/static/'
+STATIC_ROOT = '/home/nahu/git/django-survey/TreaProject/dynamicForms/static/'
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
