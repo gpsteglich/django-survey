@@ -22,5 +22,20 @@ var url = '/dyn/';
       	$rootScope.urlBase = url;
     });
 
+    app.factory('VisorService', function() {
+
+        return {
+
+            
+            sumaDos: function(param) {
+              return 2 + param;
+            },
+            getString: function() {
+              return 'soy un tring';
+            }
+          };
+    
+    });
+
 })();
 

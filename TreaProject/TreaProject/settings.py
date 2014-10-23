@@ -27,6 +27,8 @@ SECRET_KEY = 'ww3=fhba78p=6byoo8n%@ocfuaamkbn!8+i0m$iq!k8t551r+1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+COMPRESS_ENABLED = True
+
 TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -44,6 +46,8 @@ INSTALLED_APPS = (
     'rest_framework',
     'dynamicForms',
     'south',
+    'sekizai',
+    'compressor',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -95,6 +99,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATIC_ROOT = '~/git/django-survey/TreaProject/dynamicForms/static/'
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+)
 
 FIELD_FILES = (
     'dynamicForms.fieldtypes.TextField',
@@ -109,4 +120,15 @@ FIELD_FILES = (
     'dynamicForms.fieldtypes.NumberField',
     #URL: 'dynamicForms.fieldtypes.URLField',
     'dynamicForms.fieldtypes.CIField',
+)
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.core.context_processors.tz',
+    'django.contrib.messages.context_processors.messages',
+    'sekizai.context_processors.sekizai',
 )

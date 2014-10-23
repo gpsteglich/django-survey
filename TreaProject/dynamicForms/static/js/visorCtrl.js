@@ -7,8 +7,8 @@
         /*
          * The VisorCtrl holds the logic to display, validate and submit the form.
          */
-        app.controller('VisorCtrl', ['$scope','$http','$location', '$window', '$rootScope',
-                function ($scope, $http, $location, $window, $rootScope) {
+        app.controller('VisorCtrl', ['$scope','$http','$location','$window','$rootScope','VisorService',
+                function ($scope, $http, $location, $window, $rootScope, VisorService) {
 
             /*
             *  This controller is initialiced by ui-router, so it cant be used with ng-controller
@@ -19,7 +19,6 @@
             var separator = '_';
 
             visor.urlBase = $rootScope.urlBase;
-
 
             /*
              * To get the form the slug is catched form the path.
@@ -208,7 +207,8 @@
             // Persist form
             visor.save = function(){
             	visor.pre_salvar();
-                $http.post('visor/submit/'+visor.slug,visor.questions)
+                console.log('saving');
+                $http.post('visor/submit/'+visor.slug+'/',visor.questions)
                     .success( function(data, status, headers, config){
                     	//FIXTHIS
                     	visor.urlVisor = 'visor/';

@@ -18,7 +18,7 @@
                                     <div class="row" style="margin-bottom:50px">
                                                 <div class="col-md-2"></div>
                                                 <div class="col-md-2">
-                                                      <select  class="form-control" ng-options="option for option in ['Show', 'Hide']" ng-model="visor.logicField.operation" >
+                                                      <select  class="form-control" ng-options="option for option in ['Show', 'Hide']" ng-model="editor.logicField.operation" >
                                                           
                                                        </select> 
                                                 </div>
@@ -26,19 +26,19 @@
                                                     <h4 class="text-center">this page if</h4>
                                                 </div>
                                                 <div class="col-md-2">
-                                                  <select  class="form-control" ng-options="option for option in ['All', 'Any']" ng-model="visor.logicField.action" > </select> 
+                                                  <select  class="form-control" ng-options="option for option in ['All', 'Any']" ng-model="editor.logicField.action" > </select> 
                                                 </div>
                                                 <div class="col-md-4"> 
                                                   <h4>of the following conditions match: </h4>
                                                 </div>        
                                     </div>       
-                                    <div class="row" style="margin-bottom:30px" ng-repeat="condition in visor.logicField.conditions">
+                                    <div class="row" style="margin-bottom:30px" ng-repeat="condition in editor.logicField.conditions">
                                         <div  ng-include="'field_condition'" style="margin-bottom:10px" ></div>                                      
                                     </div>
                                     <div class="row">
                                          <div class="col-md-11"></div>
                                          <div class="col-md-1">
-                                            <button class="btn btn-primary pull-right " ng-click="visor.addNewLogicCondition()">
+                                            <button class="btn btn-primary pull-right " ng-click="editor.addNewLogicCondition()">
                                               <span class="glyphicon glyphicon-plus-sign" ></span>
                                             </button> 
                                         </div>
@@ -50,11 +50,11 @@
                             </br>
                              </br>
                               <button type="button" class="close" data-dismiss="modal" aria-hidden="true" 
-                                      ng-click="visor.applyPageDependencies(visor.selectedPage)">Apply</button>
+                                      ng-click="editor.applyPageDependencies(editor.selectedPage)">Apply</button>
                           </div>
               </div>
-            <pre>{{visor.logic|json}}</pre>
-            <pre>{{visor.pages|json}}</pre>
+            <pre>{{editor.logic|json}}</pre>
+            <pre>{{editor.pages|json}}</pre>
       </div>
 
 {% endverbatim %} 

@@ -11,12 +11,14 @@ from dynamicForms import views, auth
 from dynamicForms.fieldtypes.field_type import on_startup
 from django.contrib import admin
 
+from django.contrib.auth.decorators import login_required
+
 admin.autodiscover()
 
 on_startup()
 
 urlpatterns = patterns('dynamicForms.views',
-
+    
     url(r'^forms/(?P<pk>[a-z,0-9,\-,\_]+)/$', views.FormDetail.as_view()),
     url(r'^forms/delete/(?P<pk>[a-z,0-9,\-,\_]+)/$', views.DeleteForm.as_view()),
     url(r'^forms/$', views.FormList.as_view()),
@@ -29,8 +31,8 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^main/$', views.FormList.as_view()),
     url(r'^login/$', auth.user_login, name='login'),
     url(r'^logout/$', auth.user_logout, name='logout'),
-    url(r'^preview$', views.TemplateView.as_view(template_name='preview.html')),
-    url(r'^editor$', views.TemplateView.as_view(template_name='editor.html')),
+    url(r'^preview$', login_required(views.TemplateView.as_view(template_name='preview.html'))),
+    url(r'^editor$', login_required(views.TemplateView.as_view(template_name='editor.html'))),
 
     url(r'^field_condition$', views.TemplateView.as_view(template_name='field_condition.html')),
     url(r'^logic_modal', views.TemplateView.as_view(template_name='logic_modal.html')),
@@ -46,7 +48,7 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^visor_template', views.TemplateView.as_view(template_name='visor_template.html')),
     url(r'^visor/publishVersion/(?P<slug>[a-z,0-9,\-,\_]+)/$', views.FillForm.as_view()),
     url(r'^visor$', views.TemplateView.as_view(template_name='visor.html')),
-    url(r'^visor/submit/(?P<slug>[a-z,0-9,\-,\_]+)$', 'submit_form_entry'),
+    url(r'^visor/submit/(?P<slug>[a-z,0-9,\-,\_]+)/$', 'submit_form_entry'),
     url(r'^visor/form/submitted/$', views.TemplateView.as_view(template_name='form_submitted.html')),
 
     url(r'^responses/(?P<pk>[0-9]+)/(?P<number>[0-9]+)/$', 'get_responses'),
@@ -57,3 +59,5 @@ urlpatterns = patterns('dynamicForms.views',
 )
 
 urlpatterns = format_suffix_patterns(urlpatterns)
+
+

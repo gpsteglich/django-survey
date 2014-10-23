@@ -1,5 +1,5 @@
 {%extends 'base.html' %}
-{% load staticfiles %}
+{% load staticfiles sekizai_tags %}
 <!DOCTYPE html>
 {%block content%}
     {% verbatim %}
@@ -38,11 +38,25 @@
 
 
     {% endverbatim %}
+    {% addtoblock "js" %}
     <script src={% static "jquery/js/jquery-2.1.1.min.js" %}></script>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
     <script src={% static "bootstrap/js/bootstrap.js" %}></script>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
     <script src={% static "angular/angular.min.js" %}></script>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
     <script src={% static "angular/angular-ui-router.js" %}></script>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
     <script src={% static "angular/sortable.js" %}></script>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
     <script src={% static "js/app.js" %}></script>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
     <script src={% static "js/responsesCtrl.js" %}></script>
+    {% endaddtoblock %}
 {%endblock%}

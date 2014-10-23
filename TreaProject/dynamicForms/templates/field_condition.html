@@ -1,7 +1,7 @@
          <div class="col-md-5">
               <select  class="form-control"
-                ng-options="option.field_id as option.text for option in visor.questions"
-                ng-change="visor.selectFieldOnCondition(condition)"
+                ng-options="option.field_id as option.text for option in editor.questions"
+                ng-change="editor.selectFieldOnCondition(condition)"
                 ng-model="condition.field">                  
                </select> 
         </div>
@@ -15,7 +15,7 @@
             <input  class="form-control" type="text" ng-model="condition.value" /> 
         </div>
         <div class="col-md-1">
-            <button ng-click="visor.removeLogicCondition($index)" class="btn btn-primary pull-right" >
+            <button ng-click="editor.removeLogicCondition($index)" class="btn btn-primary pull-right" >
               <span class="glyphicon glyphicon-minus-sign" ></span>
             </button> 
        </div>
