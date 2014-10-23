@@ -29,7 +29,7 @@
 </head>
 
 <body ng-app="dynamicFormsFramework">
-
+{% with "/dyn/" as urlBase %}
     <div id="wrapper">
         <!-- Navigation -->
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -70,7 +70,7 @@
         </nav>
         {%block content%} {%endblock%} <!-- Content goes here -->
     </div>
-   
+{% endwith %}
  <!-- Bootstrap Core JavaScript -->
     <script src={% static 'jquery/js/jquery-2.1.1.min.js' %}></script>
     <script src={% static 'bootstrap/js/bootstrap.min.js' %}></script>
@@ -79,5 +79,5 @@
         $('.collapse').collapse()
     </script>
 </body>
-{% endwith %}
+
 </html>
