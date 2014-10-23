@@ -382,7 +382,15 @@ class FieldPrpTemplateView(TemplateView):
             return 'fields/field_properties_base.html'
         field = Factory.get_class(self.kwargs.get('type'))
         return field().render_properties()
-    
+
+class FieldStsTemplateView(TemplateView):
+    """
+    Renders the field type statistics templates.
+    """
+    def get_template_names(self):
+        field = Factory.get_class(self.kwargs.get('type'))
+        return field().render_statistic()
+   
 
 @api_view(['GET'])
 def get_pct(request, pk, number, field_id, format=None):

@@ -41,7 +41,7 @@ class NumericStatistics():
         first = minimum
         for i in range(1, 5):
             second = first + quintile_length
-            quintileX = "Between " + str(first) + " and " + str(second) 
+            quintileX = "Between "+ str(first) + " and " + str(second) 
             self.quintilesX.append(quintileX)
             quintileY = 0
             for num in list:

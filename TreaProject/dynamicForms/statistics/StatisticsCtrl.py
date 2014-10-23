@@ -34,7 +34,8 @@ class StatisticsCtrl():
                     statistics[field["field_id"]] = fieldStatistics
                 else:
                     raise Exception("There are no field entries for this form.")
-                
+        
+        #print(statistics)        
         return statistics
                 
                     

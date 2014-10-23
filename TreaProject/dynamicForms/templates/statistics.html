@@ -12,23 +12,22 @@
 	        {% verbatim %} 
             
 	        <div class="content" ng-controller="statisticsCtrl as s">
-                Bueno..... 
-               <div ac-chart="'pie'" 
-                    ac-data= "data"  
-                    ac-config="config" 
-                    class="chart">
+                <div class="list-group">
+                            <ul>
+                                <li ng-repeat="field in s.values">
+                                    <h2>Field {{field.id}}  
+                                        <select class="btn btn-primary col-md-offset-1" ng-model="field.chart" ng-options="type for type in chart_types"></select>
+                                    </h2>
+                                  
+                                    <div class="row" ng-include="templates[field.field_type]"></div>
+                                                                    
+                                </li>
+                            </ul>
                 </div>
-
-                <div>
-                    {{s.json}}
-                </div>
-
-
-            </div>
-
              {%endverbatim%}
 
      </div>
+   
       
 {%endblock%} 
 
