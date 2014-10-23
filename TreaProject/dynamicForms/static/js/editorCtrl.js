@@ -205,7 +205,7 @@
                         editor.max_id = Math.max.apply(Math,questions.map(function(o){
                             return o.field_id;
                         }));
-                        if (!isNaN(editor.max_id)){
+                        if (isNaN(editor.max_id)){
                             editor.max_id = 0;
                         }
                     })

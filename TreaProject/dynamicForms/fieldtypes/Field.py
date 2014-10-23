@@ -40,6 +40,13 @@ class Field(object):
         responses = total - queryset.filter(answer="").count()
         return (responses, total)
     
+    def get_statistics(self, data_list):
+        """
+        returns a the statistics related to the data list. 
+        """
+        return {}
+    
+    
     """
     Default Render methods for field templates
     """

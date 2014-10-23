@@ -46,7 +46,7 @@ urlpatterns = patterns('dynamicForms.views',
      
    
     url(r'^statistics/$' ,views.TemplateView.as_view(template_name='statistics.html')),
-    url(r'^statistics/(?P<pk>[0-9]+)/(?P<number>[0-9]+)/$','getStatistics'), 
+    url(r'^statistics/(?P<pk>[0-9]+)/(?P<number>[0-9]+)/$',views.StatisticsView.as_view()), 
     
     url(r'^visor_template', views.TemplateView.as_view(template_name='visor_template.html')),
     url(r'^visor/publishVersion/(?P<slug>[a-z,0-9,\-,\_]+)/$', views.FillForm.as_view()),
@@ -54,7 +54,7 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^visor/submit/(?P<slug>[a-z,0-9,\-,\_]+)$', 'submit_form_entry'),
     url(r'^visor/form/submitted/$', views.TemplateView.as_view(template_name='form_submitted.html')),
 
-    url(r'^responses/(?P<slug>[a-z,0-9,\-,\_]+)/(?P<number>[0-9]+)/$', 'get_responses'),
+    url(r'^responses/(?P<pk>[a-z,0-9,\-,\_]+)/(?P<number>[0-9]+)/$', 'get_responses'),
     url(r'^responses/$', views.TemplateView.as_view(template_name='responses.html')),
     url(r'^constants/$', 'get_constants'),
     url(r'^pct/(?P<pk>[0-9]+)/(?P<number>[0-9]+)/(?P<field_id>[0-9]+)$', 'get_pct'),

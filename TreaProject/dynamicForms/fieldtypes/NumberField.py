@@ -3,6 +3,8 @@ from django.core.exceptions import ValidationError
 from dynamicForms.fieldtypes import Field
 from dynamicForms.fieldtypes import FieldFactory
 
+from dynamicForms.statistics.NumericStatistics import NumericStatistics
+
 
 class NumberField(Field.Field):
     """
@@ -41,6 +43,15 @@ class NumberField(Field.Field):
             if (restrictions['min_number'] > restrictions['max_number']):
                 raise ValidationError("The min value might not "
                 "be below the max value.")
+                
+    def get_statistics(self, data):
+        """
+        Receives a list of integers and the text associated with the field,
+        returns a serialized NumericStatistics object containing statistical 
+        data for the field.
+        """        
+        numericStatistics = NumericStatistics(data)
+        return numericStatistics.getSerializedData()
 
     def __str__():
         return "Number"

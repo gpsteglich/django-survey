@@ -81,17 +81,17 @@
                                 'conf': conf,
                                 'data': d,
                                 'm' : field_id.mean,
-                                'mt' : field_id.mean_total,
+                                'mt' : field_id.total_mean,
                                 'sd' : field_id.standard_deviation,
-                                'sdt' : field_id.standard_deviation_total,
+                                'sdt' : field_id.total_standard_deviation,
                                 'tf' : field_id.total_filled,
                                 'tnf': field_id.total_not_filled
                             }
                         }
                                         
                     }
-                     console.log(stat.values);
-                     console.log(stat.values['id_field'].conf);
+                     //console.log(stat.values);
+                     //console.log(stat.values['id_field'].conf);
                 })
                 .error(function(data, status, headers, config){
                     alert('error loading statistics: ' + status);
@@ -106,38 +106,6 @@
         'pie',
         'bar',
     ];    
-    
-     $scope.config = {
-            title: 'Pregunta1',
-            tooltips: true,
-            labels: false,
-            mouseover: function() {},
-            mouseout: function() {},
-            click: function() {},
-            legend: {
-                display: true,
-                //could be 'left, right'
-                position: 'right'
-            }
-        };
 
-       $scope.data = {
-            series: ['Sales', 'Income', 'Expense', 'Laptops', 'Keyboards'],
-            data: [{
-              x: "Laptops",
-              y: [100, 500, 0],
-              tooltip: "this is tooltip"
-            }, {
-              x: "Desktops",
-              y: [300, 100, 100]
-            }, {
-              x: "Mobiles",
-              y: [351]
-            }, {
-              x: "Tablets",
-              y: [54, 0, 879]
-            }]
-          };
-
-    });
+});
 })();

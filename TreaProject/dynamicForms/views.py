@@ -22,6 +22,7 @@ from dynamicForms.fields import PUBLISHED, DRAFT
 from dynamicForms.serializers import FormSerializer, VersionSerializer
 from dynamicForms.serializers import FieldEntrySerializer, FormEntrySerializer
 from dynamicForms.fieldtypes.FieldFactory import FieldFactory as Factory
+from dynamicForms.statistics.StatisticsCtrl import StatisticsCtrl
 
 
 class FormList(generics.ListCreateAPIView):
@@ -401,42 +402,50 @@ def get_pct(request, pk, number, field_id, format=None):
 
 
 #class statistics(generics.RetrieveAPIView):
-@api_view(['GET'])
-def getStatistics(request, pk, number):
-    print("entre a la vista")
-        
-    #data= { "idfield":{"mensaje":"prueba", "mensaje2":"prueba2"}, "idfield2":{"mensaje":"prueba3", "mensaje2":"prueba4"} }
-    data = {
-        1: {
-            "field_type": "number",
-            "field_text": "Pregunta1",
-            "mean": 9,
-            "mean_total": 3,
-            "standard_deviation": 4,
-            "standard_deviation_total": 3,
-            "quintilesX": ["Primer quintil", "Segundo quintil", "Tercer quintil", "Cuarto quintil", "Quinto quintil"],
-            "quintilesY": [8,1,3,4,5]
-        },
-        2: {
-            "field_type": "number",
-            "field_text": "Pregunta2",
-            "mean": 12,
-            "mean_total": 5,
-            "standard_deviation": 3,
-            "standard_deviation_total": 7,
-            "quintilesX": ["Primer quintil", "Segundo quintil", "Tercer quintil", "Cuarto quintil", "Quinto quintil"],
-            "quintilesY": [4,5,1,2,3]
-        }
-    }
 
-
-    #json = JSON.parse(data);
-    #return render_to_response('statistics.html', data)
-    #return Response(content, status=status.HTTP_404_NOT_FOUND)
+#def getStatistics(request, pk, number):
     
-    return Response(data=data,status=status.HTTP_200_OK);
-            #return Response(data)
-
-
+#@api_view(['GET'])
+class StatisticsView(generics.RetrieveAPIView):
+    
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    
+    def get(self, request, pk, number):
+        """
+        Returns statistics for version (pk, number)
+        """
+        
+        try:
+            print("antes del ctrl")
+            statistics = StatisticsCtrl().getStatistics(pk, number)
+            return Response(data=statistics,status=status.HTTP_200_OK)
+        except:
+            message = {"message": "No statistics for this version."}
+            return Response(data=message, status=status.HTTP_400_BAD_REQUEST)
+        """
+        statistics = {
+            1: {
+                "field_type": "number",
+                "field_text": "Pregunta1",
+                "mean": 9,
+                "mean_total": 3,
+                "standard_deviation": 4,
+                "standard_deviation_total": 3,
+                "quintilesX": ["Primer quintil", "Segundo quintil", "Tercer quintil", "Cuarto quintil", "Quinto quintil"],
+                "quintilesY": [8,1,3,4,5]
+            },
+            2: {
+                "field_type": "number",
+                "field_text": "Pregunta2",
+                "mean": 12,
+                "mean_total": 5,
+                "standard_deviation": 3,
+                "standard_deviation_total": 7,
+                "quintilesX": ["Primer quintil", "Segundo quintil", "Tercer quintil", "Cuarto quintil", "Quinto quintil"],
+                "quintilesY": [4,5,1,2,3]
+            }
+        }
+        return Response(data=statistics,status=status.HTTP_200_OK)
+        """
     
     
