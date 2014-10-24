@@ -3,7 +3,6 @@ from django.core.exceptions import ValidationError
 from dynamicForms.fieldtypes.ListField import ListField
 from dynamicForms.fieldtypes import FieldFactory
 
-
 class SelectField(ListField):
     """
     Combobox field validator, render and analize methods
@@ -18,7 +17,6 @@ class SelectField(ListField):
             options.append(option)
         if value not in options:
             raise ValidationError("Invalid value, not among options.")
- 
 
     def __str__():
         return "Combo Box"

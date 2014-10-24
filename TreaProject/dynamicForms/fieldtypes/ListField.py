@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 
 from dynamicForms.fieldtypes.Field import Field
-
+from dynamicForms.statistics.ListStatistics import ListStatistics
 
 class ListField(Field):
     """
@@ -13,8 +13,9 @@ class ListField(Field):
         if (options == []):
             raise ValidationError("List fields need at least one option.")
     
-    def getStatistics(self, data_list, options):
-        return {}
+    def get_statistics(self, data_list, options):
+        listStatistics = ListStatistics(data_list,options)
+        return listStatistics.getSerializedData()
        
     class Meta:
         abstract = True

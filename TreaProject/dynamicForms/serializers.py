@@ -92,3 +92,11 @@ class NumericStatisticsSerializer(serializers.Serializer):
     total_standard_deviation = serializers.FloatField()
     quintilesY  = serializers.CharField()
     quintilesX  = serializers.CharField()
+    
+class ListStatisticsSerializer(serializers.Serializer):
+    """
+    Serializer for ListStatistics
+    """
+    options          = serializers.CharField()
+    total_per_option = serializers.CharField()
+    
