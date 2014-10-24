@@ -51,13 +51,13 @@ class JSONField(models.TextField):
         return super(JSONField, self).get_db_prep_save(value, connection)
     
     
-class Validations(models.Model):
+class Validations():
     """
     Class for validation objects of the version json
     """
-    max_len_text = models.IntegerField(null=True, blank=True)
-    max_number = models.IntegerField(null=True, blank=True)
-    min_number = models.IntegerField(null=True, blank=True)
+    max_len_text = models.IntegerField(blank=True)
+    max_number = models.IntegerField(blank=True)
+    min_number = models.IntegerField(blank=True)
     
     def valid_number(self):
         if (self.max_number != None) and (self.min_number != None):
@@ -67,3 +67,29 @@ class Validations(models.Model):
     def valid_text(self):
         if self.max_len_text != None:
             return self.max_len_text > 0
+        
+
+
+class Option():
+    label = models.CharField(blank=True, max_length=100)
+    id = models.IntegerField(blank=True)
+
+
+class Dependencies():
+    fields = models.CommaSeparatedIntegerField(null=True, blank=True, max_length=300) 
+    pages = models.CommaSeparatedIntegerField(null=True, blank=True, max_length=300)
+
+
+class Field():
+    text = models.CharField(null=True, blank=True, max_length=50)
+    required = models.BooleanField()
+    tooltip = models.CharField(blank=True, max_length=300)
+    answer = models.CharField(blank=True, max_length=300)
+    dependencies = Dependencies()
+    validations = Validations()
+    options = []
+    max_id = models.IntegerField(blank=True)
+    field_type = models.CharField(blank=True, max_length=30)
+    field_id = models.IntegerField(blank=True)
+     
+     
