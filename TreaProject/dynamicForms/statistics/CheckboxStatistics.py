@@ -1,6 +1,6 @@
 from dynamicForms.serializers import ListStatisticsSerializer
 
-class Checkbox():
+class CheckboxStatistics():
     
     def __init__(self, data_list, options):
         
