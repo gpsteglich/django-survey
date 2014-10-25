@@ -31,6 +31,10 @@ class StatisticsCtrl():
                     fieldStatistics = fieldType().get_statistics(data, field["options"])
                     fieldStatistics["field_type"] = field["field_type"]
                     fieldStatistics["field_text"] = field["text"]
+                    if field["validations"]["required"]:
+                        fieldStatistics["required"] = "Yes"
+                    else:
+                        fieldStatistics["required"] = "No"
                     statistics[field["field_id"]] = fieldStatistics
                 else:
                     raise Exception("There are no field entries for this form.")

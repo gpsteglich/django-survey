@@ -25,10 +25,10 @@ class NumericStatistics():
                 listTotal.append(0)
                 self.total_not_filled += 1
            
-        self.mean       = mean(list)
-        self.standard_deviation = pstdev(list, self.mean)
-        self.total_mean = mean(listTotal)
-        self.total_standard_deviation = pstdev(listTotal, self.total_mean)
+        self.mean       = round(mean(list), 2)
+        self.standard_deviation = round(pstdev(list, self.mean), 2)
+        self.total_mean = round(mean(listTotal), 2)
+        self.total_standard_deviation = round(pstdev(listTotal, self.total_mean), 2)
         self.quintilesX  = []
         self.quintilesY = []
         
@@ -41,7 +41,7 @@ class NumericStatistics():
         first = minimum
         for i in range(1, 5):
             second = first + quintile_length
-            quintileX = "Between "+ str(first) + " and " + str(second) 
+            quintileX = "[" + str(first) + ", " + str(second) + ")" 
             self.quintilesX.append(quintileX)
             quintileY = 0
             for num in list:
@@ -51,7 +51,7 @@ class NumericStatistics():
             first = second
             
         #last quintile
-        self.quintilesX.append("Between " + str(first) + " and " + str(maximum))
+        self.quintilesX.append("[ " + str(first) + ", " + str(maximum) + "]")
         quintileY = 0
         for num in list:
             if (first <= num) and (num <= maximum):
