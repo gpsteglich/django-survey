@@ -24,6 +24,7 @@ from dynamicForms.fields import PUBLISHED, DRAFT, Validations
 from dynamicForms.serializers import FormSerializer, VersionSerializer, ValidationSerializer
 from dynamicForms.serializers import FieldEntrySerializer, FormEntrySerializer
 from dynamicForms.fieldtypes.FieldFactory import FieldFactory as Factory
+from dynamicForms.statistics.StatisticsCtrl import StatisticsCtrl 
 
 
 class FormList(generics.ListCreateAPIView):
@@ -419,13 +420,28 @@ class FieldPrpTemplateView(TemplateView):
             return 'fields/field_properties_base.html'
         field = Factory.get_class(self.kwargs.get('type'))
         return field().render_properties()
-    
 
-@api_view(['GET'])
-def get_pct(request, pk, number, field_id, format=None):
-    # ALL TODO. This is just an usage example.
-    from dynamicForms.fieldtypes.TextField import TextField
-    f = TextField()
-    (r, t) = f.count_responses_pct(pk, number, field_id)
-    data = {'responses': r , 'total': t}
-    return Response(status=status.HTTP_200_OK, data=data)
+class FieldStsTemplateView(TemplateView):
+    """
+    Renders the field type statistics templates.
+    """
+    def get_template_names(self):
+        field = Factory.get_class(self.kwargs.get('type'))
+        return field().render_statistic()
+   
+class StatisticsView(generics.RetrieveAPIView):
+    
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    
+    def get(self, request, pk, number):
+        """
+        Returns statistics for version (pk, number)
+        """
+        #try:
+        statistics = StatisticsCtrl().getStatistics(pk, number)
+        return Response(data=statistics,status=status.HTTP_200_OK)
+        #except:
+            #return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+
+
+    

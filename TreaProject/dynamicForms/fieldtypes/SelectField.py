@@ -3,7 +3,6 @@ from django.core.exceptions import ValidationError
 from dynamicForms.fieldtypes.ListField import ListField
 from dynamicForms.fieldtypes import FieldFactory
 
-
 class SelectField(ListField):
     """
     Combobox field validator, render and analize methods

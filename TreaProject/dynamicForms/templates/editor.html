@@ -20,7 +20,7 @@
 			  	<div ng-include="'tooltip_modal'"></div>    	<!--modal goes here to skip affix property-->
 	            <div class="row">	           		 
 	                <div class=" col-md-7">
-		                <div class="row" style="margin-left:8%">
+		                <div class="row" style="margin-left:8%;">
 		                    <form class="panel panel-primary" form role="form" name="userForm">
 		                        <div class="panel-heading text-center">
 	                                <h1>Title:</h1>
@@ -72,7 +72,7 @@
 	                <div class="col-md-4"  >     
 	                <div data-spy="affix"> 
 			                <div class="row">                  
-			                     <div  ng-include="'modify_input'" style= "margin-left:6%; width:80%; min-width:390px; max-width:500px"></div>      
+			                     <div  ng-include="'modify_input'" style= "margin-left:6%; width:80%; min-width:390px; max-width:500px;"></div>      
 			                </div>
 			            </div>
 	                </div>
@@ -89,9 +89,18 @@
 		    <script src={% static "angular/angular.min.js" %}></script>
 			{% endaddtoblock %}
             {% addtoblock "js" %}
+            <script src={% static "angular/d3.min.js" %}></script> 
+            {% endaddtoblock %}
+            {% addtoblock "js" %}
+            <script src={% static "angular/angular-charts.min.js" %}></script>   
+            {% endaddtoblock %}
+            {% addtoblock "js" %}
             <script src={% static "bootstrap/js/ui-bootstrap.min.js" %}></script>
 			{% endaddtoblock %}
             {% addtoblock "js" %}
+            <script src={% static "angular/d3.min.js" %}></script> 
+            <script src={% static "angular/angular-charts.min.js" %}></script>   
+            <script src={% static "bootstrap/js/ui-bootstrap.min.js" %}></script>
             <script src={% static "angular/sortable.js" %}></script>
 			{% endaddtoblock %}
             {% addtoblock "js" %}
@@ -150,6 +159,7 @@
             {% endaddtoblock %}
             {% addtoblock "js" %}
             <script src={% static "bootstrap/js/bootstrap.min.js"%}></script>
+<<<<<<< HEAD
             {% endaddtoblock %}
 <!--
             <script type="text/javascript">
@@ -159,6 +169,13 @@
             </script>
 -->
 			{% addtoblock "js" %}
+=======
+           <!-- <script type="text/javascript"> -->
+            // 	function changeTab() {
+            // 		 $("#myTab li:eq(1) a").tab('show');
+            // 	}
+            <!--</script>-->
+>>>>>>> refs/heads/Estadistica
             <script type="text/javascript">
 				$(document).ready(function(){ 
     				$("#myTab li:eq(1) a").tab('show');
