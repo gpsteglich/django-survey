@@ -51,7 +51,7 @@ class NumericStatistics():
             first = second
             
         #last quintile
-        self.quintilesX.append("[ " + str(first) + ", " + str(maximum) + "]")
+        self.quintilesX.append("[" + str(first) + ", " + str(maximum) + "]")
         quintileY = 0
         for num in list:
             if (first <= num) and (num <= maximum):
