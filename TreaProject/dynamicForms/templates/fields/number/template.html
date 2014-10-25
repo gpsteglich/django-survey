@@ -4,11 +4,10 @@
         <button style="border:none;background:none" ng-show="question.tooltip!=undefined && question.tooltip!=''" tooltip="{{question.tooltip}}">
             <span class="glyphicon glyphicon-info-sign"></span>
         </button>
-    
-    <input type="number" class="form-control" ng-model="question.answer[0]" ng-change="updateDependencies(question.field_id)"
-    	ng-required="question.required"
-        min="{{question.validations.min_number}}"
-        max="{{question.validations.max_number}}"
-    />
+        <input type="number" class="form-control" ng-model="question.answer[0]" ng-change="updateDependencies(question.field_id)"
+        	ng-required="question.required"
+            min="{{question.validations.min_number}}"
+            max="{{question.validations.max_number}}"
+        />
     {% endverbatim %} 
 {%endblock%}

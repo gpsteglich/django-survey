@@ -7,6 +7,8 @@
         <input  class="form-control" type="text" ng-model="question.answer[0]"  
         	ng-required="question.required"
         	ng-maxlength="{{question.validations.max_len_text}}"
+        	fieldtype="{{question.field_type}}"
+        	validate
         />
     {% endverbatim %} 
 {%endblock%}
