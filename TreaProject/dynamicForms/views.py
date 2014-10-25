@@ -331,7 +331,11 @@ def submit_form_entry(request, slug, format=None):
                     else:
                         raise ValidationError("Validations not recognized.")
                     kw['options'] = fld.get_options(loaded, f_id)
-                    fld.validate(obj.answer, **kw)
+                    if len(obj.answer.split('#')) > 1:
+                        for option in obj.answer.split('#'):
+                            fld.validate(option, **kw)
+                    else:
+                        fld.validate(obj.answer, **kw)
                 except ValidationError as e:
                     error_log['error'] += e.message
         else:
