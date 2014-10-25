@@ -129,7 +129,7 @@
                     visor.pre_salvar();
                     $http.post('visor/submit/'+visor.slug+'/',visor.questions)
                         .success( function(data, status, headers, config){
-                            //$window.location.href = 'visor/form/submitted';
+                            $window.location.href = 'visor/form/submitted';
                         })
                         .error(function(data, status, headers, config) {
                             alert('Error saving data: ' + data.error);
