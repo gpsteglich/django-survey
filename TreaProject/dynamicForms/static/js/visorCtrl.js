@@ -109,9 +109,8 @@
 
                 }
                 for (var j=0; j< visor.questions.length; j++) {
-                    if (visor.questions[j].validations){
-                        //delete visor.questions[j].validations;
-                    }
+                    //TODO habilitar cuando back acepte el booleano
+                    //visor.questions[j].showed = Boolean(visor.showValues[visor.questions[j].field_id]);
                     if (visor.questions[j].tooltip){
                         delete visor.questions[j].tooltip;
                     }
@@ -130,7 +129,7 @@
                     visor.pre_salvar();
                     $http.post('visor/submit/'+visor.slug+'/',visor.questions)
                         .success( function(data, status, headers, config){
-                            $window.location.href = 'visor/form/submitted';
+                            //$window.location.href = 'visor/form/submitted';
                         })
                         .error(function(data, status, headers, config) {
                             alert('Error saving data: ' + data.error);
