@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 
 from dynamicForms.fieldtypes.ListField import ListField
 from dynamicForms.fieldtypes import FieldFactory
+from dynamicForms.statistics.CheckboxStatistics import CheckboxStatistics
 
 
 class CheckboxField(ListField):
@@ -21,6 +22,10 @@ class CheckboxField(ListField):
         for val in values:
             if val not in options:
                 raise ValidationError("Invalid value, not among options.")
+            
+    def get_statistics(self, data_list, options):
+        checkboxStatistics = CheckboxStatistics(data_list, options)
+        return checkboxStatistics.getSerializedData()
 
     def __str__():
         return "Checkbox"

@@ -46,8 +46,7 @@ class NumberField(Field.Field):
                 
     def get_statistics(self, data, options):
         """
-        Receives a list of integers and the text associated with the field,
-        returns a serialized NumericStatistics object containing statistical 
+        returns a serialized NumericStatistics data containing statistical 
         data for the field.
         """        
         numericStatistics = NumericStatistics(data)
