@@ -1,4 +1,4 @@
-{%extends 'fields/field_template_base.html' %}
+{%extends 'fields/field_edit_template_base.html' %}
 {%block field%}
     {% verbatim %} 
     <button style="border:none;background:none" ng-show="question.tooltip!=undefined && question.tooltip!=''" tooltip="{{question.tooltip}}">
@@ -7,7 +7,7 @@
     <select  class="form-control"   
     	ng-model="question.answer[0]"  
     	ng-options="option.id as option.label for option in question.options"
-     	ng-disabled="disabled">
+     	ng-disabled="true">
     </select>   
 	{% endverbatim %} 
 {%endblock%}

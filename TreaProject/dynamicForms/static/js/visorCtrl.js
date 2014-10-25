@@ -24,27 +24,224 @@
              * To get the form the slug is catched form the path.
              * This should be handled by $routerprovider
              */
+            // Visor url params
             visor.slug = $location.hash().split(separator)[0];
+            // Preview url params
+            visor.formIdParam = ($location.search()).form;
+            visor.versionIdParam = ($location.search()).ver;
+
+            visor.isVisorMode = function(){
+                if (visor.slug){
+                    return true;
+                } else {
+                    return false;
+                }
+            };
+
+            visor.isPreviewMode = function(){
+                if (visor.formIdParam && visor.versionIdParam){
+                    return true;
+                } else {
+                    return false;
+                }
+            };
+            
+                // Load last published Version
+            visor.load = function(){
+                if (visor.isVisorMode()){
+                    $http.get('visor/publishVersion/'+visor.slug)
+                        .success(function(data){
+                            visor.setFormValues(data);
+                        })
+                        .error(function(data, status, headers, config){
+                            alert('error loading form: ' + status);
+                        });
+                } else {
+                        //Load form
+                    $http.get('forms/'+visor.formIdParam)
+                        .success(function(data){
+                            visor.title = data.title;
+                                //Load version
+                            $http.get('version/'+visor.formIdParam+'/'+visor.versionIdParam)
+                            .success(function(data){
+                                visor.setFormValues(data);
+                            })
+                            .error(function(data, status, headers, config){
+                                alert('error loading version: ' + status);
+                            });
+                        })
+                        .error(function(data, status, headers, config){
+                            alert('error loding form: ' + status);
+                        });
+                }
+            };
+
+            // Invoque load function
+            visor.load();
+
+            visor.setFormValues = function(data){
+                visor.version = data;
+                visor.pages = JSON.parse(data.json).pages;
+                visor.logic = JSON.parse(data.json).logic;
+                visor.initialiceConditions();
+                visor.changePage(0);
+                visor.selectPage(0);
+            };
+
+            visor.pre_salvar = function(){
+                visor.questions = [];
+                for (var i=0; i< visor.pages.length; i++) {
+                    visor.questions = visor.questions.concat(angular.copy(visor.pages[i].fields));
+                }
+                for ( var i = 0; i < visor.questions.length; i++) { 
+                    if (visor.questions[i].field_type == 'CheckboxField'){
+                        var respuesta = '';
+                         for ( var x = 0; x < visor.questions[i].options.length-1; x++){
+                            respuesta += visor.questions[i].options[x].id + '#';
+                         }
+                        respuesta += visor.questions[i].options[visor.questions[i].options.length-1].id;
+                      
+                        visor.questions[i].options = respuesta;
+                    }else if (visor.questions[i].field_type == 'SelectField'){
+                        visor.questions[i].options= visor.questions[i].options.join('#');
+                    }
+                    visor.questions[i].answer = visor.questions[i].answer.join('#');
+
+                }
+                for (var j=0; j< visor.questions.length; j++) {
+                    if (visor.questions[j].validations){
+                        //delete visor.questions[j].validations;
+                    }
+                    if (visor.questions[j].tooltip){
+                        delete visor.questions[j].tooltip;
+                    }
+                    if (visor.questions[j].options){
+                        delete visor.questions[j].options;
+                    }
+                    if (visor.questions[j].dependencies){
+                        delete visor.questions[j].dependencies;
+                    }
+                }
+            };
+
+            // Persist form
+            visor.save = function(){
+                if (visor.isVisorMode()){
+                    visor.pre_salvar();
+                    $http.post('visor/submit/'+visor.slug+'/',visor.questions)
+                        .success( function(data, status, headers, config){
+                            $window.location.href = 'visor/form/submitted';
+                        })
+                        .error(function(data, status, headers, config) {
+                            alert('Error saving data: ' + data.error);
+                        });
+                } else {
+                    /*
+                     * TODO: Sería útil permitir al editor ingresar datos y que sean validados por el back
+                     * pero sin persistirlos en la base.
+                     */
+                    alert('Form was completed correctly. \nThis is a preview, the data wont be saved.');
+                }
+            };
+
+            ///////////////////// Page navegation /////////////////////
+
+            /*
+            * The page selection is fired by the change of the url
+            */
+            visor.changePage = function(page){
+                if (visor.isVisorMode()){
+                    $location.hash(visor.slug + separator + page);
+                } else {
+                    $location.search('page',page);
+                }
+            };
+            
+            /*
+            * This function watches any change in the url and updates the selected page.
+            */
+            visor.$on('$locationChangeSuccess', function(event) {
+                var changePage;
+                if (visor.isVisorMode()){
+                    changePage = $location.hash().split(separator)[1] || 0;
+                    
+                } else {
+                    changePage = ($location.search()).page || 0;
+                }
+                changePage = parseInt(changePage);
+                if (changePage.isNaN){
+                    changePage = 0;
+                }
+                if (visor.pages){
+                    if (changePage > visor.pages.size || changePage < 0){
+                        changePage = 0;   
+                    }
+                    visor.selectPage(changePage);
+                }
+            });
+
+            /*
+            * Page navegation
+             */
 
             visor.selectPage = function(page){
                 visor.selectedPage = visor.pages[page];
                 visor.selectedPageNum = page;
             };
-            
-                // Load last published Version
-            $http.get('visor/publishVersion/'+visor.slug)
-                .success(function(data){
-                    visor.version = data;
-                    visor.pages = JSON.parse(data.json).pages;
-                    visor.logic = JSON.parse(data.json).logic;
-                    visor.initialiceConditions();
-                    visor.changePage(0);
-                    visor.selectPage(0);
-                })
-                .error(function(data, status, headers, config){
-                    alert('error loading form: ' + status);
-                });
 
+            visor.getNext = function(){
+                var next = visor.selectedPageNum + 1;
+                while (next < visor.pages.length && !visor.showPageValues[next]){
+                    next++;
+                }
+                if (next == visor.pages.length){
+                    return -1;
+                } else {
+                    return next;
+                }
+            };
+
+            visor.getPrevious = function(){
+                var prev = visor.selectedPageNum - 1;
+                while (prev >= 0 && !visor.showPageValues[prev]){
+                    prev--;
+                }
+                return prev;
+            };
+           
+            visor.canNext = function(){
+                var canNext = false;
+                if (visor.pages){
+                    var next = visor.getNext();
+                    canNext = (next != -1);
+                }
+                return canNext;
+            };
+
+            visor.next = function(){
+                var next = visor.getNext();
+                if (next != -1){
+                    visor.changePage(next);
+                }
+            };
+
+            visor.canPrevious = function(){
+                var canPrevious = false;
+                if (visor.pages){
+                    var prev = visor.getPrevious();
+                    canPrevious = (prev != -1);
+                }
+                return canPrevious;
+            };
+
+            visor.previous = function(){
+                var prev = visor.getPrevious();
+                if (prev != -1){
+                    visor.changePage(prev);
+                }
+            };            
+
+            ///////////////////// Logic evaluation /////////////////////
             visor.showValues = [];
             visor.showPageValues = [];
 
@@ -148,6 +345,8 @@
                 }
             };
             
+            ///////////////////// Auxiliar functions /////////////////////
+            
             visor.getFieldById = function(id){
                 //precondition: Field with field_id == id exists
                 for(var i = 0; i < visor.pages.length; i++){
@@ -158,144 +357,6 @@
                             return field;
                         }
                     }
-                }
-            };
-
-            visor.pre_salvar = function(){
-                visor.questions = [];
-                for (var i=0; i< visor.pages.length; i++) {
-                    visor.questions = visor.questions.concat(angular.copy(visor.pages[i].fields));
-                }
-                
-                for ( var i = 0; i < visor.questions.length; i++) { 
-                    if (visor.questions[i].field_type == 'CheckboxField'){
-                        var respuesta = '';
-                         for ( var x = 0; x < visor.questions[i].options.length-1; x++){
-                            respuesta += visor.questions[i].options[x].id + '#';
-                         }
-                        respuesta += visor.questions[i].options[visor.questions[i].options.length-1].id;
-                      
-                        visor.questions[i].options = respuesta;
-                        //TODO: take out when finished
-                        //alert("question " + i + " options:  " + visor.questions[i].options);
-                    }else if (visor.questions[i].field_type == 'SelectField'){
-                        visor.questions[i].options= visor.questions[i].options.join('#');
-                        //TODO: take out when finished
-                        //alert("question " + i + " options:  " + visor.questions[i].options); 
-                    }
-                    visor.questions[i].answer = visor.questions[i].answer.join('#');
-                    //TODO: take out when finished
-                    //alert('question ' + i + ' answer: ' + visor.questions[i].answer);
-
-                }
-                for (var j=0; j< visor.questions.length; j++) {
-                    if (visor.questions[j].validations){
-                    	delete visor.questions[j].validations;
-                    }
-                    if (visor.questions[j].tooltip){
-                    	delete visor.questions[j].tooltip;
-                    }
-                    if (visor.questions[j].options){
-                    	delete visor.questions[j].options;
-                    }
-                    if (visor.questions[j].dependencies){
-                    	delete visor.questions[j].dependencies;
-                    }
-                }
-            };
-
-            // Persist form
-            visor.save = function(){
-            	visor.pre_salvar();
-                console.log('saving');
-                $http.post('visor/submit/'+visor.slug+'/',visor.questions)
-                    .success( function(data, status, headers, config){
-                    	//FIXTHIS
-                    	visor.urlVisor = 'visor/';
-                        $window.location.href = visor.urlVisor + 'form/submitted';
-                    })
-                    .error(function(data, status, headers, config) {
-                        alert('Error saving data: ' + data.error);
-                    });
-            };
-            
-            /*
-            * The page selection is fired by the change of the url
-            */
-            visor.changePage = function(page){
-                $location.hash(visor.slug + separator + page);
-            };
-            
-            /*
-            * This function watches any change in the url and updates the selected page.
-            */
-            visor.$on('$locationChangeSuccess', function(event) {
-                var changePage = $location.hash().split(separator)[1] || 0;
-                changePage = parseInt(changePage);
-                if (changePage.isNaN){
-                    changePage = 0;
-                }
-                if (visor.pages){
-                    if (changePage > visor.pages.size || changePage < 0){
-                        changePage = 0;   
-                    }
-                    visor.selectPage(changePage);
-                }
-            });
-
-            /*
-            * Page navegation
-             */
-
-            visor.getNext = function(){
-                var next = visor.selectedPageNum + 1;
-                while (next < visor.pages.length && !visor.showPageValues[next]){
-                    next++;
-                }
-                if (next == visor.pages.length){
-                    return -1;
-                } else {
-                    return next;
-                }
-            };
-
-            visor.getPrevious = function(){
-                var prev = visor.selectedPageNum - 1;
-                while (prev >= 0 && !visor.showPageValues[prev]){
-                    prev--;
-                }
-                return prev;
-            };
-           
-            visor.canNext = function(){
-                var canNext = false;
-                if (visor.pages){
-                    var next = visor.getNext();
-                    canNext = (next != -1);
-                }
-                return canNext;
-            };
-
-            visor.next = function(){
-                var next = visor.getNext();
-                if (next != -1){
-                    visor.changePage(next);
-                }
-            };
-
-            visor.canPrevious = function(){
-                var canPrevious = false;
-                if (visor.pages){
-                    var prev = visor.getPrevious();
-                    canPrevious = (prev != -1);
-                }
-                return canPrevious;
-            };
-
-            visor.previous = function(){
-                var prev = visor.getPrevious();
-                if (prev != -1){
-                    visor.changePage(prev);
                 }
             };
 

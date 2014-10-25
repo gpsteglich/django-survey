@@ -1,5 +1,7 @@
-{%verbatim%}
-	<label >{{$index + 1}}. {{question.text}}</label>
-{%endverbatim%}
-{%block field%}
-{%endblock%}
+<div ng-show="showValues[question.field_id]">
+	{%verbatim%}
+		<label>{{$index + 1}}. {{question.text}}</label>
+	{%endverbatim%}
+	{%block field%}
+	{%endblock%}
+</div>

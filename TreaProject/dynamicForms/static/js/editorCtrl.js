@@ -15,8 +15,6 @@
     	 * form on the fields templates. 
     	 */
         
-    	$scope.disabled = true;     //disables all input fields
-        
         var editor = this;
         
         editor.urlBase = $rootScope.urlBase;
@@ -432,7 +430,6 @@
         editor.selectFieldOnCondition = function(condition){
             condition.field_type = angular.copy(editor.getFieldType(condition.field));
             condition.operatorsList = editor.getOperatorsForField(condition.field_type);
-            alert(JSON.stringify(condition.operatorsList ));
             if (!editor.operatorsList){
                 editor.operatorsList = [];
             }
@@ -451,15 +448,6 @@
         editor.getOperatorsForField = function(field_type){
             return operatorFactory.getOperatorMethods(field_type);
         };
-
-        // Por compatibilidad con los templates de visor
-        $scope.hideValues = [];
-        $scope.showValues = [];
-        var arraySize = 100;
-        while(arraySize--) {
-            $scope.showValues.push(true);
-            $scope.hideValues.push(false);
-        }
 
     }]);
     
