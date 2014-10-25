@@ -27,11 +27,11 @@ class ListField(Field):
     def get_option_labels(self, field):
         options = []
         for option in field['options']:
-            options.append(option['label'])            
+            options.append(option['id'])            
         return options
     
     def get_statistics(self, data_list, field):
-        options = self.get_options_labels(field)
+        options = self.get_option_labels(field)
         listStatistics = ListStatistics(data_list,options)
         return listStatistics.getSerializedData()
 

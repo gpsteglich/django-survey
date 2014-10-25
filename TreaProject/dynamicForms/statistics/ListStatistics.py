@@ -29,7 +29,7 @@ class ListStatistics():
                  
         for data in aux_list:
             pos = 0
-            while (pos != total_options) and (data != options[pos]):
+            while (pos != total_options) and (int(data) != options[pos]):
                 pos +=1
             if pos != total_options:
                 self.total_per_option[pos] += 1
