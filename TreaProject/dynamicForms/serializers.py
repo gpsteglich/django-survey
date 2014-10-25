@@ -99,4 +99,6 @@ class ListStatisticsSerializer(serializers.Serializer):
     """
     options          = serializers.CharField()
     total_per_option = serializers.CharField()
+    total_filled     = serializers.IntegerField()
+    total_not_filled = serializers.IntegerField()
     
