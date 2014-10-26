@@ -20,7 +20,6 @@ class StatisticsCtrl():
    
         statistics = {}
         for page in pages:
-            nro = 1
             for field in page["fields"]:
                 fieldEntries = FieldEntry.objects.filter(field_id=field["field_id"], entry__version_id=version.pk) 
                 if len(fieldEntries) != 0:
