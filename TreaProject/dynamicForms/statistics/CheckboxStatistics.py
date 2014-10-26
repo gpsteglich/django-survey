@@ -5,14 +5,14 @@ class CheckboxStatistics():
     def __init__(self, data_list, options):
         
         self.total_per_option = []        
-        self.options = options
+        self.options = []
         self.total_filled = 0
         self.total_not_filled = 0
         
-        #initiate list   
-        total_options = len(options)
-        for i in range(0, total_options):
+        #initiate lists  )
+        for option in options:
             self.total_per_option.append(0)
+            self.options.append(option["label"])
             
         #count and remove null values
         #count not null values data and insert them into an auxiliary list
@@ -23,10 +23,11 @@ class CheckboxStatistics():
                 self.total_filled += 1
             else:
                 self.total_not_filled += 1
-                 
+        
+        total_options = len(options)      
         for data in aux_list:
             pos = 0
-            while (pos != total_options) and (data != options[pos]):
+            while (pos != total_options) and (int(data) != options[pos]):
                 pos +=1
             if pos != total_options:
                 self.total_per_option[pos] += 1

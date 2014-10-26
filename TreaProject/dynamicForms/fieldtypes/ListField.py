@@ -25,10 +25,7 @@ class ListField(Field):
             raise ValidationError("List fields need at least one option.")
     
     def get_option_labels(self, field):
-        options = []
-        for option in field['options']:
-            options.append(option['id'])            
-        return options
+        return field["options"]
     
     def get_statistics(self, data_list, field):
         options = self.get_option_labels(field)

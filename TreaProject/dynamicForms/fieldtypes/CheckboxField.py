@@ -13,8 +13,8 @@ class CheckboxField(ListField):
     edit_template_name = "checkbox/template_edit.html"
     prp_template_name = "checkbox/properties.html"
                     
-    def get_statistics(self, data_list, options):
-        checkboxStatistics = CheckboxStatistics(data_list, options)
+    def get_statistics(self, data_list, field):
+        checkboxStatistics = CheckboxStatistics(data_list, field["options"])
         return checkboxStatistics.getSerializedData()
 
     def __str__(self):
