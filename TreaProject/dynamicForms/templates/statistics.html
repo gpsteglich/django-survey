@@ -20,6 +20,7 @@
                                     </h2>
                                   
                                     <div class="row" ng-include="templates[field.field_type]"></div>
+                                    
                                                                     
                                 </li>
                             </ul>
@@ -57,6 +58,10 @@
 		    <script src={% static "js/operatorNumber.js" %}></script>
             <script src={% static "js/statisticsCtrl.js" %}></script>
             <script src={% static "bootstrap/js/bootstrap.min.js" %}></script>
+            <script src={% static "angular/FileSaver.js" %}></script>
+            <script src={% static "angular/jspdf.js" %}></script>
+            <script src={% static "angular/jspdf.plugin.table.js" %}></script>
+            
 {%endblock%}   
 
  
