@@ -102,30 +102,62 @@
         stat.getF();
        // console.log(stat.values);
 
-       $scope.createPDF = function(){
+       $scope.createArrayToExport  = function (field){
+        var data = [];
+        data.push({
+                                    "Label" : "Mean",
+                                    "Value" : field.m,                               
+                                });
+                                data.push({
+                                    "Label" : "Total Mean",
+                                    "Value" : field.mt,                               
+                                });
+                                data.push({
+                                    "Label" : "Standard Deviaion",
+                                    "Value" : field.sd,                               
+                                });
+                                data.push({
+                                    "Label" : "Total Standard deviation",
+                                    "Value" : field.sdt,                               
+                                });
+                                data.push({
+                                    "Label" : "Answered fields",
+                                    "Value" : field.tf,                               
+                                });
+                                data.push({
+                                    "Label" : "Empty fields",
+                                    "Value" : field.tnf,                               
+                                });
+                                return data;
+
+    }
+
+
+       $scope.createPDF = function(field){
                             // var doc = new jsPDF();
                             // doc.text(20, 20, 'Hello world!');
                             // doc.text(20, 30, 'This is client-side Javascript, pumping out a PDF.');
                             // doc.addPage('a6','l');
                             // doc.text(20, 20, 'Do you like that?');
                             // doc.save();
-                           
-                            var data = [],fontSize = 12, height = 0,doc;
+                        
+                            var fontSize = 12, height = 0,doc;
+                            var data = $scope.createArrayToExport(field) ;
                             doc = new jsPDF('p', 'pt', 'a4', true);
                             doc.setFont("courier", "normal");
-                            doc.setFontSize(fontSize);
-                            for (var insert = 0; insert <= 20; insert++) {
-                                data.push({
-                                    "name" : "jspdf plugin",
-                                    "version" : insert,
-                                    "author" : "Guillermo Kuster",
-                                    "Designation" : "AngularJs Developer"
-                                });
-                            }
+                            doc.setFontSize(fontSize);                    
                             height = doc.drawTable(data, {xstart:10,ystart:10,tablestart:70,marginleft:50});      
                             doc.save("statistics.pdf");
                          
                            }
+    // $scope.createCSV() = function (field){
+
+    // }
+
+    // $scope.getArray = [{a: 1, b:2}, {a:3, b:4}]; 
+
+    
+
         
     $scope.chart_types = [
         'pie',

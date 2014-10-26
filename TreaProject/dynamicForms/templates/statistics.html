@@ -19,12 +19,12 @@
                                         <select class="btn btn-primary col-md-offset-1" ng-model="field.chart" ng-options="type for type in chart_types"></select>
                                     </h2>
                                   
-                                    <div class="row" ng-include="templates[field.field_type]"></div>
-                                    
-                                                                    
+                                    <div class="row" ng-include="templates[field.field_type]"></div>                                                                                                    
                                 </li>
+
                             </ul>
                 </div>
+
              {%endverbatim%}
 
      </div>
@@ -42,9 +42,11 @@
 
 
 {%block scripts%}
+            <script src={% static "angular/angular.min.js" %}></script>
+            <script src={% static "angular/angular-sanitize.js" %}></script>
+            <script src={% static "angular/ng-csv.js" %}></script>
             <script src={% static "jquery/js/jquery-2.1.1.min.js" %}></script>
             <script src={% static "jquery/js/jquery-ui.min.js" %}></script>           
-		    <script src={% static "angular/angular.min.js" %}></script>
             <script src={% static "angular/d3.min.js" %}></script> 
             <script src={% static "angular/angular-charts.min.js" %}></script>   
             <script src={% static "bootstrap/js/ui-bootstrap.min.js" %}></script>
@@ -61,6 +63,9 @@
             <script src={% static "angular/FileSaver.js" %}></script>
             <script src={% static "angular/jspdf.js" %}></script>
             <script src={% static "angular/jspdf.plugin.table.js" %}></script>
+            
+
+            
             
 {%endblock%}   
 
