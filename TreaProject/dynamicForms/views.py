@@ -356,7 +356,7 @@ def submit_form_entry(request, slug, format=None):
             serializer = FieldEntrySerializer(data=field)
             if serializer.is_valid():
                 serializer.object.entry = entry
-                if serializer.object.shown:
+                if not serializer.object.shown:
                     serializer.object.answer = ''
                 serializer.save()
     return Response(status=status.HTTP_200_OK)

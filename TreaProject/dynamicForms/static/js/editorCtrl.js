@@ -148,9 +148,11 @@
         
         editor.checkValidations = function(field){
             var val = field.validations;
-            if (val.min_number > val.max_number) {
-                alert("Minimum can't exceed maximum");
-                val.min_number = val.max_number;
+            if (val.min_number && val.max_number){
+                if (val.min_number > val.max_number) {
+                    alert("Minimum can't exceed maximum");
+                    val.min_number = val.max_number;
+                }
             }
             if (val.max_len_text < 0){
                 alert("Maximum length can't be less than 0");
