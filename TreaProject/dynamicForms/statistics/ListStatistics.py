@@ -12,7 +12,6 @@ class ListStatistics():
         self.options = []
         self.total_filled = 0
         self.total_not_filled = 0
-             
         #initiate lists   
         for option in options:
             self.total_per_option.append(0)
@@ -31,12 +30,12 @@ class ListStatistics():
         total_options = len(options)         
         for data in aux_list:
             pos = 0
-            while (pos != total_options) and (int(data) != options[pos]):
+            while (pos != total_options) and (int(data) != options[pos]["id"]):
                 pos +=1
             if pos != total_options:
                 self.total_per_option[pos] += 1
             else:
-                raise Exception("Data does not match with any option")
+                raise Exception("Data does not match with any field option.")
             
     def getSerializedData(self):
         return ListStatisticsSerializer(self).data
