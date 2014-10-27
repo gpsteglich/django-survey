@@ -1,4 +1,4 @@
-{% load staticfiles sekizai tags%}
+{% load staticfiles sekizai_tags %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -88,7 +88,8 @@
     {% endaddtoblock %}
     {% addtoblock "js" %}
     <script src={% static 'bootstrap/js/bootstrap.min.js' %}></script>
-    {%block scripts%} {%endblock%}  
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
     <script type="text/javascript">
         $('.collapse').collapse()
     </script>

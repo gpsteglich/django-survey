@@ -13,7 +13,7 @@
         responses.json = "";
 
         responses.getResponses = function(){
-            $http.get('/dynamicForms/responses/'+responses.formId+'/'+ responses.versionNumber+'/')
+            $http.get('/dyn/responses/'+responses.formId+'/'+ responses.versionNumber+'/')
             .success(function(data){
                 responses.json = data;
             })
