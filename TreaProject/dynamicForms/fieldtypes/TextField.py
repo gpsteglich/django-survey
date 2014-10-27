@@ -13,14 +13,16 @@ class TextField(Field.Field):
     prp_template_name = "text/properties.html"
     
     def check_length(self, value, **kwargs):
-        val = kwargs['restrictions']
+        field = kwargs['field']
+        val = field.validations
         if (len(value) > val.max_len_text):
             raise ValidationError("Text is too long")
 
     def get_methods(self, **kwargs):
         #default validation or pass
         base = super(TextField, self).get_methods(**kwargs)
-        val = kwargs['restrictions']
+        field = kwargs['field']
+        val = field.validations
         if (val.max_len_text != None):
             base.append(self.check_length)
         return base

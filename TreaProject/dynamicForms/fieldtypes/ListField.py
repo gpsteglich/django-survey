@@ -14,7 +14,8 @@ class ListField(Field):
     
     def belong_check(self, value, **kwargs):
         v = int(value)
-        top = int(kwargs['options'])
+        field = kwargs['field']
+        top = field.max_id
         if not (v > 0 and v <= top):
             raise ValidationError("Invalid value, not among options.")
         

@@ -14,12 +14,14 @@ class NumberField(Field.Field):
     sts_template_name = "number/template_statistic.html"
     
     def check_min(self, value, **kwargs):
-        val = kwargs['restrictions']
+        field = kwargs['field']
+        val = field.validations
         if ((val.min_number != None) and (int(value) < val.min_number)):
             raise ValidationError("Value below the minimum acceptable.")
 
     def check_max(self, value, **kwargs):
-        val = kwargs['restrictions']
+        field = kwargs['field']
+        val = field.validations
         if ((val.max_number != None) and (int(value) > val.max_number)):
             raise ValidationError("Value above the maximum acceptable.")
         
@@ -34,7 +36,8 @@ class NumberField(Field.Field):
         #default validation or pass
         base = super(NumberField, self).get_methods(**kwargs)
         base.append(self.int_check)
-        restrictions = kwargs['restrictions']
+        field = kwargs['field']
+        restrictions = field.validations
         if (restrictions.min_number != None):
             base.append(self.check_min)
         if (restrictions.max_number != None):
