@@ -67,7 +67,6 @@ class Validations():
     def valid_text(self):
         if self.max_len_text != None:
             return self.max_len_text > 0
-        
 
 
 class Option():
@@ -91,5 +90,4 @@ class Field():
     max_id = models.IntegerField(blank=True)
     field_type = models.CharField(blank=True, max_length=30)
     field_id = models.IntegerField(blank=True)
-     
-     
+    
