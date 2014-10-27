@@ -4,16 +4,16 @@
         <label>Min:</label>
         <input type="number"
                class="form-control"
-               ng-model="visor.selectedField.validations.min_number" 
+               ng-model="editor.selectedField.validations.min_number" 
                ng-value="true" 
-               ng-blur="visor.checkValidations(visor.selectedField)"/>
+               ng-blur="editor.checkValidations(editor.selectedField)"/>
     </div>
     <div class="form-group">
         <label>Max:</label>
         <input type="number"
                class="form-control"
-               ng-model="visor.selectedField.validations.max_number" 
+               ng-model="editor.selectedField.validations.max_number" 
                ng-value="true" 
-               ng-blur="visor.checkValidations(visor.selectedField)"/>
+               ng-blur="editor.checkValidations(editor.selectedField)"/>
     </div>
 {%endblock%}
