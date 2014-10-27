@@ -113,7 +113,6 @@
                     delete visor.questions[j].tooltip;
                     if (visor.questions[j].options){
                         delete visor.questions[j].options;
-                        delete visor.questions[j].max_id;
                     }
                     if (visor.questions[j].dependencies){
                         delete visor.questions[j].dependencies;
