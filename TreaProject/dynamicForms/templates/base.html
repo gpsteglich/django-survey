@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load staticfiles sekizai tags%}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -71,13 +71,29 @@
         {%block content%} {%endblock%} <!-- Content goes here -->
     </div>
 {% endwith %}
- <!-- Bootstrap Core JavaScript -->
+    <!-- Bootstrap Core JavaScript -->
+    {% render_block "js" %}
+
+    {% addtoblock "js" %}
     <script src={% static 'jquery/js/jquery-2.1.1.min.js' %}></script>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
+    <script src={% static "angular/angular.min.js" %}></script>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
+    <script src={% static "angular/d3.min.js" %}></script> 
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
+    <script src={% static "angular/angular-charts.min.js" %}></script>   
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
     <script src={% static 'bootstrap/js/bootstrap.min.js' %}></script>
     {%block scripts%} {%endblock%}  
     <script type="text/javascript">
         $('.collapse').collapse()
     </script>
+    {% endaddtoblock %}
+    {%block scripts%} {%endblock%}
 </body>
 
 </html>
