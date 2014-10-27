@@ -5,7 +5,7 @@
             <span class="glyphicon glyphicon-info-sign"></span>
         </button>
         <input type="number" class="form-control" ng-model="question.answer[0]" ng-change="updateDependencies(question.field_id)"
-        	ng-required="question.required"
+        	ng-required="question.required && showValues[question.field_id]"
             min="{{question.validations.min_number}}"
             max="{{question.validations.max_number}}"
         />

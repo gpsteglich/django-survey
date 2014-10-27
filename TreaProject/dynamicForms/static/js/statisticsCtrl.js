@@ -14,12 +14,13 @@
     	stat.formId = ($location.search()).form;
         stat.versionNumber = ($location.search()).ver;
         stat.json = "";
+        /*
         $scope.templates = {
             'NumberField': '/dynamicForms/field_statistic/NumberField/',
             'SelectField': '/dynamicForms/field_statistic/SelectField/',
             'CheckboxField': '/dynamicForms/field_statistic/CheckboxField/',
 
-        }
+        }*/
         stat.config = {
             title: '',
             tooltips: true,
@@ -47,7 +48,7 @@
         
         stat.getF= function(){
         
-        $http.get('/dynamicForms/statistics/'+stat.formId+'/'+stat.versionNumber+'/')
+        $http.get('../statistics/'+stat.formId+'/'+stat.versionNumber+'/')
         
                 .success(function(data){
                     stat.json = JSON.parse(JSON.stringify(data));

@@ -262,7 +262,7 @@
                 for (var conditionId in field.conditions){
                     var condition = field.conditions[conditionId];
                     if (condition.operatorsList){
-                        delete condition.operatorsList;
+                        //delete condition.operatorsList;
                     }
                 }
             }

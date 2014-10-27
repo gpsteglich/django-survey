@@ -109,13 +109,11 @@
 
                 }
                 for (var j=0; j< visor.questions.length; j++) {
-                    //TODO habilitar cuando back acepte el booleano
-                    //visor.questions[j].showed = Boolean(visor.showValues[visor.questions[j].field_id]);
-                    if (visor.questions[j].tooltip){
-                        delete visor.questions[j].tooltip;
-                    }
+                    visor.questions[j].shown = Boolean(visor.showValues[visor.questions[j].field_id]);
+                    delete visor.questions[j].tooltip;
                     if (visor.questions[j].options){
                         delete visor.questions[j].options;
+                        delete visor.questions[j].max_id;
                     }
                     if (visor.questions[j].dependencies){
                         delete visor.questions[j].dependencies;
