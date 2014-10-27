@@ -48,7 +48,7 @@
         
         stat.getF= function(){
         
-        $http.get('/dynamicForms/statistics/'+stat.formId+'/'+stat.versionNumber+'/')
+        $http.get('../statistics/'+stat.formId+'/'+stat.versionNumber+'/')
         
                 .success(function(data){
                     stat.json = JSON.parse(JSON.stringify(data));
