@@ -48,10 +48,16 @@
                                <!--  </div> -->
                             <div class="modal-footer">
                               </br>
-                               </br>
+                               </br>                             
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true" 
-                                        ng-click="editor.applyDependencies(editor.selectedField.field_id)">Apply</button>
-                            </div>
+                                        ng-click="editor.applyDependencies(editor.selectedField.field_id)">Apply
+                                </button>
+                                <button type="button" class="close pull-left" data-dismiss="modal" aria-hidden="true" ng-click="editor.cancel()">
+                                  Cancel
+                                </button>
+
+                           </div>  
+
                 </div>
               <pre>{{editor.logic|json}}</pre>
               <pre>{{editor.pages|json}}</pre>
