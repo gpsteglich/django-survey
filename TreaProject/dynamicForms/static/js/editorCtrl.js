@@ -256,8 +256,21 @@
             return true;
         };
         
+        editor.cleanJson = function(){
+            for (var fieldId in editor.logic.fields){
+                var field = editor.logic.fields[fieldId];
+                for (var conditionId in field.conditions){
+                    var condition = field.conditions[conditionId];
+                    if (condition.operatorsList){
+                        delete condition.operatorsList;
+                    }
+                }
+            }
+        };
+
         editor.persistForm = function(formStatus){
             editor.version.status = formStatus;
+            editor.cleanJson();
             if (editor.isNewForm()){
                 $http.post('forms/', editor.form)
                 .success( function(data, status, headers, config){
