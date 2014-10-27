@@ -19,6 +19,15 @@ class CheckboxField(ListField):
         checkboxStatistics = CheckboxStatistics(data_list, field["options"])
         return checkboxStatistics.getSerializedData()
 
+    def belong_check(self, value, **kwargs):
+        v = int(value)
+        field = kwargs['field']
+        top = field.max_id
+        for v in value.split('#'):
+            v = int(v)
+            if not (v > 0 and v <= top):
+                raise ValidationError("Invalid value, not among options.")
+            
     def __str__(self):
         return "Checkbox"
 
