@@ -101,6 +101,7 @@ class FieldEntry(models.Model):
     field_type = models.CharField(max_length=100)
     text = models.CharField(max_length=200)
     required = models.BooleanField()
+    shown = models.BooleanField(default=True)
     answer = models.CharField(max_length=200, blank=True, null=True)
     entry = models.ForeignKey("FormEntry", related_name="fields",
                              blank=True, null=True)

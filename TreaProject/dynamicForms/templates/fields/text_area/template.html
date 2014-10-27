@@ -6,7 +6,7 @@
         </button>
     
     <textarea class="form-control" type="text" ng-model="question.answer[0]"
-        ng-required="question.required"
+        ng-required="question.required && showValues[question.field_id]"
     	ng-maxlength="{{question.validations.max_len_text}}"
     />
     {% endverbatim %} 

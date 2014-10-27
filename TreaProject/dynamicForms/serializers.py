@@ -70,7 +70,7 @@ class FieldEntrySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FieldEntry
-        fields = ('field_id', 'field_type', 'text', 'required', 'answer')
+        fields = ('field_id', 'field_type', 'text', 'required', 'shown', 'answer')
 
 
 class FormEntrySerializer(serializers.ModelSerializer):
