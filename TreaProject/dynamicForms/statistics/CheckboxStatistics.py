@@ -27,7 +27,7 @@ class CheckboxStatistics():
         total_options = len(options)      
         for data in aux_list:
             pos = 0
-            while (pos != total_options) and (int(data) != options[pos]):
+            while (pos != total_options) and (int(data) != options[pos]["id"]):
                 pos +=1
             if pos != total_options:
                 self.total_per_option[pos] += 1

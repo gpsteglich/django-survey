@@ -16,7 +16,9 @@
         stat.json = "";
         $scope.templates = {
             'NumberField': '/dynamicForms/field_statistic/NumberField/',
-            'list': '/dynamicForms/field_statistic/list/',
+            'SelectField': '/dynamicForms/field_statistic/SelectField/',
+            'CheckboxField': '/dynamicForms/field_statistic/CheckboxField/',
+
         }
         stat.config = {
             title: '',
@@ -37,19 +39,6 @@
             data: [{
               x: "",
               y: []
-              
-            }, {
-              x: "",
-              y: []
-            }, {
-              x: "",
-              y: []
-            }, {
-              x: "",
-              y: []
-            },{
-              x: "",
-              y: []
             }]
           };
         
@@ -62,30 +51,69 @@
         
                 .success(function(data){
                     stat.json = JSON.parse(JSON.stringify(data));
-                    //console.log(stat.json);
-                    for(var field in stat.json){
-                        var field_id = $.extend({}, stat.json[field]);
-                        if (field_id.field_type=='NumberField'){
+                    console.log(stat.json);
+                    for(var field_id in stat.json){
+                        var field = $.extend({}, stat.json[field_id]);
+                        if (field.field_type=='NumberField'){
                             var conf = angular.copy(stat.config);
-                            conf.title = field_id.field_text;
+                            conf.title = field.field_text;
                             var d = angular.copy(stat.data);
                             for(var i=0; i<5; i++){
-                                d.data[i].x=field_id.quintilesX[i];
-                                d.data[i].y=[field_id.quintilesY[i]];
-                            
+                                d.data[i] = {
+                                    'x': field.quintilesX[i],
+                                    'y': [field.quintilesY[i]]
+                                }
                             }
-                            stat.values[field] = {
-                                'id': field,
+                            stat.values[field_id] = {
+                                'id': field_id,
                                 'chart': 'pie',
                                 'field_type': 'NumberField',  
                                 'conf': conf,
                                 'data': d,
-                                'm' : field_id.mean,
-                                'mt' : field_id.total_mean,
-                                'sd' : field_id.standard_deviation,
-                                'sdt' : field_id.total_standard_deviation,
-                                'tf' : field_id.total_filled,
-                                'tnf': field_id.total_not_filled
+                                'm' : field.mean,
+                                'mt' : field.total_mean,
+                                'sd' : field.standard_deviation,
+                                'sdt' : field.total_standard_deviation,
+                                'tf' : field.total_filled,
+                                'tnf': field.total_not_filled
+                            }
+                        } else if (field.field_type=='SelectField'){
+                            var conf = angular.copy(stat.config);
+                            conf.title = field.field_text;
+                            var d = angular.copy(stat.data);
+                            for(var i=0; i<field.total_per_option.length; i++){
+                                d.data[i] = {
+                                    'x': field.options[i],
+                                    'y': [field.total_per_option[i]]
+                                }
+                            }
+                            stat.values[field_id] = {
+                                'id': field_id,
+                                'chart': 'pie',
+                                'field_type': 'SelectField',  
+                                'conf': conf,
+                                'data': d,
+                                'tf' : field.total_filled,
+                                'tnf': field.total_not_filled
+                            }
+                        } else if (field.field_type=='CheckboxField'){
+                            var conf = angular.copy(stat.config);
+                            conf.title = field.field_text;
+                            var d = angular.copy(stat.data);
+                            for(var i=0; i<field.total_per_option.length; i++){
+                                d.data[i] = {
+                                    'x': field.options[i],
+                                    'y': [field.total_per_option[i]]
+                                }
+                            }
+                            stat.values[field_id] = {
+                                'id': field_id,
+                                'chart': 'pie',
+                                'field_type': 'CheckboxField',  
+                                'conf': conf,
+                                'data': d,
+                                'tf' : field.total_filled,
+                                'tnf': field.total_not_filled
                             }
                         }
                                         

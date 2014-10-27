@@ -76,6 +76,8 @@
         editor.selectField = function(page, index) {
             editor.selectedPage = editor.pages[page];   
             editor.selectedField = editor.selectedPage.fields[index];
+            //select properties tab as active
+            $("#myTab li:eq(1) a").tab('show');
         };
 
         editor.addOption = function() {
@@ -331,8 +333,8 @@
         // logic structures  
       
         editor.newLogicField ={
-            operation : 'hide',
-            action : '',
+            operation : 'Show',
+            action : 'All',
             conditions: [],
         };
 
@@ -382,10 +384,14 @@
             editor.logicField.conditions.splice(indexCond);
         };
 
+        editor.cancel = function(){
+            editor.logicField = editor.newLogicField;
+        };
+
         editor.applyDependencies = function(fieldId){
             
-            editor.logic.fields[fieldId] = editor.logicField;
-  
+            editor.logic.fields[fieldId] = angular.copy(editor.logicField);
+
             //clean field dependecies of every field
             for(var i = 0; i < editor.pages.length; i++){
                 var page = editor.pages[i];
