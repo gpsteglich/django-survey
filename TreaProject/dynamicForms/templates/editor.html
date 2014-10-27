@@ -163,6 +163,10 @@
             {% endaddtoblock %}
             {% addtoblock "js" %}
             <script src={% static "bootstrap/js/bootstrap.min.js"%}></script>
+            
+            <script src={% static "angular/angular-sanitize.js" %}></script>
+            <script src={% static "angular/ng-csv.js" %}></script>
+            
             <script type="text/javascript">
 				$(document).ready(function(){ 
     				$("#myTab li:eq(0) a").tab('show');

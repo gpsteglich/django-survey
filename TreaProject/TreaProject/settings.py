@@ -33,6 +33,8 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+STATIC_ROOT = '~/git/django-survey/TreaProject/dynamicForms/static/'
+
 LOGIN_URL = "login"
 # Application definition
 
@@ -132,3 +134,4 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.messages.context_processors.messages',
     'sekizai.context_processors.sekizai',
 )
+
