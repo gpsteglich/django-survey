@@ -45,6 +45,8 @@ class FormList(generics.ListCreateAPIView):
 
     def get(self, request):
         forms = Form.objects.values()
+        index = 1
+
         for f in forms:
             #Obtain the list of versions of the form f
             #ordered by version number (descendant)
@@ -53,6 +55,10 @@ class FormList(generics.ListCreateAPIView):
             vers_dict = query_set.values()
             #Assign the dict of versions to the form dict
             f["versions"] = vers_dict
+            f["index"] = index
+            f["username"] = User.objects.get(id=f['owner_id'])
+
+            index += 1
             #Get the status of the last version,
             #to know if there is already a draft in this form
             if len(vers_dict) > 0:
