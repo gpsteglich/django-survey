@@ -19,4 +19,4 @@ OperatorList.not_equal = function(a, b){
 	return (a !== b);
 }
 
-operatorFactory.registerOperator('combobox', OperatorList);
+operatorFactory.registerOperator('SelectField', OperatorList);
