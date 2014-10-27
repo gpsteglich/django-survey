@@ -323,11 +323,11 @@ def submit_form_entry(request, slug, format=None):
         serializer = FieldEntrySerializer(data=field)
         if serializer.is_valid():
             obj = serializer.object
-            if obj.required and obj.answer.__str__() == '':
+            if obj.required and obj.answer.__str__() == '' and obj.shown:
                 error_log['error'] += obj.text + ': This field is required\n'
             elif not obj.required and obj.answer.__str__() == '':
                 pass
-            else:
+            elif obj.shown:
                 fld = (Factory.get_class(obj.field_type))()
                 try:
                     loaded = json.loads(final_version.json)
@@ -355,8 +355,9 @@ def submit_form_entry(request, slug, format=None):
     for field in request.DATA:
             serializer = FieldEntrySerializer(data=field)
             if serializer.is_valid():
-                #FIXME: Improve foreing key setting
                 serializer.object.entry = entry
+                if serializer.object.shown:
+                    serializer.object.answer = ''
                 serializer.save()
     return Response(status=status.HTTP_200_OK)
 
