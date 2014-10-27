@@ -1,0 +1,85 @@
+{%extends 'base.html' %}
+{% load staticfiles sekizai_tags %}
+
+
+
+<!DOCTYPE html>
+{%block content%}
+
+
+
+    <div id="page-wrapper">
+	        {% verbatim %} 
+            
+	        <div class="content" ng-controller="statisticsCtrl as s">
+                <div class="list-group">
+                            <ul>
+
+                                <li ng-repeat="field in s.values">
+                                    <h2>Field {{field.id}}  
+                                        <select class="btn btn-primary col-md-offset-1" ng-model="field.chart" ng-options="type for type in chart_types"></select>
+                                    </h2>
+                                  
+                                    <div class="row" ng-include="templates[field.field_type]"></div>
+                                                                    
+                                </li>
+                            </ul>
+                </div>
+             {%endverbatim%}
+
+     </div>
+   
+      
+            {% addtoblock "js" %}
+            <script src={% static "jquery/js/jquery-2.1.1.min.js" %}></script>
+            {% endaddtoblock %}
+            {% addtoblock "js" %}
+            <script src={% static "jquery/js/jquery-ui.min.js" %}></script>           
+		    {% endaddtoblock %}
+        {%block scripts%}
+            <script src={% static "angular/angular.min.js" %}></script>
+            <script src={% static "angular/d3.min.js" %}></script> 
+            <script src={% static "js/app.js" %}></script>
+
+            <script src={% static "angular/angular-charts.min.js" %}></script>   
+            <script src={% static "js/statisticsCtrl.js" %}></script>
+        {%endblock%}
+            {% addtoblock "js" %}
+            <script src={% static "bootstrap/js/ui-bootstrap.min.js" %}></script>
+            {% endaddtoblock %}
+            {% addtoblock "js" %}
+            <script src={% static "angular/sortable.js" %}></script>
+            {% endaddtoblock %}
+            {% addtoblock "js" %}
+            <script src={% static "angular/checklist-model.js" %}></script>
+		    {% endaddtoblock %}
+            {% addtoblock "js" %}
+          
+		    {% endaddtoblock %}
+            {% addtoblock "js" %}
+            <script src={% static "js/operators/operatorFactory.js" %}></script>
+		    {% endaddtoblock %}
+            {% addtoblock "js" %}
+            <script src={% static "js/operators/operatorField.js" %}></script>
+		    {% endaddtoblock %}
+            {% addtoblock "js" %}
+            <script src={% static "js/operators/operatorList.js" %}></script>
+		    {% endaddtoblock %}
+            {% addtoblock "js" %}
+            <script src={% static "js/operators/operatorChecks.js" %}></script>
+		    {% endaddtoblock %}
+            {% addtoblock "js" %}
+            <script src={% static "js/operators/operatorNumber.js" %}></script>
+            {% endaddtoblock %}
+            {% addtoblock "js" %}
+            <script src={% static "bootstrap/js/bootstrap.min.js" %}></script>
+            {% endaddtoblock %}
+{%endblock%}
+
+
+ 
+
+
+                                
+
+

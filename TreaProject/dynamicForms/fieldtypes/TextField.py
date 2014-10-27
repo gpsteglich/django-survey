@@ -25,9 +25,9 @@ class TextField(Field.Field):
             base.append(self.check_length)
         return base
 
-    def check_consistency(self, **kwargs):
+    def check_consistency(self, field):
         #When a field is created check if the restrictions are consistent
-        val = kwargs['restrictions']
+        val = field.validations
         if (not val.valid_text()):
             raise ValidationError("Max length might not be less than 0.")
 

@@ -2,7 +2,7 @@ from django.core.exceptions import ValidationError
 
 from dynamicForms.fieldtypes import Field
 from dynamicForms.fieldtypes import FieldFactory
-
+from dynamicForms.statistics.NumericStatistics import NumericStatistics
 
 class NumberField(Field.Field):
     """
@@ -11,6 +11,7 @@ class NumberField(Field.Field):
     template_name = "number/template.html"
     edit_template_name = "number/template_edit.html"
     prp_template_name = "number/properties.html"
+    sts_template_name = "number/template_statistic.html"
     
     def check_min(self, value, **kwargs):
         val = kwargs['restrictions']
@@ -40,12 +41,20 @@ class NumberField(Field.Field):
             base.append(self.check_max)
         return base
     
-    def check_consistency(self, **kwargs):
+    def check_consistency(self, field):
         #When a field is created check if the restrictions are consistent
-        val = kwargs['restrictions']
+        val = field.validations
         if not val.valid_number():
             raise ValidationError("The min value might not "
                 "be below the max value.")
+                
+    def get_statistics(self, data, field):
+        """
+        returns a serialized NumericStatistics data containing statistical 
+        data for the field.
+        """        
+        numericStatistics = NumericStatistics(data)
+        return numericStatistics.getSerializedData()
 
     def __str__(self):
         return "NumberField"

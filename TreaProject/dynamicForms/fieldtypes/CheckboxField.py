@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 
 from dynamicForms.fieldtypes.ListField import ListField
 from dynamicForms.fieldtypes import FieldFactory
+from dynamicForms.statistics.CheckboxStatistics import CheckboxStatistics
 
 
 class CheckboxField(ListField):
@@ -11,7 +12,13 @@ class CheckboxField(ListField):
     template_name = "checkbox/template.html"
     edit_template_name = "checkbox/template_edit.html"
     prp_template_name = "checkbox/properties.html"
-        
+    sts_template_name = "checkbox/template_statistic.html"
+
+                    
+    def get_statistics(self, data_list, field):
+        checkboxStatistics = CheckboxStatistics(data_list, field["options"])
+        return checkboxStatistics.getSerializedData()
+
     def __str__(self):
         return "Checkbox"
 

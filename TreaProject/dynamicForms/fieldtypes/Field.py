@@ -44,6 +44,13 @@ class Field(object):
         responses = total - queryset.filter(answer="").count()
         return (responses, total)
     
+    def get_statistics(self, data_list, field):
+        """
+        returns a the statistics related to the data list. 
+        """
+        return {}
+    
+    
     """
     Default Render methods for field templates
     """
@@ -55,6 +62,9 @@ class Field(object):
     
     def render_edit(self):
         return self.folder + self.edit_template_name
-
+    
+    def render_statistic(self):
+        return self.folder + self.sts_template_name
+    
     class Meta:
         abstract = True

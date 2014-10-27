@@ -21,9 +21,10 @@ from datetime import datetime
 
 from dynamicForms.models import Form, FormEntry, Version
 from dynamicForms.fields import PUBLISHED, DRAFT, Validations
-from dynamicForms.serializers import FormSerializer, VersionSerializer, ValidationSerializer
+from dynamicForms.serializers import FormSerializer, VersionSerializer
 from dynamicForms.serializers import FieldEntrySerializer, FormEntrySerializer
 from dynamicForms.fieldtypes.FieldFactory import FieldFactory as Factory
+from dynamicForms.statistics.StatisticsCtrl import StatisticsCtrl 
 
 
 class FormList(generics.ListCreateAPIView):
@@ -44,6 +45,8 @@ class FormList(generics.ListCreateAPIView):
 
     def get(self, request):
         forms = Form.objects.values()
+        index = 1
+
         for f in forms:
             #Obtain the list of versions of the form f
             #ordered by version number (descendant)
@@ -52,6 +55,10 @@ class FormList(generics.ListCreateAPIView):
             vers_dict = query_set.values()
             #Assign the dict of versions to the form dict
             f["versions"] = vers_dict
+            f["index"] = index
+            f["username"] = User.objects.get(id=f['owner_id'])
+
+            index += 1
             #Get the status of the last version,
             #to know if there is already a draft in this form
             if len(vers_dict) > 0:
@@ -419,13 +426,28 @@ class FieldPrpTemplateView(TemplateView):
             return 'fields/field_properties_base.html'
         field = Factory.get_class(self.kwargs.get('type'))
         return field().render_properties()
-    
 
-@api_view(['GET'])
-def get_pct(request, pk, number, field_id, format=None):
-    # ALL TODO. This is just an usage example.
-    from dynamicForms.fieldtypes.TextField import TextField
-    f = TextField()
-    (r, t) = f.count_responses_pct(pk, number, field_id)
-    data = {'responses': r , 'total': t}
-    return Response(status=status.HTTP_200_OK, data=data)
+class FieldStsTemplateView(TemplateView):
+    """
+    Renders the field type statistics templates.
+    """
+    def get_template_names(self):
+        field = Factory.get_class(self.kwargs.get('type'))
+        return field().render_statistic()
+   
+class StatisticsView(generics.RetrieveAPIView):
+    
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    
+    def get(self, request, pk, number):
+        """
+        Returns statistics for version (pk, number)
+        """
+        #try:
+        statistics = StatisticsCtrl().getStatistics(pk, number)
+        return Response(data=statistics,status=status.HTTP_200_OK)
+        #except:
+            #return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+
+
+    

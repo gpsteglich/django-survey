@@ -13,7 +13,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">
-                            Forms 
+                            Forms
                         </h1>
                     </div>
                 </div>
@@ -116,11 +116,11 @@
                                                     <th><div class="btn-group">
                                                     <a type="button" class="btn btn-default btn-sm" href= "{{urlBase}}editor#?form={{form.id}}&ver={{v.number}}"
                                                         {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
-                                                        <span class="glyphicon glyphicon-pencil"></span>EDIT
+                                                        <span class="glyphicon glyphicon-pencil"></span> EDIT
                                                     </a>
                                                     <a type="button" class="btn btn-default btn-sm" target="_blank" href= "{{urlBase}}visor?form={{form.id}}&ver={{v.number}}" 
                                                         {% ifnotequal v.status 1 %} disabled {% endifnotequal %}>
-                                                        <span class="glyphicon glyphicon-eye-open"></span>VIEW
+                                                        <span class="glyphicon glyphicon-eye-open"></span> VIEW
                                                     </a>
                                                     <a type="button" class="btn btn-default btn-sm" href = "{{urlBase}}version/{{form.id}}/{{v.number}}/new" 
                                                     {% ifequal form.lastStatus 0 %} disabled {% endifequal %}>
@@ -136,8 +136,12 @@
                                                     </a>
                                                     <a type="button" class="btn btn-default btn-sm" href= "{{urlBase}}responses#?form={{form.id}}&ver={{v.number}}"
                                                         {% ifequal v.status 0 %} disabled {% endifequal %}>
-                                                        <span class="glyphicon glyphicon-pencil"></span>VIEW RESPONSES
+                                                        <span class="glyphicon glyphicon-pencil"></span> RESPONSES
                                                     </a>
+													<a type="button" class="btn btn-default btn-sm" href= "{{urlBase}}statistics#?form={{form.id}}&ver={{v.number}}" {% ifequal v.status 0 %} disabled {% endifequal %}>
+                                                        <span class="glyphicon glyphicon-signal"></span> STATISTICS
+                                                    </a>
+                                                                                                       
                                                     </div></th><!-- btn-group-->
                                                 </tr>
                                             {% endfor %}
@@ -158,6 +162,12 @@
             {% endaddtoblock %}
             {% addtoblock "js" %}
             <script src={% static "angular/angular.min.js" %}></script>
+            {% endaddtoblock %}
+            {% addtoblock "js" %}
+            <script src={% static "angular/d3.min.js" %}></script> 
+            {% endaddtoblock %}
+            {% addtoblock "js" %}
+            <script src={% static "angular/angular-charts.min.js" %}></script>   
             {% endaddtoblock %}
             {% addtoblock "js" %}
             <script src={% static "angular/checklist-model.js" %}></script>

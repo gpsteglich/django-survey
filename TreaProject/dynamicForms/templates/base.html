@@ -81,10 +81,19 @@
    
 {% endwith %}
     <!-- Bootstrap Core JavaScript -->
-    {% render_block "js" postprocessor "compressor.contrib.sekizai.compress" %}
+    {% render_block "js" %}
 
     {% addtoblock "js" %}
     <script src={% static 'jquery/js/jquery-2.1.1.min.js' %}></script>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
+    <script src={% static "angular/angular.min.js" %}></script>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
+    <script src={% static "angular/d3.min.js" %}></script> 
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
+    <script src={% static "angular/angular-charts.min.js" %}></script>   
     {% endaddtoblock %}
     {% addtoblock "js" %}
     <script src={% static 'bootstrap/js/bootstrap.min.js' %}></script>
@@ -94,5 +103,6 @@
         $('.collapse').collapse()
     </script>
     {% endaddtoblock %}
+    {%block scripts%} {%endblock%}
 </body>
 </html>
