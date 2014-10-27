@@ -21,9 +21,11 @@ from datetime import datetime
 
 from dynamicForms.models import Form, FormEntry, Version
 from dynamicForms.fields import PUBLISHED, DRAFT, Validations
-from dynamicForms.serializers import FormSerializer, VersionSerializer, ValidationSerializer
+from dynamicForms.serializers import FormSerializer, VersionSerializer
 from dynamicForms.serializers import FieldEntrySerializer, FormEntrySerializer
+from dynamicForms.fields import Field
 from dynamicForms.fieldtypes.FieldFactory import FieldFactory as Factory
+from dynamicForms.JSONSerializers import FieldSerializer 
 from dynamicForms.statistics.StatisticsCtrl import StatisticsCtrl 
 
 
@@ -321,28 +323,24 @@ def submit_form_entry(request, slug, format=None):
         serializer = FieldEntrySerializer(data=field)
         if serializer.is_valid():
             obj = serializer.object
-            if obj.required and obj.answer.__str__() == '':
+            if obj.required and obj.answer.__str__() == '' and obj.shown:
                 error_log['error'] += obj.text + ': This field is required\n'
             elif not obj.required and obj.answer.__str__() == '':
                 pass
-            else:
+            elif obj.shown:
                 fld = (Factory.get_class(obj.field_type))()
                 try:
                     loaded = json.loads(final_version.json)
                     f_id = obj.field_id
                     kw = {}
-                    val = Validations()
-                    serializer = ValidationSerializer(val, fld.get_validations(loaded, f_id))
-                    if serializer.is_valid():
-                        kw['restrictions'] = val
-                    else:
-                        raise ValidationError("Validations not recognized.")
-                    kw['options'] = fld.get_options(loaded, f_id)
-                    if len(obj.answer.split('#')) > 1:
-                        for option in obj.answer.split('#'):
-                            fld.validate(option, **kw)
-                    else:
+                    f = Field()
+                    data = FieldSerializer(f, field)
+                    if (data.is_valid()):
+                        kw['field'] = f
                         fld.validate(obj.answer, **kw)
+                    else:
+                        raise ValidationError("Invalid JSON format.")
+                    
                 except ValidationError as e:
                     error_log['error'] += e.message
         else:
@@ -357,8 +355,9 @@ def submit_form_entry(request, slug, format=None):
     for field in request.DATA:
             serializer = FieldEntrySerializer(data=field)
             if serializer.is_valid():
-                #FIXME: Improve foreing key setting
                 serializer.object.entry = entry
+                if not serializer.object.shown:
+                    serializer.object.answer = ''
                 serializer.save()
     return Response(status=status.HTTP_200_OK)
 

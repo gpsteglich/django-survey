@@ -1,5 +1,6 @@
 'use strict';
 
+
 (function () {
 	
     var app = angular.module('dynamicFormsFramework');
@@ -14,12 +15,14 @@
     	stat.formId = ($location.search()).form;
         stat.versionNumber = ($location.search()).ver;
         stat.json = "";
+        /*
         // $scope.templates = {
         //     'NumberField': '/dynamicForms/field_statistic/NumberField/',
         //     'SelectField': '/dynamicForms/field_statistic/SelectField/',
         //     'CheckboxField': '/dynamicForms/field_statistic/CheckboxField/',
 
         // }
+        }*/
         stat.config = {
             title: '',
             tooltips: true,
