@@ -21,6 +21,9 @@
         preview.formIdParam = ($location.search()).form;
         preview.versionIdParam = ($location.search()).ver;
         
+        console.log('url params:');
+        console.log('slug: '+ $location.hash().split('_')[0]);
+
             // Load Form
         $http.get('forms/'+preview.formIdParam)
             .success(function(data){
@@ -80,6 +83,14 @@
             }
         });
 
+
+
+
+
+
+
+
+
         /*
         * Page navegation
          */
@@ -110,6 +121,10 @@
                 preview.changePage(preview.selectedPageNum - 1);
             }
         };
+
+
+
+
 
         preview.showValues = [];
 

@@ -22,20 +22,31 @@ var url = '/dyn/';
       	$rootScope.urlBase = url;
     });
 
-    app.factory('VisorService', function() {
-
-        return {
-
-            
-            sumaDos: function(param) {
-              return 2 + param;
-            },
-            getString: function() {
-              return 'soy un tring';
+    app.directive('validate', function() {
+      return {
+        require: 'ngModel',
+        link: function(scope, elm, attrs, ctrl) {
+          ctrl.$validators.validate = function(modelValue, viewValue) {
+            if (ctrl.$isEmpty(modelValue)) {
+              // consider empty models to be valid
+              return true;
+            }
+            var validator = validatorFactory.getValidator(attrs.fieldtype);
+            if (validator){
+                if (validator.validate(viewValue, attrs)) {
+                    // it is valid
+                    return true;
+                }
+                // it is invalid
+                return false;
+            } else {
+                return true;
             }
           };
-    
+        }
+      };
     });
+
 
 })();
 

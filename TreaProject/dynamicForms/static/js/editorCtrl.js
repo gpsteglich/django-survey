@@ -15,8 +15,6 @@
     	 * form on the fields templates. 
     	 */
         
-    	$scope.disabled = true;     //disables all input fields
-        
         var editor = this;
         
         editor.urlBase = $rootScope.urlBase;
@@ -256,8 +254,21 @@
             return true;
         };
         
+        editor.cleanJson = function(){
+            for (var fieldId in editor.logic.fields){
+                var field = editor.logic.fields[fieldId];
+                for (var conditionId in field.conditions){
+                    var condition = field.conditions[conditionId];
+                    if (condition.operatorsList){
+                        delete condition.operatorsList;
+                    }
+                }
+            }
+        };
+
         editor.persistForm = function(formStatus){
             editor.version.status = formStatus;
+            editor.cleanJson();
             if (editor.isNewForm()){
                 $http.post('forms/', editor.form)
                 .success( function(data, status, headers, config){
@@ -432,7 +443,6 @@
         editor.selectFieldOnCondition = function(condition){
             condition.field_type = angular.copy(editor.getFieldType(condition.field));
             condition.operatorsList = editor.getOperatorsForField(condition.field_type);
-            alert(JSON.stringify(condition.operatorsList ));
             if (!editor.operatorsList){
                 editor.operatorsList = [];
             }
@@ -451,15 +461,6 @@
         editor.getOperatorsForField = function(field_type){
             return operatorFactory.getOperatorMethods(field_type);
         };
-
-        // Por compatibilidad con los templates de visor
-        $scope.hideValues = [];
-        $scope.showValues = [];
-        var arraySize = 100;
-        while(arraySize--) {
-            $scope.showValues.push(true);
-            $scope.hideValues.push(false);
-        }
 
     }]);
     

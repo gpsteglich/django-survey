@@ -5,8 +5,7 @@
         <span class="glyphicon glyphicon-info-sign"></span>
     </button>
 
-    <div ng-show="showValues[question.field_id]"
-         ng-repeat ="option in question.options" >
+    <div ng-repeat ="option in question.options" >
 	    <div class="checkbox"  ng-required="question.required">
 		    <label>
 		      <input type="checkbox" checklist-model="question.answer" checklist-value="option.id" > {{option.label}}
