@@ -60,13 +60,19 @@ class Validations():
     min_number = models.IntegerField(blank=True)
     
     def valid_number(self):
-        if (self.max_number != None) and (self.min_number != None):
+        if (self.max_number != None) \
+         and (self.min_number != None):
             return self.max_number >= self.min_number
         return True
     
     def valid_text(self):
         if self.max_len_text != None:
             return self.max_len_text > 0
+    
+    def __init__(self):
+        max_len_text = None
+        max_number = None
+        min_number = None
 
 
 class Option():

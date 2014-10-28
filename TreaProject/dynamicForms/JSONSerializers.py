@@ -18,9 +18,18 @@ class ValidationSerializer(serializers.Serializer):
         an existing model instance, or create a new model instance.
         """
         if instance is not None:
-            instance.max_len_text = attrs.get('max_len_text', instance.max_len_text)
-            instance.max_number = attrs.get('max_number', instance.max_number)
-            instance.min_number = attrs.get('min_number', instance.min_number)
+            if not attrs.get('max_len_text') and (attrs.get('max_len_text') != 0):
+                instance.max_len_text = None
+            else:
+                instance.max_len_text = attrs.get('max_len_text', instance.max_len_text)
+            if not attrs.get('max_number') and (attrs.get('max_number') != 0):
+                instance.max_number = None
+            else:    
+                instance.max_number = attrs.get('max_number', instance.max_number)
+            if not attrs.get('min_number') and (attrs.get('min_number') != 0):
+                instance.min_number = None
+            else:
+                instance.min_number = attrs.get('min_number', instance.min_number)
             return instance
         return Validations(**attrs)
     
