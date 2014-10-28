@@ -14,6 +14,9 @@
         var stat = this;
     	stat.formId = ($location.search()).form;
         stat.versionNumber = ($location.search()).ver;
+        stat.versionNumber = ($location.search()).ver;
+        stat.versionNumber = ($location.search()).ver;
+        stat.versionNumber = ($location.search()).ver;
         stat.json = "";
         /*
         // $scope.templates = {
@@ -47,10 +50,23 @@
         
         stat.values ={
         };
-        
+        stat.filter_id='';
+        stat.filter_type='';
+        stat.filter_value='';
+        stat.path='';
         stat.getF= function(){
         
-        $http.get('../statistics/'+stat.formId+'/'+stat.versionNumber+'/')
+       
+          
+       if(stat.filter_id!='' && stat.filter_type !='' && stat.filter_value != ''){
+                stat.path = stat.filter_id +'/' +stat.filter_type +'/'+ stat.filter_value;
+                console.log(stat.path);
+       }else {
+           stat.path='';
+        }
+
+        
+        $http.get('../statistics/'+stat.formId+'/'+stat.versionNumber+'/'+stat.path)
         
                 .success(function(data){
                     stat.json = JSON.parse(JSON.stringify(data));
