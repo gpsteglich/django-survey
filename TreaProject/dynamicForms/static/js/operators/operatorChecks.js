@@ -25,4 +25,4 @@ OperatorChecks.not_contains = function(item, list_str){
     return true;
 }
 
-operatorFactory.registerOperator('OperatorChecks', OperatorChecks);
+operatorFactory.registerOperator('CheckboxField', OperatorChecks);

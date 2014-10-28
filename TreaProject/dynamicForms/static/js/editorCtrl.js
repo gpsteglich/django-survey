@@ -148,9 +148,11 @@
         
         editor.checkValidations = function(field){
             var val = field.validations;
-            if (val.min_number > val.max_number) {
-                alert("Minimum can't exceed maximum");
-                val.min_number = val.max_number;
+            if (val.min_number && val.max_number){
+                if (val.min_number > val.max_number) {
+                    alert("Minimum can't exceed maximum");
+                    val.min_number = val.max_number;
+                }
             }
             if (val.max_len_text < 0){
                 alert("Maximum length can't be less than 0");
@@ -262,7 +264,7 @@
                 for (var conditionId in field.conditions){
                     var condition = field.conditions[conditionId];
                     if (condition.operatorsList){
-                        delete condition.operatorsList;
+                        //delete condition.operatorsList;
                     }
                 }
             }
@@ -370,8 +372,13 @@
             }
             if(editor.logic.fields[fieldId]==undefined){
                 editor.logicField = angular.copy(editor.newLogicField);
+                
             }else{
-                editor.logicField=editor.logic.fields[fieldId];
+                editor.logicField=angular.copy(editor.logic.fields[fieldId]);
+                for (var cond_index in editor.logicField.conditions){
+                    cond = editor.logicField.conditions[cond_index];
+                    editor.selectFieldOnCondition(cond);
+                }
             }
         };
 
@@ -384,7 +391,11 @@
             if(editor.logic.pages[pageNum]==undefined){
                 editor.logicField = angular.copy(editor.newLogicField);
             }else{
-                editor.logicField=editor.logic.pages[pageNum];
+                editor.logicField=angular.copy(editor.logic.pages[pageNum]);
+                for (var cond_index in editor.logicField.conditions){
+                    cond = editor.logicField.conditions[cond_index];
+                    editor.selectFieldOnCondition(cond);
+                }
             }
         };
 
@@ -395,10 +406,6 @@
 
         editor.removeLogicCondition= function(indexCond){
             editor.logicField.conditions.splice(indexCond);
-        };
-
-        editor.cancel = function(){
-            editor.logicField = editor.newLogicField;
         };
 
         editor.applyDependencies = function(fieldId){
@@ -426,7 +433,7 @@
 
         editor.applyPageDependencies = function(page){
             pageNum = editor.getPageNum(page);
-            editor.logic.pages[pageNum] = editor.logicField;
+            editor.logic.pages[pageNum] = angular.copy(editor.logicField);
 
             //clean page dependecies of every field
             for(var i = 0; i < editor.pages.length; i++){
@@ -438,11 +445,13 @@
             }
   
             //add dependencies
-            var dest_page = editor.logic.pages[pageNum];
-            for (var k = 0; k < dest_page.conditions.length; k++){
-                origin_id = dest_page.conditions[k].field;
-                origin = editor.getFieldById(origin_id);
-                origin.dependencies.pages.push(pageNum);
+            for (var dest_page_num in editor.logic.pages){
+                var dest_page = editor.logic.pages[dest_page_num];
+                for (var k = 0; k < dest_page.conditions.length; k++){
+                    origin_id = dest_page.conditions[k].field;
+                    origin = editor.getFieldById(origin_id);
+                    origin.dependencies.pages.push(dest_page_num);
+                }
             }
         };
 

@@ -33,7 +33,7 @@ class Field(object):
     def get_options(self, json, f_id):
         pass
 
-    def check_consistency(self, **kwargs):
+    def check_consistency(self, field):
         #When a field is created check if the restrictions are consistent
         pass
 

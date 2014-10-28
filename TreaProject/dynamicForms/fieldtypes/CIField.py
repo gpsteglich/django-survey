@@ -4,7 +4,6 @@ import re
 from dynamicForms.fieldtypes import Field
 from dynamicForms.fieldtypes import FieldFactory
 
-
 class CIField(Field.Field):
     """
     CI field type class
@@ -18,7 +17,7 @@ class CIField(Field.Field):
         # If value has less than 8 digits, we complete with zeros on the left
         if len(digits) < 8:
             diff = 8 - len(digits)
-            for x in range(0, diff + 1):
+            for x in range(0, diff):
                 digits.insert(0, 0)
 
         const = [2, 9, 8, 7, 6, 3, 4]

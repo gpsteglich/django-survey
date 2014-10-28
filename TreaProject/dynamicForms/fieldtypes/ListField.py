@@ -14,13 +14,14 @@ class ListField(Field):
     
     def belong_check(self, value, **kwargs):
         v = int(value)
-        top = int(kwargs['options'])
+        field = kwargs['field']
+        top = field.max_id
         if not (v > 0 and v <= top):
             raise ValidationError("Invalid value, not among options.")
         
     
-    def check_consistency(self, **kwargs):
-        options = kwargs['options']
+    def check_consistency(self, field):
+        options = field.options
         if (options == []):
             raise ValidationError("List fields need at least one option.")
     
