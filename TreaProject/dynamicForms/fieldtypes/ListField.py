@@ -31,7 +31,9 @@ class ListField(Field):
     def get_statistics(self, data_list, field):
         options = self.get_option_labels(field)
         listStatistics = ListStatistics(data_list,options)
-        return listStatistics.getSerializedData()
+        statistics = super(ListField, self).get_statistics(data_list,field)
+        statistics.update(listStatistics.getSerializedData())      
+        return statistics
 
     def get_options(self, json, f_id):
         for page in json['pages']:

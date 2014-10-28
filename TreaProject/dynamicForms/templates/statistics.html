@@ -11,9 +11,41 @@
 	        {% verbatim %} 
             
 	        <div class="content" ng-controller="statisticsCtrl as s">
+            <div>
+               <div class="row" style="margin-bottom:50px">
+                                                  <div class="col-md-2">
+                                                    <label>Field: </label>
+                                                  </div>
+                                                  <div class="col-md-2">
+                                                        <select  class="form-control" ng-options="id as value.conf.title for (id,value) in s.values" ng-model="s.filter_id" >
+                                                            
+                                                         </select> 
+                                                  </div>
+                                                  <div class="col-md-2">
+                                                      <h4 class="text-center">Filter type:</h4>
+                                                  </div>
+                                                  <div class="col-md-2">
+                                                    <select  class="form-control" ng-options="option for option in ['contains', 'equals']" ng-model="s.filter_type" > </select> 
+                                                  </div>
+                                                  <div class="col-md-2"> 
+                                                    <h4> value: </h4>
+                                                  </div> 
+                                                   <div class="col-md-2"> 
+                                                        <input  class="form-control" type="text" ng-model="s.filter_value" /> 
+                                                  </div>        
+                                      </div>     
+                <div class="row" style="margin-bottom:50px">
+                                                  <div class="col-md-2">
+                                                    <button ng-click="s.getF()">Apply</button>
+                                                  </div>        
+
+                                                   <div class="col-md-2">
+                                                    <button ng-click="s.Discard()">Discard</button>
+                                                  </div>                                              
+                                      </div>            
+            </div>
                 <div class="list-group">
                             <ul>
-
                                 <li ng-repeat="field in s.values">
                                     <h2>Field {{field.id}}  
                                         <select class="btn btn-primary col-md-offset-1" ng-model="field.chart" ng-options="type for type in chart_types"></select>
