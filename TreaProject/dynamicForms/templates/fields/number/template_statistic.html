@@ -8,6 +8,10 @@
         <table class="table table-bordered">
             <tbody>
                 <tr>
+                    <td>Type</td>
+                    <td>{{field.type}}</td>    
+                </tr>
+                <tr>
                     <td>Mean</td>
                     <td>{{field.m}}</td>
                 <tr>
@@ -30,7 +34,13 @@
                     <td>Empty fields</td>
                     <td>{{field.tnf}}</td>
                 </tr>
+                <tr>
+                    <td>Required</td>
+                    <td>{{field.req}}</td>    
+                </tr>
             </tbody>
         </table>
+        <button type="button" ng-click="createPDF(field)" class="btn btn-primary">Export PDF</button>
+        <button type="button" ng-csv="createArrayToExport(field)" filename="test.csv" class="btn btn-primary  ">Export CSV</button>
     </div>
 {% endverbatim %}

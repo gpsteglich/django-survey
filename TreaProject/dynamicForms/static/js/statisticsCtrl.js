@@ -1,5 +1,6 @@
 'use strict';
 
+
 (function () {
 	
     var app = angular.module('dynamicFormsFramework');
@@ -15,11 +16,12 @@
         stat.versionNumber = ($location.search()).ver;
         stat.json = "";
         /*
-        $scope.templates = {
-            'NumberField': '/dynamicForms/field_statistic/NumberField/',
-            'SelectField': '/dynamicForms/field_statistic/SelectField/',
-            'CheckboxField': '/dynamicForms/field_statistic/CheckboxField/',
+        // $scope.templates = {
+        //     'NumberField': '/dynamicForms/field_statistic/NumberField/',
+        //     'SelectField': '/dynamicForms/field_statistic/SelectField/',
+        //     'CheckboxField': '/dynamicForms/field_statistic/CheckboxField/',
 
+        // }
         }*/
         stat.config = {
             title: '',
@@ -76,7 +78,9 @@
                                 'sd' : field.standard_deviation,
                                 'sdt' : field.total_standard_deviation,
                                 'tf' : field.total_filled,
-                                'tnf': field.total_not_filled
+                                'tnf': field.total_not_filled,
+                                'req': field.required,
+                                'type': "Number"
                             }
                         } else if (field.field_type=='SelectField'){
                             var conf = angular.copy(stat.config);
@@ -95,7 +99,10 @@
                                 'conf': conf,
                                 'data': d,
                                 'tf' : field.total_filled,
-                                'tnf': field.total_not_filled
+                                'tnf': field.total_not_filled,
+                                'req': field.required,
+                                'type': "Combobox"
+
                             }
                         } else if (field.field_type=='CheckboxField'){
                             var conf = angular.copy(stat.config);
@@ -114,7 +121,9 @@
                                 'conf': conf,
                                 'data': d,
                                 'tf' : field.total_filled,
-                                'tnf': field.total_not_filled
+                                'tnf': field.total_not_filled,
+                                'req': field.required,
+                                'type': "Checkbox"
                             }
                         }
                                         
@@ -130,6 +139,54 @@
      
         stat.getF();
       console.log(stat.values);
+
+       $scope.createArrayToExport  = function (field){
+        var data = [];
+        data.push({
+                                    "Label" : "Mean",
+                                    "Value" : field.m,                               
+                                });
+                                data.push({
+                                    "Label" : "Total Mean",
+                                    "Value" : field.mt,                               
+                                });
+                                data.push({
+                                    "Label" : "Standard Deviaion",
+                                    "Value" : field.sd,                               
+                                });
+                                data.push({
+                                    "Label" : "Total Standard deviation",
+                                    "Value" : field.sdt,                               
+                                });
+                                data.push({
+                                    "Label" : "Answered fields",
+                                    "Value" : field.tf,                               
+                                });
+                                data.push({
+                                    "Label" : "Empty fields",
+                                    "Value" : field.tnf,                               
+                                });
+                                return data;
+
+    }
+
+
+       $scope.createPDF = function(field){
+                          
+                        
+                            var fontSize = 12, height = 0,doc;
+                            var data = $scope.createArrayToExport(field) ;
+                            doc = new jsPDF('p', 'pt', 'a4', true);
+                            doc.setFont("courier", "normal");
+                            doc.setFontSize(fontSize);                    
+                            height = doc.drawTable(data, {xstart:10,ystart:10,tablestart:70,marginleft:50});      
+                            doc.save("statistics.pdf");
+                         
+                           }
+     
+
+    
+
         
     $scope.chart_types = [
         'pie',
