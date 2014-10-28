@@ -37,8 +37,8 @@ class MatriculaField(Field.Field):
     letters = 3
     
     def pattern_check(self, value, **kwargs):
-        regex = r"[A-Z]{" + re.escape("%d", letters) + "}[0-9]{" + \
-            re.escape("%d", digits) + "}"
+        regex = r"[A-Z]{" + self.letters.__str__() + "}[0-9]{" + \
+            self.digits.__str__() + "}"
         result = re.match(regex, value);
         if (result == None):
             raise ValidationError("Not a valid format.")
