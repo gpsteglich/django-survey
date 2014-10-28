@@ -381,8 +381,11 @@ def get_responses(request, pk, number, format=None):
             content = {"error": "This version's status is Draft."}
             return Response(content, status=status.HTTP_406_NOT_ACCEPTABLE)
         queryset = v.entries.all()
-        serializer = FormEntrySerializer(queryset, many=True)
-        return Response(serializer.data)
+        if queryset:
+            serializer = FormEntrySerializer(queryset, many=True)
+            return Response(serializer.data)
+        else: 
+            return Response(data="No field entries for this form", status=status.HTTP_406_NOT_ACCEPTABLE)
     except ObjectDoesNotExist:
         content = {"error": "There is no form with that slug or the"
         " corresponding form has no version with that number"}
