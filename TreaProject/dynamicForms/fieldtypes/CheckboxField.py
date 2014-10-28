@@ -20,7 +20,6 @@ class CheckboxField(ListField):
         return checkboxStatistics.getSerializedData()
 
     def belong_check(self, value, **kwargs):
-        v = int(value)
         field = kwargs['field']
         top = field.max_id
         for v in value.split('#'):
