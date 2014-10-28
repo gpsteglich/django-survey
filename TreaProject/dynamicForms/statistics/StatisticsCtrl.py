@@ -33,7 +33,6 @@ class StatisticsCtrl():
                 for field in page["fields"]:
                     data = []
                     for fieldEntry in fieldEntries:
-                        print(fieldEntry)
                         if fieldEntry.field_id == field["field_id"]:
                             data.append(fieldEntry.answer)                                      
                     fieldType = Factory.get_class(field["field_type"])

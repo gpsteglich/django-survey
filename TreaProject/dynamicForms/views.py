@@ -445,8 +445,9 @@ class StatisticsView(generics.RetrieveAPIView):
         try:
             statistics = StatisticsCtrl().getStatistics(pk, number, fieldId, filterType, filter)
             return Response(data=statistics,status=status.HTTP_200_OK)
-        except Exception:
-            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+        except Exception as e:
+            error_msg = str(e) 
+            return Response(data=error_msg, status=status.HTTP_406_NOT_ACCEPTABLE)
 
 
     
