@@ -1,6 +1,6 @@
 'use strict';
 
-var url = '/dyn/';
+var url = '/dynamicForms/';
 
 (function () {
     /*

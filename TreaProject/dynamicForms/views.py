@@ -403,6 +403,16 @@ def get_constants(request, format=None):
     return Response(status=status.HTTP_200_OK, data=data)
 
 
+@login_required
+@api_view(['GET'])
+def get_URL(request, format=None):
+    """
+    View to get the base URL.
+    """
+    data = {'URL': settings.FORMS_BASE_URL}
+    return Response(status=status.HTTP_200_OK, data=data)
+
+
 class FieldTemplateView(TemplateView):
     """
     Renders the field type templates.
