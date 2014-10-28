@@ -5,6 +5,43 @@ from django.template.defaultfilters import slugify
 from dynamicForms.fields import JSONField, STATUS, DRAFT, PUBLISHED, EXPIRED
 from datetime import datetime
 
+class VersionQueySet(models.query.QuerySet):
+    """
+    QuerySet for Version model
+    """
+    def data_icontains(self, *args, **kwargs):
+        entries = self.get(pk=kwargs['version']).entries.all()
+        data = []
+        for entry in entries:
+            fields = entry.fields.filter(field_id=kwargs['field_id'], answer__icontains=kwargs['data'])
+            for field in fields:
+                data.append(field)
+        return data
+    def data_iexact(self, *args, **kwargs):
+        entries = self.get(pk=kwargs['version']).entries.all()
+        data = []
+        for entry in entries:
+            fields = entry.fields.filter(field_id=kwargs['field_id'], answer__iexact=kwargs['data'])
+            for field in fields:
+                data.append(field)
+        return data
+    def data_all(self, *args, **kwargs):
+        entries = self.get(pk=kwargs['version']).entries.all()
+        data = []
+        for entry in entries:
+            fields = entry.fields.filter(field_id=kwargs['field_id'])
+            for field in fields:
+                data.append(field)
+        return data
+
+
+class VersionManager(models.Manager):
+    """
+    Manager for Version model
+    """
+    def get_queryset(self):
+        return VersionQueySet(self.model, using=self._db)
+
 
 class Form(models.Model):
     """
@@ -44,6 +81,8 @@ class Version(models.Model):
     publish_date = models.DateTimeField(blank=True, null=True)
     expiry_date = models.DateTimeField(blank=True, null=True)
     form = models.ForeignKey("Form", related_name="versions")
+
+    objects = VersionManager()
 
     def __str__(self):
         return str(self.number)
