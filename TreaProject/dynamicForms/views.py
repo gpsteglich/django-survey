@@ -438,12 +438,12 @@ class StatisticsView(generics.RetrieveAPIView):
     
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     
-    def get(self, request, pk, number):
+    def get(self, request, pk, number, fieldId=None,filterType=None, filter=""):
         """
         Returns statistics for version (pk, number)
         """
         try:
-            statistics = StatisticsCtrl().getStatistics(pk, number)
+            statistics = StatisticsCtrl().getStatistics(pk, number, fieldId, filterType, filter)
             return Response(data=statistics,status=status.HTTP_200_OK)
         except Exception:
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
