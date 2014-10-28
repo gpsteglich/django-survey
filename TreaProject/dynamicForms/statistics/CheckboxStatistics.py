@@ -1,4 +1,4 @@
-from dynamicForms.serializers import ListStatisticsSerializer
+from dynamicForms.statistics.serializers import ListStatisticsSerializer
 
 class CheckboxStatistics():
     

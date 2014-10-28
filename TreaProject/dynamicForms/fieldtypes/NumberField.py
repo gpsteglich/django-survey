@@ -55,10 +55,12 @@ class NumberField(Field.Field):
         """
         returns a serialized NumericStatistics data containing statistical 
         data for the field.
-        """        
+        """  
+        statistics = super(NumberField, self).get_statistics(data, field)      
         numericStatistics = NumericStatistics(data)
-        return numericStatistics.getSerializedData()
-
+        statistics.update(numericStatistics.getSerializedData())
+        return statistics
+    
     def __str__(self):
         return "NumberField"
 

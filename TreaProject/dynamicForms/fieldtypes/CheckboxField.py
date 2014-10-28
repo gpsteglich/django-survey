@@ -17,7 +17,14 @@ class CheckboxField(ListField):
                     
     def get_statistics(self, data_list, field):
         checkboxStatistics = CheckboxStatistics(data_list, field["options"])
-        return checkboxStatistics.getSerializedData()
+        statistics = checkboxStatistics.getSerializedData()
+        statistics["field_text"] = field["text"] 
+        if field["required"]:
+            statistics["required"] = "Yes"
+        else:
+            statistics["required"] = "No"
+        return statistics
+      
 
     def belong_check(self, value, **kwargs):
         v = int(value)
