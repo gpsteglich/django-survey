@@ -108,7 +108,7 @@ STATIC_ROOT = '~/git/django-survey/TreaProject/dynamicForms/static/'
 
 LOGIN_URL = "login"
 
-FORMS_BASE_URL = '/dynamicForms/'
+FORMS_BASE_URL = '/inefop/'
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',

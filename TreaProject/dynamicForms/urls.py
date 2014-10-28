@@ -59,7 +59,6 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^responses/(?P<pk>[a-z,0-9,\-,\_]+)/(?P<number>[0-9]+)/$', 'get_responses'),
     url(r'^responses/$', views.TemplateView.as_view(template_name='responses.html')),
     url(r'^constants/$', 'get_constants'),
-    url(r'^base_url/$', 'get_URL'),
 )
 
 urlpatterns = format_suffix_patterns(urlpatterns)
