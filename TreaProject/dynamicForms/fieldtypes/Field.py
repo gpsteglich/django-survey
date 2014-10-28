@@ -48,7 +48,12 @@ class Field(object):
         """
         returns a the statistics related to the data list. 
         """
-        return {}
+        statistics = {"field_type": field["field_type"], "field_text": field["text"]}
+        if field["required"]:
+            statistics["required"] = "Yes"
+        else:
+            statistics["required"] = "No"
+        return statistics
     
     
     """

@@ -1,7 +1,7 @@
 from statistics import mean, pstdev
 import math
 
-from dynamicForms.serializers import NumericStatisticsSerializer 
+from dynamicForms.statistics.serializers import NumericStatisticsSerializer 
 
 class NumericStatistics():
     

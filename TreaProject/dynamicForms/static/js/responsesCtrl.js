@@ -18,7 +18,7 @@
                 responses.json = data;
             })
             .error(function(data, status, headers, config){
-                alert('Error loading form data: ' + status);
+                alert(data + status);
             })
         }
 

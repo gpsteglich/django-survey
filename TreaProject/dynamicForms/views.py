@@ -385,8 +385,11 @@ def get_responses(request, pk, number, format=None):
             content = {"error": "This version's status is Draft."}
             return Response(content, status=status.HTTP_406_NOT_ACCEPTABLE)
         queryset = v.entries.all()
-        serializer = FormEntrySerializer(queryset, many=True)
-        return Response(serializer.data)
+        if queryset:
+            serializer = FormEntrySerializer(queryset, many=True)
+            return Response(serializer.data)
+        else: 
+            return Response(data="No field entries for this form", status=status.HTTP_406_NOT_ACCEPTABLE)
     except ObjectDoesNotExist:
         content = {"error": "There is no form with that slug or the"
         " corresponding form has no version with that number"}
@@ -452,15 +455,16 @@ class StatisticsView(generics.RetrieveAPIView):
     
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     
-    def get(self, request, pk, number):
+    def get(self, request, pk, number, fieldId=None,filterType=None, filter=""):
         """
         Returns statistics for version (pk, number)
         """
-        #try:
-        statistics = StatisticsCtrl().getStatistics(pk, number)
-        return Response(data=statistics,status=status.HTTP_200_OK)
-        #except:
-            #return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+        try:
+            statistics = StatisticsCtrl().getStatistics(pk, number, fieldId, filterType, filter)
+            return Response(data=statistics,status=status.HTTP_200_OK)
+        except Exception as e:
+            error_msg = str(e) 
+            return Response(data=error_msg, status=status.HTTP_406_NOT_ACCEPTABLE)
 
 
     
