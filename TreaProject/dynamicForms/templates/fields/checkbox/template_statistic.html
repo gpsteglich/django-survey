@@ -26,5 +26,7 @@
                 </tr>
             </tbody>
         </table>
+        <button type="button" ng-click="createPDF(field)" class="btn btn-primary">Export PDF</button>
+        <button type="button" ng-csv="createArrayToExport(field)" filename="test.csv" class="btn btn-primary  ">Export CSV</button>
     </div>
 {% endverbatim %}

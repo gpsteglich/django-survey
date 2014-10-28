@@ -142,31 +142,56 @@
 
        $scope.createArrayToExport  = function (field){
         var data = [];
-        data.push({
-                                    "Label" : "Mean",
-                                    "Value" : field.m,                               
-                                });
-                                data.push({
-                                    "Label" : "Total Mean",
-                                    "Value" : field.mt,                               
-                                });
-                                data.push({
-                                    "Label" : "Standard Deviaion",
-                                    "Value" : field.sd,                               
-                                });
-                                data.push({
-                                    "Label" : "Total Standard deviation",
-                                    "Value" : field.sdt,                               
-                                });
-                                data.push({
-                                    "Label" : "Answered fields",
-                                    "Value" : field.tf,                               
-                                });
-                                data.push({
-                                    "Label" : "Empty fields",
-                                    "Value" : field.tnf,                               
-                                });
-                                return data;
+       
+            data.push({
+                "Label" : "field type",
+                "Value" : field.type,                               
+            });
+            data.push({
+                "Label" : "is required",
+                "Value" : field.req,                               
+            });
+            data.push({
+                "Label" : "Answered fields",
+                "Value" : field.tf,                               
+            });
+            data.push({
+                "Label" : "Empty fields",
+                "Value" : field.tnf,                               
+            });
+            data.push({
+                "Label" : "   ",
+                "Value" : '',                               
+            });
+        if (field.type == 'Number'){
+            
+            data.push({
+                "Label" : "Mean",
+                "Value" : field.m,                               
+            });
+            data.push({
+                "Label" : "Total Mean",
+                "Value" : field.mt,                               
+            });
+            data.push({
+                "Label" : "Standard Deviaion",
+                "Value" : field.sd,                               
+            });
+            data.push({
+                "Label" : "Total Standard deviation",
+                "Value" : field.sdt,                               
+            });      
+            for(var i=0; i<5; i++){
+               data.push(field.data.data[i]); 
+            }
+        }
+        else{
+            // alert(data.data[1]);
+            for(var i=0; i<field.data.data.length; i++){
+                data.push(field.data.data[i]);
+            }
+        }
+        return data;
 
     }
 
