@@ -7,9 +7,9 @@ function OperatorList() {
 OperatorList = Object.create(OperatorField);
 OperatorList.prototype.constructor = OperatorList;
 
-OperatorList.register = function(){
-	//llamar a factory
-}
+OperatorList.operandKind = function(){
+	return 'options';
+};
 
 OperatorList.equal = function(a, b){
 	return (a === b);

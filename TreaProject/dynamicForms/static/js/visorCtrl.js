@@ -106,7 +106,6 @@
                         visor.questions[i].options= visor.questions[i].options.join('#');
                     }
                     visor.questions[i].answer = visor.questions[i].answer.join('#');
-
                 }
                 for (var j=0; j< visor.questions.length; j++) {
                     visor.questions[j].shown = Boolean(visor.showValues[visor.questions[j].field_id]);
@@ -274,7 +273,7 @@
                         for (var condAll in logic.conditions){
                             var condition = logic.conditions[condAll];
                             var field_org = visor.getFieldById(condition.field);
-                            var data = field_org.answer; 
+                            var data = field_org.answer;
                             var operator = eval('operatorFactory.getOperator("'+condition.field_type+'")');
                             var funcStr = 'operator.'+ condition.comparator +'("'+data+'","'+ condition.value+'")';
                             value &= eval(funcStr);

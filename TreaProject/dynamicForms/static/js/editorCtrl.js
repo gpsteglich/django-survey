@@ -466,6 +466,16 @@
         editor.selectFieldOnCondition = function(condition){
             condition.field_type = angular.copy(editor.getFieldType(condition.field));
             condition.operatorsList = editor.getOperatorsForField(condition.field_type);
+            condition.operandKind = editor.getFieldOperandKind(condition.field_type);
+            if (editor.isOptionsType(condition.operandKind)){
+                var field = editor.getFieldById(condition.field);
+                condition.options = field.options;
+            }
+            if (editor.isInputType(condition.operandKind)){
+                if (condition.options){
+                    delete condition.options;
+                }
+            }
             if (!editor.operatorsList){
                 editor.operatorsList = [];
             }
@@ -484,6 +494,19 @@
         editor.getOperatorsForField = function(field_type){
             return operatorFactory.getOperatorMethods(field_type);
         };
+
+        editor.getFieldOperandKind = function(field_type){
+            var operator = operatorFactory.getOperator(field_type);
+            return operator.operandKind();
+        }
+
+        editor.isInputType = function (operandKind){
+            return operandKind == 'input';
+        }
+
+        editor.isOptionsType = function (operandKind){
+            return operandKind == 'options';
+        }
 
     }]);
     

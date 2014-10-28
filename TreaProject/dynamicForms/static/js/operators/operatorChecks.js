@@ -5,20 +5,20 @@ function OperatorChecks() {
 OperatorChecks = Object.create(OperatorList);
 OperatorChecks.prototype.constructor = OperatorChecks;
 
-OperatorChecks.contains = function(item, list_str){
-	list = list_str.split('#');
+OperatorChecks.contains = function(data, contition){
+	list = data.split(',');
 	for (var i = 0; i < list.length; i++) {
-        if (list[i] === item) {
+        if (list[i] === contition) {
             return true;
         }
     }
     return false;
 }
 
-OperatorChecks.not_contains = function(item, list_str){
-	list = list_str.split('#');
+OperatorChecks.not_contains = function(data, contition){
+	list = data.split(',');
 	for (var i = 0; i < list.length; i++) {
-        if (list[i] === item) {
+        if (list[i] === contition) {
             return false;
         }
     }
