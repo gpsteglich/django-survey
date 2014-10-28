@@ -148,13 +148,24 @@
 
                 })
                 .error(function(data, status, headers, config){
-                    alert('error loading statistics: ' + status);
+                    alert('error loading statistics: ' + data);
                 });
         
         };
      
         stat.getF();
       console.log(stat.values);
+
+      stat.Discard = function(){
+        stat.filter_id='';
+        stat.filter_type='';
+        stat.filter_value='';
+        stat.path='';
+        stat.getF();
+
+
+
+      }
 
        $scope.createArrayToExport  = function (field){
         var data = [];
