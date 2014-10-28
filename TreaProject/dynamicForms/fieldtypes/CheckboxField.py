@@ -26,7 +26,7 @@ class CheckboxField(ListField):
             v = int(v)
             if not (v > 0 and v <= top):
                 raise ValidationError("Invalid value, not among options.")
-            
+
     def __str__(self):
         return "Checkbox"
 
