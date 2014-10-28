@@ -14,24 +14,30 @@ class VersionQueySet(models.query.QuerySet):
         data = []
         for entry in entries:
             fields = entry.fields.filter(field_id=kwargs['field_id'], answer__icontains=kwargs['data'])
-            for field in fields:
-                data.append(field)
+            # for field in fields:
+            if fields.count() > 0:
+                for field in entry.fields.all():
+                    data.append(field)
         return data
     def data_iexact(self, *args, **kwargs):
         entries = self.get(pk=kwargs['version']).entries.all()
         data = []
         for entry in entries:
             fields = entry.fields.filter(field_id=kwargs['field_id'], answer__iexact=kwargs['data'])
-            for field in fields:
-                data.append(field)
+            # for field in fields:
+            if fields.count() > 0:
+                for field in entry.fields.all():
+                    data.append(field)
         return data
     def data_all(self, *args, **kwargs):
         entries = self.get(pk=kwargs['version']).entries.all()
         data = []
         for entry in entries:
             fields = entry.fields.filter(field_id=kwargs['field_id'])
-            for field in fields:
-                data.append(field)
+            # for field in fields:
+            if fields.count() > 0:
+                for field in entry.fields.all():
+                    data.append(field)
         return data
 
 
