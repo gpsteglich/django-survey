@@ -234,7 +234,9 @@
         */
         //TODO: usar variables globales para PUBLISH, DRAFT
         editor.saveForm = function(){
-            editor.persistForm(0);
+            if (editor.validateForm()){
+                editor.persistForm(0);
+            }
         };
         editor.submitForm = function(){
             if (editor.validateForm()){
@@ -244,14 +246,20 @@
     
         editor.validateForm = function(){
             for (var pageNum in editor.pages){
-                page = editor.pages[pageNum];
+                var page = editor.pages[pageNum];
                 for (var fieldIndex in page.fields){
-                    field = page.fields[fieldIndex];
+                    var field = page.fields[fieldIndex];
                     if (field.text == null || field.text == ''){
                         f = parseInt(fieldIndex, 10) + 1;
                         p = parseInt(pageNum, 10) + 1;
-                        alert ("Field labels can't be empty. Check field " + f + " on page " + p);
+                        alert ("Field labels can't be empty.");
                         return false;
+                    }
+                    if (field.field_type == 'SelectField' || field.field_type == 'CheckboxField'){
+                        if (!field.options.length){
+                            alert ("Field options can't be empty.");
+                            return false;
+                        }
                     }
                 }
             }
