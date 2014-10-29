@@ -108,7 +108,15 @@
                     visor.questions[i].answer = visor.questions[i].answer.join('#');
                 }
                 for (var j=0; j< visor.questions.length; j++) {
-                    visor.questions[j].shown = Boolean(visor.showValues[visor.questions[j].field_id]);
+                    var pageNum = visor.getPageNumByFieldId(visor.questions[j].field_id);
+                    visor.questions[j].shown = Boolean(visor.showValues[visor.questions[j].field_id]
+                                                && visor.showPageValues[pageNum]);
+                    console.log("field: "+visor.questions[j].text+" en pag "+
+                                visor.getPageNumByFieldId(visor.questions[j].field_id)+
+                                " shown = "+ visor.questions[j].shown);
+                    console.log(visor.showValues);
+                    console.log(visor.showPageValues);
+
                     delete visor.questions[j].tooltip;
                     if (visor.questions[j].options){
                         delete visor.questions[j].options;
@@ -350,6 +358,19 @@
                         var field = page.fields[j];
                         if(field.field_id == id){
                             return field;
+                        }
+                    }
+                }
+            };
+
+            visor.getPageNumByFieldId = function(id){
+                //precondition: Field with field_id == id exists
+                for(var i = 0; i < visor.pages.length; i++){
+                    var page = visor.pages[i];
+                    for(var j = 0; j < page.fields.length; j++){
+                        var field = page.fields[j];
+                        if(field.field_id == id){
+                            return i;
                         }
                     }
                 }
