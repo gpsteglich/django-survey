@@ -111,12 +111,6 @@
                     var pageNum = visor.getPageNumByFieldId(visor.questions[j].field_id);
                     visor.questions[j].shown = Boolean(visor.showValues[visor.questions[j].field_id]
                                                 && visor.showPageValues[pageNum]);
-                    console.log("field: "+visor.questions[j].text+" en pag "+
-                                visor.getPageNumByFieldId(visor.questions[j].field_id)+
-                                " shown = "+ visor.questions[j].shown);
-                    console.log(visor.showValues);
-                    console.log(visor.showPageValues);
-
                     delete visor.questions[j].tooltip;
                     if (visor.questions[j].options){
                         delete visor.questions[j].options;
