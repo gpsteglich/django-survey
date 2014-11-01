@@ -32,7 +32,6 @@ from dynamicForms.fieldtypes.FieldFactory import FieldFactory as Factory
 from dynamicForms.JSONSerializers import FieldSerializer 
 from dynamicForms.statistics.StatisticsCtrl import StatisticsCtrl 
 
-
 class FormList(generics.ListCreateAPIView):
     """
     APIView where the forms of the app are listed and a new form can be added.

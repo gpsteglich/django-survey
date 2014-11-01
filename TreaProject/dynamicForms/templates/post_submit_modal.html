@@ -1,0 +1,53 @@
+{% verbatim %} 
+  <div id="myPostSubmitModal" class="modal fade modal-primary" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
+      <div class="modal-dialog modal-lg" style="width:60%">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1><span class="label label-default">Post Submit Actions</span></h1>
+          </div>
+          <div class="modal-body">
+            <!-- Email sending options -->
+            <div class="row">
+              <div class="col-md-6">
+                <input type="checkbox" ng-model="editor.after_submit.sendMail"> Send Email
+                <label ng-show="editor.after_submit.sendMail"> to </label>
+                <select ng-show="editor.after_submit.sendMail"
+                        ng-options="option for option in ['Field1', 'Field2']"
+                        ng-model="editor.after_submit.mailRecipient">
+                </select>
+              </div>       
+            </div>
+            <div ng-show="editor.after_submit.sendMail">
+              <textarea class="form-control" ng-model="editor.after_submit.mailText" rows="3"></textarea>
+            </div>  
+            <br>
+            <!-- Redirect or message options -->
+            <div>
+              <h4>After submitting the form</h4>
+              <select class="form-control"
+                      ng-options="option for option in ['Redirect To', 'Show Message']"
+                      ng-model="editor.after_submit.action" >
+              </select> 
+              <div ng-show="editor.after_submit.action=='Show Message'">
+                <textarea class="form-control" ng-model="editor.after_submit.message" rows="3"></textarea>
+              </div>
+              <div ng-show="editor.after_submit.action=='Redirect To'">
+                <input type="text" class="form-control" ng-model="editor.after_submit.redirect">
+              </div>
+            </div>
+            <br>
+            <div class="modal-footer">
+              <div class="row">                             
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" 
+                        ng-click="">Apply
+                </button>
+                <button type="button" class="close pull-left" data-dismiss="modal" aria-hidden="true">
+                    Cancel
+                </button>
+              </div>
+            </div>  
+          </div>
+        </div>
+      </div>
+  </div>
+  {% endverbatim %} 

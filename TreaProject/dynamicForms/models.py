@@ -5,6 +5,12 @@ from django.template.defaultfilters import slugify
 from dynamicForms.fields import JSONField, STATUS, DRAFT, PUBLISHED, EXPIRED
 from datetime import datetime
 
+
+from django.core.mail import send_mail
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+import json
+
 class VersionQueySet(models.query.QuerySet):
     """
     QuerySet for Version model
@@ -135,12 +141,19 @@ class Version(models.Model):
             raise ValidationError('You cannot edit a published form')
         super(Version, self).save(*args, **kwargs)
 
-
 class FormEntry(models.Model):
     version = models.ForeignKey("Version", related_name="entries")
     entry_time = models.DateTimeField(blank=True)
+    
 
-
+@receiver(post_save, sender=FormEntry)
+def notification_mail(sender, **kwargs):
+    instance = kwargs.get('instance')
+    js = instance.version.json
+    d = json.loads(js)
+    content = d['after_submit']['mailText']
+    send_mail('bien ahiii', content, 'santrbl@gmail.com', ['santrbl@gmail.com'], fail_silently=False)
+    
 class FieldEntry(models.Model):
     field_id = models.IntegerField()
     field_type = models.CharField(max_length=100)

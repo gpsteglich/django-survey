@@ -205,6 +205,7 @@
                         editor.version = data;
                         editor.pages = JSON.parse(data.json).pages;
                         editor.logic = JSON.parse(data.json).logic;
+                        editor.after_submit = JSON.parse(data.json).after_submit;
                         editor.questions = [];
                         for (var i=0; i<editor.pages.length; i++) {
                             editor.questions = editor.questions.concat(editor.pages[i].fields);
@@ -287,7 +288,7 @@
                     editor.form = data;
                     editor.formIdParam = data.id;
                     editor.version.form = data.id;
-                    editor.version.json = angular.toJson({'pages':editor.pages,'logic':editor.logic});
+                    editor.version.json = angular.toJson({'pages':editor.pages,'logic':editor.logic, 'after_submit':editor.after_submit});
                     $http.post('version/'+editor.formIdParam+'/', editor.version)
                     .success( function(data, status, headers, config){
                         editor.versionIdParam = data.number;
@@ -311,7 +312,7 @@
                 $http.put('forms/'+ editor.formIdParam + '/', editor.form)
                 .success( function(data, status, headers, config){
                     editor.form = data;
-                    editor.version.json = angular.toJson({'pages':editor.pages,'logic':editor.logic});
+                    editor.version.json = angular.toJson({'pages':editor.pages,'logic':editor.logic,'after_submit':editor.after_submit});
                     $http.put('version/'+editor.formIdParam+'/'+editor.versionIdParam+"/", editor.version)
                     .success( function(data, status, headers, config){
                         editor.version = data;
@@ -508,6 +509,14 @@
             return operandKind == 'options';
         }
 
+        editor.after_submit = {
+            /*mailText: "Gracias pibe!",
+            sendMail: true,
+            action: 'Redirect To',
+            redirect: 'http://www.google.com',
+            message: 'Muchas gracias \n  Que pases bien',*/
+        }
+        
     }]);
     
 })();
