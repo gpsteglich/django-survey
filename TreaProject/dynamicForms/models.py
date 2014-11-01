@@ -5,6 +5,9 @@ from django.template.defaultfilters import slugify
 from dynamicForms.fields import JSONField, STATUS, DRAFT, PUBLISHED, EXPIRED
 from datetime import datetime
 
+from cms.models.pluginmodel import CMSPlugin
+
+
 class VersionQueySet(models.query.QuerySet):
     """
     QuerySet for Version model
@@ -153,3 +156,11 @@ class FieldEntry(models.Model):
 
     def __str__(self):
         return '%s : %s' % (self.text, self.answer)
+
+
+class Hello(CMSPlugin):
+    guest_name = models.CharField(max_length=50, default='Guest')
+
+
+class Survey(CMSPlugin):
+    form_id = models.ForeignKey(Form, related_name='plugins')

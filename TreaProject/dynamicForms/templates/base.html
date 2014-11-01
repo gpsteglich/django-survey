@@ -24,12 +24,12 @@
     <link href={% static 'bootstrap/fonts/font-awesome-4.1.0/css/font-awesome.min.css' %} rel="stylesheet" type="text/css">
     {%block styles%}{%endblock%} 
 
-    {%block title%} <title> SB Admin - Bootstrap Admin Template </title> {%endblock%} 
+    {%block title%} <title> Dynamic Forms by PythonWarriors </title> {%endblock%} 
     
 </head>
 
 <body ng-app="dynamicFormsFramework">
-{% with "/inefop/" as urlBase %}
+{% with "/dynamicForms/" as urlBase %}
     <div id="wrapper">
         <!-- Navigation -->
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -72,6 +72,8 @@
     </div>
 {% endwith %}
     <!-- Bootstrap Core JavaScript -->
+
+
     {% render_block "js" %}
 
     {% addtoblock "js" %}

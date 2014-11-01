@@ -1,5 +1,5 @@
 from django.core.exceptions import ValidationError
-from dynamicForms.models import Form, Version, FormEntry, FieldEntry 
+from dynamicForms.models import Version, FieldEntry 
 
 
 class Field(object):
