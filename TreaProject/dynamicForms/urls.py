@@ -58,6 +58,7 @@ urlpatterns = patterns('dynamicForms.views',
 
     url(r'^responses/(?P<pk>[a-z,0-9,\-,\_]+)/(?P<number>[0-9]+)/$', 'get_responses'),
     url(r'^responses/$', views.TemplateView.as_view(template_name='responses.html')),
+    url(r'^responses/export-csv/(?P<pk>[a-z,0-9,\-,\_]+)/(?P<number>[0-9]+)/$', 'export_csv' ),
     url(r'^constants/$', 'get_constants'),
 )
 

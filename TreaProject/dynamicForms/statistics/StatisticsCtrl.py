@@ -16,7 +16,6 @@ class StatisticsCtrl():
         version = form.versions.get(number=versionNum)
 
         if filterType == "equals":
-            
             fieldEntries = Version.objects.get_queryset().data_iexact(version=version.pk, field_id=fieldId, data=filter )
         elif filterType == "contains":
             fieldEntries = Version.objects.get_queryset().data_icontains(version=version.pk, field_id=fieldId, data=filter )

@@ -21,6 +21,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 
 import json
+import csv
 from datetime import datetime
 
 from dynamicForms.models import Form, FormEntry, Version
@@ -467,4 +468,47 @@ class StatisticsView(generics.RetrieveAPIView):
             return Response(data=error_msg, status=status.HTTP_406_NOT_ACCEPTABLE)
 
 
+@login_required
+@api_view(['GET'])
+def export_csv(request, pk, number, format=None):
+    """
+    Function view for exporting responses of form version in csv format
+    """
     
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="responses.csv"'
+    #Create a csv writer object
+    writer = csv.writer(response)
+    
+    try:
+        #get version
+        form = Form.objects.get(pk=pk)
+        version = form.versions.get(number=number)
+        
+        #only from a not draft version a csv file can be exported
+        if (version.status == DRAFT):
+            content = {"error": "This version's status is Draft."}
+            return Response(content, status=status.HTTP_406_NOT_ACCEPTABLE)
+        
+        #write first row which indicates form pk, version number and form title 
+        writer.writerow(["Form", pk, number, form.title]) 
+        
+        #get all entries
+        formEntries = version.entries.all()
+        if formEntries:
+            for formEntry in formEntries:
+                #write row on cvs file with form enty date
+                writer.writerow(['Entry date', formEntry.entry_time])
+                fields = formEntry.fields.all()
+                for field in fields:
+                    writer.writerow(["Field", field.field_id, field.field_type, field.text,field.required, field.answer ])
+                            
+            return response
+        else: 
+            return Response(data="No field entries for this form", status=status.HTTP_406_NOT_ACCEPTABLE)
+    except ObjectDoesNotExist:
+        content = {"error": "There is no form with that slug or the"
+        " corresponding form has no version with that number"}
+        return Response(content, status=status.HTTP_404_NOT_FOUND)
+   
