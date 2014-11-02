@@ -124,7 +124,7 @@
                                                     </a>
                                                     <a type="button" class="btn btn-default btn-sm" href = "{{urlBase}}version/{{form.id}}/{{v.number}}/new" 
                                                     {% ifequal form.lastStatus 0 %} disabled {% endifequal %}>
-                                                        <span class="glyphicon glyphicon-plus"></span>NEW VERSION
+                                                        <span class="glyphicon glyphicon-plus"></span> NEW VERSION
                                                     </a>
                                                     <a type="button" class="btn btn-default btn-sm" href = "{{urlBase}}version/{{form.id}}/{{v.number}}/duplicate"
                                                         {% ifequal v.status 0 %} disabled {% endifequal %}>    
@@ -139,7 +139,7 @@
                                                     </a>
                                                     <a type="button" class="btn btn-default btn-sm" href="{{urlBase}}version/delete/{{form.id}}/{{v.number}}"
                                                         {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
-                                                        <span class="glyphicon glyphicon-remove-circle"></span>DISCARD
+                                                        <span class="glyphicon glyphicon-remove-circle"></span> DISCARD
                                                     </a>
                                                                                                        
                                                     </div></th><!-- btn-group-->
