@@ -468,7 +468,7 @@ class StatisticsView(generics.RetrieveAPIView):
 
 
 @api_view(['POST'])
-def submit_files(request,entry_id,format=None)
+def submit_files(request,entry_id,format=None):
     entry = Entry.objects.get(pk=entry_id)
     for file_inode in request.DATA:
         serializer = FileEntrySerializer(data=file_inode)

@@ -121,17 +121,38 @@
                 }
             };
 
+            var getFileInodes = function(){
+                var temp = [];
+                for(var j=0; j< visor.questions.length; j++){
+                    if(visor.questions[j].field_type=='FileField'){
+                        temp.push(angular.copy(visor.questions[j].answer[0]));
+                        console.log('esto:'+JSON.stringify(visor.questions[j]));
+                        visor.questions[j].answer ='';
+                        
+                    }
+                        
+                }
+                console.log(temp);
+                return temp;
+            }
             // Persist form
             visor.save = function(){
                 if (visor.isVisorMode()){
                     visor.pre_salvar();
-                    $http.post('visor/submit/'+visor.slug+'/',visor.questions)
+                    var files = getFileInodes();
+                    var dataMedia = {
+                        media : files,
+                        answer : visor.questions
+                    }
+                    /*
+                    $http.post('visor/submit/'+visor.slug+'/',dataMedia)
                         .success( function(data, status, headers, config){
                             $window.location.href = 'visor/form/submitted';
                         })
                         .error(function(data, status, headers, config) {
                             alert('Error saving data: ' + data.error);
-                        });
+                        });*/
+                    console.log(JSON.stringify(dataMedia));
                 } else {
                     /*
                      * TODO: Sería útil permitir al editor ingresar datos y que sean validados por el back
@@ -347,18 +368,18 @@
                   var reader = new FileReader();
                     
                   reader.onloadend = function () {
-                      //  var encoded = reader.result;
-                        var view   = new Int32Array(reader.result);
+
+                       // var view   = new Int32Array(reader.result);
                         var fileDescriptor = {
-                            file:view,
+                            field_id : fileModel.field_id,
+                            file:reader.result,
                             name:file.name,
                             type:file.type
                         }
-                        console.log('El tipo eso:'+ JSON.stringify(fileDescriptor));
                         fileModel.answer[0] = fileDescriptor;
+                      console.log(fileModel.answer[0]);
                      
                     }
-                    
                    reader.readAsArrayBuffer(file);
 
           };
