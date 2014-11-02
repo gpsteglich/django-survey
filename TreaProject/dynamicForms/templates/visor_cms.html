@@ -5,13 +5,17 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         {% verbatim %}
-        <title>Django surveys - {{instance.form_id}}</title>
+        <title>Django surveys - {{instance.slug}}</title>
         {% endverbatim %}
         <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 	</head>
 	<body class="radial-center">
-        <div ng-include="'visor_template'"></div>
+        <script type="text/javascript">
+        var instance = "{{instance}}"
+        var base_url = "{{base_url}}"
+        </script>
+        <div ng-include="'/inefop/visor_template'"></div>
     </body>
     <script src={% static "jquery/js/jquery-2.1.1.min.js" %}></script>
     <script src={% static "bootstrap/js/bootstrap.js" %}></script>

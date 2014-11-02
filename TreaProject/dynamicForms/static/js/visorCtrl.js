@@ -17,7 +17,8 @@
             var visor = $scope;
             
             var separator = '_';
-
+            console.log(instance);
+            console.log(base_url);
             visor.urlBase = $rootScope.urlBase;
 
             /*

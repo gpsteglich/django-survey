@@ -163,4 +163,12 @@ class Hello(CMSPlugin):
 
 
 class Survey(CMSPlugin):
-    form_id = models.ForeignKey(Form, related_name='plugins')
+    form = models.ForeignKey(Form, related_name='plugins')
+    slug = models.SlugField(max_length=100, blank=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = self.form.slug
+        super(Survey, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.slug

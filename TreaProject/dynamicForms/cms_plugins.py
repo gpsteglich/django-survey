@@ -3,7 +3,9 @@ from cms.plugin_pool import plugin_pool
 from cms.models.pluginmodel import CMSPlugin
 from django.utils.translation import ugettext_lazy as _
 
-from .models import Survey, Hello
+from .models import Survey, Hello, Form
+
+from django.conf import settings
 
 class HelloPlugin(CMSPluginBase):
     model = Hello
@@ -23,6 +25,7 @@ class SurveyPlugin(CMSPluginBase):
 
     def render(self, context, instance, placeholder):
         context['instance'] = instance
+        context['base_url'] = settings.FORMS_BASE_URL
         return context
 
 plugin_pool.register_plugin(SurveyPlugin)
