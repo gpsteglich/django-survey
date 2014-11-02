@@ -70,7 +70,7 @@ class DependencySerializer(serializers.Serializer):
         return Dependencies(**attrs)
         
 class FieldSerializer(serializers.Serializer):
-    text = serializers.CharField(required=True, max_length=50)
+    text = serializers.CharField(required=True, max_length=500)
     required = serializers.BooleanField(required=True)
     tooltip = serializers.CharField(required=False, max_length=300)
     answer = serializers.CharField(required=False)
