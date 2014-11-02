@@ -9,7 +9,7 @@ urlpatterns = patterns('dynamicForms.views',
     # url(r'^$', 'inefop.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
     url(r'^forms/', include('formularios.urls')),
-    url(r'^inefop/', include('dynamicForms.urls')),
+    url(r'^inefop/', include('dynamicForms.urls'), name='base'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^base_url/$', dyn.get_URL),
 )

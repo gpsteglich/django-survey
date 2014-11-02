@@ -1,0 +1,57 @@
+{% load staticfiles sekizai_tags %}
+{%block templates %}
+	<script src="field_edit/TextField" type="text/ng-template"></script> 
+	<script src="field_edit/UsuarioField" type="text/ng-template"></script> 
+	<script src="field_edit/MatriculaField" type="text/ng-template"></script> 
+	<script src="field_edit/TextAreaField" type="text/ng-template"></script> 
+	<script src="field_edit/CheckboxField" type="text/ng-template"></script> 
+	<script src="field_edit/SelectField" type="text/ng-template"></script> 
+	<script src="field_edit/CIField" type="text/ng-template"></script> 
+	<script src="field_edit/EmailField" type="text/ng-template"></script>
+{%endblock%}
+
+<!-- fields -->
+{% addtoblock "js" %}
+<script src={% static "js/fields/FieldBase.js" %}></script>
+{% endaddtoblock %}
+{% addtoblock "js" %}
+<script src={% static "js/fields/TextField.js" %}></script>
+{% endaddtoblock %}
+{% addtoblock "js" %}
+<script src={% static "js/fields/TextAreaField.js" %}></script>
+{% endaddtoblock %}
+{% addtoblock "js" %}
+<script src={% static "js/fields/EmailField.js" %}></script>
+{% endaddtoblock %}
+{% addtoblock "js" %}
+<script src={% static "js/fields/CheckboxField.js" %}></script>
+{% endaddtoblock %}
+{% addtoblock "js" %}
+<script src={% static "js/fields/NumberField.js" %}></script>
+{% endaddtoblock %}
+{% addtoblock "js" %}
+<script src={% static "js/fields/SelectField.js" %}></script>
+{% endaddtoblock %}
+{% addtoblock "js" %}
+<script src={% static "js/fields/CIField.js" %}></script>
+{% endaddtoblock %}
+{% addtoblock "js" %}
+<script src={% static "js/fields/Matricula.js" %}></script>
+{% endaddtoblock %}
+{% addtoblock "js" %}
+<script src={% static "js/fields/Usuario.js" %}></script>
+{% endaddtoblock %}
+<!-- operators -->
+{% addtoblock "js" %}
+<script src={% static "js/operators/operatorField.js" %}></script>
+{% endaddtoblock %}
+{% addtoblock "js" %}
+<script src={% static "js/operators/operatorList.js" %}></script>
+{% endaddtoblock %}
+{% addtoblock "js" %}
+<script src={% static "js/operators/operatorChecks.js" %}></script>
+{% endaddtoblock %}
+{% addtoblock "js" %}
+<script src={% static "js/operators/operatorNumber.js" %}></script>
+{% endaddtoblock %}
+
