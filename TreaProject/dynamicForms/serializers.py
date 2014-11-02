@@ -78,3 +78,8 @@ class FormEntrySerializer(serializers.ModelSerializer):
         fields = ('entry_time', 'fields')
         
     
+class FileEntrySerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = FileEntry
+        fields = ('field_id','file_type','file_name','file_data')

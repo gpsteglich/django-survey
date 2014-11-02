@@ -341,25 +341,22 @@
                     visor.showPageValues[pageNum] = 1;
                 }
             };
-            visor.compara;
             visor.onFileSelect = function($files,fileModel) {
                 //$files: an array of files selected, each file has name, size, and type.
                   var file = $files[0];                  
                   var reader = new FileReader();
                     
                   reader.onloadend = function () {
-                        var encoded = reader.result;
-                      
+                      //  var encoded = reader.result;
+                        var view   = new Int32Array(reader.result);
                         var fileDescriptor = {
-                            file:reader.result,
-                            name:file.name
+                            file:view,
+                            name:file.name,
+                            type:file.type
                         }
-                        
+                        console.log('El tipo eso:'+ JSON.stringify(fileDescriptor));
                         fileModel.answer[0] = fileDescriptor;
                      
-                      
-                      console.log("ESTO:" + JSON.stringify(fileDescriptor.file));
-
                     }
                     
                    reader.readAsArrayBuffer(file);
@@ -369,23 +366,10 @@
                     
             visor.downloadFile = function(fileModel){
                 var fileDescriptor = fileModel.answer[0];
-                 var reader = new FileReader();
+                var reader = new FileReader();
 
-		        //  console.log("Decoded" + fileDescriptor.file);
-           //     var arrayData = [atob(fileDescriptor.file)];
-            /*    var bytes = new Uint8Array(fileDescriptor.file);
-                for (var i=0; i<fileDescriptor.file.length; i++)
-                    bytes[i] = fileDescriptor.file.charCodeAt(i);*/
-              //  var arrayData = [fileDescriptor.file];
-           //     console.log(fileDescriptor.file);
-                var oMyBlob = new Blob([fileDescriptor.file], {type : 'application/pdf'});
-                console.log(oMyBlob);
-                reader.readAsBinaryString(oMyBlob);
-                 reader.onloadend = function () {
-                       
-                      console.log("Encoded" + reader.result);
-
-                    }
+                var oMyBlob = new Blob([fileDescriptor.file], {type : fileDescriptor.type});
+              
                 saveAs(oMyBlob,fileDescriptor.name);
                 
             

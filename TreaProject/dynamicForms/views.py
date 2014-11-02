@@ -467,4 +467,13 @@ class StatisticsView(generics.RetrieveAPIView):
             return Response(data=error_msg, status=status.HTTP_406_NOT_ACCEPTABLE)
 
 
-    
+@api_view(['POST'])
+def submit_files(request,entry_id,format=None)
+    entry = Entry.objects.get(pk=entry_id)
+    for file_inode in request.DATA:
+        serializer = FileEntrySerializer(data=file_inode)
+        if serializer.is_valid():
+            field_id = entry.objects.fields.get(field_id=serializer.object.field_id)
+            serializer.object.field_id = field_id
+            serializer.save()
+    return Response(status=status.HTTP_200_OK)
