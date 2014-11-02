@@ -33,7 +33,7 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
-STATIC_ROOT = '~/git/django-survey/TreaProject/dynamicForms/static/'
+#STATIC_ROOT = '~/git/django-survey/TreaProject/dynamicForms/static/'
 
 LOGIN_URL = "login"
 # Application definition

@@ -7,8 +7,8 @@
     /*
      * This controller handles the logic to create, edit and save a form.
      */    
-    app.controller('EditorCtrl', ['$scope','$http','$location', '$window', '$rootScope', 
-                function ($scope, $http, $location, $window, $rootScope) {
+    app.controller('EditorCtrl', ['$scope','$http','$location', '$window', '$rootScope', '$templateCache', 
+                function ($scope, $http, $location, $window, $rootScope, $templateCache) {
         
     	/*
     	 * editorMode variable determines if the context is for editing or showing the
@@ -16,14 +16,18 @@
     	 */
         
         var editor = this;
-        
-        editor.urlBase = $rootScope.urlBase;
 
         editor.FieldTypes = [];
         
         $http.get('constants/')
                 .success(function(data){
                     editor.FieldTypes = data;
+                    var fields = Object.keys(editor.FieldTypes);
+                    for(var i = 0;i<fields.length; i++){
+                        console.log('loading template '+fields[i]);
+                        $http.get('field_edit/'+fields[i], {cache:$templateCache});
+                    }
+
                 }).error(function(status, data){
                     alert(status+' data:'+data);
                 });

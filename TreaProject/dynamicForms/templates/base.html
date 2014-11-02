@@ -12,17 +12,25 @@
     <meta name="description" content="">
     <meta name="author" content="">
     
-    <!-- jQuery Version 1.11.0 -->
-    <script src={% static 'jquery/js/jquery-2.1.1.min.js'%} ></script>
+    {% addtoblock "css" %}
     <!-- css Styles-->
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    {% endaddtoblock %}
+     {% addtoblock "css" %}
      <!-- Bootstrap Core CSS -->
     <link href= {% static 'bootstrap/css/bootstrap.min.css'%} rel="stylesheet">
+    {% endaddtoblock %}
+    {% addtoblock "css" %}
     <!-- Custom CSS -->
     <link href={% static 'bootstrap/css/sb-admin.css'%} rel="stylesheet">
+    {% endaddtoblock %}
+    {% addtoblock "css" %}
     <!-- Custom Fonts -->
     <link href={% static 'bootstrap/fonts/font-awesome-4.1.0/css/font-awesome.min.css' %} rel="stylesheet" type="text/css">
+    {% endaddtoblock %}
     {%block styles%}{%endblock%} 
+
+    {% render_block "css" postprocessor "compressor.contrib.sekizai.compress" %}
 
     {%block title%} <title> SB Admin - Bootstrap Admin Template </title> {%endblock%} 
     
@@ -41,7 +49,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{{urlBase}}main/"> Home</a>
+                <a class="navbar-brand" href="{% url 'main' %}"> Home</a>
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
@@ -56,7 +64,7 @@
                 <ul class="nav navbar-nav side-nav">
                     <li>
                         <!-- The editor controller expects -->
-                        <a href="{{urlBase}}editor" target="_self"><i class="fa fa-fw fa-table"></i> New form</a>
+                        <a href="{% url 'editor_new' %}" target="_self"><i class="fa fa-fw fa-table"></i> New form</a>
                     </li>
                     <li>
                         <a href="{{urlBase}}main/"><i class="fa fa-fw fa-edit"></i> Saved forms</a>
@@ -71,14 +79,21 @@
         {%block content%} {%endblock%} <!-- Content goes here -->
     </div>
 {% endwith %}
-    <!-- Bootstrap Core JavaScript -->
-    {% render_block "js" %}
 
     {% addtoblock "js" %}
     <script src={% static 'jquery/js/jquery-2.1.1.min.js' %}></script>
     {% endaddtoblock %}
     {% addtoblock "js" %}
-    <script src={% static "angular/angular.min.js" %}></script>
+    <script src={% static 'bootstrap/js/bootstrap.min.js' %}></script>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
+    <script src={% static "jquery/js/jquery-ui.min.js" %}></script>           
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
+    <script src={% static "angular/angular.js" %}></script>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
+    <script src={% static "bootstrap/js/ui-bootstrap.min.js" %}></script>
     {% endaddtoblock %}
     {% addtoblock "js" %}
     <script src={% static "angular/d3.min.js" %}></script> 
@@ -87,16 +102,30 @@
     <script src={% static "angular/angular-charts.min.js" %}></script>   
     {% endaddtoblock %}
     {% addtoblock "js" %}
-    <script src={% static 'bootstrap/js/bootstrap.min.js' %}></script>
+    <script src={% static "angular/checklist-model.js" %}></script>
     {% endaddtoblock %}
     {% addtoblock "js" %}
+    <script src={% static "angular/sortable.js" %}></script>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
+    <script src={% static "angular/angular-sanitize.js" %}></script>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
+    <script src={% static "angular/ng-csv.js" %}></script>
+    {% endaddtoblock %}
+    
 
-     
+    {% addtoblock "js" %}
     <script type="text/javascript">
-        $('.collapse').collapse()
+        $('.collapse').collapse();
     </script>
     {% endaddtoblock %}
+
     {%block scripts%} {%endblock%}
+
+    {% render_block "js" postprocessor "compressor.contrib.sekizai.compress" %}
+
+
 </body>
 
 </html>
