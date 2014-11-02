@@ -103,6 +103,8 @@
             <script src={% static "bootstrap/js/ui-bootstrap.min.js" %}></script>
 			{% endaddtoblock %}
             {% addtoblock "js" %}
+            <script src={% static "angular/angular-file-upload-shim.js" %}></script> 
+            <script src={% static "angular/angular-file-upload.js" %}></script> 
             <script src={% static "angular/d3.min.js" %}></script> 
             <script src={% static "angular/angular-charts.min.js" %}></script>   
             <script src={% static "bootstrap/js/ui-bootstrap.min.js" %}></script>
@@ -158,16 +160,19 @@
 		    {% addtoblock "js" %}
 		    <script src={% static "js/fields/CIField.js" %}></script>
 			{% endaddtoblock %}
+            {% addtoblock "js" %}
+		    <script src={% static "js/fields/FileField.js" %}></script>
+			{% endaddtoblock %}
 			{% addtoblock "js" %}
 		    <script src={% static "js/fields/Matricula.js" %}></script>
 			{% endaddtoblock %}
 			{% addtoblock "js" %}
 		    <script src={% static "js/fields/Usuario.js" %}></script>
 			{% endaddtoblock %}
-
 			{% addtoblock "js" %}
             <script src={% static "js/editorCtrl.js" %}></script>
             {% endaddtoblock %}
+
             {% addtoblock "js" %}
             <script src={% static "bootstrap/js/bootstrap.min.js"%}></script>
             

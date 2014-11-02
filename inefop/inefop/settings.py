@@ -97,6 +97,7 @@ FIELD_FILES = (
     'dynamicForms.fieldtypes.NumberField',
     #URL: 'dynamicForms.fieldtypes.URLField',
     'dynamicForms.fieldtypes.CIField',
+	'dynamicForms.fieldtypes.FileField',
     'formularios.fields',
 )
 # Static files (CSS, JavaScript, Images)
