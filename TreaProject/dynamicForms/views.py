@@ -408,6 +408,16 @@ def get_constants(request, format=None):
 
 @login_required
 @api_view(['GET'])
+def get_model_fields(request, format=None):
+    """
+    View to get the available model fields.
+    """
+    data = Factory.get_model_strings()
+    return Response(status=status.HTTP_200_OK, data=data)
+
+
+@login_required
+@api_view(['GET'])
 def get_URL(request, format=None):
     """
     View to get the base URL.

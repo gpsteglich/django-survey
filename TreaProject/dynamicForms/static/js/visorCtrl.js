@@ -17,14 +17,14 @@
             var visor = $scope;
             
             var separator = '_';
-            console.log(instance); //slug
+            //console.log(instance); //slug
 
             visor.plugin_mode = false;
             if (instance){
                 visor.plugin_mode = true;
             }
 
-            console.log(base_url);
+            //console.log(base_url);
             visor.base_url = base_url;
             if (!visor.base_url){
                 visor.base_url = '';

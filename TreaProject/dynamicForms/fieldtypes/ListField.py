@@ -40,9 +40,6 @@ class ListField(Field):
             for field in page['fields']:
                 if (field['field_id'] == f_id):
                     return field['max_id']
-                
-        
-
 
     class Meta:
         abstract = True
