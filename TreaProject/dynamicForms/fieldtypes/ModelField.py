@@ -38,10 +38,7 @@ class ModelField(Field):
         return l
     
     def get_options(self, json, f_id):
-        for page in json['pages']:
-            for field in page['fields']:
-                if (field['field_id'] == f_id):
-                    return field['options']
+        return self.find_options()
 
     class Meta:
         abstract = True
