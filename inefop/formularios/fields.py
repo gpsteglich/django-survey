@@ -2,32 +2,31 @@ from django.core.exceptions import ValidationError
 import re
 
 from dynamicForms.fieldtypes import Field
-from dynamicForms.fieldtypes import NumberField
+from dynamicForms.fieldtypes import ModelField
 from dynamicForms.fieldtypes import FieldFactory
-from formularios.models import Usuario
+from formularios.models import Usuario, Club
 
-class UsuarioField(NumberField.NumberField):
-    template_name = "inefop/template.html"
-    edit_template_name = "inefop/template_edit.html"
-    prp_template_name = "inefop/properties.html"
-    
-    def model_check(self, value, **kwargs):
-        value = int(value)
-        try:
-            u = Usuario.objects.get(pk=value)
-        except Usuario.DoesNotExist:
-            raise ValidationError("There is no such user.")
-        
-    def get_methods(self, **kwargs):
-        #default validation or pass
-        base = super(UsuarioField, self).get_methods(**kwargs)
-        base.append(self.model_check)
-        return base
+class UsuarioField(ModelField.ModelField):
+    prp_template_name = "usuario/properties.html"
+    model = Usuario
+    name =  "Usuario"
     
     def __str__(self):
         return "Usuario"
     
 FieldFactory.FieldFactory.register('UsuarioField', UsuarioField)
+
+
+class ClubField(ModelField.ModelField):
+    prp_template_name = "club/properties.html"
+    model = Club
+    name =  "Club"
+    
+    def __str__(self):
+        return "Club"
+    
+FieldFactory.FieldFactory.register('ClubField', ClubField)
+
 
 class MatriculaField(Field.Field):
     template_name = "matricula/template.html"

@@ -1,6 +1,5 @@
 from django.db import models
 
-from dynamicForms.fieldtypes import FieldFactory
 # Create your models here.
 
 
@@ -11,17 +10,14 @@ class Usuario(models.Model):
     has_car = models.BooleanField()
 
     def __str__(self):
-        return name + surname
-
-
-FieldFactory.FieldFactory.register_model('Usuario', Usuario)
+        return self.name + self.surname
 
 
 class Country(models.Model):
     name = models.TextField(max_length=30)
 
     def __str__(self):
-        return name
+        return self.name
     
 
 class Club(models.Model):
@@ -30,7 +26,5 @@ class Club(models.Model):
     established = models.DateField()
 
     def __str__(self):
-        return name +'(' + country.__str__() + ')'
+        return self.name +'(' + self.country.__str__() + ')'
 
-
-FieldFactory.FieldFactory.register_model('Club', Club)

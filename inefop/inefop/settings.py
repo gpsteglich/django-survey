@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'formularios',
     'dynamicForms',
     'south',
     'sekizai',
@@ -115,7 +116,6 @@ FIELD_FILES = (
     #URL: 'dynamicForms.fieldtypes.URLField',
     'dynamicForms.fieldtypes.CIField',
     'formularios.fields',
-    'formularios.models',
 )
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/

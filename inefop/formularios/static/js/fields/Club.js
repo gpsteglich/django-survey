@@ -1,6 +1,6 @@
-function UsuarioField() {
+function ClubField() {
 	return fieldFactory.getField('ModelField');	
 }
 
 // Register field constructor in Factory
-fieldFactory.registerField(UsuarioField.name, UsuarioField);
+fieldFactory.registerField(ClubField.name, ClubField);
