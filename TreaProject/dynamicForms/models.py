@@ -158,4 +158,4 @@ class FileEntry(models.Model):
     field_id = models.ForeignKey("FieldEntry",related_name="files",blank=True,null=True)
     file_type = models.CharField(max_length=50)
     file_name = models.CharField(max_length=50)
-    file_data = models.FileField(upload_to="/")
+    file_data = models.BinaryField()
