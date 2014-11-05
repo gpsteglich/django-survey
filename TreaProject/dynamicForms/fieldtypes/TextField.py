@@ -33,6 +33,9 @@ class TextField(Field.Field):
         if (not val.valid_text()):
             raise ValidationError("Max length might not be less than 0.")
 
+    def get_assets():
+        return ['js/fields/TextField.js']
+
     def __str__(self):
         return "Single Line Text"
 

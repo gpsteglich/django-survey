@@ -1,10 +1,16 @@
 import datetime
 from django import template
 
+from dynamicForms.fieldtypes import FieldFactory
+
 register = template.Library()
 
-@register.simple_tag
-def current_time(format_string):
-    return datetime.datetime.now().strftime(format_string)
 
-#register.tag('current_time', current_time)
+def get_static_field_files():
+    l = FieldFactory.FieldFactory.get_all_classes()
+    ret = ['js/fields/FieldBase.js']
+    for c in l:
+    	ret.extend(c.get_assets())
+    return ret
+
+register.tag('load_fields_template', get_static_field_files)

@@ -23,6 +23,9 @@ class UsuarioField(NumberField.NumberField):
         base = super(UsuarioField, self).get_methods(**kwargs)
         base.append(self.model_check)
         return base
+
+    def get_assets():
+        return ['js/fields/UsuarioField.js']
     
     def __str__(self):
         return "Usuario"
@@ -48,6 +51,9 @@ class MatriculaField(Field.Field):
         base = super(MatriculaField, self).get_methods(**kwargs)
         base.append(self.pattern_check)
         return base
+
+    def get_assets():
+        return ['js/fields/MatriculaField.js']
     
     def __str__(self):
         return "Matricula"

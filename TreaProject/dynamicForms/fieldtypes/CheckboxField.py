@@ -34,6 +34,9 @@ class CheckboxField(ListField):
             if not (v > 0 and v <= top):
                 raise ValidationError("Invalid value, not among options.")
 
+    def get_assets():
+        return ['js/fields/CheckboxField.js']
+
     def __str__(self):
         return "Checkbox"
 

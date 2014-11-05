@@ -11,6 +11,9 @@ class TextAreaField(TextField.TextField):
     edit_template_name = "text_area/template_edit.html"
     prp_template_name = "text_area/properties.html"
 
+    def get_assets():
+        return ['js/fields/TextAreaField.js']
+
     def __str__(self):
         return "Multi Line Text"
 

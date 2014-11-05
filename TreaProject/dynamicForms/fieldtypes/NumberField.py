@@ -60,6 +60,9 @@ class NumberField(Field.Field):
         numericStatistics = NumericStatistics(data)
         statistics.update(numericStatistics.getSerializedData())
         return statistics
+
+    def get_assets():
+        return ['js/fields/NumberField.js']
     
     def __str__(self):
         return "NumberField"
