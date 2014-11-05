@@ -86,10 +86,10 @@ class Dependencies():
 
 
 class Field():
-    text = models.CharField(null=True, blank=True, max_length=50)
+    text = models.CharField(null=True, blank=True, max_length=500)
     required = models.BooleanField()
     tooltip = models.CharField(blank=True, max_length=300)
-    answer = models.CharField(blank=True, max_length=300)
+    answer = models.CharField(blank=True, max_length=400)
     dependencies = Dependencies()
     validations = Validations()
     options = []

@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.template.defaultfilters import slugify
+import json
 
 from dynamicForms.fields import JSONField, STATUS, DRAFT, PUBLISHED, EXPIRED
 from datetime import datetime
@@ -135,6 +136,13 @@ class Version(models.Model):
             raise ValidationError('You cannot edit a published form')
         super(Version, self).save(*args, **kwargs)
 
+    def get_logic(self):
+        loaded = json.loads(self.json)
+        return loaded['logic']
+
+    def get_pages(self):
+        loaded = json.loads(self.json)
+        return loaded['pages']
 
 class FormEntry(models.Model):
     version = models.ForeignKey("Version", related_name="entries")
@@ -147,7 +155,7 @@ class FieldEntry(models.Model):
     text = models.CharField(max_length=200)
     required = models.BooleanField()
     shown = models.BooleanField(default=True)
-    answer = models.CharField(max_length=200, blank=True, null=True)
+    answer = models.CharField(max_length=400, blank=True, null=True)
     entry = models.ForeignKey("FormEntry", related_name="fields",
                              blank=True, null=True)
 
