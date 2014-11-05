@@ -1,0 +1,26 @@
+{%extends 'fields/field_edit_template_base.html' %}
+{% load staticfiles sekizai_tags %}
+
+{%block field%}
+{% verbatim %}    
+ <button style="border:none;background:none" ng-show="question.tooltip!=undefined && question.tooltip!=''" tooltip="{{question.tooltip}}">
+<span class="glyphicon glyphicon-info-sign"></span>
+</button> 
+<div class="content">
+    <div id={{question.field_id}} class="map-canvas" ></div>
+    {{editor.loadmap(question)}}
+</div>     
+	
+
+{% endverbatim %} 
+
+{% addtoblock "js" %}
+<script src= {% static "angular/angular.min.js" %}></script>
+{% endaddtoblock %}
+{% addtoblock "js" %}
+<script src={% static  "js/GeoField.js" %}></script>
+{% endaddtoblock %} 
+
+
+
+{%endblock%}

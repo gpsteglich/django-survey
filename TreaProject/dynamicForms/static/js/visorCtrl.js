@@ -16,6 +16,43 @@
             */
             var visor = $scope;
             
+                
+                    
+            visor.loadmap = function(field){
+            
+            var map;
+           
+            if (field.first==false){
+                var lat = field.mapXY.latitude;
+                var lon = field.mapXY.longitude;   
+                var options = {
+                    zoom: 8,
+                    center: new google.maps.LatLng(lat, lon)
+                };
+                field.answer=[lat,lon];
+                map = new google.maps.Map(document.getElementById(field.field_id),
+                options);
+
+                var oneLatLng = new google.maps.LatLng(lat, lon);
+                   var one = new google.maps.Marker({
+                    position: oneLatLng,
+                    map: map,
+                    draggable: true
+
+                });
+            field.first = true;
+           
+            google.maps.event.addListener(one, "dragend", function(evento) {
+                //Obtengo las coordenadas separadas
+                var la = evento.latLng.lat();
+                var lo = evento.latLng.lng();
+                
+                field.answer=[la,lo];
+           
+            });    
+            }     
+
+        };           
             var separator = '_';
 
             visor.urlBase = $rootScope.urlBase;

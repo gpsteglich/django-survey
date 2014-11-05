@@ -46,7 +46,8 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^tooltip_modal$', views.TemplateView.as_view(template_name='tooltip_modal.html')),
     url(r'^modify_input$', views.TemplateView.as_view(template_name='modifyInput.html')),
      
-   
+    url(r'^versions$', views.TemplateView.as_view(template_name='versions.html')),
+    
     url(r'^statistics/$' ,views.TemplateView.as_view(template_name='statistics.html')),
     url(r'^statistics/(?P<pk>[0-9]+)/(?P<number>[0-9]+)(?:/(?P<fieldId>[0-9]+)/(?P<filterType>[a-z]+)/(?P<filter>[A-Z,a-z,0-9,\-,\_]+))?/$',views.StatisticsView.as_view()), 
     

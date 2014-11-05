@@ -12,8 +12,11 @@ var url = '/dynamicForms/';
 
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';
 		$httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+     
 
     }]).run(function($rootScope) {
       	$rootScope.urlBase = url;
     });
+    
+      
 })();

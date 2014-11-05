@@ -403,6 +403,7 @@ def get_constants(request, format=None):
     View to get the available field type IDs.
     """
     data = Factory.get_strings()
+    print(data)
     return Response(status=status.HTTP_200_OK, data=data)
 
 

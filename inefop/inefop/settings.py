@@ -91,6 +91,7 @@ FIELD_FILES = (
     'dynamicForms.fieldtypes.CheckboxField',
     #CHECKBOX_MULTIPLE: 'dynamicForms.fieldtypes.MultipleChoiceField',
     'dynamicForms.fieldtypes.SelectField',
+    'dynamicForms.fieldtypes.GeoField',
     #SELECT_MULTIPLE: 'dynamicForms.fieldtypes.MultipleChoiceField',
     #RADIO_MULTIPLE: 'dynamicForms.fieldtypes.ChoiceField',
     #DATE: 'dynamicForms.fieldtypes.DateField',

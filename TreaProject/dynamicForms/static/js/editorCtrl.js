@@ -7,16 +7,64 @@
     /*
      * This controller handles the logic to create, edit and save a form.
      */    
-    app.controller('EditorCtrl', ['$scope','$http','$location', '$window', '$rootScope', 
+    app.controller('EditorCtrl', ['$scope','$http','$location', '$window', '$rootScope',
                 function ($scope, $http, $location, $window, $rootScope) {
         
     	/*
     	 * editorMode variable determines if the context is for editing or showing the
     	 * form on the fields templates. 
     	 */
-        
+
         var editor = this;
         
+                    
+            
+        editor.loadmap = function(field){
+        
+            var map;
+            console.log(field);
+            if (field.first){
+                console.log('entro al loadmap');
+                //var la = {{question.mapXY.latitude}};
+                // var lo = {{question.mapXY.longitude}};
+                var lat = -34.806777135903424;
+                var lon = -56.164398487890594;   
+                var options = {
+                    zoom: 8,
+                    center: new google.maps.LatLng(lat, lon)
+                };
+
+                map = new google.maps.Map(document.getElementById(field.field_id),
+                options);
+
+                var oneLatLng = new google.maps.LatLng(lat, lon);
+                   var one = new google.maps.Marker({
+                    position: oneLatLng,
+                    map: map,
+                    draggable: true
+
+                });
+            field.first = false;
+            
+            google.maps.event.addListener(one, "dragend", function(evento) {
+                //Obtengo las coordenadas separadas
+                var la = evento.latLng.lat();
+                var lo = evento.latLng.lng();
+                
+                field.mapXY.latitude = la;
+                field.mapXY.longitude = lo;
+                //Puedo unirlas en una unica variable si asi lo prefiero
+                //var coordenadas = evento.latLng.lat() + ", " + evento.latLng.lng();
+                //Las muestro con un popup
+                //alert(coordenadas);
+            });    
+            }
+
+        };            
+                    
+                    
+                    
+                    
         editor.urlBase = $rootScope.urlBase;
 
         editor.FieldTypes = [];
@@ -32,7 +80,13 @@
             label : 'new option',
             id : 0
         };
+                    
+        //-------------mapa----------------            
         
+     
+                    
+         
+  //--------------------------------------------------------------------------------                  
         editor.max_id = 0;
         
         editor.newPage = {'fields':[], 'subTitle':''};
@@ -111,6 +165,8 @@
         };
     
         editor.createField = function(type){
+            console.log(type);
+            console.log(fieldFactory.listFields());
             return fieldFactory.getField(type).buildField();
         };
 
@@ -350,7 +406,6 @@
                 }
             }
         };
-
 
 //------------------------------------------------LOGICA------------------------------------------------------------------------//
         // logic structures  

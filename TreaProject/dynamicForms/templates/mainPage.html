@@ -18,7 +18,8 @@
                     </div>
                 </div>
 
-                    {% verbatim %}                    
+                    {% verbatim %}  
+                
                 <!--forms sorting menu-->
                 <div class="row">
                     <ul class="combo_order col-md-pull-1">
@@ -68,7 +69,7 @@
                             </div>
                         </div>
                         <!--List of forms-->
-
+                          
 			            {% for form in formList %}
                             <div class="panel-group" id="accordion">
                               <div class="panel panel-default">
@@ -163,6 +164,16 @@
             {% addtoblock "js" %}
             <script src={% static "angular/angular.min.js" %}></script>
             {% endaddtoblock %}
+                {% addtoblock "js" %}
+            <script src={% static "angular/lodash.min.js" %}></script>
+            {% endaddtoblock %}
+            {% addtoblock "js" %}
+            <script src={% static "angular/bluebird.js" %}></script>
+            {% endaddtoblock %}
+            {% addtoblock "js" %}
+            <script src={% static "angular/angular-google-maps.min.js" %}></script>
+            {% endaddtoblock %}
+            
             {% addtoblock "js" %}
             <script src={% static "angular/d3.min.js" %}></script> 
             {% endaddtoblock %}
