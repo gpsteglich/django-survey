@@ -106,7 +106,7 @@
                     }else if (visor.questions[i].field_type == 'SelectField'){
                         visor.questions[i].options= visor.questions[i].options.join('#');
                     }else if(visor.questions[i].field_type == 'FileField'){
-                        visor.files.push(angular.copy(visor.questions[i].answer[0]));
+                        visor.files.push(angular.copy(visor.questions[i].answer[0].file));
                     }
                     visor.questions[i].answer = visor.questions[i].answer.join('#');
                 }
