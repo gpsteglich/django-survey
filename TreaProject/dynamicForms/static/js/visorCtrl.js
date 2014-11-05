@@ -87,9 +87,10 @@
                 visor.changePage(0);
                 visor.selectPage(0);
             };
-
+            visor.files=[];
             visor.pre_salvar = function(){
                 visor.questions = [];
+
                 for (var i=0; i< visor.pages.length; i++) {
                     visor.questions = visor.questions.concat(angular.copy(visor.pages[i].fields));
                 }
@@ -104,6 +105,8 @@
                         visor.questions[i].options = respuesta;
                     }else if (visor.questions[i].field_type == 'SelectField'){
                         visor.questions[i].options= visor.questions[i].options.join('#');
+                    }else if(visor.questions[i].field_type == 'FileField'){
+                        visor.files.push(angular.copy(visor.questions[i].answer[0]));
                     }
                     visor.questions[i].answer = visor.questions[i].answer.join('#');
                 }
@@ -121,27 +124,27 @@
                 }
             };
 
-            var getFileInodes = function(){
-                var temp = [];
-                for(var j=0; j< visor.questions.length; j++){
-                    if(visor.questions[j].field_type=='FileField'){
-                        temp.push(angular.copy(visor.questions[j].answer[0]));
-                        console.log('esto:'+JSON.stringify(visor.questions[j]));
-                        visor.questions[j].answer ='';
-                        
-                    }
-                        
-                }
-                console.log(temp);
-                return temp;
-            }
+//            var getFileInodes = function(){
+//                var temp = [];
+//                for(var j=0; j< visor.questions.length; j++){
+//                    if(visor.questions[j].field_type=='FileField'){
+//                        temp.push(angular.copy(visor.questions[j].answer[0]));
+//                        console.log('esto:'+JSON.stringify(visor.questions[j]));
+//                        visor.questions[j].answer ='';
+//                        
+//                    }
+//                        
+//                }
+//                console.log(temp);
+//                return temp;
+//            }
             // Persist form
             visor.save = function(){
                 if (visor.isVisorMode()){
                     visor.pre_salvar();
-                    var files = getFileInodes();
+                    console.log(visor.files);
                     var dataMedia = {
-                        media : files,
+                        media : visor.files,
                         answer : visor.questions
                     }
                     /*
@@ -152,7 +155,7 @@
                         .error(function(data, status, headers, config) {
                             alert('Error saving data: ' + data.error);
                         });*/
-                    console.log(JSON.stringify(dataMedia));
+                    console.log(dataMedia);
                 } else {
                     /*
                      * TODO: Sería útil permitir al editor ingresar datos y que sean validados por el back
@@ -376,7 +379,7 @@
                             name:file.name,
                             type:file.type
                         }
-                        fileModel.answer[0] = fileDescriptor;
+                      fileModel.answer[0] = fileDescriptor;
                       console.log(fileModel.answer[0]);
                      
                     }

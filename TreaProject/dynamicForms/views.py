@@ -26,7 +26,7 @@ from datetime import datetime
 from dynamicForms.models import Form, FormEntry, Version
 from dynamicForms.fields import PUBLISHED, DRAFT, Validations
 from dynamicForms.serializers import FormSerializer, VersionSerializer
-from dynamicForms.serializers import FieldEntrySerializer, FormEntrySerializer
+from dynamicForms.serializers import FieldEntrySerializer, FormEntrySerializer,FileEntrySerializer
 from dynamicForms.fields import Field
 from dynamicForms.fieldtypes.FieldFactory import FieldFactory as Factory
 from dynamicForms.JSONSerializers import FieldSerializer 
@@ -469,7 +469,7 @@ class StatisticsView(generics.RetrieveAPIView):
 
 @api_view(['POST'])
 def submit_files(request,entry_id,format=None):
-    entry = Entry.objects.get(pk=entry_id)
+    entry = FormEntry.objects.get(pk=entry_id)
     for file_inode in request.DATA:
         serializer = FileEntrySerializer(data=file_inode)
         if serializer.is_valid():
