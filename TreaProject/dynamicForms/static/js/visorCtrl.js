@@ -372,15 +372,13 @@
                     
                   reader.onloadend = function () {
 
-                       // var view   = new Int32Array(reader.result);
-                        var fileDescriptor = {
+                       var fileDescriptor = {
                             field_id : fileModel.field_id,
                             file:reader.result,
                             name:file.name,
                             type:file.type
                         }
                       fileModel.answer[0] = fileDescriptor;
-                      console.log(fileModel.answer[0]);
                      
                     }
                    reader.readAsArrayBuffer(file);
