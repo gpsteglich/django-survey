@@ -1,7 +1,6 @@
 from django import template
 from django.template.loader import render_to_string
-from classytags.arguments import Argument
-from classytags.core import Options
+from django.templatetags.static import static
 from classytags.helpers import InclusionTag
 from dynamicForms.fieldtypes import FieldFactory
 
@@ -18,19 +17,19 @@ class asset_block_template(InclusionTag):
         return ret
 
     def get_context(self, context):
-        asset_list = ['js/fields/NumberField.js',
-                    'js/fields/TextField.js',
-                    'js/fields/TextAreaField.js',
-                    'js/fields/EmailField.js',
-                    'js/fields/CheckboxField.js',
-                    'js/fields/NumberField.js',
-                    'js/fields/SelectField.js',
-                    'js/fields/CIField.js',
-                    'js/fields/Matricula.js',
-                    'js/fields/Usuario.js',
-                    'js/operators/operatorList.js',
-                    'js/operators/operatorChecks.js',
-                    'js/operators/operatorNumber.js',
+        asset_list = [static('js/fields/NumberField.js'),
+                    static('js/fields/TextField.js'),
+                    static('js/fields/TextAreaField.js'),
+                    static('js/fields/EmailField.js'),
+                    static('js/fields/CheckboxField.js'),
+                    static('js/fields/NumberField.js'),
+                    static('js/fields/SelectField.js'),
+                    static('js/fields/CIField.js'),
+                    static('js/fields/Matricula.js'),
+                    static('js/fields/Usuario.js'),
+                    static('js/operators/operatorList.js'),
+                    static('js/operators/operatorChecks.js'),
+                    static('js/operators/operatorNumber.js'),
                     ]
         #asset_list = asset_block_template.get_static_field_files(self)
         context['asset_list'] = asset_list
