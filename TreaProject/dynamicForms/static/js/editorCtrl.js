@@ -24,7 +24,7 @@
                     editor.FieldTypes = data;
                     var fields = Object.keys(editor.FieldTypes);
                     for(var i = 0;i<fields.length; i++){
-                        console.log('loading template '+fields[i]);
+                        //console.log('loading template '+fields[i]);
                         $http.get('field_edit/'+fields[i], {cache:$templateCache});
                     }
 

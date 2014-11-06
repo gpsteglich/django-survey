@@ -1,0 +1,8 @@
+{% load staticfiles sekizai_tags %}
+
+{% for asset_route in asset_list %}
+	{% addtoblock "jsTag" %}
+	<script src="/static/{{ asset_route }}"></script>
+	{# <script src={% static "{{ asset_route }}" %}></script> #}
+	{% endaddtoblock %}
+{% endfor %}

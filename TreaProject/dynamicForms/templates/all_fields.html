@@ -35,12 +35,6 @@
 {% addtoblock "js" %}
 <script src={% static "js/fields/CIField.js" %}></script>
 {% endaddtoblock %}
-{% addtoblock "js" %}
-<script src={% static "js/fields/Matricula.js" %}></script>
-{% endaddtoblock %}
-{% addtoblock "js" %}
-<script src={% static "js/fields/Usuario.js" %}></script>
-{% endaddtoblock %}
 <!-- operators -->
 {% addtoblock "js" %}
 <script src={% static "js/operators/operatorField.js" %}></script>
@@ -55,3 +49,9 @@
 <script src={% static "js/operators/operatorNumber.js" %}></script>
 {% endaddtoblock %}
 
+
+
+
+{% addtoblock "js" %}
+<script src={% static "{{ruta}}" %}></script>
+{% endaddtoblock %}

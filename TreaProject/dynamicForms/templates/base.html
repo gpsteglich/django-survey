@@ -123,9 +123,11 @@
 
     {%block scripts%} {%endblock%}
 
-    {% render_block "js" postprocessor "compressor.contrib.sekizai.compress" %}
+    {% render_block "js" %}
 
-
+    <!-- asset_block_template --> 
+    {% render_block "jsTag" %}
+    <!-- asset_block_template --> 
 </body>
 
 </html>

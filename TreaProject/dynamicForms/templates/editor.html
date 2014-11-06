@@ -64,7 +64,6 @@
                               	    <a href="main" class="btn btn-default">Discard changes</a>
                                 </div>
                             </div>
-                            <pre>{{editor.pages|json}}</pre>
 	                    </form>
 	                    </br> 
 		                </br>
@@ -89,7 +88,13 @@
     <script src={% static "js/fields/FieldFactory.js" %}></script>
     {% endaddtoblock %}
     {% addtoblock "js" %}
+    <script src={% static "js/fields/FieldBase.js" %}></script>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
     <script src={% static "js/operators/operatorFactory.js" %}></script>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
+    <script src={% static "js/operators/operatorField.js" %}></script>
     {% endaddtoblock %}
     {% addtoblock "js" %}
     <script src={% static "js/app.js" %}></script>
@@ -97,7 +102,9 @@
 	{% addtoblock "js" %}
     <script src={% static "js/editorCtrl.js" %}></script>
     {% endaddtoblock %}
-	{% include "all_fields.html" %}
+
+	{% asset_block_template %}
+
     {% addtoblock "js" %}   
     <script type="text/javascript">
 		$(document).ready(function(){ 
