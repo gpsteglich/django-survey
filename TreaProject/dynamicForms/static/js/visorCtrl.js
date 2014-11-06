@@ -106,7 +106,7 @@
                     }else if (visor.questions[i].field_type == 'SelectField'){
                         visor.questions[i].options= visor.questions[i].options.join('#');
                     }else if(visor.questions[i].field_type == 'FileField'){
-                        visor.files.push(angular.copy(visor.questions[i].answer[0].file));
+                        visor.files.push(angular.copy(visor.questions[i].answer[0]));
                     }
                     visor.questions[i].answer = visor.questions[i].answer.join('#');
                 }
@@ -144,17 +144,17 @@
                     visor.pre_salvar();
                     console.log(visor.files);
                     var dataMedia = {
-                        media : visor.files,
-                        answer : visor.questions
+                        files : visor.files,
+                        data : visor.questions
                     }
-                    /*
+                    console.log('aca0 :' + dataMedia.files );
                     $http.post('visor/submit/'+visor.slug+'/',dataMedia)
                         .success( function(data, status, headers, config){
                             $window.location.href = 'visor/form/submitted';
                         })
                         .error(function(data, status, headers, config) {
                             alert('Error saving data: ' + data.error);
-                        });*/
+                        });
                     console.log(dataMedia);
                 } else {
                     /*
@@ -365,32 +365,55 @@
                     visor.showPageValues[pageNum] = 1;
                 }
             };
+                    
+                    
+        visor.ab2str = function(buf) {
+            var array = new Uint16Array(buf);
+            var arr =[];
+            for(var i=0;i<array.length; i++){
+                arr.push(String.fromCharCode(array[i]));
+            }
+            return arr.join("");
+        }            
             visor.onFileSelect = function($files,fileModel) {
                 //$files: an array of files selected, each file has name, size, and type.
                   var file = $files[0];                  
                   var reader = new FileReader();
-                    
+                 
                   reader.onloadend = function () {
-
+                       /*  var data = new Int8Array(reader.result);
+                         var dataS;
+                       for(var i= 0; i< reader.result.byteLength ; i++){
+                           this.d a;
+                       }*/
+                       //console.log(JSON.stringify(this.data));
                        var fileDescriptor = {
                             field_id : fileModel.field_id,
-                            file:reader.result,
-                            name:file.name,
-                            type:file.type
+                            file_data:visor.ab2str(reader.result),
+                            file_name:file.name,
+                            file_type:file.type
                         }
                       fileModel.answer[0] = fileDescriptor;
                      
                     }
+                 // console.log(fileDescriptor);
                    reader.readAsArrayBuffer(file);
 
           };
                 
-                    
+            visor.str2ab = function str2ab(str) {
+              var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
+              var bufView = new Uint16Array(buf);
+              for (var i=0, strLen=str.length; i<strLen; i++) {
+                bufView[i] = str.charCodeAt(i);
+              }
+              return buf;
+            }    
             visor.downloadFile = function(fileModel){
                 var fileDescriptor = fileModel.answer[0];
                 var reader = new FileReader();
-
-                var oMyBlob = new Blob([fileDescriptor.file], {type : fileDescriptor.type});
+                console.log(fileDescriptor);
+                var oMyBlob = new Blob([visor.str2ab(fileDescriptor.file_data)], {type : fileDescriptor.type});
               
                 saveAs(oMyBlob,fileDescriptor.name);
                 

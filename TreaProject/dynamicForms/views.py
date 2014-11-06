@@ -323,7 +323,7 @@ def submit_form_entry(request, slug, format=None):
     error_log = {"error": ""}
     form_versions = Form.objects.get(slug=slug).versions.all()
     final_version = form_versions.filter(status=PUBLISHED).first()
-    for field in request.DATA:
+    for field in request.DATA['data']:
         serializer = FieldEntrySerializer(data=field)
         if serializer.is_valid():
             obj = serializer.object
@@ -356,13 +356,24 @@ def submit_form_entry(request, slug, format=None):
     entry = FormEntry(version=final_version)
     entry.entry_time = datetime.now()
     entry.save()
-    for field in request.DATA:
+    for field in request.DATA['data']:
             serializer = FieldEntrySerializer(data=field)
             if serializer.is_valid():
                 serializer.object.entry = entry
                 if not serializer.object.shown:
                     serializer.object.answer = ''
                 serializer.save()
+                # If field is a FileField we find the corresponding file and save it to the database
+                if serializer.object.field_type == 'FileField':
+                    for uploaded_file in request.DATA['files']:
+                        file_serializer = FileEntrySerializer(data=uploaded_file)
+                        if file_serializer.is_valid():
+                            if file_serializer.object.field_id == serializer.object.field_id:
+                                file_serializer.object.field_id = serializer.object.pk
+                                file_serializer.save()
+                                break
+                        else:
+                            print("Serializador de archivos no es valido")
     return Response(status=status.HTTP_200_OK)
 
 
