@@ -52,6 +52,7 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^statistics/(?P<pk>[0-9]+)/(?P<number>[0-9]+)(?:/(?P<fieldId>[0-9]+)/(?P<filterType>[a-z]+)/(?P<filter>[A-Z,a-z,0-9,\-,\_]+))?/$',views.StatisticsView.as_view()), 
     
     url(r'^visor_template', views.TemplateView.as_view(template_name='visor_template.html')),
+    url(r'^captcha_template', views.TemplateView.as_view(template_name='captcha_template.html')),
     url(r'^visor/publishVersion/(?P<slug>[a-z,0-9,\-,\_]+)/$', views.FillForm.as_view()),
     url(r'^visor$', views.TemplateView.as_view(template_name='visor.html')),
     url(r'^visor/submit/(?P<slug>[a-z,0-9,\-,\_]+)/$', 'submit_form_entry'),

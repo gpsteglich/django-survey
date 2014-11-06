@@ -7,8 +7,8 @@
         /*
          * The VisorCtrl holds the logic to display, validate and submit the form.
          */
-        app.controller('VisorCtrl', ['$scope','$http','$location','$window','$rootScope',
-                function ($scope, $http, $location, $window, $rootScope) {
+        app.controller('VisorCtrl', ['$scope','$http','$location','$window','$rootScope', '$captcha',
+                function ($scope, $http, $location, $window, $rootScope, $captcha) {
 
             /*
             *  This controller is initialiced by ui-router, so it cant be used with ng-controller
@@ -16,7 +16,24 @@
             */
             var visor = $scope;
             
-                
+            
+            
+            visor.enviarCaptcha = function(resultado)
+                {
+                    
+                    if($captcha.checkResult(resultado) === true)
+                    {
+                        // alert("El captcha ha pasado la validación");
+                    return true;
+                    }
+                    
+                    else
+                    {
+                        //console.log(resultado);
+                        // alert(resultado);
+                        return false;
+                    }
+                }  
                     
             visor.loadmap = function(field){
             
@@ -167,6 +184,7 @@
                             $window.location.href = 'visor/form/submitted';
                         })
                         .error(function(data, status, headers, config) {
+                             alert('Error savindfdsfdsfsdg data: ' + data.error);
                             alert('Error saving data: ' + data.error);
                         });
                 } else {

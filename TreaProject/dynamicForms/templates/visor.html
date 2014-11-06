@@ -11,11 +11,27 @@
         <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 	</head>
 	<body class="radial-center">
+   <!--  {% verbatim %}
+    <div class="large-2 columns captcha">
+                    
+                    <captcha field1="{{field1}}" operator="{{operator}}" field2="{{field2}}"></captcha>
+                </div>
+                <div class="large-1 columns resultado">
+                    
+                    <input ng-model="resultado" size="1" required />
+                </div>
+ 
+                <button   ng-click="login()" class="button button-primary">
+                    Submit captcha
+                </button>
+{% endverbatim %} -->
+       
         <div ng-include="'visor_template'"></div>
     </body>
     <script src={% static "jquery/js/jquery-2.1.1.min.js" %}></script>
     <script src={% static "bootstrap/js/bootstrap.js" %}></script>
     <script src={% static "angular/angular.js" %}></script>
+    <script src={% static "angular/captcha.js" %}></script>
     <script src={% static "angular/checklist-model.js" %}></script>
     <script src={% static "bootstrap/js/ui-bootstrap.min.js" %}></script>
     <script src={% static "angular/angular-sanitize.js" %}></script>
