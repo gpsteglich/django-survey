@@ -25,7 +25,7 @@ class UsuarioField(NumberField.NumberField):
         return base
 
     def get_assets():
-        return ['js/fields/UsuarioField.js']
+        return ['formularios/js/fields/Usuario.js']
     
     def __str__(self):
         return "Usuario"
@@ -53,7 +53,7 @@ class MatriculaField(Field.Field):
         return base
 
     def get_assets():
-        return ['js/fields/MatriculaField.js']
+        return ['formularios/js/fields/Matricula.js']
     
     def __str__(self):
         return "Matricula"
