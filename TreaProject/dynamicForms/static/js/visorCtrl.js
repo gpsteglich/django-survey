@@ -179,9 +179,9 @@
             visor.$on('$locationChangeSuccess', function(event) {
                 var changePage;
                 if (visor.plugin_mode){
-                    changePage = $location.hash().split(separator)[1] || 0;
+                    changePage = $location.hash()
                 } else if (visor.isVisorMode()) {
-                    changePage = $location.hash();
+                    changePage = $location.hash().split(separator)[1] || 0;;
                 } else {
                     changePage = ($location.search()).page || 0;
                 }
