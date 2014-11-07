@@ -13,7 +13,7 @@ class SelectField(ListField):
     sts_template_name = "combobox/template_statistic.html"
 
     def get_assets():
-        return ['js/fields/SelectField.js']
+        return ['js/fields/SelectField.js', 'js/operators/operatorList.js']
 
     def __str__(self):
         return "Combo Box"

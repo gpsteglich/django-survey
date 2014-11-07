@@ -10,7 +10,7 @@ class FieldFactory():
         return FieldFactory.fields[id]
 
     def get_all_classes():
-        return fields.values()
+        return FieldFactory.fields.values()
 
     def register(id, type):
         if id not in FieldFactory.fields:

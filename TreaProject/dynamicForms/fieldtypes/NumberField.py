@@ -62,7 +62,7 @@ class NumberField(Field.Field):
         return statistics
 
     def get_assets():
-        return ['js/fields/NumberField.js']
+        return ['js/fields/NumberField.js', 'js/operators/operatorNumber.js']
     
     def __str__(self):
         return "NumberField"

@@ -9,12 +9,17 @@ register = template.Library()
 class asset_block_template(InclusionTag):
     template = 'asset_block_template.html'
 
-    def get_static_field_files(self):
+    def get_static_field_files(self, context):
         l = FieldFactory.FieldFactory.get_all_classes()
-        ret = ['js/fields/FieldBase.js']
+        ret = []
         for c in l:
             ret.extend(c.get_assets())
-        return ret
+        context['asset_list'] = []
+        for elem in ret:
+        	st_elem = static(elem)
+        	if st_elem not in context['asset_list']:
+        		context['asset_list'].append(st_elem)
+        return context
 
     def get_context(self, context):
         asset_list = [static('js/fields/NumberField.js'),
@@ -36,7 +41,7 @@ class asset_block_template(InclusionTag):
         return context
 
     def render_tag(self, context):
-        data = self.get_context(context)
+        data = self.get_static_field_files(context)
         output = render_to_string(self.template, data)
         return output
     
