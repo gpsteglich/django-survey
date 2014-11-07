@@ -6,10 +6,14 @@ from dynamicForms.fieldtypes import ModelField
 from dynamicForms.fieldtypes import FieldFactory
 from formularios.models import Usuario, Club
 
+
 class UsuarioField(ModelField.ModelField):
     prp_template_name = "usuario/properties.html"
     model = Usuario
     name =  "Usuario"
+
+    def get_assets():
+        return ['formularios/js/fields/Usuario.js']
     
     def __str__(self):
         return "Usuario"
@@ -21,6 +25,9 @@ class ClubField(ModelField.ModelField):
     prp_template_name = "club/properties.html"
     model = Club
     name =  "Club"
+    
+    def get_assets():
+        return ['formularios/js/fields/Club.js']
     
     def __str__(self):
         return "Club"
@@ -47,6 +54,9 @@ class MatriculaField(Field.Field):
         base = super(MatriculaField, self).get_methods(**kwargs)
         base.append(self.pattern_check)
         return base
+
+    def get_assets():
+        return ['formularios/js/fields/Matricula.js']
     
     def __str__(self):
         return "Matricula"

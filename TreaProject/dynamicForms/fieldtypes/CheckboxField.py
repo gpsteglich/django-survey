@@ -37,6 +37,9 @@ class CheckboxField(ListField):
             if v not in l:
                 raise ValidationError("Invalid value, not among options.")
 
+    def get_assets():
+        return ['js/fields/CheckboxField.js', 'js/operators/operatorList.js', 'js/operators/operatorChecks.js']
+
     def __str__(self):
         return "Checkbox"
 

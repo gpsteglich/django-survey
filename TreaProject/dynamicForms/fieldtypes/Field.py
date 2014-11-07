@@ -55,7 +55,9 @@ class Field(object):
             statistics["required"] = "No"
         return statistics
     
-    
+    def get_assets():
+        return []
+        
     """
     Default Render methods for field templates
     """
