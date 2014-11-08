@@ -23,7 +23,7 @@ from rest_framework.response import Response
 import json
 from datetime import datetime
 
-from dynamicForms.models import Form, FormEntry, Version
+from dynamicForms.models import Form, FormEntry, Version, FieldEntry
 from dynamicForms.fields import PUBLISHED, DRAFT, Validations
 from dynamicForms.serializers import FormSerializer, VersionSerializer
 from dynamicForms.serializers import FieldEntrySerializer, FormEntrySerializer,FileEntrySerializer
@@ -369,8 +369,10 @@ def submit_form_entry(request, slug, format=None):
                         file_serializer = FileEntrySerializer(data=uploaded_file)
                         if file_serializer.is_valid():
                             if file_serializer.object.field_id == serializer.object.field_id:
-                                file_serializer.object.field_id = serializer.object.pk
+                                field = FieldEntry.objects.get(pk=serializer.object.pk) 
+                                file_serializer.object.field_entry = field
                                 file_serializer.save()
+                                print("Paso 2")
                                 break
                         else:
                             print("Serializador de archivos no es valido")
@@ -488,3 +490,11 @@ def submit_files(request,entry_id,format=None):
             serializer.object.field_id = field_id
             serializer.save()
     return Response(status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def download_file(request,field_id,entry):
+    
+    fieldEntry = FieldEntry.objects.get(pk=entry)
+    fileEntry = fieldEntry.files.get(field_id=field_id)       
+    print(fileEntry.file_type)
+    return Response(data= {"file":fileEntry.file_data}, status=status.HTTP_200_OK)

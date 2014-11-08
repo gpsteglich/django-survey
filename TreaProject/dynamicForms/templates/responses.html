@@ -22,8 +22,18 @@
                                     <p>Entry: {{response.entry_time}}</p>
                                     <ul>
                                         <li ng-repeat="field in response.fields">
-                                        {{field}}
+                                            <div ng-show="responses.isFile(field)">
+                                                 <button ng-click="responses.download(field)">{{field}}</button>
+                                                
+                                            </div>
+                                            <div ng-hide="responses.isFile(field)">
+                                                 {{field}}
+                                            </div>
+                                            
+                                       
                                         </li>
+                                        
+                                        
                                     </ul>
                                 </li>
                             </ul>
@@ -57,6 +67,8 @@
     <script src={% static "js/app.js" %}></script>
     {% endaddtoblock %}
     {% addtoblock "js" %}
+    <script src={% static "angular/FileSaver.js" %}></script>
+
     <script src={% static "js/responsesCtrl.js" %}></script>
      <script src={% static "angular/angular-sanitize.js" %}></script>
     <script src={% static "angular/ng-csv.js" %}></script>
