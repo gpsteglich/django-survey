@@ -109,13 +109,8 @@ FIELD_FILES = (
     'dynamicForms.fieldtypes.TextAreaField',
     'dynamicForms.fieldtypes.EmailField',
     'dynamicForms.fieldtypes.CheckboxField',
-    #CHECKBOX_MULTIPLE: 'dynamicForms.fieldtypes.MultipleChoiceField',
     'dynamicForms.fieldtypes.SelectField',
-    #SELECT_MULTIPLE: 'dynamicForms.fieldtypes.MultipleChoiceField',
-    #RADIO_MULTIPLE: 'dynamicForms.fieldtypes.ChoiceField',
-    #DATE: 'dynamicForms.fieldtypes.DateField',
     'dynamicForms.fieldtypes.NumberField',
-    #URL: 'dynamicForms.fieldtypes.URLField',
     'dynamicForms.fieldtypes.CIField',
     'formularios.fields',
 )

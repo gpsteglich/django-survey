@@ -10,7 +10,7 @@ class Usuario(models.Model):
     has_car = models.BooleanField()
 
     def __str__(self):
-        return self.name + self.surname
+        return self.name + " " + self.surname
 
 
 class Country(models.Model):
@@ -26,5 +26,5 @@ class Club(models.Model):
     established = models.DateField()
 
     def __str__(self):
-        return self.name +'(' + self.country.__str__() + ')'
+        return self.name +' (' + self.country.__str__() + ')'
 
