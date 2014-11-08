@@ -18,7 +18,8 @@
               </div>       
             </div>
             <div ng-show="editor.after_submit.sendMail">
-              <textarea class="form-control" ng-model="editor.after_submit.mailText" rows="3"></textarea>
+                <input class="form-control" type="text" ng-model="editor.after_submit.mailSubject" placeholder="Subject">
+                <textarea class="form-control" ng-model="editor.after_submit.mailText" rows="3" placeholder="Content"></textarea>
             </div>  
             <br>
             <!-- Redirect or message options -->

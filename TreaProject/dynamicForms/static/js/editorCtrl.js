@@ -510,11 +510,14 @@
         }
 
         editor.after_submit = {
-            mailText: "Gracias pibe!",
-            sendMail: true,
-            action: 'Redirect To',
-            redirect: 'http://www.google.com',
-            message: 'Muchas gracias \n  Que pases bien',
+            sendMail: false,
+            //mailSubject
+            //mailText
+            mailSender: 'santrbl@gmail.com',
+            //mailRecipient
+            action: 'Show Message',// can be 'Show Message' or 'Redirect To'
+            message: 'Thank you. You successfully filled the form!',
+            redirect: 'http://'
         }
         
     }]);
