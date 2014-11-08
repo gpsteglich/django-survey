@@ -491,18 +491,30 @@ def export_csv(request, pk, number, format=None):
             content = {"error": "This version's status is Draft."}
             return Response(content, status=status.HTTP_406_NOT_ACCEPTABLE)
         
-        #write first row which indicates form pk, version number and form title 
-        writer.writerow(["Form", pk, number, form.title]) 
-        
         #get all entries
         formEntries = version.entries.all()
         if formEntries:
+            initial = formEntries[0]
+            labels = []
+            ids = []
+            types = []
+            required = []
+            for field in initial.fields.all().order_by("field_id"):
+                labels.append(field.text)
+                ids.append(field.field_id)
+                types.append(field.field_type)
+                required.append(field.required)
+            writer.writerow(labels)
+            writer.writerow(ids)
+            writer.writerow(types)
+            writer.writerow(required)
             for formEntry in formEntries:
-                #write row on cvs file with form enty date
-                writer.writerow(['Entry date', formEntry.entry_time])
-                fields = formEntry.fields.all()
+                fields = formEntry.fields.all().order_by("field_id")
+                data = []
                 for field in fields:
-                    writer.writerow(["Field", field.field_id, field.field_type, field.text,field.required, field.answer ])
+                    data.append(field.answer)
+                data.append(formEntry.entry_time)   
+                writer.writerow(data)
                             
             return response
         else: 
