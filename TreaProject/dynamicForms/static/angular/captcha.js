@@ -124,7 +124,7 @@ captcha.factory('$captcha', ['$rootScope', function ($rootScope)
             //en otro caso cambiamos la operacion
             else
             {
-                this.getOperation();
+               // this.getOperation();
             }
         }
     }

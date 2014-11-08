@@ -15,7 +15,7 @@
             *  It uses $scope to make variables available for the page.
             */
             var visor = $scope;
-            
+            visor.disableSubmit = true;
             
             
             visor.enviarCaptcha = function(resultado)
@@ -23,14 +23,16 @@
                     
                     if($captcha.checkResult(resultado) === true)
                     {
-                         alert("El captcha ha pasado la validación");
+                        // alert("El captcha ha pasado la validación");
+                         visor.disableSubmit =false;
                     //return true;
                     }
                     
                     else
                     {
                         //console.log(resultado);
-                         alert(resultado);
+                        // alert(resultado);
+                         visor.disableSubmit= true;
                        // return false;
                     }
                 }  
@@ -135,6 +137,7 @@
 
             visor.setFormValues = function(data){
                 visor.version = data;
+                visor.disableSubmit = visor.version.captcha;
                 visor.pages = JSON.parse(data.json).pages;
                 visor.logic = JSON.parse(data.json).logic;
                 visor.initialiceConditions();
