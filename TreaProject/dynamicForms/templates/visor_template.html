@@ -40,12 +40,14 @@
                                 </span>
                             </h3>
                             <div class="row" > 
-                                <input type="text" class="form-control" ng-model="resultado" />
+
+                                <input type="text" class="form-control" ng-model="resultado" ng-disabled = "version.captcha"
+                                    fieldtype="Captcha" validate/>
                             </div>
                              <div class="text-right">
-                                <!-- <button  ng-click="enviarCaptcha(resultado)" class="btn btn-primary">
+                                <button  ng-click="enviarCaptcha(resultado)" class="btn btn-primary">
                                    Submit captcha
-                                </button> -->
+                                </button>
                              </div>
                         </div>
                     </div>

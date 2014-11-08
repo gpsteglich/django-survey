@@ -23,15 +23,15 @@
                     
                     if($captcha.checkResult(resultado) === true)
                     {
-                        // alert("El captcha ha pasado la validación");
-                    return true;
+                         alert("El captcha ha pasado la validación");
+                    //return true;
                     }
                     
                     else
                     {
                         //console.log(resultado);
-                        // alert(resultado);
-                        return false;
+                         alert(resultado);
+                       // return false;
                     }
                 }  
                     
@@ -177,23 +177,24 @@
 
             // Persist form
             visor.save = function(){
-                if (visor.isVisorMode()){
-                    visor.pre_salvar();
-                    $http.post('visor/submit/'+visor.slug+'/',visor.questions)
-                        .success( function(data, status, headers, config){
-                            $window.location.href = 'visor/form/submitted';
-                        })
-                        .error(function(data, status, headers, config) {
-                             alert('Error savindfdsfdsfsdg data: ' + data.error);
-                            alert('Error saving data: ' + data.error);
-                        });
-                } else {
-                    /*
-                     * TODO: Sería útil permitir al editor ingresar datos y que sean validados por el back
-                     * pero sin persistirlos en la base.
-                     */
-                    alert('Form was completed correctly. \nThis is a preview, the data wont be saved.');
-                }
+                // if (visor.isVisorMode()){
+                //     visor.pre_salvar();
+                //     $http.post('visor/submit/'+visor.slug+'/',visor.questions)
+                //         .success( function(data, status, headers, config){
+                //             $window.location.href = 'visor/form/submitted';
+                //         })
+                //         .error(function(data, status, headers, config) {
+                //              alert('Error savindfdsfdsfsdg data: ' + data.error);
+                //             alert('Error saving data: ' + data.error);
+                //         });
+                // } else {
+                //     /*
+                //      * TODO: Sería útil permitir al editor ingresar datos y que sean validados por el back
+                //      * pero sin persistirlos en la base.
+                //      */
+                //     alert('Form was completed correctly. \nThis is a preview, the data wont be saved.');
+                // }
+                alert('elfjdklfjsdklfjsd');
             };
 
             ///////////////////// Page navegation /////////////////////
