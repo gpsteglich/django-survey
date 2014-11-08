@@ -61,7 +61,7 @@ class NumberField(Field.Field):
         statistics.update(numericStatistics.getSerializedData())
         return statistics
 
-    def get_assets():
+    def get_assets(self):
         return ['js/fields/NumberField.js', 'js/operators/operatorNumber.js']
     
     def __str__(self):
