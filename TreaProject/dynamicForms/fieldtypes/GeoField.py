@@ -32,6 +32,9 @@ class GeoField(Field.Field):
         base = super(GeoField, self).get_methods(**kwargs)
         base.append(self.geo_check)
         return base
+    
+    def get_non_static():
+        return ['https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false']
         
     def __str__(self):
         return "GeoLocation"
