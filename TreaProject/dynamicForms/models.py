@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.template.defaultfilters import slugify
+import json
 
 from dynamicForms.fields import JSONField, STATUS, DRAFT, PUBLISHED, EXPIRED
 from datetime import datetime
@@ -8,48 +9,78 @@ from datetime import datetime
 from cms.models.pluginmodel import CMSPlugin
 
 
-class VersionQueySet(models.query.QuerySet):
+class FormEntryQuerySet(models.query.QuerySet):
     """
-    QuerySet for Version model
+    QuerySet for FormEntry model
     """
-    def data_icontains(self, *args, **kwargs):
-        entries = self.get(pk=kwargs['version']).entries.all()
+    def data_icontains(self, field_id, data, exclude=False):
+        entries = set()
+        for entry in self:
+            fields = entry.fields.filter(field_id=field_id, answer__icontains=data)
+            if exclude:
+                if fields.count() == 0:
+                    entries.add(entry.pk)
+            else:
+                if fields.count() > 0:
+                    entries.add(entry.pk)
+        return FormEntry.objects.filter(pk__in=entries)
+
+    def data_iexact(self, field_id, data, exclude=False):
+        entries = set()
+        for entry in self:
+            fields = entry.fields.filter(field_id=field_id, answer__iexact=data)
+            if exclude:
+                if fields.count() == 0:
+                    entries.add(entry.pk)
+            else:
+                if fields.count() > 0:
+                    entries.add(entry.pk)
+        return FormEntry.objects.filter(pk__in=entries)
+
+    def data_number(self, field_id, data, operator, exclude=False):
+        entries = set()
+        for entry in self:
+            if operator == 'gt':
+                fields = entry.fields.filter(field_id=field_id, answer__gt=data)
+            elif operator == 'gte':
+                fields = entry.fields.filter(field_id=field_id, answer__gte=data)
+            elif operator == 'lt':
+                fields = entry.fields.filter(field_id=field_id, answer__lt=data)
+            elif operator == 'lte':
+                fields = entry.fields.filter(field_id=field_id, answer__lte=data)
+            elif operator == 'eq':
+                fields = entry.fields.filter(field_id=field_id, answer=data)
+            if exclude:
+                if fields.count() == 0:
+                    entries.add(entry.pk)
+            else:
+                if fields.count() > 0:
+                    entries.add(entry.pk)
+        return FormEntry.objects.filter(pk__in=entries)
+
+    def get_data(self):
         data = []
-        for entry in entries:
-            fields = entry.fields.filter(field_id=kwargs['field_id'], answer__icontains=kwargs['data'])
-            # for field in fields:
-            if fields.count() > 0:
-                for field in entry.fields.all():
-                    data.append(field)
+        for entry in self:
+            fields = entry.fields.all()
+            for field in fields:
+                data.append(field)
         return data
-    def data_iexact(self, *args, **kwargs):
-        entries = self.get(pk=kwargs['version']).entries.all()
-        data = []
-        for entry in entries:
-            fields = entry.fields.filter(field_id=kwargs['field_id'], answer__iexact=kwargs['data'])
-            # for field in fields:
-            if fields.count() > 0:
-                for field in entry.fields.all():
-                    data.append(field)
-        return data
-    def data_all(self, *args, **kwargs):
-        entries = self.get(pk=kwargs['version']).entries.all()
-        data = []
-        for entry in entries:
-            fields = entry.fields.filter(field_id=kwargs['field_id'])
-            # for field in fields:
-            if fields.count() > 0:
-                for field in entry.fields.all():
-                    data.append(field)
-        return data
+
+
+class FormEntryManager(models.Manager):
+    """
+    Manager for FormEntry model
+    """
+    def get_queryset(self):
+        return FormEntryQuerySet(self.model, using=self._db)
 
 
 class VersionManager(models.Manager):
     """
     Manager for Version model
     """
-    def get_queryset(self):
-        return VersionQueySet(self.model, using=self._db)
+    def get_entries(self, version):
+        return self.get(pk=version).entries.all()
 
 
 class Form(models.Model):
@@ -138,11 +169,19 @@ class Version(models.Model):
             raise ValidationError('You cannot edit a published form')
         super(Version, self).save(*args, **kwargs)
 
+    def get_logic(self):
+        loaded = json.loads(self.json)
+        return loaded['logic']
+
+    def get_pages(self):
+        loaded = json.loads(self.json)
+        return loaded['pages']
 
 class FormEntry(models.Model):
     version = models.ForeignKey("Version", related_name="entries")
     entry_time = models.DateTimeField(blank=True)
 
+    objects = FormEntryManager()
 
 class FieldEntry(models.Model):
     field_id = models.IntegerField()
@@ -150,7 +189,7 @@ class FieldEntry(models.Model):
     text = models.CharField(max_length=200)
     required = models.BooleanField()
     shown = models.BooleanField(default=True)
-    answer = models.CharField(max_length=200, blank=True, null=True)
+    answer = models.CharField(max_length=400, blank=True, null=True)
     entry = models.ForeignKey("FormEntry", related_name="fields",
                              blank=True, null=True)
 
