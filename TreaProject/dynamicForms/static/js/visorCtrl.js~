@@ -14,15 +14,13 @@
             *  This controller is initialiced by ui-router, so it cant be used with ng-controller
             *  It uses $scope to make variables available for the page.
             */
-         var visor = $scope;
-        
-         visor.loadmaps=[];             
-                    
+            var visor = $scope;
+            
 	     visor.loadmap = function(field){
             
             var map;
            
-            if (visor.loadmaps[field.field_id]==undefined){
+            if (field.first==false){
                 var lat = field.mapXY.latitude;
                 var lon = field.mapXY.longitude;   
                 var options = {
@@ -40,7 +38,7 @@
                     draggable: true
 
                 });
-            visor.loadmaps[field.field_id]= true;
+            field.first = true;
            
             google.maps.event.addListener(one, "dragend", function(evento) {
                 //Obtengo las coordenadas separadas

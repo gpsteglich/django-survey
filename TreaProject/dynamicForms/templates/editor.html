@@ -158,6 +158,12 @@
 		    {% addtoblock "js" %}
 		    <script src={% static "js/fields/CIField.js" %}></script>
 			{% endaddtoblock %}
+
+ 			<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>         
+            		
+			{% addtoblock "js" %}
+		  <script src={% static "js/fields/GeoField.js" %}></script>
+			{% endaddtoblock %}
 			{% addtoblock "js" %}
 		    <script src={% static "js/fields/Matricula.js" %}></script>
 			{% endaddtoblock %}
