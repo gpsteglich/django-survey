@@ -299,6 +299,9 @@ class FillForm(generics.RetrieveUpdateDestroyAPIView):
         form_versions = Form.objects.get(slug=slug).versions.all()
         # We assume there is only one published version at any given time
         final_version = form_versions.filter(status=PUBLISHED).first()
+        if (not final_version):
+            error = {"error" : "This Form has not been published."}
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data=error)
         loaded = json.loads(final_version.json)
         for p in loaded['pages']:
             for f in p['fields']:

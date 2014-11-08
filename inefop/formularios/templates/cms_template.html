@@ -1,6 +1,8 @@
 {% extends "cms_base.html" %}
-{% load cms_tags %}
+{% load cms_tags load_visor_tag %}
 
 {% block base_content %}
   {% placeholder cms_template_content %}
+  {% visor_template_tag 9 %}
 {% endblock %}
+
