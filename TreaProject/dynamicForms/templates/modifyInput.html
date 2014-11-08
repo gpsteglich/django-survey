@@ -36,7 +36,19 @@
                     <button type="button" class="btn btn-danger btn-md tridimensonal-button"  ng-click="editor.configLogicPage(editor.selectedPage)" data-toggle="modal" data-target="#myLogicPageModal" ng-disabled="editor.selectedPage==undefined">
                       <span class="glyphicon glyphicon-star"></span> Configure Page Logic
                     </button>
-                 </div>      
+                 </div>
+                 <div class="form-group">
+            <div class="radio-inline">
+                <lable>
+                    <input type="radio" ng-model="editor.version.captcha" ng-value="true"> Enable captcha
+                </lable>           
+            </div>
+            <div class="radio-inline">
+                <lable>
+                    <input type="radio" ng-model="editor.version.captcha" ng-value="false"> Disable captcha
+                </lable>           
+            </div>
+        </div>      
             </div>
         </div>
     </div>

@@ -94,6 +94,8 @@
         editor.pages = [angular.copy(editor.newPage)];
 
         editor.questions = [];
+
+
         //editor.pages[0].fields = editor.questions;
 
         /*
@@ -246,6 +248,7 @@
                     'number' : 0,
                     'owner' : '',
                     'form' : '',
+                    'captcha':false,
                 };
             } else {
                 /*
