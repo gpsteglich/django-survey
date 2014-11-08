@@ -465,5 +465,12 @@ class StatisticsView(generics.RetrieveAPIView):
             error_msg = str(e) 
             return Response(data=error_msg, status=status.HTTP_406_NOT_ACCEPTABLE)
 
+@login_required
+@api_view(['GET'])
+def after_submit_message(request, slug):
+    form_versions = Form.objects.get(slug=slug).versions.all()
+    final_version = form_versions.filter(status=PUBLISHED).first()
+    message = json.loads(final_version.json)['after_submit']['message']
+    return render_to_response('form_submitted.html', {"message": message}, context_instance=RequestContext(request))
 
     

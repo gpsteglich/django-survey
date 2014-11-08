@@ -149,11 +149,19 @@ class FormEntry(models.Model):
 @receiver(post_save, sender=FormEntry)
 def notification_mail(sender, **kwargs):
     instance = kwargs.get('instance')
+    print("Notificacion")
     js = instance.version.json
     d = json.loads(js)
     content = d['after_submit']['mailText']
-    send_mail('bien ahiii', content, 'santrbl@gmail.com', ['santrbl@gmail.com'], fail_silently=False)
-    
+    print(content)
+    try:
+        pass
+        #send_mail('bien ahiii', content, 'santrbl@gmail.com', ['santrbl@gmail.com'], fail_silently=False)
+    except Exception as e:
+        print ("ERROR")
+
+
+
 class FieldEntry(models.Model):
     field_id = models.IntegerField()
     field_type = models.CharField(max_length=100)

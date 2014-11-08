@@ -83,6 +83,7 @@
                 visor.version = data;
                 visor.pages = JSON.parse(data.json).pages;
                 visor.logic = JSON.parse(data.json).logic;
+                visor.after_submit = JSON.parse(data.json).after_submit;
                 visor.initialiceConditions();
                 visor.changePage(0);
                 visor.selectPage(0);
@@ -125,9 +126,15 @@
             visor.save = function(){
                 if (visor.isVisorMode()){
                     visor.pre_salvar();
+
                     $http.post('visor/submit/'+visor.slug+'/',visor.questions)
                         .success( function(data, status, headers, config){
-                            $window.location.href = 'visor/form/submitted';
+                            if(visor.after_submit.action == "Redirect To"){
+                                $window.location.href = visor.after_submit.redirect;
+                            } else {
+                                $window.location.href = 'visor/form/submitted/'+visor.slug+'/';
+                            }
+
                         })
                         .error(function(data, status, headers, config) {
                             alert('Error saving data: ' + data.error);
