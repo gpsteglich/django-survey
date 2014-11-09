@@ -35,7 +35,6 @@ module.exports = function(config) {
         './static/js/*.js',
         './static/js/editorCtrl.js',
         './static/js/visorCtrl.js',
-        './testing/example.js',
         './testing/visor_tests.js',
     ],
 

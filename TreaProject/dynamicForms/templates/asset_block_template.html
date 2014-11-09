@@ -5,3 +5,15 @@
 	<script src="{{ asset_route }}"></script>
 	{% endaddtoblock %}
 {% endfor %}
+
+{% for asset_route in non_static_list %}
+	{% addtoblock "jsUnc" %}
+	<script src="{{ asset_route }}"></script>
+	{% endaddtoblock %}
+{% endfor %}
+
+{% for asset_route in styles_list %}
+	{% addtoblock "js" %}
+	<link rel="stylesheet" type="text/css" href="{{ asset_route }}">
+	{% endaddtoblock %}
+{% endfor %}

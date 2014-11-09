@@ -117,7 +117,7 @@
 
     {%block scripts%} {%endblock%}
 
-    {% render_block "js" %}
+    {% render_block "js" postprocessor "compressor.contrib.sekizai.compress" %}
 
 </body>
 
