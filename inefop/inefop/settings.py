@@ -120,6 +120,7 @@ FIELD_FILES = (
 STATIC_URL = '/static/'
 
 STATIC_ROOT = '~/git/django-survey/TreaProject/dynamicForms/static/'
+#STATIC_ROOT = '/var/www/pyforms/static/'
 
 LOGIN_URL = "login"
 
