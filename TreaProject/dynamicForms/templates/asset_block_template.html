@@ -1,7 +1,7 @@
 {% load sekizai_tags %}
 
 {% for asset_route in asset_list %}
-	{% addtoblock "jsTag" %}
+	{% addtoblock "js" %}
 	<script src="{{ asset_route }}"></script>
 	{% endaddtoblock %}
 {% endfor %}

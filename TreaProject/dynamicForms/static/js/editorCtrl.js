@@ -17,10 +17,8 @@
         
         var editor = this;
 
-        
         editor.loadmaps=[];            
-        
-                    
+             
 	    editor.loadmap = function(field){
         
         var map;
@@ -30,8 +28,7 @@
                 if (field.mapXY == undefined){
                     var lat = -34.806777135903424;
                     var lon = -56.164398487890594; 
-                }
-                else{    
+                }else{    
                     var lat = field.mapXY.latitude;
                     var lon = field.mapXY.longitude;
                 }
@@ -50,24 +47,23 @@
                     draggable: true
 
                 });
-            editor.loadmaps[field.field_id] = true;
-            
-            google.maps.event.addListener(one, "dragend", function(evento) {
-                //Obtengo las coordenadas separadas
-                var la = evento.latLng.lat();
-                var lo = evento.latLng.lng();
+                editor.loadmaps[field.field_id] = true;
                 
-                field.mapXY.latitude = la;
-                field.mapXY.longitude = lo;
-                //Puedo unirlas en una unica variable si asi lo prefiero
-                //var coordenadas = evento.latLng.lat() + ", " + evento.latLng.lng();
-                //Las muestro con un popup
-                //alert(coordenadas);
-            });    
+                google.maps.event.addListener(one, "dragend", function(evento) {
+                    //Obtengo las coordenadas separadas
+                    var la = evento.latLng.lat();
+                    var lo = evento.latLng.lng();
+                    
+                    field.mapXY.latitude = la;
+                    field.mapXY.longitude = lo;
+                    //Puedo unirlas en una unica variable si asi lo prefiero
+                    //var coordenadas = evento.latLng.lat() + ", " + evento.latLng.lng();
+                    //Las muestro con un popup
+                    //alert(coordenadas);
+                });    
             }
 
         };            
-   	
 
         editor.urlBase = $rootScope.urlBase;
 
@@ -78,10 +74,8 @@
                     editor.FieldTypes = data;
                     var fields = Object.keys(editor.FieldTypes);
                     for(var i = 0;i<fields.length; i++){
-                        //console.log('loading template '+fields[i]);
                         $http.get('field_edit/'+fields[i], {cache:$templateCache});
                     }
-
                 }).error(function(status, data){
                     alert(status+' data:'+data);
                 });
@@ -98,7 +92,6 @@
         editor.pages = [angular.copy(editor.newPage)];
 
         editor.questions = [];
-        //editor.pages[0].fields = editor.questions;
 
         /*
         * 'selectedPage' holds the current page that's being edited
@@ -155,12 +148,9 @@
         
         editor.optionsAdded = [];
         editor.applyOptions = function(){     
-            
             editor.optionsAdded = editor.optionsAdded.map(function(o){
                 return { label:o.toString(), id: 0   };
-
             });
-           
             for(var i = 0;i<editor.optionsAdded.length; i++){
                 editor.optionsAdded[i].id = ++editor.selectedField.max_id;
             }            
@@ -330,9 +320,6 @@
                 var field = editor.logic.fields[fieldId];
                 for (var conditionId in field.conditions){
                     var condition = field.conditions[conditionId];
-                    if (condition.operatorsList){
-                        //delete condition.operatorsList;
-                    }
                 }
             }
         };
