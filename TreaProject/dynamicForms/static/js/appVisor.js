@@ -7,7 +7,7 @@ var url = '/dyn/';
     * Module dynamicFormsFramework
     * This module encapsulates the logic that will handle the form.
     */
-    var app = angular.module('dynamicFormsFramework', ['ui.bootstrap','checklist-model'])
+    var app = angular.module('dynamicFormsFramework', ['ui.bootstrap','checklist-model', 'udpCaptcha',])
     .config(['$locationProvider','$httpProvider', function ($locationProvider, $httpProvider) {
         
         //$locationProvider.html5Mode(true);
