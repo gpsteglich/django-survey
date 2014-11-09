@@ -8,7 +8,7 @@
          * The VisorCtrl holds the logic to display, validate and submit the form.
          */
         app.controller('VisorCtrl', ['$scope','$http','$location','$window','$rootScope',
-                function ($scope, $http, $location, $window, $rootScope) {
+                function ($scope, $http, $location, $window, $rootScope, $timeout) {
 
             /*
             *  This controller is initialiced by ui-router, so it cant be used with ng-controller
@@ -17,7 +17,9 @@
             var visor = $scope;
             
             var separator = '_';
-
+            
+            visor.submitting = false;
+                    
             visor.urlBase = $rootScope.urlBase;
 
             /*
@@ -90,6 +92,7 @@
             };
 
             visor.pre_salvar = function(){
+                visor.submitting=true
                 visor.questions = [];
                 for (var i=0; i< visor.pages.length; i++) {
                     visor.questions = visor.questions.concat(angular.copy(visor.pages[i].fields));
@@ -147,6 +150,7 @@
                     alert('Form was completed correctly. \nThis is a preview, the data wont be saved.');
                 }
             };
+                    
 
             ///////////////////// Page navegation /////////////////////
 

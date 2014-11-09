@@ -8,13 +8,20 @@
           <div class="modal-body">
             <!-- Email sending options -->
             <div class="row">
-              <div class="col-md-6">
+              <div class="col-md-12">
                 <input type="checkbox" ng-model="editor.after_submit.sendMail"> Send Email
-                <label ng-show="editor.after_submit.sendMail"> to </label>
+                <div ng-show="editor.after_submit.sendMail">
+                    <label> From: </label> 
+                    <input type="text" ng-model="editor.after_submit.mailSender">
+                    <label> To: </label>
+                    <input type="text" ng-model="editor.after_submit.mailRecipient">
+                </div>
+                <!--
                 <select ng-show="editor.after_submit.sendMail"
                         ng-options="option for option in ['Field1', 'Field2']"
                         ng-model="editor.after_submit.mailRecipient">
                 </select>
+                -->
               </div>       
             </div>
             <div ng-show="editor.after_submit.sendMail">

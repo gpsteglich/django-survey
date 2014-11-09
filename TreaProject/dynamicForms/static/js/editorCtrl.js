@@ -513,8 +513,8 @@
             sendMail: false,
             //mailSubject
             //mailText
-            mailSender: 'santrbl@gmail.com',
-            //mailRecipient
+            mailSender: '',
+            mailRecipient: ''
             action: 'Show Message',// can be 'Show Message' or 'Redirect To'
             message: 'Thank you. You successfully filled the form!',
             redirect: 'http://'

@@ -151,14 +151,16 @@ def notification_mail(sender, **kwargs):
     instance = kwargs.get('instance')
     js = instance.version.json
     d = json.loads(js)
-    content = d['after_submit']['mailText']
-    subject = d['after_submit']['mailSubject']
-    sender = d['after_submit']['mailSender']
-    print(content)
-    try:
-        send_mail(subject, content, sender, ['santrbl@gmail.com'], fail_silently=False)
-    except Exception as e:
-        print ("ERROR")
+    if d['after_submit']['sendMail']:
+        content = d['after_submit']['mailText']
+        subject = d['after_submit']['mailSubject']
+        sender = d['after_submit']['mailSender']
+        
+        print(content)
+        try:
+            send_mail(subject, content, sender, ['santrbl@gmail.com'], fail_silently=False)
+        except Exception as e:
+            print ("ERROR")
 
 
 
