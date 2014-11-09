@@ -60,6 +60,9 @@ class Field(object):
     
     def get_non_static():
         return []
+
+    def get_styles():
+        return []
         
     """
     Default Render methods for field templates

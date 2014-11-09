@@ -13,17 +13,22 @@ class asset_block_template(InclusionTag):
         l = FieldFactory.FieldFactory.get_all_classes()
         ret = []
         non_static = []
+        styles = []
         for c in l:
             ret.extend(c.get_assets())
             non_static.extend(c.get_non_static())
+            styles.extend(c.get_styles())
         context['asset_list'] = []
         for elem in ret:
             st_elem = static(elem)
             if st_elem not in context['asset_list']:
                 context['asset_list'].append(st_elem)
         for elem in non_static:
-            if elem not in context['asset_list']:
-                context['asset_list'].append(elem)
+            if elem not in context['non_static_assets']:
+                context['non_static_assets'].append(elem)
+        for elem in styles:
+            if elem not in context['style_list']:
+                context['style_list'].append(elem)
         return context
 
     def render_tag(self, context):
