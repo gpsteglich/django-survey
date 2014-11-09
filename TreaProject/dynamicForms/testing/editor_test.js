@@ -1,6 +1,6 @@
 describe("EditorCtrl Testing Pages", function() {
     
-   beforeEach(angular.mock.module('dynamicFormsFramework'));
+   beforeEach(angular.mock.module('dynamicFormsFrameworkAdmin'));
      
     
   xit("Field Types constant successfully loaded.", inject(function( _$httpBackend_,$controller,$rootScope) {

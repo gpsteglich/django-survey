@@ -1,3 +1,6 @@
+var instance = '';
+var base_url = '';
+
 describe("VisorCtrl Testing", function() {
     
     beforeEach(angular.mock.module('dynamicFormsFramework'));
@@ -28,7 +31,6 @@ describe("VisorCtrl Testing", function() {
 
     it("Testing visor pagination", inject(function($controller,$rootScope) {
         var ctrl = createController();
-        expect(scope.isVisorMode()).toBe(true);
         scope.pages = getFakeForm().pages;
         scope.logic = getFakeForm().logic;
         scope.initialiceConditions();
@@ -63,7 +65,6 @@ describe("VisorCtrl Testing", function() {
     
     it("Testing visor auxiliar functions", inject(function($controller,$rootScope) {
         var ctrl = createController();
-        expect(scope.isVisorMode()).toBe(true);
         scope.pages = getFakeForm().pages;
         scope.logic = getFakeForm().logic;
         scope.initialiceConditions();
@@ -78,7 +79,7 @@ describe("VisorCtrl Testing", function() {
         expect(scope.getPageNumByFieldId(4)).toBe(2);
     }));
 
-    xit("Testing visor auxiliar functions", inject(function($controller,$rootScope) {
+    it("Testing visor auxiliar functions", inject(function($controller,$rootScope) {
         
     }));
 
