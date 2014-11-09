@@ -2,7 +2,7 @@
 
 (function () {
 	
-    var app = angular.module('dynamicFormsFramework');
+    var app = angular.module('dynamicFormsFrameworkAdmin');
     
     /*
      * This controller handles the logic to display the list of forms

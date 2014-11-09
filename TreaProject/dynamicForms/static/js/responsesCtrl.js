@@ -1,6 +1,6 @@
 (function () {
 	
-    var app = angular.module('dynamicFormsFramework', []);
+    var app = angular.module('dynamicFormsFrameworkAdmin', []);
     
     /*
      * This controller handles the logic to create, edit and save a form.
