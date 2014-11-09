@@ -7,8 +7,13 @@
         {% verbatim %}
         <title>Django surveys - {{version.form}}</title>
         {% endverbatim %}
+        {% addtoblock "css" %}
         <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+        {% endaddtoblock %}
+        {% addtoblock "css" %}
         <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+        {% endaddtoblock %}
+        {% render_block "css" postprocessor "compressor.contrib.sekizai.compress" %}
 	</head>
 	<body class="radial-center">
         <script type="text/javascript">
@@ -68,6 +73,6 @@
     <script src={% static "js/visorCtrl.js" %}></script>
     {% endaddtoblock %}
 
-    {% render_block "js" %}
+    {% render_block "js" postprocessor "compressor.contrib.sekizai.compress" %}
     
 </html>
