@@ -97,3 +97,23 @@ class Field():
     field_type = models.CharField(blank=True, max_length=30)
     field_id = models.IntegerField(blank=True)
     
+class AfterSubmit(object):
+    sendMail = models.BooleanField()
+    action = models.CharField()
+    mailSubject = models.CharField()
+    mailText = models.CharField()
+    mailSender = models.CharField()
+    mailRecipient = models.CharField()
+    message = models.CharField()
+    redirect = models.CharField()
+    
+    def __init__(self, sendMail, action, mailSubject, mailText, mailSender, 
+                 mailRecipient, message, redirect):
+        self.sendMail = sendMail
+        self.action = action
+        self.mailSubject = mailSubject
+        self.mailText = mailText
+        self.mailSender = mailSender
+        self.mailRecipient = mailRecipient
+        self.message = message
+        self.redirect = redirect

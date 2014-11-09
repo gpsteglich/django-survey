@@ -141,12 +141,14 @@
             visor.disableSubmit = visor.version.captcha;
             visor.pages = JSON.parse(data.json).pages;
             visor.logic = JSON.parse(data.json).logic;
+            visor.after_submit = JSON.parse(data.json).after_submit;
             visor.initialiceConditions();
             visor.changePage(0);
             visor.selectPage(0);
         };
 
         visor.pre_salvar = function(){
+	        visor.submitting=true;
             visor.questions = [];
             for (var i=0; i< visor.pages.length; i++) {
                 visor.questions = visor.questions.concat(angular.copy(visor.pages[i].fields));
@@ -185,7 +187,11 @@
                 visor.pre_salvar();
                 $http.post(visor.base_url+'visor/submit/'+visor.slug+'/',visor.questions)
                     .success( function(data, status, headers, config){
-                        //$window.location.href = 'visor/form/submitted';
+                        if(visor.after_submit.action == "Redirect To"){
+							$window.location.href = visor.after_submit.redirect;
+                        } else {
+							$window.location.href = 'visor/form/submitted/'+visor.slug+'/';
+                        }
                     })
                     .error(function(data, status, headers, config) {
                         alert('Error saving data: ' + data.error);

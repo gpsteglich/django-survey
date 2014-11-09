@@ -254,6 +254,7 @@
                         editor.version = data;
                         editor.pages = JSON.parse(data.json).pages;
                         editor.logic = JSON.parse(data.json).logic;
+                        editor.after_submit = JSON.parse(data.json).after_submit;
                         editor.questions = [];
                         for (var i=0; i<editor.pages.length; i++) {
                             editor.questions = editor.questions.concat(editor.pages[i].fields);
@@ -333,7 +334,7 @@
                     editor.form = data;
                     editor.formIdParam = data.id;
                     editor.version.form = data.id;
-                    editor.version.json = angular.toJson({'pages':editor.pages,'logic':editor.logic});
+                    editor.version.json = angular.toJson({'pages':editor.pages,'logic':editor.logic, 'after_submit':editor.after_submit});
                     $http.post('version/'+editor.formIdParam+'/', editor.version)
                     .success( function(data, status, headers, config){
                         editor.versionIdParam = data.number;
@@ -357,7 +358,7 @@
                 $http.put('forms/'+ editor.formIdParam + '/', editor.form)
                 .success( function(data, status, headers, config){
                     editor.form = data;
-                    editor.version.json = angular.toJson({'pages':editor.pages,'logic':editor.logic});
+                    editor.version.json = angular.toJson({'pages':editor.pages,'logic':editor.logic,'after_submit':editor.after_submit});
                     $http.put('version/'+editor.formIdParam+'/'+editor.versionIdParam+"/", editor.version)
                     .success( function(data, status, headers, config){
                         editor.version = data;
@@ -544,16 +545,37 @@
         editor.getFieldOperandKind = function(field_type){
             var operator = operatorFactory.getOperator(field_type);
             return operator.operandKind();
-        }
+        };
 
         editor.isInputType = function (operandKind){
             return operandKind == 'input';
-        }
+        };
 
         editor.isOptionsType = function (operandKind){
             return operandKind == 'options';
-        }
+        };
 
+        editor.new_after_submit = {
+            sendMail: false,
+            mailSubject: '',
+            mailText: '',
+            mailSender: '',
+            mailRecipient: '',
+            action: 'Show Message',// can be 'Show Message' or 'Redirect To',
+            message: 'Thank you. You successfully filled the form!',
+            redirect: 'http://'
+        };
+                    
+        editor.after_submit = angular.copy(editor.new_after_submit);
+                    
+        editor.configAfterSubmit = function(){
+            editor.actual_after_submit = angular.copy(editor.after_submit);
+        };
+            
+        editor.applyAfterSubmit = function(){
+            editor.after_submit = editor.actual_after_submit;
+        };
+        
     }]);
     
 })();

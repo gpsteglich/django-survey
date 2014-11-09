@@ -31,7 +31,7 @@ from dynamicForms.serializers import FieldEntrySerializer, FormEntrySerializer
 from dynamicForms.fields import Field
 from dynamicForms.fieldtypes.FieldFactory import FieldFactory as Factory
 from dynamicForms.fieldtypes.ModelField import ModelField
-from dynamicForms.JSONSerializers import FieldSerializer 
+from dynamicForms.JSONSerializers import FieldSerializer, AfterSubmitSerializer 
 from dynamicForms.statistics.StatisticsCtrl import StatisticsCtrl 
 
 
@@ -156,7 +156,6 @@ class VersionList(generics.ListCreateAPIView):
             serializer.object.form = form
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        print("Serializer no es valido")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -604,7 +603,6 @@ def get_constants(request, format=None):
     View to get the available field type IDs.
     """
     data = Factory.get_strings()
-    print(data)
     return Response(status=status.HTTP_200_OK, data=data)
 
 
@@ -668,6 +666,18 @@ class StatisticsView(generics.RetrieveAPIView):
             error_msg = str(e) 
             return Response(data=error_msg, status=status.HTTP_406_NOT_ACCEPTABLE)
 
+@login_required
+@api_view(['GET'])
+def after_submit_message(request, slug):
+    form_versions = Form.objects.get(slug=slug).versions.all()
+    final_version = form_versions.filter(status=PUBLISHED).first()
+    js = json.loads(final_version.json)
+    serializer = AfterSubmitSerializer(data=js['after_submit'])
+    if serializer.is_valid():
+        d = serializer.object
+        message = d.message
+    #message = json.loads(final_version.json)['after_submit']['message']
+    return render_to_response('form_submitted.html', {"message": message}, context_instance=RequestContext(request))
 
 @login_required
 @api_view(['GET'])
