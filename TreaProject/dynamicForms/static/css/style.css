@@ -110,6 +110,18 @@ ul.combo_order li{ display: inline; }
  width: 500px;
  height: 500px;
  }
+
+.map-canvas
+{
+	width: 435px;
+	height: 315px;
+}
+.map-canvas-visor
+{
+	width: 100%;
+	height: 315px;
+}
+.angular-google-map-container { height: 400px; }
 /**buttons styles*/
 
 .tridimensonal-button{

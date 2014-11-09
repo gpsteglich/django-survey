@@ -7,8 +7,8 @@
     /*
      * This controller handles the logic to create, edit and save a form.
      */    
-    app.controller('EditorCtrl', ['$scope','$http','$location', '$window', '$rootScope', '$templateCache', 
-                function ($scope, $http, $location, $window, $rootScope, $templateCache) {
+    app.controller('EditorCtrl', ['$scope','$http','$location', '$window', '$rootScope', 
+                function ($scope, $http, $location, $window, $rootScope) {
         
     	/*
     	 * editorMode variable determines if the context is for editing or showing the
@@ -16,25 +16,17 @@
     	 */
         
         var editor = this;
-
         
-        editor.loadmaps=[];            
+	     editor.loadmap = function(field){
         
-                    
-	    editor.loadmap = function(field){
-        
-        var map;
+            var map;
             console.log(field);
-            if (editor.loadmaps[field.field_id]==undefined){
+            if (field.first){
                 console.log('entro al loadmap');
-                if (field.mapXY == undefined){
-                    var lat = -34.806777135903424;
-                    var lon = -56.164398487890594; 
-                }
-                else{    
-                    var lat = field.mapXY.latitude;
-                    var lon = field.mapXY.longitude;
-                }
+                //var la = {{question.mapXY.latitude}};
+                // var lo = {{question.mapXY.longitude}};
+                var lat = -34.806777135903424;
+                var lon = -56.164398487890594;   
                 var options = {
                     zoom: 8,
                     center: new google.maps.LatLng(lat, lon)
@@ -50,7 +42,7 @@
                     draggable: true
 
                 });
-            editor.loadmaps[field.field_id] = true;
+            field.first = false;
             
             google.maps.event.addListener(one, "dragend", function(evento) {
                 //Obtengo las coordenadas separadas
@@ -76,12 +68,6 @@
         $http.get('constants/')
                 .success(function(data){
                     editor.FieldTypes = data;
-                    var fields = Object.keys(editor.FieldTypes);
-                    for(var i = 0;i<fields.length; i++){
-                        //console.log('loading template '+fields[i]);
-                        $http.get('field_edit/'+fields[i], {cache:$templateCache});
-                    }
-
                 }).error(function(status, data){
                     alert(status+' data:'+data);
                 });

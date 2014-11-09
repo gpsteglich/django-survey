@@ -110,6 +110,7 @@ FIELD_FILES = (
     'dynamicForms.fieldtypes.EmailField',
     'dynamicForms.fieldtypes.CheckboxField',
     'dynamicForms.fieldtypes.SelectField',
+    'dynamicForms.fieldtypes.GeoField',
     'dynamicForms.fieldtypes.NumberField',
     'dynamicForms.fieldtypes.CIField',
     'formularios.fields',

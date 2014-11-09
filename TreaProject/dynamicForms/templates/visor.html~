@@ -11,10 +11,6 @@
         <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 	</head>
 	<body class="radial-center">
-        <script type="text/javascript">
-            var instance
-            var base_url
-        </script>
         <div ng-include="'visor_template'"></div>
     </body>
     <script src={% static "jquery/js/jquery-2.1.1.min.js" %}></script>
@@ -33,7 +29,7 @@
 
     <script src={% static "js/validators/validatorFactory.js" %}></script>
     <script src={% static "js/validators/TextField.js" %}></script>
-       
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false">         
     <script src={% static "js/fields/GeoField.js" %}></script>
     <script src={% static "js/appVisor.js" %}></script>
     <script src={% static "js/visorCtrl.js" %}></script>

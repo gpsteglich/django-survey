@@ -57,6 +57,9 @@ class Field(object):
     
     def get_assets():
         return []
+    
+    def get_non_static():
+        return []
         
     """
     Default Render methods for field templates

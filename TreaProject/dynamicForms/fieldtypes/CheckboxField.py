@@ -19,6 +19,7 @@ class CheckboxField(ListField):
         checkboxStatistics = CheckboxStatistics(data_list, field["options"])
         statistics = checkboxStatistics.getSerializedData()
         statistics["field_text"] = field["text"] 
+        statistics["field_type"] = field["field_type"] 
         if field["required"]:
             statistics["required"] = "Yes"
         else:

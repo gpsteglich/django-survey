@@ -16,12 +16,11 @@ class StatisticsCtrl():
         version = form.versions.get(number=versionNum)
 
         if filterType == "equals":
-            
-            fieldEntries = Version.objects.get_queryset().data_iexact(version=version.pk, field_id=fieldId, data=filter )
+            fieldEntries = Version.objects.get_entries(version.pk).data_iexact(field_id=fieldId, data=filter).get_data()
         elif filterType == "contains":
-            fieldEntries = Version.objects.get_queryset().data_icontains(version=version.pk, field_id=fieldId, data=filter )
+            fieldEntries = Version.objects.get_entries(version.pk).data_icontains(field_id=fieldId, data=filter).get_data()
         else:
-            fieldEntries = FieldEntry.objects.filter(entry__version_id=version.pk) 
+            fieldEntries = Version.objects.get_entries(version.pk).get_data()
         
         if fieldEntries:
 
