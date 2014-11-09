@@ -37,7 +37,9 @@
 </head>
 
 <body ng-app="dynamicFormsFramework">
-{% with "/inefop/" as urlBase %}
+    <script type="text/javascript">
+        var urlBase = {% url 'main'%};
+    </script>
     <div id="wrapper">
         <!-- Navigation -->
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -55,7 +57,7 @@
             <ul class="nav navbar-right top-nav">
             
                <li>
-         	      <a href="{{urlBase}}logout/"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+         	      <a href="{% url 'logout' %}"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
                </li>
                    
             </ul>
@@ -64,21 +66,16 @@
                 <ul class="nav navbar-nav side-nav">
                     <li>
                         <!-- The editor controller expects -->
-                        <a href="{% url 'editor_new' %}" target="_self"><i class="fa fa-fw fa-table"></i> New form</a>
+                        <a href="{% url 'editor' %}" target="_self"><i class="fa fa-fw fa-table"></i> New form</a>
                     </li>
                     <li>
-                        <a href="{{urlBase}}main/"><i class="fa fa-fw fa-edit"></i> Saved forms</a>
+                        <a href="{% url 'main' %}"><i class="fa fa-fw fa-edit"></i> Saved forms</a>
                     </li>
-                     <li>
-                        <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> Statistics</a>
-                    </li>
-                    
                 </ul>
             </div>
         </nav>
         {%block content%} {%endblock%} <!-- Content goes here -->
     </div>
-{% endwith %}
 
     {% addtoblock "js" %}
     <script src={% static 'jquery/js/jquery-2.1.1.min.js' %}></script>
@@ -124,10 +121,8 @@
     {%block scripts%} {%endblock%}
 
     {% render_block "js" %}
-
-    <!-- asset_block_template --> 
     {% render_block "jsTag" %}
-    <!-- asset_block_template --> 
+
 </body>
 
 </html>

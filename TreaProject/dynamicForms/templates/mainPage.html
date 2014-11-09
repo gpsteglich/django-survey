@@ -35,8 +35,7 @@
                                     value="DSC" ng-checked="mainPage.actualascdsc == 'DSC'">
                             <span class="glyphicon glyphicon-arrow-down"></span>Dsc
                         </li>
-                        <li>
-                            <a href="{{urlBase}}main/{{myOrder.value}}/{{mainPage.ascdsc}}" 
+                            <a href="{{urlBase}}{{myOrder.value}}/{{mainPage.ascdsc}}" 
                                 class="btn btn-default" type="button">Sort</a>
                         </li>
                     </ul>
@@ -91,7 +90,7 @@
                                             </a>
                                         </h4>
                                             <a type="button" class="btn btn-danger btn-xs col-md-1" 
-                                                href="{{urlBase}}forms/delete/{{form.id}}" 
+                                                href="{% url 'form_delete' pk=form.id %}" 
                                                 onclick="return confirmation();">
                                                 <span class="glyphicon glyphicon-trash"></span> DELETE
                                             </a>
@@ -113,31 +112,36 @@
                                                             {% ifequal v.status 2 %}EXPIRED{% endifequal %}
                                                             {% endifequal %}{% endifequal %}</th>
                                                     <th><div class="btn-group">
-                                                    <a type="button" class="btn btn-default btn-sm" href= "{{urlBase}}editor#?form={{form.id}}&ver={{v.number}}"
+                                                    <a type="button" class="btn btn-default btn-sm" href= "{% url 'editor' %}#?form={{form.id}}&ver={{v.number}}"
                                                         {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
                                                         <span class="glyphicon glyphicon-pencil"></span> EDIT
                                                     </a>
-                                                    <a type="button" class="btn btn-default btn-sm" target="_blank" href= "{{urlBase}}visor?form={{form.id}}&ver={{v.number}}" 
+                                                    <a type="button" class="btn btn-default btn-sm" target="_blank" href= "{% url 'visor' %}?form={{form.id}}&ver={{v.number}}" 
                                                         {% ifnotequal v.status 1 %} disabled {% endifnotequal %}>
                                                         <span class="glyphicon glyphicon-eye-open"></span> VIEW
                                                     </a>
-                                                    <a type="button" class="btn btn-default btn-sm" href = "{{urlBase}}version/{{form.id}}/{{v.number}}/new" 
+                                                    <a type="button" class="btn btn-default btn-sm" href = "
+                                                    {% url 'version' pk=form.id number=v.number action='new' %}" 
                                                     {% ifequal form.lastStatus 0 %} disabled {% endifequal %}>
                                                         <span class="glyphicon glyphicon-plus"></span>NEW VERSION
                                                     </a>
-                                                    <a type="button" class="btn btn-default btn-sm" href = "{{urlBase}}version/{{form.id}}/{{v.number}}/duplicate"
+                                                    <a type="button" class="btn btn-default btn-sm" href = "
+                                                    {% url 'version' pk=form.id number=v.number action='duplicate' %}"
                                                         {% ifequal v.status 0 %} disabled {% endifequal %}>    
                                                         <span class="glyphicon glyphicon-forward"></span>DUPLICATE
                                                     </a>
-                                                    <a type="button" class="btn btn-default btn-sm" href="{{urlBase}}version/delete/{{form.id}}/{{v.number}}"
+                                                    <a type="button" class="btn btn-default btn-sm" href="
+                                                    {% url 'version_delete' pk=form.id number=v.number %}"
                                                         {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
                                                         <span class="glyphicon glyphicon-remove-circle"></span>DISCARD
                                                     </a>
-                                                    <a type="button" class="btn btn-default btn-sm" href= "{{urlBase}}responses#?form={{form.id}}&ver={{v.number}}"
+                                                    <a type="button" class="btn btn-default btn-sm" href= "
+                                                    {% url 'responses' %}#?form={{form.id}}&ver={{v.number}}"
                                                         {% ifequal v.status 0 %} disabled {% endifequal %}>
                                                         <span class="glyphicon glyphicon-pencil"></span> RESPONSES
                                                     </a>
-													<a type="button" class="btn btn-default btn-sm" href= "{{urlBase}}statistics#?form={{form.id}}&ver={{v.number}}" {% ifequal v.status 0 %} disabled {% endifequal %}>
+													<a type="button" class="btn btn-default btn-sm" href= "
+                                                    {% url 'statistics' %}#?form={{form.id}}&ver={{v.number}}" {% ifequal v.status 0 %} disabled {% endifequal %}>
                                                         <span class="glyphicon glyphicon-signal"></span> STATISTICS
                                                     </a>
                                                                                                        

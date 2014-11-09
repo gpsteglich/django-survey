@@ -10,7 +10,7 @@
     app.controller('MainPageCtrl', ['$scope','$http','$location', '$window','$rootScope', 
             function ($scope, $http, $location, $window, $rootScope) {
     	
-        $scope.urlBase = $rootScope.urlBase;
+        //$scope.urlBase = $rootScope.urlBase;
 
     	var mainPage = this;
         mainPage.formSlugParam = ($location.search()).form;

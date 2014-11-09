@@ -3,7 +3,6 @@
 <html lang="en">
 
 <!-- variable global para setear url base -->
-{% with "/inefop/" as urlBase %}
 
     <head>
         <meta charset="utf-8">
@@ -19,7 +18,6 @@
         <link href= {% static 'bootstrap/css/bootstrap.min.css'%} rel="stylesheet">
         <link href={% static 'bootstrap/css/sb-admin.css'%} rel="stylesheet">
     </head>
-
     <body>
         <div id="myModal" class="modal show" >
             <div class="modal-dialog">
@@ -28,7 +26,7 @@
                         <h2 class="modal-header"  align="Center">User access</h2>
                         <label>Please fill the fields:</label>
                     </div>
-                    <form method="POST" action="{{urlBase}}login/">
+                    <form method="POST" action="{% url 'login' %}">
                         <div class="modal-body">
                             {% csrf_token %}
                             <div class="form-group">
@@ -64,5 +62,4 @@
             </div>
         </div>
     </body>
-{% endwith %}
 </html>
