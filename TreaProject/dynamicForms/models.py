@@ -4,7 +4,12 @@ from django.template.defaultfilters import slugify
 import json
 
 from dynamicForms.fields import JSONField, STATUS, DRAFT, PUBLISHED, EXPIRED
+from dynamicForms.JSONSerializers import AfterSubmitSerializer
 from datetime import datetime
+
+from django.core.mail import send_mail
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 from cms.models.pluginmodel import CMSPlugin
 
@@ -208,3 +213,21 @@ class Survey(CMSPlugin):
 
     def __str__(self):
         return self.slug
+
+@receiver(post_save, sender=FormEntry)
+def notification_mail(sender, **kwargs):
+    print("notification_mail")
+    instance = kwargs.get('instance')
+    js = json.loads(instance.version.json)
+    serializer = AfterSubmitSerializer(data=js['after_submit'])
+    if serializer.is_valid():
+        d = serializer.object
+        if d.sendMail:
+            content = d.mailText
+            subject = d.mailSubject
+            sender = d.mailSender
+            recipient = d.mailRecipient
+            try:
+                send_mail(subject, content, sender, [recipient], fail_silently=False)
+            except Exception as e:
+                print ("Error sending mail")

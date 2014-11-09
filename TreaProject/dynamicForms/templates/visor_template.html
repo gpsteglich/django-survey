@@ -42,7 +42,10 @@
                         </button>
                     </div>
                     <div class="text-right">
-                        <button type="submit" ng-disabled="dynForm.$invalid || disableSubmit" class="btn btn-primary">Submit</button>
+                        <button type="submit" ng-disabled="dynForm.$invalid || disableSubmit || submitting" class="btn btn-primary">
+							<span ng-show="submitting">Please Wait...</span>
+							<span ng-show="!submitting">Submit</span>
+						</button>
                     </div>
                 </form>
             </div>

@@ -154,3 +154,9 @@ LANGUAGES = [
     ('en-us', 'English'),
     ('es', 'Spanish'),
 ]
+
+EMAIL_HOST = 'smtp.elasticemail.com'
+EMAIL_HOST_USER = '46c73022-ff99-4460-b2b7-ef28e7bbe0b9'
+EMAIL_HOST_PASSWORD = '46c73022-ff99-4460-b2b7-ef28e7bbe0b9'
+EMAIL_PORT = 2525
+EMAIL_USE_TLS = True

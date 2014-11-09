@@ -2,7 +2,7 @@
 from rest_framework import serializers
 import ast
 
-from dynamicForms.fields import Validations, Dependencies, Field, Option
+from dynamicForms.fields import Validations, Dependencies, Field, Option, AfterSubmit
 
 class ValidationSerializer(serializers.Serializer):
     """
@@ -102,3 +102,32 @@ class FieldSerializer(serializers.Serializer):
             return instance
         return Field(**attrs)
 
+class AfterSubmitSerializer(serializers.Serializer):
+    """
+    Serializer for the validations in the versions json
+    """
+    sendMail = serializers.BooleanField(required=True)
+    action = serializers.CharField(required=True)
+    mailSubject = serializers.CharField(required=False)
+    mailText = serializers.CharField(required=False)
+    mailSender = serializers.CharField(required=False)
+    mailRecipient = serializers.CharField(required=False)
+    message = serializers.CharField(required=False)
+    redirect = serializers.CharField(required=False)
+    
+    def restore_object(self, attrs, instance=None):
+        """
+        Given a dictionary of deserialized field values, either update
+        an existing model instance, or create a new model instance.
+        """
+        if instance is not None:
+            instance.sendMail = attrs.get('sendMail', instance.sendMail)
+            instance.action = attrs.get('action', instance.action)
+            instance.mailSubject = attrs.get('mailSubject', instance.mailSubject)
+            instance.mailText = attrs.get('mailText', instance.mailText)
+            instance.mailSender = attrs.get('mailSender', instance.mailSender)
+            instance.mailRecipient = attrs.get('mailRecipient', instance.mailRecipient)
+            instance.message = attrs.get('message', instance.message)
+            instance.redirect = attrs.get('redirect', instance.redirect)
+            return instance
+        return AfterSubmit(**attrs)
