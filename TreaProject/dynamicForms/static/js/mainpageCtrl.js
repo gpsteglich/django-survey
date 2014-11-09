@@ -9,8 +9,6 @@
      */
     app.controller('MainPageCtrl', ['$scope','$http','$location', '$window','$rootScope', 
             function ($scope, $http, $location, $window, $rootScope) {
-    	
-        //$scope.urlBase = $rootScope.urlBase;
 
     	var mainPage = this;
         mainPage.formSlugParam = ($location.search()).form;
@@ -19,7 +17,6 @@
             {name: "Id", value: "id"},
             {name: "Owner", value: "owner"},
             {name: "Title", value: "title"},
-            //{name: "Publish Date", value: "publish_date"},
         ]
 
         mainPage.selectascdsc = function(ascdsc){
@@ -32,21 +29,7 @@
             var crit = arr[arr.length - 3];
             var sent = arr[arr.length - 2];
             return ([crit, sent]);
-        }
-
-        //deletes draft version of form
-        /* HAS AN ERROR
-        mainPage.discardVersion = function(formId, versionNum){
-            $http.delete('/version/'+formId+'/'+versionNum)
-                .success( function(data, status, headers, config){
-                    $window.location.href = '/main';
-                })
-                .error(function(data, status, headers, config) {
-                    alert('Error discarding version/'+formId+'/'+versionNum + '. Status: ' + status );
-                });
-
-        }
-        */
+        };
 
         mainPage.actualOrder = function(){
             if (mainPage.url()[0] == 'owner'){
