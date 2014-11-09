@@ -7,7 +7,6 @@ var fieldFactory = (function () {
     return {
         getField: function ( fieldName ) {
             var Field = field[fieldName];
-            //console.log('se creó una instancia de la clase '+fieldName);
             return Field;
         },
 

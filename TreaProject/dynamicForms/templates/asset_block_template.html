@@ -6,14 +6,14 @@
 	{% endaddtoblock %}
 {% endfor %}
 
-{% for asset_route in non_static_list %}
+{% for asset_route in non_static_assets %}
 	{% addtoblock "jsUnc" %}
 	<script src="{{ asset_route }}"></script>
 	{% endaddtoblock %}
 {% endfor %}
 
-{% for asset_route in styles_list %}
-	{% addtoblock "js" %}
+{% for asset_route in style_list %}
+	{% addtoblock "css" %}
 	<link rel="stylesheet" type="text/css" href="{{ asset_route }}">
 	{% endaddtoblock %}
 {% endfor %}

@@ -73,6 +73,7 @@
     <script src={% static "js/visorCtrl.js" %}></script>
     {% endaddtoblock %}
 
+    {% render_block "jsUnc" %}
     {% render_block "js" postprocessor "compressor.contrib.sekizai.compress" %}
     
 </html>

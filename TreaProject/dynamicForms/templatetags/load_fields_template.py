@@ -19,6 +19,8 @@ class asset_block_template(InclusionTag):
             non_static.extend(c.get_non_static())
             styles.extend(c.get_styles())
         context['asset_list'] = []
+        context['non_static_assets'] = []
+        context['style_list'] = []
         for elem in ret:
             st_elem = static(elem)
             if st_elem not in context['asset_list']:
