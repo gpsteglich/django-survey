@@ -29,8 +29,9 @@ class asset_block_template(InclusionTag):
             if elem not in context['non_static_assets']:
                 context['non_static_assets'].append(elem)
         for elem in styles:
-            if elem not in context['style_list']:
-                context['style_list'].append(elem)
+            st_elem = static(elem)
+            if st_elem not in context['style_list']:
+                context['style_list'].append(st_elem)
         return context
 
     def render_tag(self, context):
