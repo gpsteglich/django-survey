@@ -198,10 +198,6 @@ class FieldEntry(models.Model):
         return '%s : %s' % (self.text, self.answer)
 
 
-class Hello(CMSPlugin):
-    guest_name = models.CharField(max_length=50, default='Guest')
-
-
 class Survey(CMSPlugin):
     form = models.ForeignKey(Form, related_name='plugins')
     slug = models.SlugField(max_length=100, blank=True)

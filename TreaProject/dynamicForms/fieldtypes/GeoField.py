@@ -33,6 +33,9 @@ class GeoField(Field.Field):
         base.append(self.geo_check)
         return base
     
+    def get_assets():
+        return ['js/fields/GeoField.js']
+    
     def get_non_static():
         return ['https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false']
         
