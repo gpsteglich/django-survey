@@ -37,9 +37,9 @@
         //deletes draft version of form
         /* HAS AN ERROR
         mainPage.discardVersion = function(formId, versionNum){
-            $http.delete('dynamicForms/version/'+formId+'/'+versionNum)
+            $http.delete('/version/'+formId+'/'+versionNum)
                 .success( function(data, status, headers, config){
-                    $window.location.href = '/dynamicForms/main';
+                    $window.location.href = '/main';
                 })
                 .error(function(data, status, headers, config) {
                     alert('Error discarding version/'+formId+'/'+versionNum + '. Status: ' + status );
@@ -66,14 +66,5 @@
             mainPage.actualascdsc = 'ASC';
         }
             
-        mainPage.getResponses = function(){
-            $http.get('responses/'+mainPage.formSlugParam+'/'+ mainPage.versionIdParam+'/')
-            .success(function(data){
-                mainPage.json = data;
-            })
-            .error(function(data, status, headers, config){
-                alert('Error loading form data: ' + status);
-            })
-        }
     }]);
 })();

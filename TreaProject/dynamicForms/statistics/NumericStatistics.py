@@ -25,7 +25,7 @@ class NumericStatistics():
                 listTotal.append(0)
                 self.total_not_filled += 1
            
-        self.mean       = round(mean(list), 2)
+        self.mean = round(mean(list), 2)
         self.standard_deviation = round(pstdev(list, self.mean), 2)
         self.total_mean = round(mean(listTotal), 2)
         self.total_standard_deviation = round(pstdev(listTotal, self.total_mean), 2)

@@ -123,17 +123,12 @@
                                                     <a type="button" class="btn btn-default btn-sm" href = "
                                                     {% url 'version' pk=form.id number=v.number action='new' %}" 
                                                     {% ifequal form.lastStatus 0 %} disabled {% endifequal %}>
-                                                        <span class="glyphicon glyphicon-plus"></span>NEW VERSION
+                                                        <span class="glyphicon glyphicon-plus"></span> NEW VERSION
                                                     </a>
                                                     <a type="button" class="btn btn-default btn-sm" href = "
                                                     {% url 'version' pk=form.id number=v.number action='duplicate' %}"
                                                         {% ifequal v.status 0 %} disabled {% endifequal %}>    
-                                                        <span class="glyphicon glyphicon-forward"></span>DUPLICATE
-                                                    </a>
-                                                    <a type="button" class="btn btn-default btn-sm" href="
-                                                    {% url 'version_delete' pk=form.id number=v.number %}"
-                                                        {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
-                                                        <span class="glyphicon glyphicon-remove-circle"></span>DISCARD
+                                                        <span class="glyphicon glyphicon-forward"></span> DUPLICATE
                                                     </a>
                                                     <a type="button" class="btn btn-default btn-sm" href= "
                                                     {% url 'responses' %}#?form={{form.id}}&ver={{v.number}}"
@@ -144,7 +139,11 @@
                                                     {% url 'statistics' %}#?form={{form.id}}&ver={{v.number}}" {% ifequal v.status 0 %} disabled {% endifequal %}>
                                                         <span class="glyphicon glyphicon-signal"></span> STATISTICS
                                                     </a>
-                                                                                                       
+                                                    <a type="button" class="btn btn-default btn-sm" href="
+                                                    {% url 'version_delete' pk=form.id number=v.number %}"
+                                                        {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
+                                                        <span class="glyphicon glyphicon-remove-circle"></span> DISCARD
+                                                    </a>                                           
                                                     </div></th><!-- btn-group-->
                                                 </tr>
                                             {% endfor %}

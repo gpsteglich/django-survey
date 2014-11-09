@@ -6,7 +6,7 @@ import json
 class StatisticsCtrl():
     
 
-    def getStatistics(self, formId, versionNum, fieldId, filterType, filter):
+    def getStatistics(self, formId, versionNum, fieldId=None, filterType=None, filter=None):
         """
          Receives a the id of a version (formId, versionNum),
          returns the statistics of each field on it

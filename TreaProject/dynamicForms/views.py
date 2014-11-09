@@ -21,6 +21,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 
 import json
+import csv
 from datetime import datetime
 
 from dynamicForms.models import Form, FormEntry, Version
@@ -668,4 +669,59 @@ class StatisticsView(generics.RetrieveAPIView):
             return Response(data=error_msg, status=status.HTTP_406_NOT_ACCEPTABLE)
 
 
+@login_required
+@api_view(['GET'])
+def export_csv(request, pk, number, format=None):
+    """
+    Function view for exporting responses of form version in csv format
+    """
     
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="responses.csv"'
+    #Create a csv writer object
+    writer = csv.writer(response)
+    
+    try:
+        #get version
+        form = Form.objects.get(pk=pk)
+        version = form.versions.get(number=number)
+        
+        #only from a not draft version a csv file can be exported
+        if (version.status == DRAFT):
+            content = {"error": "This version's status is Draft."}
+            return Response(content, status=status.HTTP_406_NOT_ACCEPTABLE)
+        
+        #get all entries
+        formEntries = version.entries.all()
+        if formEntries:
+            initial = formEntries[0]
+            labels = []
+            ids = []
+            types = []
+            required = []
+            for field in initial.fields.all().order_by("field_id"):
+                labels.append(field.text)
+                ids.append(field.field_id)
+                types.append(field.field_type)
+                required.append(field.required)
+            writer.writerow(labels)
+            writer.writerow(ids)
+            writer.writerow(types)
+            writer.writerow(required)
+            for formEntry in formEntries:
+                fields = formEntry.fields.all().order_by("field_id")
+                data = []
+                for field in fields:
+                    data.append(field.answer)
+                data.append(formEntry.entry_time)   
+                writer.writerow(data)
+                            
+            return response
+        else: 
+            return Response(data="No field entries for this form", status=status.HTTP_406_NOT_ACCEPTABLE)
+    except ObjectDoesNotExist:
+        content = {"error": "There is no form with that slug or the"
+        " corresponding form has no version with that number"}
+        return Response(content, status=status.HTTP_404_NOT_FOUND)
+   
