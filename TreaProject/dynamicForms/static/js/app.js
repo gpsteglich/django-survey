@@ -1,7 +1,5 @@
 'use strict';
 
-var url = '/dynamicForms/';
-
 (function () {
     /*
     * Module dynamicFormsFramework  ,'angularCharts'
@@ -14,9 +12,6 @@ var url = '/dynamicForms/';
 		$httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
      
 
-    }]).run(function($rootScope) {
-      	$rootScope.urlBase = url;
-    });
+    }]);
     
-      
 })();

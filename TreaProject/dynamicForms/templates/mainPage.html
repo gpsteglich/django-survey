@@ -4,7 +4,9 @@
 <!DOCTYPE html>
 <html lang="en">
 {%block content%}
-
+        <script type="text/javascript">
+            var urlBase = {% url 'main'%};
+        </script>
         <div id="page-wrapper" ng-controller="MainPageCtrl as mainPage">
             <div class="container-fluid">
 

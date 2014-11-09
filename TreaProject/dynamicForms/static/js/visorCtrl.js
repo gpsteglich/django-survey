@@ -19,35 +19,35 @@
          visor.loadmaps=[];             
                     
             
-            visor.disableSubmit = true;
-            
-            
-            visor.enviarCaptcha = function(resultado){
-                if($captcha.checkResult(resultado) === true){
-                    visor.disableSubmit =false;
-                } else {
-                    visor.disableSubmit= true;
-                }
-            };
+        visor.disableSubmit = true;
+        
+        
+        visor.enviarCaptcha = function(resultado){
+            if($captcha.checkResult(resultado) === true){
+                visor.disableSubmit =false;
+            } else {
+                visor.disableSubmit= true;
+            }
+        };
                     
-            visor.loadmap = function(field){
-                var map;
-                if (visor.loadmaps[field.field_id]==undefined){
-                    var lat = field.mapXY.latitude;
-                    var lon = field.mapXY.longitude;   
-                    var options = {
-                        zoom: 8,
-                        center: new google.maps.LatLng(lat, lon)
-                    };
-                    field.answer=[lat,lon];
-                    map = new google.maps.Map(document.getElementById(field.field_id),
-                    options);
-                    var oneLatLng = new google.maps.LatLng(lat, lon);
-                    var one = new google.maps.Marker({
-                        position: oneLatLng,
-                        map: map,
-                        draggable: true
-                    });
+        visor.loadmap = function(field){
+            var map;
+            if (visor.loadmaps[field.field_id]==undefined){
+                var lat = field.mapXY.latitude;
+                var lon = field.mapXY.longitude;   
+                var options = {
+                    zoom: 8,
+                    center: new google.maps.LatLng(lat, lon)
+                };
+                field.answer=[lat,lon];
+                map = new google.maps.Map(document.getElementById(field.field_id),
+                options);
+                var oneLatLng = new google.maps.LatLng(lat, lon);
+                var one = new google.maps.Marker({
+                    position: oneLatLng,
+                    map: map,
+                    draggable: true
+                });
                 visor.loadmaps[field.field_id]= true;
                 google.maps.event.addListener(one, "dragend", function(evento) {
                     //Obtengo las coordenadas separadas
@@ -55,8 +55,7 @@
                     var lo = evento.latLng.lng();
                     field.answer=[la,lo];
                 });
-            }     
-
+            }
         };           	
 		
         var separator = '_';
