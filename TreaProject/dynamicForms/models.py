@@ -121,6 +121,7 @@ class Version(models.Model):
     publish_date = models.DateTimeField(blank=True, null=True)
     expiry_date = models.DateTimeField(blank=True, null=True)
     form = models.ForeignKey("Form", related_name="versions")
+    captcha= models.BooleanField (default=False)
 
     objects = VersionManager()
 

@@ -14,7 +14,6 @@ var fieldFactory = (function () {
         registerField: function ( fieldName, Field ) {
             // Register Field Class
             field[fieldName] = Field;
-            console.log('fieldFactory - se registro la clase: ' + fieldName);
             return fieldFactory;
         },
 

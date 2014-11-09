@@ -248,6 +248,7 @@
                     'number' : 0,
                     'owner' : '',
                     'form' : '',
+                    'captcha':false,
                 };
             } else {
                 /*

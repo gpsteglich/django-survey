@@ -48,7 +48,7 @@ class VersionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Version
         fields = ('number', 'status', 'publish_date', 'expiry_date',
-                 'json', 'form')
+                 'json', 'form', 'captcha')
         read_only_fields = ('number',)
 
 

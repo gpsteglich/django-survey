@@ -167,7 +167,10 @@
     {% addtoblock "js" %}
     <script src={% static "js/mainpageCtrl.js" %}></script>
     {% endaddtoblock %}
-    {% addtoblock "js" %}    
+    {% addtoblock "js" %}
+    <script src={% static "angular/angular-sanitize.js" %}></script>
+    <script src={% static "angular/ng-csv.js" %}></script>
+    
     <script type="text/javascript">
         function confirmation(){
             if (confirm("Are you sure you want to delete this form?")){

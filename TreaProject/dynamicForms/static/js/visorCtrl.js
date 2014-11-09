@@ -7,8 +7,8 @@
         /*
          * The VisorCtrl holds the logic to display, validate and submit the form.
          */
-        app.controller('VisorCtrl', ['$scope','$http','$location','$window','$rootScope',
-                function ($scope, $http, $location, $window, $rootScope) {
+        app.controller('VisorCtrl', ['$scope','$http','$location','$window','$rootScope', '$captcha',
+                function ($scope, $http, $location, $window, $rootScope, $captcha) {
 
             /*
             *  This controller is initialiced by ui-router, so it cant be used with ng-controller
@@ -18,7 +18,30 @@
         
          visor.loadmaps=[];             
                     
-	     visor.loadmap = function(field){
+            
+            visor.disableSubmit = true;
+            
+            
+            visor.enviarCaptcha = function(resultado)
+                {
+                    
+                    if($captcha.checkResult(resultado) === true)
+                    {
+                        // alert("El captcha ha pasado la validación");
+                         visor.disableSubmit =false;
+                    //return true;
+                    }
+                    
+                    else
+                    {
+                        //console.log(resultado);
+                        // alert(resultado);
+                         visor.disableSubmit= true;
+                       // return false;
+                    }
+                }  
+                    
+            visor.loadmap = function(field){
             
             var map;
            
@@ -55,7 +78,6 @@
         };           	
 		
             var separator = '_';
-            //console.log(instance); //slug
 
             visor.plugin_mode = false;
             if (instance){
@@ -135,6 +157,7 @@
 
             visor.setFormValues = function(data){
                 visor.version = data;
+                visor.disableSubmit = visor.version.captcha;
                 visor.pages = JSON.parse(data.json).pages;
                 visor.logic = JSON.parse(data.json).logic;
                 visor.initialiceConditions();
@@ -179,7 +202,6 @@
             visor.save = function(){
                 if (visor.isVisorMode()){
                     visor.pre_salvar();
-                    console.log();
                     $http.post(visor.base_url+'visor/submit/'+visor.slug+'/',visor.questions)
                         .success( function(data, status, headers, config){
                             //$window.location.href = 'visor/form/submitted';
