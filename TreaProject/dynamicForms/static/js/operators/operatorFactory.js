@@ -20,6 +20,7 @@ var operatorFactory = (function () {
             operator[operatorName] = Operator;
             // Register Operator's available methods
             operatorMethods[operatorName] = Operator.listMethods();
+            console.log(operatorName);
             return operatorFactory;
         },
 

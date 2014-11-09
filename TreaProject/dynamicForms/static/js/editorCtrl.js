@@ -22,9 +22,7 @@
 	    editor.loadmap = function(field){
         
         var map;
-            console.log(field);
             if (editor.loadmaps[field.field_id]==undefined){
-                console.log('entro al loadmap');
                 if (field.mapXY == undefined){
                     var lat = -34.806777135903424;
                     var lon = -56.164398487890594; 
