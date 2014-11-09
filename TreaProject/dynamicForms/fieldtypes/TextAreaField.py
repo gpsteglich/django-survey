@@ -14,6 +14,9 @@ class TextAreaField(TextField.TextField):
     def get_assets():
         return ['js/fields/TextAreaField.js']
 
+    def get_styles():
+        return ['css/fields/TextAreaField.css']
+
     def __str__(self):
         return "Multi Line Text"
 

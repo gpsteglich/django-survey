@@ -38,7 +38,10 @@ class GeoField(Field.Field):
     
     def get_non_static():
         return ['https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false']
-        
+
+    def get_styles():
+        return ['css/fields/GeoField.css']
+
     def __str__(self):
         return "GeoLocation"
 

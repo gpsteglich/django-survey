@@ -36,6 +36,9 @@ class TextField(Field.Field):
     def get_assets():
         return ['js/fields/TextField.js']
 
+    def get_styles():
+        return ['css/fields/TextField.css']
+
     def __str__(self):
         return "Single Line Text"
 

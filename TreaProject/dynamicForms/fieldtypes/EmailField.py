@@ -26,7 +26,10 @@ class EmailField(TextField.TextField):
 
     def get_assets():
         return ['js/fields/EmailField.js']
-        
+    
+    def get_styles():
+        return ['css/fields/EmailField.css']
+
     def __str__(self):
         return "Email"
 

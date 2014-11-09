@@ -63,7 +63,10 @@ class NumberField(Field.Field):
 
     def get_assets():
         return ['js/fields/NumberField.js', 'js/operators/operatorNumber.js']
-    
+
+    def get_styles():
+        return ['css/fields/NumberField.css']
+
     def __str__(self):
         return "NumberField"
 

@@ -42,7 +42,10 @@ class CIField(Field.Field):
 
     def get_assets():
         return ['js/fields/CIField.js']
-        
+
+    def get_styles():
+        return ['css/fields/CIField.css']
+
     def __str__(self):
         return "Cedula"
 

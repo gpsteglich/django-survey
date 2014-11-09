@@ -41,6 +41,9 @@ class CheckboxField(ListField):
     def get_assets():
         return ['js/fields/CheckboxField.js', 'js/operators/operatorList.js', 'js/operators/operatorChecks.js']
 
+    def get_styles():
+        return ['css/fields/CheckboxField.css']
+
     def __str__(self):
         return "Checkbox"
 

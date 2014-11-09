@@ -15,6 +15,9 @@ class SelectField(ListField):
     def get_assets():
         return ['js/fields/SelectField.js', 'js/operators/operatorList.js']
 
+    def get_styles():
+        return ['css/fields/SelectField.css']
+
     def __str__(self):
         return "Combo Box"
 
