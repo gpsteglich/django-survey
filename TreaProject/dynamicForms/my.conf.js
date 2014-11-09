@@ -31,11 +31,11 @@ module.exports = function(config) {
         './static/js/operators/operatorChecks.js',
         './static/js/fields/FieldFactory.js',
         './static/js/fields/*.js',
+        './static/js/appVisor.js',
         './static/js/app.js',
-        './static/js/*.js',
-        './static/js/editorCtrl.js',
         './static/js/visorCtrl.js',
         './testing/visor_tests.js',
+        './testing/editor_test.js',
     ],
 
 
