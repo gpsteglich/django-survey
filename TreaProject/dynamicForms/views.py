@@ -29,7 +29,7 @@ from dynamicForms.serializers import FormSerializer, VersionSerializer
 from dynamicForms.serializers import FieldEntrySerializer, FormEntrySerializer
 from dynamicForms.fields import Field
 from dynamicForms.fieldtypes.FieldFactory import FieldFactory as Factory
-from dynamicForms.JSONSerializers import FieldSerializer 
+from dynamicForms.JSONSerializers import FieldSerializer, AfterSubmitSerializer 
 from dynamicForms.statistics.StatisticsCtrl import StatisticsCtrl 
 
 class FormList(generics.ListCreateAPIView):
@@ -470,7 +470,12 @@ class StatisticsView(generics.RetrieveAPIView):
 def after_submit_message(request, slug):
     form_versions = Form.objects.get(slug=slug).versions.all()
     final_version = form_versions.filter(status=PUBLISHED).first()
-    message = json.loads(final_version.json)['after_submit']['message']
+    js = json.loads(final_version.json)
+    serializer = AfterSubmitSerializer(data=js['after_submit'])
+    if serializer.is_valid():
+        d = serializer.object
+        message = d.message
+    #message = json.loads(final_version.json)['after_submit']['message']
     return render_to_response('form_submitted.html', {"message": message}, context_instance=RequestContext(request))
 
     

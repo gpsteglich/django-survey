@@ -499,26 +499,36 @@
         editor.getFieldOperandKind = function(field_type){
             var operator = operatorFactory.getOperator(field_type);
             return operator.operandKind();
-        }
+        };
 
         editor.isInputType = function (operandKind){
             return operandKind == 'input';
-        }
+        };
 
         editor.isOptionsType = function (operandKind){
             return operandKind == 'options';
-        }
+        };
 
-        editor.after_submit = {
+        editor.new_after_submit = {
             sendMail: false,
-            //mailSubject
-            //mailText
+            mailSubject: '',
+            mailText: '',
             mailSender: '',
-            mailRecipient: ''
-            action: 'Show Message',// can be 'Show Message' or 'Redirect To'
+            mailRecipient: '',
+            action: 'Show Message',// can be 'Show Message' or 'Redirect To',
             message: 'Thank you. You successfully filled the form!',
             redirect: 'http://'
-        }
+        };
+                    
+        editor.after_submit = angular.copy(editor.new_after_submit);
+                    
+        editor.configAfterSubmit = function(){
+            editor.actual_after_submit = angular.copy(editor.after_submit);
+        };
+            
+        editor.applyAfterSubmit = function(){
+            editor.after_submit = editor.actual_after_submit;
+        };
         
     }]);
     

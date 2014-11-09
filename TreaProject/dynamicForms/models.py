@@ -3,6 +3,7 @@ from django.db import models
 from django.template.defaultfilters import slugify
 
 from dynamicForms.fields import JSONField, STATUS, DRAFT, PUBLISHED, EXPIRED
+from dynamicForms.JSONSerializers import AfterSubmitSerializer 
 from datetime import datetime
 
 
@@ -149,19 +150,19 @@ class FormEntry(models.Model):
 @receiver(post_save, sender=FormEntry)
 def notification_mail(sender, **kwargs):
     instance = kwargs.get('instance')
-    js = instance.version.json
-    d = json.loads(js)
-    if d['after_submit']['sendMail']:
-        content = d['after_submit']['mailText']
-        subject = d['after_submit']['mailSubject']
-        sender = d['after_submit']['mailSender']
-        
-        print(content)
-        try:
-            send_mail(subject, content, sender, ['santrbl@gmail.com'], fail_silently=False)
-        except Exception as e:
-            print ("ERROR")
-
+    js = json.loads(instance.version.json)
+    serializer = AfterSubmitSerializer(data=js['after_submit'])
+    if serializer.is_valid():
+        d = serializer.object
+        if d.sendMail:
+            content = d.mailText
+            subject = d.mailSubject
+            sender = d.mailSender
+            recipient = d.mailRecipient
+            try:
+                send_mail(subject, content, sender, [recipient], fail_silently=False)
+            except Exception as e:
+                print ("Error sending mail")
 
 
 class FieldEntry(models.Model):
