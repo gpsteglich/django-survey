@@ -1,0 +1,12 @@
+global-include *.py
+global-include *.html
+global-include *.js
+global-include *.css
+
+graft static
+
+prune static/CACHE
+prune testing
+prune migrations
+prune dist
+prune dynamicForms.egg-info

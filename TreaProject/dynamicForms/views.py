@@ -24,15 +24,15 @@ import json
 import csv
 from datetime import datetime
 
-from dynamicForms.models import Form, FormEntry, Version
-from dynamicForms.fields import PUBLISHED, DRAFT, Validations
-from dynamicForms.serializers import FormSerializer, VersionSerializer
-from dynamicForms.serializers import FieldEntrySerializer, FormEntrySerializer
-from dynamicForms.fields import Field
-from dynamicForms.fieldtypes.FieldFactory import FieldFactory as Factory
-from dynamicForms.fieldtypes.ModelField import ModelField
-from dynamicForms.JSONSerializers import FieldSerializer, AfterSubmitSerializer 
-from dynamicForms.statistics.StatisticsCtrl import StatisticsCtrl 
+from .models import Form, FormEntry, Version
+from .fields import PUBLISHED, DRAFT
+from .serializers import FormSerializer, VersionSerializer
+from .serializers import FieldEntrySerializer, FormEntrySerializer
+from .fields import Field
+from .fieldtypes.FieldFactory import FieldFactory as Factory
+from .fieldtypes.ModelField import ModelField
+from .JSONSerializers import FieldSerializer, AfterSubmitSerializer 
+from .statistics.StatisticsCtrl import StatisticsCtrl 
 
 
 class FormList(generics.ListCreateAPIView):
@@ -418,99 +418,6 @@ def validate_logic(request, version):
     # If there are no errors, logic is valid
     return True
 
-def is_shown(request, version, field, item_id):
-    logic = version.get_logic()
-
-    # If field == True, we check for field logic, otherwise we check page logic
-    if field:
-        logic = logic['fields']
-    else:
-        logic = logic['pages']
-    # If there are no logic restrictions to show the item,
-    # item is always shown
-    if item_id not in logic:
-        return True
-
-    eval_results = []
-    conditions = logic[item_id]['conditions']
-    for condition in conditions:
-        data = ''
-        for field in request.DATA:
-            serializer = FieldEntrySerializer(data=field)
-            if serializer.is_valid():
-                if serializer.object.field_id == condition['field']:
-                    field_org = serializer.object
-                    data = field_org.answer
-                    break
-        operator = ''
-        if condition['comparator'] == "greater_than":
-            operator = '>'
-        elif condition['comparator'] == "greater_than_or_equal":
-            operator = '>='
-        elif condition['comparator'] == "equal":
-            operator = '=='
-        elif condition['comparator'] == "not_equal":
-            operator = '!='
-        elif condition['comparator'] == "less_than_or_equal":
-            operator = '<='
-        elif condition['comparator'] == "less_than":
-            operator = '<'
-        if operator != '':
-            expression = data + operator + condition['value'].__str__()
-            eval_results.append(eval(expression))
-        # TODO: Missing error handling
-        else:
-            pass
-
-    if logic[item_id]['action'] == 'All':
-        value = True
-        for result in eval_results:
-            value = value & result
-    elif logic[item_id]['action'] == 'Any':
-        value = False
-        for result in eval_results:
-            value = value | result
-    if logic[item_id]['operation'] == 'Show':
-        shown = value
-    else:
-        shown = not value
-
-    return shown
-
-def validate_logic(request, version):
-    pages = version.get_pages()
-
-    page_id = 0
-    pages_show_value = []
-    for page in pages:
-        pages_show_value.append(is_shown(request, version, False, page_id.__str__()))
-        page_id += 1
-
-    for field in request.DATA:
-        field_page = -1
-        serializer = FieldEntrySerializer(data=field)
-        if serializer.is_valid():
-            obj = serializer.object
-            index = -1
-            for page in pages:
-                index += 1
-                for page_field in page['fields']:
-                    if page_field['field_id'] == obj.field_id:
-                        field_page = index
-                        break
-                if field_page != -1:
-                    break
-            # If field cannot be found, logic check fails
-            if field_page == -1:
-                return False
-
-            shown = is_shown(request, version, True, obj.field_id.__str__())
-            shown = shown & pages_show_value[field_page]
-            if shown != obj.shown:
-                # If recived shown value differs from calculated, we return False
-                return False
-    # If there are no errors, logic is valid
-    return True
 
 @api_view(['POST'])
 def submit_form_entry(request, slug, format=None):

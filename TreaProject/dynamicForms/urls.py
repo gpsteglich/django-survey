@@ -8,7 +8,7 @@ Created on 30/8/2014
 from django.conf.urls import patterns, url
 from rest_framework.urlpatterns import format_suffix_patterns
 from dynamicForms import views, auth
-from dynamicForms.fieldtypes.field_type import on_startup
+from .fieldtypes.field_type import on_startup
 from django.contrib import admin
 
 from django.contrib.auth.decorators import login_required
