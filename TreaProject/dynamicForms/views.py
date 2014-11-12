@@ -28,7 +28,7 @@ from .models import Form, FormEntry, Version
 from .fields import PUBLISHED, DRAFT
 from .serializers import FormSerializer, VersionSerializer
 from .serializers import FieldEntrySerializer, FormEntrySerializer
-from .fields import Field
+from .fields import Field_Data
 from .fieldtypes.FieldFactory import FieldFactory as Factory
 from .fieldtypes.ModelField import ModelField
 from .JSONSerializers import FieldSerializer, AfterSubmitSerializer 
@@ -443,7 +443,7 @@ def submit_form_entry(request, slug, format=None):
                     loaded = json.loads(final_version.json)
                     f_id = obj.field_id
                     kw = {}
-                    f = Field()
+                    f = Field_Data()
                     data = FieldSerializer(f, field)
                     if (data.is_valid()):
                         kw['field'] = f

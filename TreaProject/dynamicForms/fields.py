@@ -85,7 +85,7 @@ class Dependencies():
     pages = models.CommaSeparatedIntegerField(null=True, blank=True, max_length=300)
 
 
-class Field():
+class Field_Data():
     text = models.CharField(null=True, blank=True, max_length=500)
     required = models.BooleanField()
     tooltip = models.CharField(blank=True, max_length=300)

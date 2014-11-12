@@ -8,6 +8,7 @@ from classytags.arguments import Argument
 from classytags.helpers import InclusionTag
 
 from dynamicForms.models import Form
+from dynamicForms.fields import PUBLISHED
 
 register = template.Library()
 
@@ -24,10 +25,19 @@ class visor_template_tag(InclusionTag):
     )
 
     def get_context(self, context, form):
-        output = Form.objects.get(pk=form).slug
-        base_url = settings.FORMS_BASE_URL
-        context['instance'] = output
-        context['base_url'] = base_url    
+        try:
+            f =  Form.objects.get(pk=form)
+        except Form.DoesNotExist:
+            context['errors'] = ["This Form does not exist."]
+            return context
+        v = f.versions.filter(status=PUBLISHED).first()
+        if (not v):
+            context['errors'] = ["This Form has no published version."]
+        else:
+            output = f.slug
+            base_url = settings.FORMS_BASE_URL
+            context['instance'] = output
+            context['base_url'] = base_url    
         return context
 
     def render_tag(self, context, form):

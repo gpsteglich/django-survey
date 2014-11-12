@@ -2,7 +2,7 @@
 from rest_framework import serializers
 import ast
 
-from dynamicForms.fields import Validations, Dependencies, Field, Option, AfterSubmit
+from dynamicForms.fields import Validations, Dependencies, Field_Data, Option, AfterSubmit
 
 class ValidationSerializer(serializers.Serializer):
     """
@@ -100,7 +100,7 @@ class FieldSerializer(serializers.Serializer):
             instance.field_id = attrs.get('field_id', instance.field_id)
 
             return instance
-        return Field(**attrs)
+        return Field_Data(**attrs)
 
 class AfterSubmitSerializer(serializers.Serializer):
     """

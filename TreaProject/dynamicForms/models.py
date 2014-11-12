@@ -204,7 +204,7 @@ class FieldEntry(models.Model):
 
 
 class Survey(CMSPlugin):
-    form = models.ForeignKey(Form, related_name='plugins')
+    form = models.ForeignKey(Form, related_name='plugins',limit_choices_to={'versions__status__exact': PUBLISHED})
     slug = models.SlugField(max_length=100, blank=True)
 
     def save(self, *args, **kwargs):

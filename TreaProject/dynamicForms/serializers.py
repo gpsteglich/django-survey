@@ -5,7 +5,7 @@ import json
 from rest_framework import serializers
 
 from dynamicForms.models import Form, FieldEntry, Version, FormEntry
-from dynamicForms.fields import Field
+from dynamicForms.fields import Field_Data
 from dynamicForms.fieldtypes.FieldFactory import FieldFactory as Factory
 from dynamicForms.JSONSerializers import FieldSerializer 
 
@@ -37,7 +37,7 @@ class VersionSerializer(serializers.ModelSerializer):
             for field in page['fields']:
                 f_type = Factory.get_class(field['field_type'])
                 kw = {}
-                f = Field()
+                f = Field_Data()
                 data = FieldSerializer(f, field)
                 if (data.is_valid()):
                     f_type().check_consistency(f)
