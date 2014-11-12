@@ -105,10 +105,9 @@
                         visor.questions[i].options = respuesta;
                     }else if (visor.questions[i].field_type == 'SelectField'){
                         visor.questions[i].options= visor.questions[i].options.join('#');
-                    }else if(visor.questions[i].field_type == 'FileField'){
-                        visor.files.push(angular.copy(visor.questions[i].answer[0]));
                     }
-                    visor.questions[i].answer = visor.questions[i].answer.join('#');
+                    if(visor.questions[i].field_type!='FileField')
+                        visor.questions[i].answer = visor.questions[i].answer.join('#');
                 }
                 for (var j=0; j< visor.questions.length; j++) {
                     var pageNum = visor.getPageNumByFieldId(visor.questions[j].field_id);
@@ -138,29 +137,33 @@
 //                console.log(temp);
 //                return temp;
 //            }
+    
+            visor.dataMedia = new FormData();                   
+            visor.cantFilesUploaded = 0;
             // Persist form
-            visor.save = function(){
+            visor.save = function($files){
                 if (visor.isVisorMode()){
-                    visor.pre_salvar();
-                    console.log(visor.files);
-                    var dataMedia = {
-                        files : visor.files,
-                        data : visor.questions
-                    }
-                    console.log('aca0 :' + dataMedia.files );
-                    $http.post('visor/submit/'+visor.slug+'/',dataMedia)
-                        .success( function(data, status, headers, config){
-                            $window.location.href = 'visor/form/submitted';
-                        })
-                        .error(function(data, status, headers, config) {
-                            alert('Error saving data: ' + data.error);
-                        });
-                    console.log(dataMedia);
+                    visor.pre_salvar();         
+                    console.log(visor.questions);
+                    $http({
+                        method: 'POST',
+                        url: 'visor/submit/'+visor.slug+'/',
+                        headers: { 'Content-Type': undefined},
+                        transformRequest:function (data) {                          
+                            data.append("data", angular.toJson(visor.questions));
+                            return data; 
+                        },
+                        data:visor.dataMedia
+                    }).
+                    success(function (data, status, headers, config) {
+                        alert("success!");
+                    }).
+                    error(function (data, status, headers, config) {
+                        alert("failed!");
+                    });
+                  //  console.log(dataMedia);
                 } else {
-                    /*
-                     * TODO: Sería útil permitir al editor ingresar datos y que sean validados por el back
-                     * pero sin persistirlos en la base.
-                     */
+                    
                     alert('Form was completed correctly. \nThis is a preview, the data wont be saved.');
                 }
             };
@@ -367,58 +370,18 @@
             };
                     
                     
-        visor.ab2str = function(buf) {
-            var array = new Uint16Array(buf);
-            var arr =[];
-            for(var i=0;i<array.length; i++){
-                arr.push(String.fromCharCode(array[i]));
-            }
-            return arr.join("");
-        }            
             visor.onFileSelect = function($files,fileModel) {
                 //$files: an array of files selected, each file has name, size, and type.
-                  var file = $files[0];                  
-                  var reader = new FileReader();
-                 
-                  reader.onloadend = function () {
-                       /*  var data = new Int8Array(reader.result);
-                         var dataS;
-                       for(var i= 0; i< reader.result.byteLength ; i++){
-                           this.d a;
-                       }*/
-                       //console.log(JSON.stringify(this.data));
-                       var fileDescriptor = {
-                            field_id : fileModel.field_id,
-                            file_data:visor.ab2str(reader.result),
-                            file_name:file.name,
-                            file_type:file.type
-                        }
-                      fileModel.answer[0] = fileDescriptor;
-                     
-                    }
-                 // console.log(fileDescriptor);
-                   reader.readAsArrayBuffer(file);
-
+                  var file = $files[0]; 
+                  var file_id = file.name;
+                  visor.dataMedia.append(file_id,file);
+                  fileModel.answer = file_id;//clean answer field.
+                  
+                  
+                  console.log(fileModel.answer);
           };
                 
-            visor.str2ab = function str2ab(str) {
-              var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
-              var bufView = new Uint16Array(buf);
-              for (var i=0, strLen=str.length; i<strLen; i++) {
-                bufView[i] = str.charCodeAt(i);
-              }
-              return buf;
-            }    
-            visor.downloadFile = function(fileModel){
-                var fileDescriptor = fileModel.answer[0];
-                var reader = new FileReader();
-                console.log(fileDescriptor);
-                var oMyBlob = new Blob([visor.str2ab(fileDescriptor.file_data)], {type : fileDescriptor.type});
-              
-                saveAs(oMyBlob,fileDescriptor.name);
-                
             
-            }
             ///////////////////// Auxiliar functions /////////////////////
             
             visor.getFieldById = function(id){

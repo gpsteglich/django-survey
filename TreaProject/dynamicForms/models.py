@@ -158,6 +158,5 @@ class FileEntry(models.Model):
     field_id = models.IntegerField()
     file_type = models.CharField(max_length=50)
     file_name = models.CharField(max_length=50)
-    """10 megabytes data files"""
-    file_data = models.CharField(max_length=10485760)
+    file_data = models.FileField(upload_to='doc')
     field_entry = models.ForeignKey("FieldEntry",related_name="files",blank=True,null=True)

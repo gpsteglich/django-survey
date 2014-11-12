@@ -23,7 +23,7 @@
                                     <ul>
                                         <li ng-repeat="field in response.fields">
                                             <div ng-show="responses.isFile(field)">
-                                                 <button ng-click="responses.download(field)">{{field}}</button>
+                                                 <a ng-href="{{responses.downloadLink(field)}}">{{field}}</a>
                                                 
                                             </div>
                                             <div ng-hide="responses.isFile(field)">

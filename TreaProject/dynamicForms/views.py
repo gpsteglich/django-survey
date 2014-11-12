@@ -13,7 +13,8 @@ from django.template import RequestContext
 from django.utils.decorators import method_decorator
 
 
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view,parser_classes
+from rest_framework.parsers import MultiPartParser,FormParser,JSONParser
 from rest_framework import generics
 from rest_framework import permissions
 from rest_framework import status
@@ -23,7 +24,7 @@ from rest_framework.response import Response
 import json
 from datetime import datetime
 
-from dynamicForms.models import Form, FormEntry, Version, FieldEntry
+from dynamicForms.models import Form, FormEntry, Version, FieldEntry, FileEntry
 from dynamicForms.fields import PUBLISHED, DRAFT, Validations
 from dynamicForms.serializers import FormSerializer, VersionSerializer
 from dynamicForms.serializers import FieldEntrySerializer, FormEntrySerializer,FileEntrySerializer
@@ -314,6 +315,7 @@ class JSONResponse(HttpResponse):
 
 
 @api_view(['POST'])
+@parser_classes((FormParser,MultiPartParser,JSONParser))
 def submit_form_entry(request, slug, format=None):
     """
     APIView to submit a Form Entry.
@@ -323,7 +325,8 @@ def submit_form_entry(request, slug, format=None):
     error_log = {"error": ""}
     form_versions = Form.objects.get(slug=slug).versions.all()
     final_version = form_versions.filter(status=PUBLISHED).first()
-    for field in request.DATA['data']:
+    form_json = json.loads(request.DATA['data'])
+    for field in form_json:
         serializer = FieldEntrySerializer(data=field)
         if serializer.is_valid():
             obj = serializer.object
@@ -356,7 +359,8 @@ def submit_form_entry(request, slug, format=None):
     entry = FormEntry(version=final_version)
     entry.entry_time = datetime.now()
     entry.save()
-    for field in request.DATA['data']:
+    form_json = json.loads(request.DATA['data'])
+    for field in form_json:
             serializer = FieldEntrySerializer(data=field)
             if serializer.is_valid():
                 serializer.object.entry = entry
@@ -365,17 +369,8 @@ def submit_form_entry(request, slug, format=None):
                 serializer.save()
                 # If field is a FileField we find the corresponding file and save it to the database
                 if serializer.object.field_type == 'FileField':
-                    for uploaded_file in request.DATA['files']:
-                        file_serializer = FileEntrySerializer(data=uploaded_file)
-                        if file_serializer.is_valid():
-                            if file_serializer.object.field_id == serializer.object.field_id:
-                                field = FieldEntry.objects.get(pk=serializer.object.pk) 
-                                file_serializer.object.field_entry = field
-                                file_serializer.save()
-                                print("Paso 2")
-                                break
-                        else:
-                            print("Serializador de archivos no es valido")
+                    data_json = serializer.object.answer
+                    FileEntry.objects.create(field_id=serializer.object.field_id,file_type=request.FILES[data_json].content_type,file_data=request.FILES[data_json],field_entry=FieldEntry.objects.get(pk=serializer.object.pk),file_name=request.FILES[data_json].name)
     return Response(status=status.HTTP_200_OK)
 
 
@@ -496,5 +491,11 @@ def download_file(request,field_id,entry):
     
     fieldEntry = FieldEntry.objects.get(pk=entry)
     fileEntry = fieldEntry.files.get(field_id=field_id)       
-    print(fileEntry.file_type)
-    return Response(data= {"file":fileEntry.file_data}, status=status.HTTP_200_OK)
+    response = HttpResponse(fileEntry.file_data,content_type=fileEntry.file_type)
+    response['Content-Disposition'] = 'attachment; filename="' + fileEntry.file_name+'"'
+    return response
+
+
+
+
+
