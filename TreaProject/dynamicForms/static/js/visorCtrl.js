@@ -135,7 +135,6 @@
         // Invoque load function
         visor.load();
 
-<<<<<<< HEAD
         visor.setFormValues = function(data){
             visor.version = data;
             visor.disableSubmit = visor.version.captcha;
@@ -164,24 +163,7 @@
                     visor.questions[i].options = respuesta;
                 }else if (visor.questions[i].field_type == 'SelectField'){
                     visor.questions[i].options= visor.questions[i].options.join('#');
-=======
-            visor.setFormValues = function(data){
-                visor.version = data;
-                visor.pages = JSON.parse(data.json).pages;
-                visor.logic = JSON.parse(data.json).logic;
-                visor.initialiceConditions();
-                visor.changePage(0);
-                visor.selectPage(0);
-            };
-            visor.files=[];
-            visor.pre_salvar = function(){
-                visor.questions = [];
-
-                for (var i=0; i< visor.pages.length; i++) {
-                    visor.questions = visor.questions.concat(angular.copy(visor.pages[i].fields));
->>>>>>> refs/heads/fileIntegrationCMS
                 }
-<<<<<<< HEAD
                 visor.questions[i].answer = visor.questions[i].answer.join('#');
             }
             for (var j=0; j< visor.questions.length; j++) {
@@ -191,22 +173,6 @@
                 delete visor.questions[j].tooltip;
                 if (visor.questions[j].options){
                     delete visor.questions[j].options;
-=======
-                for ( var i = 0; i < visor.questions.length; i++) { 
-                    if (visor.questions[i].field_type == 'CheckboxField'){
-                        var respuesta = '';
-                         for ( var x = 0; x < visor.questions[i].options.length-1; x++){
-                            respuesta += visor.questions[i].options[x].id + '#';
-                         }
-                        respuesta += visor.questions[i].options[visor.questions[i].options.length-1].id;
-                      
-                        visor.questions[i].options = respuesta;
-                    }else if (visor.questions[i].field_type == 'SelectField'){
-                        visor.questions[i].options= visor.questions[i].options.join('#');
-                    }
-                    if(visor.questions[i].field_type!='FileField')
-                        visor.questions[i].answer = visor.questions[i].answer.join('#');
->>>>>>> refs/heads/fileIntegrationCMS
                 }
                 if (visor.questions[j].dependencies){
                     delete visor.questions[j].dependencies;
@@ -214,7 +180,6 @@
             }
         };
 
-<<<<<<< HEAD
         // Persist form
         visor.save = function(){
             if (visor.isVisorMode()){
@@ -238,58 +203,9 @@
                 alert('Form was completed correctly. \nThis is a preview, the data wont be saved.');
             }
         };
-=======
-//            var getFileInodes = function(){
-//                var temp = [];
-//                for(var j=0; j< visor.questions.length; j++){
-//                    if(visor.questions[j].field_type=='FileField'){
-//                        temp.push(angular.copy(visor.questions[j].answer[0]));
-//                        console.log('esto:'+JSON.stringify(visor.questions[j]));
-//                        visor.questions[j].answer ='';
-//                        
-//                    }
-//                        
-//                }
-//                console.log(temp);
-//                return temp;
-//            }
-    
-            visor.dataMedia = new FormData();                   
-            visor.cantFilesUploaded = 0;
-            // Persist form
-            visor.save = function($files){
-                if (visor.isVisorMode()){
-                    visor.pre_salvar();         
-                    console.log(visor.questions);
-                    $http({
-                        method: 'POST',
-                        url:visor.base_url+ 'visor/submit/'+visor.slug+'/',
-                        headers: { 'Content-Type': undefined},
-                        transformRequest:function (data) {                          
-                            data.append("data", angular.toJson(visor.questions));
-                            return data; 
-                        },
-                        data:visor.dataMedia
-                    }).
-                    success(function (data, status, headers, config) {
-                       //$window.location.href = 'visor/form/submitted';
-
-                    }).
-                    error(function (data, status, headers, config) {
-                        alert('Error saving data: ' + data.error);
-
-                    });
-                  //  console.log(dataMedia);
-                } else {
-                    
-                    alert('Form was completed correctly. \nThis is a preview, the data wont be saved.');
-                }
-            };
->>>>>>> refs/heads/fileIntegrationCMS
 
         ///////////////////// Page navegation /////////////////////
 
-<<<<<<< HEAD
         /*
         * The page selection is fired by the change of the url
         */
@@ -322,51 +238,10 @@
             if (visor.pages){
                 if (changePage > visor.pages.size || changePage < 0){
                     changePage = 0;   
-=======
-            /*
-            * The page selection is fired by the change of the url
-            */
-            visor.changePage = function(page){
-                if (visor.plugin_mode){
-                    $location.hash(page);
-                } else if (visor.isVisorMode()) {
-                    $location.hash(visor.slug + separator + page);
-                } else {
-                    $location.search('page',page);
->>>>>>> refs/heads/fileIntegrationCMS
                 }
-<<<<<<< HEAD
                 visor.selectPage(changePage);
             }
         });
-=======
-            };
-            
-            /*
-            * This function watches any change in the url and updates the selected page.
-            */
-            visor.$on('$locationChangeSuccess', function(event) {
-                var changePage;
-                if (visor.plugin_mode){
-                    changePage = $location.hash() || 0;
-                } else if (visor.isVisorMode()) {
-                    changePage = $location.hash().split(separator)[1] || 0;
-                    
-                } else {
-                    changePage = ($location.search()).page || 0;
-                }
-                changePage = parseInt(changePage);
-                if (changePage.isNaN){
-                    changePage = 0;
-                }
-                if (visor.pages){
-                    if (changePage > visor.pages.size || changePage < 0){
-                        changePage = 0;   
-                    }
-                    visor.selectPage(changePage);
-                }
-            });
->>>>>>> refs/heads/fileIntegrationCMS
 
         /*
         * Page navegation
@@ -528,7 +403,6 @@
                 } else {
                     visor.showPageValues[pageNum] = !value;
                 }
-<<<<<<< HEAD
             } else {
                 visor.showPageValues[pageNum] = 1;
             }
@@ -544,34 +418,6 @@
                     var field = page.fields[j];
                     if(field.field_id == id){
                         return field;
-=======
-            };
-                    
-                    
-            visor.onFileSelect = function($files,fileModel) {
-                //$files: an array of files selected, each file has name, size, and type.
-                  var file = $files[0]; 
-                  var file_id = file.name;
-                  visor.dataMedia.append(file_id,file);
-                  fileModel.answer = file_id;//clean answer field.
-                  
-                  
-                  console.log(fileModel.answer);
-          };
-                
-            
-            ///////////////////// Auxiliar functions /////////////////////
-            
-            visor.getFieldById = function(id){
-                //precondition: Field with field_id == id exists
-                for(var i = 0; i < visor.pages.length; i++){
-                    var page = visor.pages[i];
-                    for(var j = 0; j < page.fields.length; j++){
-                        var field = page.fields[j];
-                        if(field.field_id == id){
-                            return field;
-                        }
->>>>>>> refs/heads/fileIntegrationCMS
                     }
                 }
             }
