@@ -24,6 +24,29 @@
 
         //calls the function getResponses
         responses.getResponses();
+        
+        responses.isFile = function(field){
+            
+            var re = new RegExp("FileField");
+            var res = ""
+            var res = re.exec(field);
+           // console.log(res);
+            return res!=null;
+            
+        }
+        responses.downloadLink=function(field){
+            var infoFile =  /.*,(\d*),(\d*)/g.exec(field);
+            var field_id = infoFile[1];
+            var entry = infoFile[2];
+            console.log('download/'+field_id+'/'+ entry+'/');
+            return 'download/'+field_id+'/'+ entry+'/';
+        
+        }
 
+                    
+            
+        
+        
+    
     });
 })();

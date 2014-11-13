@@ -13,7 +13,8 @@ from django.template import RequestContext
 from django.utils.decorators import method_decorator
 
 
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view,parser_classes
+from rest_framework.parsers import MultiPartParser,FormParser,JSONParser
 from rest_framework import generics
 from rest_framework import permissions
 from rest_framework import status
@@ -24,7 +25,7 @@ import json
 import csv
 from datetime import datetime
 
-from .models import Form, FormEntry, Version
+from .models import Form, FormEntry, Version,FieldEntry,FileEntry
 from .fields import PUBLISHED, DRAFT
 from .serializers import FormSerializer, VersionSerializer
 from .serializers import FieldEntrySerializer, FormEntrySerializer
@@ -420,6 +421,7 @@ def validate_logic(request, version):
 
 
 @api_view(['POST'])
+@parser_classes((FormParser,MultiPartParser,JSONParser))
 def submit_form_entry(request, slug, format=None):
     """
     APIView to submit a Form Entry.
@@ -429,7 +431,8 @@ def submit_form_entry(request, slug, format=None):
     error_log = {"error": ""}
     form_versions = Form.objects.get(slug=slug).versions.all()
     final_version = form_versions.filter(status=PUBLISHED).first()
-    for field in request.DATA:
+    form_json = json.loads(request.DATA['data'])
+    for field in form_json:
         serializer = FieldEntrySerializer(data=field)
         if serializer.is_valid():
             obj = serializer.object
@@ -469,13 +472,18 @@ def submit_form_entry(request, slug, format=None):
     entry = FormEntry(version=final_version)
     entry.entry_time = datetime.now()
     entry.save()
-    for field in request.DATA:
+    form_json = json.loads(request.DATA['data'])
+    for field in form_json:
             serializer = FieldEntrySerializer(data=field)
             if serializer.is_valid():
                 serializer.object.entry = entry
                 if not serializer.object.shown:
                     serializer.object.answer = ''
                 serializer.save()
+                # If field is a FileField we find the corresponding file and save it to the database
+                if serializer.object.field_type == 'FileField':
+                    data_json = serializer.object.answer
+                    FileEntry.objects.create(field_id=serializer.object.field_id,file_type=request.FILES[data_json].content_type,file_data=request.FILES[data_json],field_entry=FieldEntry.objects.get(pk=serializer.object.pk),file_name=request.FILES[data_json].name)
     return Response(status=status.HTTP_200_OK)
 
 
@@ -642,3 +650,11 @@ def export_csv(request, pk, number, format=None):
         " corresponding form has no version with that number"}
         return Response(content, status=status.HTTP_404_NOT_FOUND)
    
+@api_view(['GET'])
+def download_file(request,field_id,entry):
+    
+    fieldEntry = FieldEntry.objects.get(pk=entry)
+    fileEntry = fieldEntry.files.get(field_id=field_id)       
+    response = HttpResponse(fileEntry.file_data,content_type=fileEntry.file_type)
+    response['Content-Disposition'] = 'attachment; filename="' + fileEntry.file_name+'"'
+    return response

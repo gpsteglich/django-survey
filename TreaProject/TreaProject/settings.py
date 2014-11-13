@@ -138,6 +138,7 @@ FIELD_FILES = (
     'dynamicForms.fieldtypes.NumberField',
     #URL: 'dynamicForms.fieldtypes.URLField',
     'dynamicForms.fieldtypes.CIField',
+    'dynamicForms.fieldtypes.FileField'
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (

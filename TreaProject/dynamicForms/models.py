@@ -200,7 +200,14 @@ class FieldEntry(models.Model):
                              blank=True, null=True)
 
     def __str__(self):
-        return '%s : %s' % (self.text, self.answer)
+        return '[%s,%s,%s] %s : %s' % (self.field_type,self.field_id.__str__(),self.pk.__str__(), self.text, self.answer)
+    
+class FileEntry(models.Model):
+    field_id = models.IntegerField()
+    file_type = models.CharField(max_length=50)
+    file_name = models.CharField(max_length=50)
+    file_data = models.FileField(upload_to='doc')
+    field_entry = models.ForeignKey("FieldEntry",related_name="files",blank=True,null=True)
 
 
 class Survey(CMSPlugin):
