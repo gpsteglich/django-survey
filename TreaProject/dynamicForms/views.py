@@ -196,14 +196,18 @@ class VersionDetail(generics.RetrieveUpdateDestroyAPIView):
 
     def delete(self, request, pk, number, format=None):
         #get related form of the version that is going to be deleted
-        form = Form.objects.get(id=pk)
-        #get version
-        version = Version.objects.get(form=form, number=number)
-        #only draft versions can be deleted this way
-        if version.status == DRAFT:
-            #if selected form has only a draft and no previous versions
-            if len(Version.objects.filter(form=form)) == 1:
-                form.delete()
+        try:
+            form = Form.objects.get(id=pk)
+            #get version
+            version = Version.objects.get(form=form, number=number)
+            #only draft versions can be deleted this way
+            if version.status == DRAFT:
+                #if selected form has only a draft and no previous versions
+                if len(Version.objects.filter(form=form)) == 1:
+                    form.delete()
+                else:
+                    version.delete()
+                return Response(status=status.HTTP_200_OK)
             else:
                 version.delete()
             return Response(status=status.HTTP_200_OK)
@@ -259,19 +263,22 @@ class DeleteVersion(generics.DestroyAPIView):
     
     def get(self, request, pk, number, format=None):
         ##get related form of the version that is going to be deleted
-        form = Form.objects.get(id=pk)
-        #get version
-        version = Version.objects.get(form=form, number=number)
-        #only draft versions can be deleted this way
-        if version.status == DRAFT:
-            #if selected form has only a draft and no previous versions
-            if len(Version.objects.filter(form=form)) == 1:
-                form.delete()
+        try:
+            form = Form.objects.get(id=pk)
+            #get version
+            version = Version.objects.get(form=form, number=number)
+            #only draft versions can be deleted this way
+            if version.status == DRAFT:
+                #if selected form has only a draft and no previous versions
+                if len(Version.objects.filter(form=form)) == 1:
+                    form.delete()
+                else:
+                    version.delete()
+                return HttpResponseRedirect(settings.FORMS_BASE_URL + "main/")
             else:
-                version.delete()
-            return HttpResponseRedirect(settings.FORMS_BASE_URL + "main/")
-        else:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
+                return Response(status=status.HTTP_401_UNAUTHORIZED)
+        except Form.DoesNotExist or Version.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class DeleteForm(generics.DestroyAPIView):
@@ -298,21 +305,24 @@ class FillForm(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = VersionSerializer
 
     def get(self, request, slug, format=None):
-        form_versions = Form.objects.get(slug=slug).versions.all()
-        # We assume there is only one published version at any given time
-        final_version = form_versions.filter(status=PUBLISHED).first()
-        if (not final_version):
-            error = {"error" : "This Form has not been published."}
-            return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data=error)
-        loaded = json.loads(final_version.json)
-        for p in loaded['pages']:
-            for f in p['fields']:
-                fld = (Factory.get_class(f['field_type']))()
-                if isinstance(fld, ModelField):
-                    f['options'] = fld.find_options()
-        final_version.json = json.dumps(loaded)
-        serializer = VersionSerializer(final_version)
-        return Response(serializer.data)
+        try:
+            form_versions = Form.objects.get(slug=slug).versions.all()
+            # We assume there is only one published version at any given time
+            final_version = form_versions.filter(status=PUBLISHED).first()
+            if (not final_version):
+                error = {"error" : "This Form has not been published."}
+                return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data=error)
+            loaded = json.loads(final_version.json)
+            for p in loaded['pages']:
+                for f in p['fields']:
+                    fld = (Factory.get_class(f['field_type']))()
+                    if isinstance(fld, ModelField):
+                        f['options'] = fld.find_options()
+            final_version.json = json.dumps(loaded)
+            serializer = VersionSerializer(final_version)
+            return Response(serializer.data)
+        except Form.DoesNotExist or Version.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class JSONResponse(HttpResponse):
@@ -658,3 +668,8 @@ def download_file(request,field_id,entry):
     response = HttpResponse(fileEntry.file_data,content_type=fileEntry.file_type)
     response['Content-Disposition'] = 'attachment; filename="' + fileEntry.file_name+'"'
     return response
+
+api_view(['GET'])
+def render_form(request, format=None, **kwargs):
+    base_url = settings.FORMS_BASE_URL
+    return render_to_response('visor.html', {"instance": kwargs['instance'], "base_url": base_url}, context_instance=RequestContext(request))

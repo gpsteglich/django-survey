@@ -17,10 +17,10 @@
 	</head>
 	<body class="radial-center">
         <script type="text/javascript">
-            var instance
-            var base_url
+            var instance = "{{instance}}";
+            var base_url = "{{base_url}}";
         </script>
-        <div ng-include="'visor_template'"></div>
+        <div ng-include="'{{base_url}}visor_template'"></div>
     </body>
 
     {% addtoblock "js" %}

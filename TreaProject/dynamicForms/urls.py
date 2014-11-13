@@ -64,6 +64,8 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^responses/export-csv/(?P<pk>[a-z,0-9,\-,\_]+)/(?P<number>[0-9]+)/$', 'export_csv' ),
     url(r'^constants/$', 'get_constants'),
     url(r'^base_url/$', views.get_URL, name='get_URL'),
+    
+    url(r'^some_form/$', 'render_form', {'instance':'ppp'}),
 )
 
 urlpatterns = format_suffix_patterns(urlpatterns)
