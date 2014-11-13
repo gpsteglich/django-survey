@@ -54,19 +54,16 @@
         stat.filter_type='';
         stat.filter_value='';
         stat.path='';
-        stat.getF= function(){
-        
-       
-          
-       if(stat.filter_id!='' && stat.filter_type !='' && stat.filter_value != ''){
-                stat.path = stat.filter_id +'/' +stat.filter_type +'/'+ stat.filter_value;
-                console.log(stat.path);
-       }else {
-           stat.path='';
-        }
 
-        
-        $http.get('../statistics/'+stat.formId+'/'+stat.versionNumber+'/'+stat.path)
+        stat.getStatistics= function(){
+
+            if(stat.filter_id!='' && stat.filter_type !='' && stat.filter_value != ''){
+                stat.path = stat.filter_id +'/' +stat.filter_type +'/'+ stat.filter_value;
+            }else {
+                stat.path='';
+            }
+
+            $http.get('../statistics/'+stat.formId+'/'+stat.versionNumber+'/'+stat.path)
         
                 .success(function(data){
                     stat.json = JSON.parse(JSON.stringify(data));
@@ -144,8 +141,6 @@
                         }
                                         
                     }
-                     console.log(stat.values);
-
                 })
                 .error(function(data, status, headers, config){
                     alert('error loading statistics: ' + data);
@@ -153,22 +148,18 @@
         
         };
      
-        stat.getF();
-      console.log(stat.values);
+        stat.getStatistics();
+     
+        stat.Discard = function(){
+            stat.filter_id='';
+            stat.filter_type='';
+            stat.filter_value='';
+            stat.path='';
+            stat.getStatistics();
+        }
 
-      stat.Discard = function(){
-        stat.filter_id='';
-        stat.filter_type='';
-        stat.filter_value='';
-        stat.path='';
-        stat.getF();
-
-
-
-      }
-
-       $scope.createArrayToExport  = function (field){
-        var data = [];
+        $scope.createArrayToExport  = function (field){
+            var data = [];
        
             data.push({
                 "Label" : "field type",
@@ -190,60 +181,50 @@
                 "Label" : "   ",
                 "Value" : '',                               
             });
-        if (field.type == 'Number'){
+
+            if (field.type == 'Number'){
             
-            data.push({
-                "Label" : "Mean",
-                "Value" : field.m,                               
-            });
-            data.push({
-                "Label" : "Total Mean",
-                "Value" : field.mt,                               
-            });
-            data.push({
-                "Label" : "Standard Deviaion",
-                "Value" : field.sd,                               
-            });
-            data.push({
-                "Label" : "Total Standard deviation",
-                "Value" : field.sdt,                               
-            });      
-            for(var i=0; i<5; i++){
-               data.push(field.data.data[i]); 
+                data.push({
+                    "Label" : "Mean",
+                    "Value" : field.m,                               
+                });
+                data.push({
+                    "Label" : "Total Mean",
+                    "Value" : field.mt,                               
+                });
+                data.push({
+                    "Label" : "Standard Deviaion",
+                    "Value" : field.sd,                               
+                });
+                data.push({
+                    "Label" : "Total Standard deviation",
+                    "Value" : field.sdt,                               
+                });      
+                for(var i=0; i<5; i++){
+                   data.push(field.data.data[i]); 
+                }
+             }
+            else{
+             
+                for(var i=0; i<field.data.data.length; i++){
+                     data.push(field.data.data[i]);
+                }
             }
+            return data;
         }
-        else{
-            // alert(data.data[1]);
-            for(var i=0; i<field.data.data.length; i++){
-                data.push(field.data.data[i]);
-            }
-        }
-        return data;
-
-    }
-
-
-       $scope.createPDF = function(field){
-                          
-                        
-                            var fontSize = 12, height = 0,doc;
-                            var data = $scope.createArrayToExport(field) ;
-                            doc = new jsPDF('p', 'pt', 'a4', true);
-                            doc.setFont("courier", "normal");
-                            doc.setFontSize(fontSize);                    
-                            height = doc.drawTable(data, {xstart:10,ystart:10,tablestart:70,marginleft:50});      
-                            doc.save("statistics.pdf");
-                         
-                           }
-     
-
-    
-
         
-    $scope.chart_types = [
-        'pie',
-        'bar',
-    ];    
+        $scope.createPDF = function(fieldId){
+          $http.get('export-pdf/'+stat.formId+'/'+stat.versionNumber+'/'+fieldId)
+            .error(function(data, status, headers, config){
+                    alert('error exporting pdf: ' + data);
+            });
+                         
+        }
+        
+        $scope.chart_types = [
+            'pie',
+            'bar',
+        ];    
 
-});
+    });
 })();

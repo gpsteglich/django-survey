@@ -12,6 +12,7 @@ from django.conf import settings
 from django.template import RequestContext
 from django.utils.decorators import method_decorator
 
+from reportlab.pdfgen import canvas
 
 from rest_framework.decorators import api_view
 from rest_framework import generics
@@ -523,4 +524,29 @@ def export_csv(request, pk, number, format=None):
         content = {"error": "There is no form with that slug or the"
         " corresponding form has no version with that number"}
         return Response(content, status=status.HTTP_404_NOT_FOUND)
-   
+
+@login_required
+@api_view(['GET'])
+def export_pdf(request, pk, number, field):
+    """
+    # Create the HttpResponse object with the appropriate PDF headers.
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="field_statistics.pdf"'
+    
+    #Create the PDF object, using the response object as its "file."
+    p = canvas.Canvas(response)
+    
+    p.drawString(100, 100, "Hello world.")
+
+    # Close the PDF object cleanly, and we're done.
+    p.showPage()
+    p.save()
+    
+    return response
+    """
+    try:
+        statistics = StatisticsCtrl().getFieldStatistics(pk, number, field)
+        return Response(data=statistics,status=status.HTTP_200_OK)
+    except Exception as e:
+        error_msg = str(e) 
+    return Response(data=error_msg, status=status.HTTP_406_NOT_ACCEPTABLE)
