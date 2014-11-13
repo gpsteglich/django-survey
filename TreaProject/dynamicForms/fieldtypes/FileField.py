@@ -12,7 +12,9 @@ class FileField(Field.Field):
     edit_template_name = "file/template_edit.html"
     prp_template_name = "file/properties.html"
     
-   
+    def get_assets():
+        return ['js/fields/FileField.js']
+    
     def __str__(self):
         return "FileField"
 
