@@ -38,6 +38,13 @@
                     </button>
                  </div>
                  <div class="form-group">
+            <div class="form-group">
+				<button type="button" class="btn btn-danger btn-md tridimensonal-button"
+					ng-click="editor.configAfterSubmit()"
+					data-toggle="modal" data-target="#myPostSubmitModal">
+					<span class="glyphicon glyphicon-star"></span> Configure Post-Submit Action
+				</button>
+			</div>
             <div class="radio-inline">
                 <lable>
                     <input type="radio" ng-model="editor.version.captcha" ng-value="true"> Enable captcha
@@ -48,13 +55,6 @@
                     <input type="radio" ng-model="editor.version.captcha" ng-value="false"> Disable captcha
                 </lable>           
             </div>
-            <div class="form-group">
-				<button type="button" class="btn btn-danger btn-md tridimensonal-button"
-					ng-click="editor.configAfterSubmit()"
-					data-toggle="modal" data-target="#myPostSubmitModal">
-					<span class="glyphicon glyphicon-star"></span> Configure Post-Submit Action
-				</button>
-			</div>
         </div>      
             </div>
         </div>
