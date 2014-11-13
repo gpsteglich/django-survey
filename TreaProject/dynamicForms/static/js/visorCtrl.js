@@ -194,6 +194,7 @@
                     })
                     .error(function(data, status, headers, config) {
                         alert('Error saving data: ' + data.error);
+                        visor.submitting=false;
                     });
             } else {
                 /*
