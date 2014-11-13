@@ -39,6 +39,9 @@ class CIField(Field.Field):
             int(value)
         except (ValueError, TypeError):
             raise ValidationError('Enter a valid integer.', code='invalid')
+
+    def get_assets():
+        return ['js/fields/CIField.js']
         
     def __str__(self):
         return "Cedula"

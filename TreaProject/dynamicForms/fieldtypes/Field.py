@@ -1,5 +1,5 @@
 from django.core.exceptions import ValidationError
-from dynamicForms.models import Form, Version, FormEntry, FieldEntry 
+from dynamicForms.models import Version, FieldEntry 
 
 
 class Field(object):
@@ -31,7 +31,7 @@ class Field(object):
                     return field['validations']
 
     def get_options(self, json, f_id):
-        pass
+        return None
 
     def check_consistency(self, field):
         #When a field is created check if the restrictions are consistent
@@ -55,7 +55,9 @@ class Field(object):
             statistics["required"] = "No"
         return statistics
     
-    
+    def get_assets():
+        return []
+        
     """
     Default Render methods for field templates
     """

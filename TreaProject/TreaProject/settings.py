@@ -33,16 +33,22 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
-STATIC_ROOT = '~/git/django-survey/TreaProject/dynamicForms/static/'
+STATIC_ROOT = BASE_DIR + '/static/'
 
 LOGIN_URL = "login"
+
+FORMS_BASE_URL = '/dynamicForms/'
+
+SITE_ID = 1
 # Application definition
 
 INSTALLED_APPS = (
+    'djangocms_admin_style',  # for the admin skin. You **must** add 'djangocms_admin_style' in the list **before** 'django.contrib.admin'.
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
@@ -50,6 +56,10 @@ INSTALLED_APPS = (
     'south',
     'sekizai',
     'compressor',
+    'cms',  # django CMS itself
+    'mptt',  # utilities for implementing a modified pre-order traversal tree
+    'menus',  # helper for model independent hierarchical website navigation
+
 )
 
 MIDDLEWARE_CLASSES = (
@@ -60,6 +70,13 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.doc.XViewMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'cms.middleware.user.CurrentUserMiddleware',
+    'cms.middleware.page.CurrentPageMiddleware',
+    'cms.middleware.toolbar.ToolbarMiddleware',
+    'cms.middleware.language.LanguageCookieMiddleware',
 )
 
 ROOT_URLCONF = 'TreaProject.urls'
@@ -101,8 +118,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = '~/git/django-survey/inefop/formularios/static/'
-
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
@@ -129,10 +144,19 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.debug',
     'django.core.context_processors.i18n',
+    'django.core.context_processors.request',
     'django.core.context_processors.media',
     'django.core.context_processors.static',
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
     'sekizai.context_processors.sekizai',
+    'cms.context_processors.cms_settings',
 )
 
+CMS_TEMPLATES = (
+)
+
+LANGUAGES = [
+    ('en-us', 'English'),
+    ('es', 'Spanish'),
+]

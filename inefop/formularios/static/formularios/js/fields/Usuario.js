@@ -1,11 +1,12 @@
 function UsuarioField() {
-	
+
 }
 
 UsuarioField.buildField = function(){
 	var field = FieldBase.buildField(this);
 	field.field_type = UsuarioField.name;
-	field.validations = {};
+	field.options = [];
+    field.max_id = 0;
 	return (field);
 };
 

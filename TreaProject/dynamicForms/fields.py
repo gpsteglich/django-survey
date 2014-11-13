@@ -70,9 +70,9 @@ class Validations():
             return self.max_len_text > 0
     
     def __init__(self):
-        max_len_text = None
-        max_number = None
-        min_number = None
+        self.max_len_text = None
+        self.max_number = None
+        self.min_number = None
 
 
 class Option():

@@ -1,0 +1,40 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html ng-app="dynamicFormsFramework" ng-controller="VisorCtrl as visor">
+	<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {% verbatim %}
+        <title>Django surveys - {{instance}}</title>
+        {% endverbatim %}
+        <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+	</head>
+	<body class="radial-center">
+        <script type="text/javascript">
+        var instance = "{{instance}}"
+        var base_url = "{{base_url}}"
+        </script>
+        <div ng-include="'/inefop/visor_template'"></div>
+    </body>
+    <script src={% static "jquery/js/jquery-2.1.1.min.js" %}></script>
+    <script src={% static "bootstrap/js/bootstrap.js" %}></script>
+    <script src={% static "angular/angular.js" %}></script>
+    <script src={% static "angular/checklist-model.js" %}></script>
+    <script src={% static "bootstrap/js/ui-bootstrap.min.js" %}></script>
+    <script src={% static "angular/angular-sanitize.js" %}></script>
+    <script src={% static "angular/ng-csv.js" %}></script>
+
+    <script src={% static "js/operators/operatorFactory.js" %}></script>
+    <script src={% static "js/operators/operatorField.js" %}></script>
+    <script src={% static "js/operators/operatorList.js" %}></script>
+    <script src={% static "js/operators/operatorChecks.js" %}></script>
+    <script src={% static "js/operators/operatorNumber.js" %}></script>
+
+    <script src={% static "js/validators/validatorFactory.js" %}></script>
+    <script src={% static "js/validators/TextField.js" %}></script>
+
+    <script src={% static "js/appVisor.js" %}></script>
+    <script src={% static "js/visorCtrl.js" %}></script>
+    
+</html>

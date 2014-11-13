@@ -28,11 +28,17 @@ class CheckboxField(ListField):
 
     def belong_check(self, value, **kwargs):
         field = kwargs['field']
-        top = field.max_id
+        opt = kwargs['options']
+        l = []
+        for o in opt:
+            l.append(o['id'])
         for v in value.split('#'):
             v = int(v)
-            if not (v > 0 and v <= top):
+            if v not in l:
                 raise ValidationError("Invalid value, not among options.")
+
+    def get_assets():
+        return ['js/fields/CheckboxField.js', 'js/operators/operatorList.js', 'js/operators/operatorChecks.js']
 
     def __str__(self):
         return "Checkbox"

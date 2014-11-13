@@ -1,195 +1,122 @@
 {%extends 'base.html' %}
-{% load staticfiles sekizai_tags %}
+{% load staticfiles sekizai_tags load_fields_template %}
 
-<html>
-	{%block content%}
-		{% addtoblock "css" %}
-		<!-- Ya esta en el base, que hace aca? -->
-	    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-	    {% endaddtoblock %}
-        {% addtoblock "css" %}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/visorTest.css' %}">
-        {% endaddtoblock %}
-		<div id="page-wrapper">
-	        {% verbatim %} 
-	          
-	        <div class="content" ng-controller="EditorCtrl as editor">
-	          	<div ng-include="'select_modal'"></div> 	<!-- checkbox option modal and tooltip -->
-	          	<div ng-include="'logic_modal'"></div>    	<!--modal goes here to skip affix property-->
-	          	<div ng-include="'logic_page_modal'"></div>
-			  	<div ng-include="'tooltip_modal'"></div>    	<!--modal goes here to skip affix property-->
-	            <div class="row">	           		 
-	                <div class=" col-md-7">
-		                <div class="row" style="margin-left:8%;">
-		                    <form class="panel panel-primary" form role="form" name="userForm">
-		                        <div class="panel-heading text-center">
-	                                <h1>Title:</h1>
-                                    <input name="title"  class="form-control" type="text" ng-model="editor.form.title" required/>
-                                    <div class="alert alert-info" ng-show= "userForm.title.$error.required"> 
-                                    	Please enter a title!
+{%block styles%}
+	{% addtoblock "css" %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/visorTest.css' %}">
+    {% endaddtoblock %}
+{% endblock %}
+
+{%block content%}
+	<div id="page-wrapper">
+        {% verbatim %}
+        <div class="content" ng-controller="EditorCtrl as editor">
+          	<div ng-include="'select_modal'"></div> 	<!-- checkbox option modal and tooltip -->
+          	<div ng-include="'logic_modal'"></div>    	<!--modal goes here to skip affix property-->
+          	<div ng-include="'logic_page_modal'"></div>
+		  	<div ng-include="'tooltip_modal'"></div>    	<!--modal goes here to skip affix property-->
+            <div class="row">	           		 
+                <div class=" col-md-7">
+	                <div class="row" style="margin-left:8%;">
+	                    <form class="panel panel-primary" form role="form" name="userForm">
+	                        <div class="panel-heading text-center">
+                                <h1>Title:</h1>
+                                <input name="title"  class="form-control" type="text" ng-model="editor.form.title" required/>
+                                <div class="alert alert-info" ng-show= "userForm.title.$error.required"> 
+                                	Please enter a title!
+                                </div>
+                                <div class="text-center">
+                                	<label>Slug: {{editor.form.slug}}</label>
+                            	</div>
+                            </div>
+                            
+                            <div role="form" class="panel-body" >
+                                <div  ng-repeat="page in editor.pages"  ng-click="editor.selectPage($index)" ng-class="{'selected-page':page==editor.selectedPage}"> 
+                                    <div class="pull-right">
+                                        <label>Page {{$index + 1}}</label>
+                                        <button class="btn" ng-click="editor.deletePage($index)"
+                                                style="background-color:transparent;padding:0;">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
                                     </div>
                                     <div class="text-center">
-                                    	<label>Slug: {{editor.form.slug}}</label>
-                                	</div>
-	                            </div>
-                                
-	                            <div role="form" class="panel-body" >
-	                                <div  ng-repeat="page in editor.pages"  ng-click="editor.selectPage($index)" ng-class="{'selected-page':page==editor.selectedPage}"> 
-	                                    <div class="pull-right">
-	                                        <label>Page {{$index + 1}}</label>
-	                                        <button class="btn" ng-click="editor.deletePage($index)"
+                                        <label>Subtitle: </label>
+                                        <input type="text" ng-model="page.subTitle"/>   
+                                    </div>
+                                    <ul ui-sortable ng-model="page.fields" class="panel-body list-body" style="list-style-type: none;">
+	                                    <li  ng-repeat="question in page.fields"  ng-class="{'selected-field':question==editor.selectedField}" ng-click="editor.selectField($parent.$index, $index)"
+	                                            style="padding:10px;" itemcell class="field-color">
+	                                        <button class="btn pull-right" ng-click="editor.deleteField($parent.$index, $index)"
 	                                                style="background-color:transparent;padding:0;">
 	                                            <span class="glyphicon glyphicon-remove"></span>
 	                                        </button>
-	                                    </div>
-	                                    <div class="text-center">
-	                                        <label>Subtitle: </label>
-	                                        <input type="text" ng-model="page.subTitle"/>   
-	                                    </div>
-	                                    <ul ui-sortable ng-model="page.fields" class="panel-body list-body" style="list-style-type: none;">
-		                                    <li  ng-repeat="question in page.fields"  ng-class="{'selected-field':question==editor.selectedField}" ng-click="editor.selectField($parent.$index, $index)"
-		                                            style="padding:10px;" itemcell class="field-color">
-		                                        <button class="btn pull-right" ng-click="editor.deleteField($parent.$index, $index)"
-		                                                style="background-color:transparent;padding:0;">
-		                                            <span class="glyphicon glyphicon-remove"></span>
-		                                        </button>
-		                                        <div class="form-group" >
-		                                            <div ng-include="'field_edit/'+ question.field_type"></div>
-		                                        </div>
-		                                    </li>
-	                                    </ul>
-	                                    <hr/>
-	                                </div>
-	                                
-	                                <div class="text-right">
-	                                    <button type="submit" ng-click="editor.submitForm()" class="btn btn-default" ng-disabled = "userForm.$invalid">Publish</button>
-	                                    <button type="submit" ng-click="editor.saveForm()" class="btn btn-default" ng-disabled = "userForm.$invalid">Save</button>
-	                              	    <a href="main" class="btn btn-default">Discard changes</a>
-	                                </div>
-	                            </div>
-	                            <pre>{{editor.pages|json}}</pre>
-		                    </form>
-		                    </br> 
-			                </br>
-			                </br>
-	                    </div>
-	                </div>
-	                <div class="col-md-4"  >     
-	                <div data-spy="affix"> 
-			                <div class="row">                  
-			                     <div  ng-include="'modify_input'" style= "margin-left:6%; width:80%; min-width:390px; max-width:500px;"></div>      
-			                </div>
-			            </div>
-	                </div>
-	            </div>
-	         </div>
-	    {%endverbatim%}
-			{% addtoblock "js" %}
-            <script src={% static "jquery/js/jquery-2.1.1.min.js" %}></script>
-			{% endaddtoblock %}
-            {% addtoblock "js" %}
-            <script src={% static "jquery/js/jquery-ui.min.js" %}></script>           
-			{% endaddtoblock %}
-		    {% addtoblock "js" %}
-		    <script src={% static "angular/angular.min.js" %}></script>
-			{% endaddtoblock %}
-            {% addtoblock "js" %}
-            <script src={% static "angular/d3.min.js" %}></script> 
-            {% endaddtoblock %}
-            {% addtoblock "js" %}
-            <script src={% static "angular/angular-charts.min.js" %}></script>   
-            {% endaddtoblock %}
-            {% addtoblock "js" %}
-            <script src={% static "bootstrap/js/ui-bootstrap.min.js" %}></script>
-			{% endaddtoblock %}
-            {% addtoblock "js" %}
-            <script src={% static "angular/angular-file-upload-shim.js" %}></script> 
-            <script src={% static "angular/angular-file-upload.js" %}></script> 
-            <script src={% static "angular/d3.min.js" %}></script> 
-            <script src={% static "angular/angular-charts.min.js" %}></script>   
-            <script src={% static "bootstrap/js/ui-bootstrap.min.js" %}></script>
-            <script src={% static "angular/sortable.js" %}></script>
-			{% endaddtoblock %}
-            {% addtoblock "js" %}
-            <script src={% static "angular/checklist-model.js" %}></script>
-			{% endaddtoblock %}
-		    {% addtoblock "js" %}
-		    <script src={% static "js/app.js" %}></script>
-			{% endaddtoblock %}
-		    <!-- operators -->
-		    {% addtoblock "js" %}
-		    <script src={% static "js/operators/operatorFactory.js" %}></script>
-		    {% endaddtoblock %}
-		    {% addtoblock "js" %}
-		    <script src={% static "js/operators/operatorField.js" %}></script>
-		    {% endaddtoblock %}
-		    {% addtoblock "js" %}
-		    <script src={% static "js/operators/operatorList.js" %}></script>
-		    {% endaddtoblock %}
-		    {% addtoblock "js" %}
-		    <script src={% static "js/operators/operatorChecks.js" %}></script>
-		    {% endaddtoblock %}
-		    {% addtoblock "js" %}
-		    <script src={% static "js/operators/operatorNumber.js" %}></script>
-		    {% endaddtoblock %}
-		    <!-- fields -->
-		    {% addtoblock "js" %}
-		    <script src={% static "js/fields/FieldFactory.js" %}></script>
-		    {% endaddtoblock %}
-		    {% addtoblock "js" %}
-		    <script src={% static "js/fields/FieldBase.js" %}></script>
-		    {% endaddtoblock %}
-		    {% addtoblock "js" %}
-		    <script src={% static "js/fields/TextField.js" %}></script>
-		    {% endaddtoblock %}
-		    {% addtoblock "js" %}
-		    <script src={% static "js/fields/TextAreaField.js" %}></script>
-		    {% endaddtoblock %}
-		    {% addtoblock "js" %}
-		    <script src={% static "js/fields/EmailField.js" %}></script>
-		    {% endaddtoblock %}
-		    {% addtoblock "js" %}
-		    <script src={% static "js/fields/CheckboxField.js" %}></script>
-		    {% endaddtoblock %}
-		    {% addtoblock "js" %}
-		    <script src={% static "js/fields/NumberField.js" %}></script>
-		    {% endaddtoblock %}
-		    {% addtoblock "js" %}
-		    <script src={% static "js/fields/SelectField.js" %}></script>
-		    {% endaddtoblock %}
-		    {% addtoblock "js" %}
-		    <script src={% static "js/fields/CIField.js" %}></script>
-			{% endaddtoblock %}
-            {% addtoblock "js" %}
-		    <script src={% static "js/fields/FileField.js" %}></script>
-			{% endaddtoblock %}
-			{% addtoblock "js" %}
-		    <script src={% static "js/fields/Matricula.js" %}></script>
-			{% endaddtoblock %}
-			{% addtoblock "js" %}
-		    <script src={% static "js/fields/Usuario.js" %}></script>
-			{% endaddtoblock %}
-			{% addtoblock "js" %}
-            <script src={% static "js/editorCtrl.js" %}></script>
-            {% endaddtoblock %}
+	                                        <div class="form-group" >
+	                                            <div ng-include="'field_edit/'+ question.field_type"></div>
+	                                        </div>
+	                                    </li>
+                                    </ul>
+                                    <hr/>
+                                </div>
+                                
+                                <div class="text-right">
+                                    <button type="submit" ng-click="editor.submitForm()" class="btn btn-default" ng-disabled = "userForm.$invalid">Publish</button>
+                                    <button type="submit" ng-click="editor.saveForm()" class="btn btn-default" ng-disabled = "userForm.$invalid">Save</button>
+                              	    <a href="main" class="btn btn-default">Discard changes</a>
+                                </div>
+                            </div>
+	                    </form>
+	                    </br> 
+		                </br>
+		                </br>
+                    </div>
+                </div>
+                <div class="col-md-4"  >     
+                	<div data-spy="affix"> 
+		                <div class="row">                  
+		                     <div  ng-include="'modify_input'" style= "margin-left:6%; width:80%; min-width:390px; max-width:500px;"></div>      
+		                </div>
+		            </div>
+                </div>
+            </div>
+         </div>
+    </div> <!-- div de page-wrapper -->
+    {%endverbatim%}
+{%endblock%} 
 
-            {% addtoblock "js" %}
-            <script src={% static "bootstrap/js/bootstrap.min.js"%}></script>
+{%block scripts%}
+    {% addtoblock "js" %}
+    <script src={% static "js/fields/FieldFactory.js" %}></script>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
+    <script src={% static "js/fields/FieldBase.js" %}></script>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
+    <script src={% static "js/operators/operatorFactory.js" %}></script>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
+    <script src={% static "js/operators/operatorField.js" %}></script>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
+    <script src={% static "js/app.js" %}></script>
+	{% endaddtoblock %}
+	{% addtoblock "js" %}
+    <script src={% static "js/editorCtrl.js" %}></script>
+    {% endaddtoblock %}
+
+	{% asset_block_template %}
+
+    {% addtoblock "js" %}   
+    <script type="text/javascript">
+		$(document).ready(function(){ 
+			$("#myTab li:eq(0) a").tab('show');
+		});
+	</script>
+	{% endaddtoblock %}
+
+{%endblock%}   
             
-            <script src={% static "angular/angular-sanitize.js" %}></script>
-            <script src={% static "angular/ng-csv.js" %}></script>
             
-            <script type="text/javascript">
-				$(document).ready(function(){ 
-    				$("#myTab li:eq(0) a").tab('show');
-				});
-			</script>
-			{% endaddtoblock %}
-    {%endblock%}   
-            
-            
-		</div> <!-- div de page-wrapper -->
+		
 	   
 
-</html>
 

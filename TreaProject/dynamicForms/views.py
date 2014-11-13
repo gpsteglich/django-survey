@@ -30,6 +30,7 @@ from dynamicForms.serializers import FormSerializer, VersionSerializer
 from dynamicForms.serializers import FieldEntrySerializer, FormEntrySerializer,FileEntrySerializer
 from dynamicForms.fields import Field
 from dynamicForms.fieldtypes.FieldFactory import FieldFactory as Factory
+from dynamicForms.fieldtypes.ModelField import ModelField
 from dynamicForms.JSONSerializers import FieldSerializer 
 from dynamicForms.statistics.StatisticsCtrl import StatisticsCtrl 
 
@@ -299,7 +300,16 @@ class FillForm(generics.RetrieveUpdateDestroyAPIView):
         form_versions = Form.objects.get(slug=slug).versions.all()
         # We assume there is only one published version at any given time
         final_version = form_versions.filter(status=PUBLISHED).first()
-
+        if (not final_version):
+            error = {"error" : "This Form has not been published."}
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data=error)
+        loaded = json.loads(final_version.json)
+        for p in loaded['pages']:
+            for f in p['fields']:
+                fld = (Factory.get_class(f['field_type']))()
+                if isinstance(fld, ModelField):
+                    f['options'] = fld.find_options()
+        final_version.json = json.dumps(loaded)
         serializer = VersionSerializer(final_version)
         return Response(serializer.data)
 
@@ -344,6 +354,7 @@ def submit_form_entry(request, slug, format=None):
                     data = FieldSerializer(f, field)
                     if (data.is_valid()):
                         kw['field'] = f
+                        kw['options'] = fld.get_options(loaded, f_id)
                         fld.validate(obj.answer, **kw)
                     else:
                         raise ValidationError("Invalid JSON format.")
@@ -372,12 +383,6 @@ def submit_form_entry(request, slug, format=None):
                     data_json = serializer.object.answer
                     FileEntry.objects.create(field_id=serializer.object.field_id,file_type=request.FILES[data_json].content_type,file_data=request.FILES[data_json],field_entry=FieldEntry.objects.get(pk=serializer.object.pk),file_name=request.FILES[data_json].name)
     return Response(status=status.HTTP_200_OK)
-
-
-#TODO: esta función no se usa.
-@login_required
-def editor(request):
-    return render_to_response('editor.html', {}, context_instance=RequestContext(request))
 
 
 @login_required

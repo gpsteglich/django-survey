@@ -17,8 +17,19 @@
             var visor = $scope;
             
             var separator = '_';
+            //console.log(instance); //slug
 
-            visor.urlBase = $rootScope.urlBase;
+            visor.plugin_mode = false;
+            if (instance){
+                visor.plugin_mode = true;
+            }
+
+            //console.log(base_url);
+            visor.base_url = base_url;
+            if (!visor.base_url){
+                visor.base_url = '';
+            }
+            //visor.urlBase = $rootScope.urlBase;
 
             /*
              * To get the form the slug is catched form the path.
@@ -26,6 +37,11 @@
              */
             // Visor url params
             visor.slug = $location.hash().split(separator)[0];
+
+            if (instance){
+                visor.slug = instance;
+            }
+
             // Preview url params
             visor.formIdParam = ($location.search()).form;
             visor.versionIdParam = ($location.search()).ver;
@@ -49,7 +65,7 @@
                 // Load last published Version
             visor.load = function(){
                 if (visor.isVisorMode()){
-                    $http.get('visor/publishVersion/'+visor.slug)
+                    $http.get(visor.base_url+'visor/publishVersion/'+visor.slug)
                         .success(function(data){
                             visor.setFormValues(data);
                         })
@@ -58,7 +74,7 @@
                         });
                 } else {
                         //Load form
-                    $http.get('forms/'+visor.formIdParam)
+                    $http.get(visor.base_url+'forms/'+visor.formIdParam)
                         .success(function(data){
                             visor.title = data.title;
                                 //Load version
@@ -147,7 +163,7 @@
                     console.log(visor.questions);
                     $http({
                         method: 'POST',
-                        url: 'visor/submit/'+visor.slug+'/',
+                        url:visor.base_url+ 'visor/submit/'+visor.slug+'/',
                         headers: { 'Content-Type': undefined},
                         transformRequest:function (data) {                          
                             data.append("data", angular.toJson(visor.questions));
@@ -156,10 +172,12 @@
                         data:visor.dataMedia
                     }).
                     success(function (data, status, headers, config) {
-                        alert("success!");
+                       //$window.location.href = 'visor/form/submitted';
+
                     }).
                     error(function (data, status, headers, config) {
-                        alert("failed!");
+                        alert('Error saving data: ' + data.error);
+
                     });
                   //  console.log(dataMedia);
                 } else {
@@ -174,7 +192,9 @@
             * The page selection is fired by the change of the url
             */
             visor.changePage = function(page){
-                if (visor.isVisorMode()){
+                if (visor.plugin_mode){
+                    $location.hash(page);
+                } else if (visor.isVisorMode()) {
                     $location.hash(visor.slug + separator + page);
                 } else {
                     $location.search('page',page);
@@ -186,7 +206,9 @@
             */
             visor.$on('$locationChangeSuccess', function(event) {
                 var changePage;
-                if (visor.isVisorMode()){
+                if (visor.plugin_mode){
+                    changePage = $location.hash() || 0;
+                } else if (visor.isVisorMode()) {
                     changePage = $location.hash().split(separator)[1] || 0;
                     
                 } else {

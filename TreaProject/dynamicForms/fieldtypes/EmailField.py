@@ -23,6 +23,9 @@ class EmailField(TextField.TextField):
         base = super(EmailField, self).get_methods(**kwargs)
         base.append(self.mail_check)
         return base
+
+    def get_assets():
+        return ['js/fields/EmailField.js']
         
     def __str__(self):
         return "Email"

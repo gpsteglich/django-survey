@@ -5,6 +5,9 @@ from django.template.defaultfilters import slugify
 from dynamicForms.fields import JSONField, STATUS, DRAFT, PUBLISHED, EXPIRED
 from datetime import datetime
 
+from cms.models.pluginmodel import CMSPlugin
+
+
 class VersionQueySet(models.query.QuerySet):
     """
     QuerySet for Version model
@@ -160,3 +163,19 @@ class FileEntry(models.Model):
     file_name = models.CharField(max_length=50)
     file_data = models.FileField(upload_to='doc')
     field_entry = models.ForeignKey("FieldEntry",related_name="files",blank=True,null=True)
+
+
+class Hello(CMSPlugin):
+    guest_name = models.CharField(max_length=50, default='Guest')
+
+
+class Survey(CMSPlugin):
+    form = models.ForeignKey(Form, related_name='plugins')
+    slug = models.SlugField(max_length=100, blank=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = self.form.slug
+        super(Survey, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.slug
