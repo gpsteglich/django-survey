@@ -31,32 +31,50 @@
         };
                     
         visor.loadmap = function(field){
+            
             var map;
+        
             if (visor.loadmaps[field.field_id]==undefined){
-                var lat = field.mapXY.latitude;
-                var lon = field.mapXY.longitude;   
+                if (field.answer[0] == undefined){
+                    var lat = field.mapXY.latitude;
+                    field.answer[0] = lat;
+                } else {
+                    var lat = field.answer[0];
+                };
+                if (field.answer[1] == undefined){
+                    var lon = field.mapXY.longitude;
+                    field.answer[1] = lon;
+                } else {
+                    var lon = field.answer[1];
+                };
                 var options = {
                     zoom: 8,
                     center: new google.maps.LatLng(lat, lon)
                 };
-                field.answer=[lat,lon];
                 map = new google.maps.Map(document.getElementById(field.field_id),
                 options);
+                
                 var oneLatLng = new google.maps.LatLng(lat, lon);
                 var one = new google.maps.Marker({
-                    position: oneLatLng,
-                    map: map,
-                    draggable: true
-                });
-                visor.loadmaps[field.field_id]= true;
-                google.maps.event.addListener(one, "dragend", function(evento) {
-                    //Obtengo las coordenadas separadas
-                    var la = evento.latLng.lat();
-                    var lo = evento.latLng.lng();
-                    field.answer=[la,lo];
+                position: oneLatLng,
+                map: map,
+                draggable: true
+            
+            });
+            visor.loadmaps[field.field_id]= true;
+            
+            
+            google.maps.event.addListener(one, "dragend", function(evento) {
+                //Obtengo las coordenadas separadas
+                var la = evento.latLng.lat();
+                var lo = evento.latLng.lng();
+                
+                field.answer=[la,lo];
+                
                 });
             }
-        };           	
+            
+        };            	
 		
         var separator = '_';
 
@@ -225,6 +243,7 @@
         */
         visor.$on('$locationChangeSuccess', function(event) {
             var changePage;
+            visor.loadmaps=[];
             if (visor.plugin_mode){
                 changePage = $location.hash() || 0;
             } else if (visor.isVisorMode()) {
