@@ -199,21 +199,11 @@
         };
 
         // Persist form
-        visor.dataMedia = new FormData();                   
-        
         visor.save = function(){
             if (visor.isVisorMode()){
                 visor.pre_salvar();
-                $http({
-                        method: 'POST',
-                        url:visor.base_url+ 'visor/submit/'+visor.slug+'/',
-                        headers: { 'Content-Type': undefined},
-                        transformRequest:function (data) {                          
-                            data.append("data", angular.toJson(visor.questions));
-                            return data; 
-                        },
-                        data:visor.dataMedia
-                    }).success( function(data, status, headers, config){
+                $http.post(visor.base_url+'visor/submit/'+visor.slug+'/',visor.questions)
+                    .success( function(data, status, headers, config){
                         if(visor.after_submit.action == "Redirect To"){
 							$window.location.href = visor.after_submit.redirect;
                         } else {
@@ -437,16 +427,7 @@
                 visor.showPageValues[pageNum] = 1;
             }
         };
-         visor.onFileSelect = function($files,fileModel) {
-                //$files: an array of files selected, each file has name, size, and type.
-                  var file = $files[0]; 
-                  var file_id = file.name;
-                  visor.dataMedia.append(file_id,file);
-                  fileModel.answer = file_id;//clean answer field.
-                  
-                  
-                  console.log(fileModel.answer);
-          };
+        
         ///////////////////// Auxiliar functions /////////////////////
         
         visor.getFieldById = function(id){

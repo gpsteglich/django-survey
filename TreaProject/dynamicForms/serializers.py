@@ -4,7 +4,6 @@ import json
 
 from rest_framework import serializers
 
-
 from dynamicForms.models import Form, FieldEntry, Version, FormEntry
 from dynamicForms.fields import Field_Data
 from dynamicForms.fieldtypes.FieldFactory import FieldFactory as Factory

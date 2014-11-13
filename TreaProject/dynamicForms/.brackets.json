@@ -1,6 +1,5 @@
 {
     "jscodehints.detectedExclusions": [
-        "/home/pavlov/git/django-survey/TreaProject/dynamicForms/static/bootstrap/js/ui-bootstrap.min.js",
-        "/home/federico/git/django-survey/TreaProject/dynamicForms/my.conf.js"
+        "/home/pavlov/git/django-survey/TreaProject/dynamicForms/static/bootstrap/js/ui-bootstrap.min.js"
     ]
 }
