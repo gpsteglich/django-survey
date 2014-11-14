@@ -182,7 +182,12 @@
                 }else if (visor.questions[i].field_type == 'SelectField'){
                     visor.questions[i].options= visor.questions[i].options.join('#');
                 }
-                visor.questions[i].answer = visor.questions[i].answer.join('#');
+                 if(visor.questions[i].field_type!='FileField')                
+             		   visor.questions[i].answer = visor.questions[i].answer.join('#');
+                else if(visor.questions[i].field_type=='FileField' && visor.questions[i].answer.length==0)
+                    visor.questions[i].answer = visor.questions[i].answer=""
+                    
+                console.log('aca' +visor.questions[i].answer.length);
             }
             for (var j=0; j< visor.questions.length; j++) {
                 var pageNum = visor.getPageNumByFieldId(visor.questions[j].field_id);
@@ -199,21 +204,32 @@
         };
 
         // Persist form
+        
+        visor.dataMedia = new FormData(); 
         visor.save = function(){
             if (visor.isVisorMode()){
-                visor.pre_salvar();
-                $http.post(visor.base_url+'visor/submit/'+visor.slug+'/',visor.questions)
-                    .success( function(data, status, headers, config){
-                        if(visor.after_submit.action == "Redirect To"){
-							$window.location.href = visor.after_submit.redirect;
-                        } else {
-							$window.location.href = 'visor/form/submitted/'+visor.slug+'/';
-                        }
-                    })
-                    .error(function(data, status, headers, config) {
-                        alert('Error saving data: ' + data.error);
-                        visor.submitting=false;
-                    });
+                visor.pre_salvar();              
+                $http({
+                    method: 'POST',
+                    url: visor.base_url+'visor/submit/'+visor.slug+'/',
+                    headers: { 'Content-Type': undefined},
+                    transformRequest:function (data) {                          
+                        data.append("data", angular.toJson(visor.questions));
+                        return data; 
+                    },
+                    data:visor.dataMedia
+                }).success( function(data, status, headers, config){
+                    if(visor.after_submit.action == "Redirect To"){
+                        $window.location.href = visor.after_submit.redirect;
+                    } else {
+                        $window.location.href = 'visor/form/submitted/'+visor.slug+'/';
+                    }
+                })
+                .error(function(data, status, headers, config) {
+                    alert('Error saving data: ' + data.error);
+                    visor.submitting=false;
+                });
+                console.log(visor.dataMedia);
             } else {
                 /*
                  * TODO: Sería útil permitir al editor ingresar datos y que sean validados por el back
@@ -428,7 +444,21 @@
             }
         };
         
+        
+        
         ///////////////////// Auxiliar functions /////////////////////
+         visor.onFileSelect = function($files,fileModel) {
+                //$files: an array of files selected, each file has name, size, and type.
+             console.log("hola");
+             var file = $files[0]; 
+                  var file_id = file.name;
+                  visor.dataMedia.append(file_id,file);
+                  fileModel.answer = file_id;//clean answer field.
+                  console.log(file);
+             console.log("hola");
+                  
+            };
+        
         
         visor.getFieldById = function(id){
             //precondition: Field with field_id == id exists
