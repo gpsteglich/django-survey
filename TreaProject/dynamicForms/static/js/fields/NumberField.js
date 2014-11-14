@@ -4,7 +4,7 @@ function NumberField() {
 
 NumberField.buildField = function(){
 	var field = FieldBase.buildField(this);
-	field.field_type = NumberField.name;
+	field.field_type = 'NumberField';
 	field.validations = {
         min_number: null,
         max_number: null,
@@ -13,4 +13,4 @@ NumberField.buildField = function(){
 };
 
 // Register field constructor in Factory
-fieldFactory.registerField(NumberField.name, NumberField);
+fieldFactory.registerField('NumberField', NumberField);

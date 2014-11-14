@@ -4,9 +4,9 @@ function CIField() {
 
 CIField.buildField = function(){
 	var field = FieldBase.buildField(this);
-	field.field_type = CIField.name;
+	field.field_type = 'CIField';
 	return (field);
 };
 
 // Register field constructor in Factory
-fieldFactory.registerField(CIField.name, CIField);
+fieldFactory.registerField('CIField', CIField);

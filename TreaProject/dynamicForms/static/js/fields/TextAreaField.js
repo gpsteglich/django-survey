@@ -4,7 +4,7 @@ function TextAreaField() {
 
 TextAreaField.buildField = function(){
 	var field = FieldBase.buildField(this);
-	field.field_type = TextAreaField.name;
+	field.field_type = 'TextAreaField';
 	field.validations = {
         max_len_text: 400,
     };
@@ -12,4 +12,4 @@ TextAreaField.buildField = function(){
 };
 
 // Register field constructor in Factory
-fieldFactory.registerField(TextAreaField.name, TextAreaField);
+fieldFactory.registerField('TextAreaField', TextAreaField);
