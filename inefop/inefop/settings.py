@@ -53,7 +53,7 @@ INSTALLED_APPS = (
     'cms',  # django CMS itself
     'mptt',  # utilities for implementing a modified pre-order traversal tree
     'menus',  # helper for model independent hierarchical website navigation
-    
+    'reportlab',
 )
 
 MIDDLEWARE_CLASSES = (
