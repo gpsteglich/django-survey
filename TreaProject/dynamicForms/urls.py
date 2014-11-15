@@ -1,17 +1,11 @@
-'''
-Created on 30/8/2014
-
-@author: federico
-'''
-
-
 from django.conf.urls import patterns, url
-from rest_framework.urlpatterns import format_suffix_patterns
-from dynamicForms import views, auth
-from .fieldtypes.field_type import on_startup
+from django.contrib.auth.decorators import login_required
 from django.contrib import admin
 
-from django.contrib.auth.decorators import login_required
+from rest_framework.urlpatterns import format_suffix_patterns
+
+from dynamicForms import views, auth
+from .fieldtypes.field_type import on_startup
 
 admin.autodiscover()
 
@@ -69,5 +63,3 @@ urlpatterns = patterns('dynamicForms.views',
 )
 
 urlpatterns = format_suffix_patterns(urlpatterns)
-
-

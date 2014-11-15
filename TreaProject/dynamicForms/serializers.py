@@ -10,7 +10,6 @@ from dynamicForms.fieldtypes.FieldFactory import FieldFactory as Factory
 from dynamicForms.JSONSerializers import FieldSerializer 
 
 
-
 class FormSerializer(serializers.ModelSerializer):
     """
     Complete serializer for the forms used for the REST framework
@@ -76,5 +75,3 @@ class FormEntrySerializer(serializers.ModelSerializer):
     class Meta:
         model = FormEntry
         fields = ('entry_time', 'fields')
-        
-    
