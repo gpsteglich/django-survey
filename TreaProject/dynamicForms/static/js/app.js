@@ -2,7 +2,7 @@
 
 (function () {
     /*
-    * Module dynamicFormsFramework  ,'angularCharts'
+    * Module dynamicFormsFramework
     * This module encapsulates the logic that will handle the form.
     */
     var app = angular.module('dynamicFormsFrameworkAdmin', ['ui.sortable','ui.bootstrap','checklist-model','angularCharts','ngSanitize','ngCsv'])
@@ -11,7 +11,6 @@
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';
 		$httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
      
-
     }]);
     
 })();

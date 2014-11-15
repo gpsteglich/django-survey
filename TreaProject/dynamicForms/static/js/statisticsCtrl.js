@@ -18,14 +18,7 @@
         stat.versionNumber = ($location.search()).ver;
         stat.versionNumber = ($location.search()).ver;
         stat.json = "";
-        /*
-        // $scope.templates = {
-        //     'NumberField': '/dynamicForms/field_statistic/NumberField/',
-        //     'SelectField': '/dynamicForms/field_statistic/SelectField/',
-        //     'CheckboxField': '/dynamicForms/field_statistic/CheckboxField/',
 
-        // }
-        }*/
         stat.config = {
             title: '',
             tooltips: true,
@@ -43,10 +36,10 @@
         stat.data = {
             series: [],
             data: [{
-              x: "",
-              y: []
+                x: "",
+                y: []
             }]
-          };
+        };
         
         stat.values ={
         };
@@ -64,7 +57,6 @@
             }
 
             $http.get('../statistics/'+stat.formId+'/'+stat.versionNumber+'/'+stat.path)
-        
                 .success(function(data){
                     stat.json = JSON.parse(JSON.stringify(data));
                     for(var field_id in stat.json){
@@ -144,7 +136,6 @@
                 .error(function(data, status, headers, config){
                     alert('error loading statistics: ' + data);
                 });
-        
         };
      
         stat.getStatistics();

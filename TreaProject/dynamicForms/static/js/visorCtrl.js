@@ -25,9 +25,7 @@
         };
                     
         visor.loadmap = function(field){
-            
             var map;
-        
             if (visor.loadmaps[field.field_id]==undefined){
                 if (field.answer[0] == undefined){
                     var lat = field.mapXY.latitude;
@@ -47,27 +45,19 @@
                 };
                 map = new google.maps.Map(document.getElementById(field.field_id),
                 options);
-                
                 var oneLatLng = new google.maps.LatLng(lat, lon);
                 var one = new google.maps.Marker({
                 position: oneLatLng,
                 map: map,
                 draggable: true
-            
             });
             visor.loadmaps[field.field_id]= true;
-            
-            
             google.maps.event.addListener(one, "dragend", function(evento) {
-                //Obtengo las coordenadas separadas
                 var la = evento.latLng.lat();
                 var lo = evento.latLng.lng();
-                
                 field.answer=[la,lo];
-                
                 });
             }
-            
         };            	
 		
         var separator = '_';
@@ -81,12 +71,7 @@
         if (!visor.base_url){
             visor.base_url = '';
         }
-        //visor.urlBase = $rootScope.urlBase;
 
-        /*
-         * To get the form the slug is catched form the path.
-         * This should be handled by $routerprovider
-         */
         // Visor url params
         visor.slug = $location.hash().split(separator)[0];
 
@@ -114,7 +99,7 @@
             }
         };
         
-            // Load last published Version
+        // Load last published Version
         visor.load = function(){
             if (visor.isVisorMode()){
                 $http.get(visor.base_url+'visor/publishVersion/'+visor.slug)
@@ -125,11 +110,11 @@
                         alert('error loading form: ' + status);
                     });
             } else {
-                    //Load form
+                //Load form
                 $http.get(visor.base_url+'forms/'+visor.formIdParam)
                     .success(function(data){
                         visor.title = data.title;
-                            //Load version
+                        //Load version
                         $http.get('version/'+visor.formIdParam+'/'+visor.versionIdParam)
                         .success(function(data){
                             visor.setFormValues(data);
@@ -158,7 +143,7 @@
             visor.selectPage(0);
         };
 
-        visor.pre_salvar = function(){
+        visor.pre_save = function(){
 	        visor.submitting=true;
             visor.questions = [];
             for (var i=0; i< visor.pages.length; i++) {
@@ -171,16 +156,14 @@
                         respuesta += visor.questions[i].options[x].id + '#';
                      }
                     respuesta += visor.questions[i].options[visor.questions[i].options.length-1].id;
-                  
                     visor.questions[i].options = respuesta;
                 }else if (visor.questions[i].field_type == 'SelectField'){
                     visor.questions[i].options= visor.questions[i].options.join('#');
                 }
-                 if(visor.questions[i].field_type!='FileField')                
+                if(visor.questions[i].field_type!='FileField')                
              		   visor.questions[i].answer = visor.questions[i].answer.join('#');
                 else if(visor.questions[i].field_type=='FileField' && visor.questions[i].answer.length==0)
                     visor.questions[i].answer = visor.questions[i].answer=""
-                    
                 console.log('aca' +visor.questions[i].answer.length);
             }
             for (var j=0; j< visor.questions.length; j++) {
@@ -197,12 +180,12 @@
             }
         };
 
+        visor.dataMedia = new FormData();
+
         // Persist form
-        
-        visor.dataMedia = new FormData(); 
         visor.save = function(){
             if (visor.isVisorMode()){
-                visor.pre_salvar();              
+                visor.pre_save();              
                 $http({
                     method: 'POST',
                     url: visor.base_url+'visor/submit/'+visor.slug+'/',
@@ -225,19 +208,16 @@
                 });
                 console.log(visor.dataMedia);
             } else {
-                /*
-                 * TODO: Sería útil permitir al editor ingresar datos y que sean validados por el back
-                 * pero sin persistirlos en la base.
-                 */
                 alert('Form was completed correctly. \nThis is a preview, the data wont be saved.');
             }
         };
 
-        ///////////////////// Page navegation /////////////////////
-
-        /*
-        * The page selection is fired by the change of the url
+        
+        /* 
+        * Page navegation
         */
+
+        // The page selection is fired by the change of the url
         visor.changePage = function(page){
             if (visor.plugin_mode){
                 $location.hash(page);
@@ -248,9 +228,7 @@
             }
         };
         
-        /*
-        * This function watches any change in the url and updates the selected page.
-        */
+        // This function watches any change in the url and updates the selected page.
         visor.$on('$locationChangeSuccess', function(event) {
             var changePage;
             visor.loadmaps=[];
@@ -272,10 +250,6 @@
                 visor.selectPage(changePage);
             }
         });
-
-        /*
-        * Page navegation
-         */
 
         visor.selectPage = function(page){
             visor.selectedPage = visor.pages[page];
@@ -334,7 +308,11 @@
             }
         };            
 
-        ///////////////////// Logic evaluation /////////////////////
+
+        /*
+         * Logic evaluation
+         */
+        
         visor.showValues = [];
         visor.showPageValues = [];
 
@@ -439,8 +417,10 @@
         };
         
         
+        /*
+         * Auxiliar functions
+         */
         
-        ///////////////////// Auxiliar functions /////////////////////
          visor.onFileSelect = function($files,fileModel) {
                 //$files: an array of files selected, each file has name, size, and type.
              console.log("hola");
@@ -454,8 +434,8 @@
             };
         
         
+        //precondition: Field with field_id == id exists
         visor.getFieldById = function(id){
-            //precondition: Field with field_id == id exists
             for(var i = 0; i < visor.pages.length; i++){
                 var page = visor.pages[i];
                 for(var j = 0; j < page.fields.length; j++){
@@ -467,8 +447,8 @@
             }
         };
 
+        //precondition: Field with field_id == id exists
         visor.getPageNumByFieldId = function(id){
-            //precondition: Field with field_id == id exists
             for(var i = 0; i < visor.pages.length; i++){
                 var page = visor.pages[i];
                 for(var j = 0; j < page.fields.length; j++){
