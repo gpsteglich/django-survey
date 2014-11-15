@@ -10,6 +10,8 @@ def user_login(request):
     #get context for the user's request
     context = RequestContext(request)
 
+    if request.user.is_authenticated():
+        return HttpResponseRedirect(settings.FORMS_BASE_URL + "main/")
     if request.method == 'POST':
         #get data from login form
         username = request.POST['username']

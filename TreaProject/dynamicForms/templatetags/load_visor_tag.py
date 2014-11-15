@@ -1,6 +1,9 @@
 from django import template
 from django.template.loader import render_to_string
 from django.conf import settings
+from django.shortcuts import render_to_response
+from django.http import Http404
+from django.template import RequestContext
 
 
 from classytags.core import Options
@@ -29,10 +32,12 @@ class visor_template_tag(InclusionTag):
             f =  Form.objects.get(pk=form)
         except Form.DoesNotExist:
             context['errors'] = ["This Form does not exist."]
+            #return render_to_string('chuck404.html', context)
             return context
         v = f.versions.filter(status=PUBLISHED).first()
         if (not v):
             context['errors'] = ["This Form has no published version."]
+            raise Http404
         else:
             output = f.slug
             base_url = settings.FORMS_BASE_URL

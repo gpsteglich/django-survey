@@ -291,9 +291,12 @@ class DeleteForm(generics.DestroyAPIView):
     
     def get(self, request, pk):
         #get form and delete it
-        form = Form.objects.get(id=pk)
-        form.delete()
-        return HttpResponseRedirect(settings.FORMS_BASE_URL + "main/")
+        try:
+            form = Form.objects.get(id=pk)
+            form.delete()
+            return HttpResponseRedirect(settings.FORMS_BASE_URL + "main/")
+        except Form.DoesNotExist:
+            return HttpResponseRedirect(settings.FORMS_BASE_URL + "chuck/")
 
 
 class FillForm(generics.RetrieveUpdateDestroyAPIView):
