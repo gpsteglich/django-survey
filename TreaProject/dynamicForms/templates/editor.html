@@ -8,7 +8,7 @@
 {% endblock %}
 
 {%block content%}
-	<div id="page-wrapper">
+	<div  id="page-wrapper">
         {% verbatim %}
         <div class="content" ng-controller="EditorCtrl as editor">
           	<div ng-include="'select_modal'"></div> 	<!-- checkbox option modal and tooltip -->
@@ -26,14 +26,14 @@
                                 <div class="alert alert-info" ng-show= "userForm.title.$error.required"> 
                                 	Please enter a title!
                                 </div>
-                                <div class="text-center">
-                                	<label>Slug: {{editor.form.slug}}</label>
+                                <div ng-cloak class="text-center">
+                                	<label> Slug: {{editor.form.slug}}</label>
                             	</div>
                             </div>
                             
                             <div role="form" class="panel-body" >
                                 <div  ng-repeat="page in editor.pages"  ng-click="editor.selectPage($index)" ng-class="{'selected-page':page==editor.selectedPage}"> 
-                                    <div class="pull-right">
+                                    <div ng-cloak class="pull-right">
                                         <label>Page {{$index + 1}}</label>
                                         <button class="btn" ng-click="editor.deletePage($index)"
                                                 style="background-color:transparent;padding:0;">
