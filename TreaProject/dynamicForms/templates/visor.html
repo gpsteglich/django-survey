@@ -29,8 +29,17 @@
     {% addtoblock "js" %}
     <script src={% static "bootstrap/js/bootstrap.js" %}></script>
     {% endaddtoblock %}
+     
+     {% addtoblock "js" %}
+        <script src={% static "angular/angular-file-upload-shim.js" %}></script>
+    {% endaddtoblock %}
+  
+    
     {% addtoblock "js" %}
     <script src={% static "angular/angular.js" %}></script>
+    {% endaddtoblock %}
+      {% addtoblock "js" %}
+        <script src={% static "angular/angular-file-upload.js" %}></script>
     {% endaddtoblock %}
     {% addtoblock "js" %}
     <script src={% static "angular/captcha.js" %}></script>

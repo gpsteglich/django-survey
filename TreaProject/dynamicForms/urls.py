@@ -58,6 +58,7 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^visor/submit/(?P<slug>[a-z,0-9,\-,\_]+)/$', 'submit_form_entry'),
     #url(r'^visor/form/submitted/$', views.TemplateView.as_view(template_name='form_submitted.html')),
     url(r'^visor/form/submitted/(?P<slug>[a-z,0-9,\-,\_]+)/$', 'after_submit_message'),
+    url(r'^responses/download/(?P<field_id>[0-9]+)/(?P<entry>[0-9]+)/$', 'download_file'),
 
     url(r'^responses/(?P<pk>[a-z,0-9,\-,\_]+)/(?P<number>[0-9]+)/$', 'get_responses'),
     url(r'^responses/$', views.TemplateView.as_view(template_name='responses.html'), name="responses"),
