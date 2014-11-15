@@ -1,10 +1,13 @@
 from django import template
 from django.template.loader import render_to_string
 from django.templatetags.static import static
+
 from classytags.helpers import InclusionTag
+
 from dynamicForms.fieldtypes import FieldFactory
 
 register = template.Library()
+
 
 class asset_block_template(InclusionTag):
     template = 'asset_block_template.html'
