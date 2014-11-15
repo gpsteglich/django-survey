@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.template.defaultfilters import slugify
 import json
+import logging
 
 from dynamicForms.fields import JSONField, STATUS, DRAFT, PUBLISHED, EXPIRED
 from dynamicForms.JSONSerializers import AfterSubmitSerializer
@@ -12,6 +13,9 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 
 from cms.models.pluginmodel import CMSPlugin
+
+
+logger = logging.getLogger(__name__)
 
 
 class FormEntryQuerySet(models.query.QuerySet):
@@ -183,6 +187,7 @@ class Version(models.Model):
         loaded = json.loads(self.json)
         return loaded['pages']
 
+
 class FormEntry(models.Model):
     version = models.ForeignKey("Version", related_name="entries")
     entry_time = models.DateTimeField(blank=True)
@@ -214,6 +219,26 @@ class Survey(CMSPlugin):
     def __str__(self):
         return self.slug
 
+
+@receiver(post_save, sender=Form)
+def form_handler(sender, **kwargs):
+    if kwargs['created']:
+        logger.info("Form has been created with slug '" + kwargs['instance'].slug + "'")
+    else:
+        logger.info("Form has been saved with slug '" + kwargs['instance'].slug + "'")
+
+@receiver(post_save, sender=Version)
+def version_handler(sender, **kwargs):
+    msg = "Version " + kwargs['instance'].number.__str__() + " of Form '" + kwargs['instance'].form.slug + "'"
+    if kwargs['instance'].status == DRAFT and kwargs['created']:
+        logger.info(msg + " has been created.")
+    if kwargs['instance'].status == DRAFT:
+        logger.info(msg + " has been saved.")
+    elif kwargs['instance'].status == PUBLISHED:
+        logger.info(msg + " has been published.")
+    elif kwargs['instance'].status == EXPIRED:
+        logger.info(msg + " has expired.")
+
 @receiver(post_save, sender=FormEntry)
 def notification_mail(sender, **kwargs):
     print("notification_mail")
@@ -223,6 +248,9 @@ def notification_mail(sender, **kwargs):
     if serializer.is_valid():
         d = serializer.object
         if d.sendMail:
+            logger.info("Mail has been sent to '" + d.mailRecipient + "'"
+                        + " after completing Version " + kwargs['instance'].version.number.__str__()
+                        + " of Form '" + kwargs['instance'].version.form.slug + "'")
             content = d.mailText
             subject = d.mailSubject
             sender = d.mailSender

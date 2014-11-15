@@ -16,7 +16,7 @@
                             <div ng-include="base_url + 'field/' + question.field_type"></div>
                         </div>
                     </div>
-                     <div class="jumbotron" style="padding-top:0px" ng-show ="version.captcha" >
+                     <div class="jumbotron" style="padding-top:0px" ng-show ="version.captcha &&!canNext()" >
                         <div class="container">
                             <h3 style="margin-bottom:50px">
                                 <span class="label label-success">
@@ -42,7 +42,7 @@
                         </button>
                     </div>
                     <div class="text-right">
-                        <button type="submit" ng-disabled="dynForm.$invalid || disableSubmit || submitting" class="btn btn-primary">
+                        <button type="submit" ng-disabled="dynForm.$invalid || disableSubmit || submitting" class="btn btn-primary" ng-show="!canNext()">
 							<span ng-show="submitting">Please Wait...</span>
 							<span ng-show="!submitting">Submit</span>
 						</button>

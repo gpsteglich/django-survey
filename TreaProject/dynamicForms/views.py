@@ -1,6 +1,7 @@
 
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.dispatch import receiver
 from django.http import HttpResponse
 from django.http.response import HttpResponseRedirect
 from django.views.generic import TemplateView
@@ -21,6 +22,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 
 import json
+import logging
 import csv
 from datetime import datetime
 
@@ -33,6 +35,7 @@ from .fieldtypes.FieldFactory import FieldFactory as Factory
 from .fieldtypes.ModelField import ModelField
 from .JSONSerializers import FieldSerializer, AfterSubmitSerializer 
 from .statistics.StatisticsCtrl import StatisticsCtrl 
+from .signals import modified_logic
 
 
 class FormList(generics.ListCreateAPIView):
@@ -481,8 +484,7 @@ def submit_form_entry(request, slug, format=None):
     # Make sure logic contraints are respected.
     logic_check = validate_logic(request, final_version)
     if not logic_check:
-        # If logic has been manipulated we return an error and raise an alarm.
-        # TODO: Raise alarm
+        modified_logic.send(sender=request, sent_data=request.DATA)
         return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
     # FIXME: Error log sent to client side is handmade,
     # find a better way to make the dictionary
@@ -500,6 +502,11 @@ def submit_form_entry(request, slug, format=None):
                 serializer.save()
     return Response(status=status.HTTP_200_OK)
 
+logger = logging.getLogger(__name__)
+
+@receiver(modified_logic)
+def modified_logic_handler(sender, **kwargs):
+    logger.error("Submitted form logic has been modified. DATA:" + kwargs['sent_data'].__str__())
 
 @login_required
 @api_view(['GET'])
