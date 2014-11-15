@@ -63,8 +63,8 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^constants/$', 'get_constants'),
     url(r'^base_url/$', views.get_URL, name='get_URL'),
     
-    url(r'^', 'redirect_to_main'),
-    #url(r'^.*/$', 'redirect_to_main'),
+    url(r'^$', 'redirect_to_main'),
+    url(r'^.*/$', 'redirect_to_main'),
 )
 
 urlpatterns = format_suffix_patterns(urlpatterns)
