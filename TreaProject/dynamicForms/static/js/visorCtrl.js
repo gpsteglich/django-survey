@@ -10,17 +10,11 @@
         app.controller('VisorCtrl', ['$scope','$http','$location','$window','$rootScope', '$captcha',
                 function ($scope, $http, $location, $window, $rootScope, $captcha) {
 
-            /*
-            *  This controller is initialiced by ui-router, so it cant be used with ng-controller
-            *  It uses $scope to make variables available for the page.
-            */
-         var visor = $scope;
+        var visor = $scope;
         
-         visor.loadmaps=[];             
-                    
+        visor.loadmaps=[];        
             
         visor.disableSubmit = true;
-        
         
         visor.enviarCaptcha = function(resultado){
             if($captcha.checkResult(resultado) === true){
