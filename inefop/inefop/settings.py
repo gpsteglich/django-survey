@@ -113,6 +113,7 @@ FIELD_FILES = (
     'dynamicForms.fieldtypes.GeoField',
     'dynamicForms.fieldtypes.NumberField',
     'dynamicForms.fieldtypes.CIField',
+    'dynamicForms.fieldtypes.FileField',
     'formularios.fields',
 )
 # Static files (CSS, JavaScript, Images)

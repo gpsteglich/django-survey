@@ -636,24 +636,14 @@ def export_csv(request, pk, number, format=None):
         if formEntries:
             initial = formEntries[0]
             labels = []
-            ids = []
-            types = []
-            required = []
             for field in initial.fields.all().order_by("field_id"):
                 labels.append(field.text)
-                ids.append(field.field_id)
-                types.append(field.field_type)
-                required.append(field.required)
             writer.writerow(labels)
-            writer.writerow(ids)
-            writer.writerow(types)
-            writer.writerow(required)
             for formEntry in formEntries:
                 fields = formEntry.fields.all().order_by("field_id")
                 data = []
                 for field in fields:
                     data.append(field.answer)
-                data.append(formEntry.entry_time)   
                 writer.writerow(data)
                             
             return response
