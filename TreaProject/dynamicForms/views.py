@@ -12,13 +12,14 @@ from django.conf import settings
 from django.template import RequestContext
 from django.utils.decorators import method_decorator
 
-
 from rest_framework.decorators import api_view
 from rest_framework import generics
 from rest_framework import permissions
 from rest_framework import status
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
+
+from io import BytesIO
 
 import json
 import csv
@@ -33,6 +34,8 @@ from .fieldtypes.FieldFactory import FieldFactory as Factory
 from .fieldtypes.ModelField import ModelField
 from .JSONSerializers import FieldSerializer, AfterSubmitSerializer 
 from .statistics.StatisticsCtrl import StatisticsCtrl 
+from dynamicForms.statistics.StatisticsPdf import StatisticsPdf 
+
 
 
 class FormList(generics.ListCreateAPIView):
@@ -650,7 +653,33 @@ def export_csv(request, pk, number, format=None):
         content = {"error": "There is no form with that slug or the"
         " corresponding form has no version with that number"}
         return Response(content, status=status.HTTP_404_NOT_FOUND)
-   
+
+@login_required
+@api_view(['GET'])
+def export_pdf(request, pk, number, field):
+    """
+    View for exporting field statistics on pdf format
+    """
+    try:
+        
+        statistics = StatisticsCtrl().getFieldStatistics(pk, number, field)
+        
+        #Create the HttpResponse object with the appropriate PDF headers.
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="field_statistics.pdf"'
+        
+        buffer = BytesIO()
+         
+        report = StatisticsPdf(buffer, 'A4', statistics)
+        pdf = report.print_statistics() 
+        
+        response.write(pdf)
+        
+        return response
+    
+    except Exception as e:
+        error_msg = str(e) 
+    return Response(data=error_msg, status=status.HTTP_406_NOT_ACCEPTABLE)
 
 @api_view(['GET'])
 def render_form(request, format=None, **kwargs):

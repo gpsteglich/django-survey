@@ -49,7 +49,8 @@ urlpatterns = patterns('dynamicForms.views',
      
    
     url(r'^statistics/$' ,views.TemplateView.as_view(template_name='statistics.html'), name="statistics"),
-    url(r'^statistics/(?P<pk>[0-9]+)/(?P<number>[0-9]+)(?:/(?P<fieldId>[0-9]+)/(?P<filterType>[a-z]+)/(?P<filter>[A-Z,a-z,0-9,\-,\_]+))?/$',views.StatisticsView.as_view()), 
+    url(r'^statistics/(?P<pk>[0-9]+)/(?P<number>[0-9]+)(?:/(?P<fieldId>[0-9]+)/(?P<filterType>[a-z]+)/(?P<filter>[A-Z,a-z,0-9,\-,\_]+))?/$',views.StatisticsView.as_view()),
+    url(r'^statistics/export-pdf/(?P<pk>[a-z,0-9,\-,\_]+)/(?P<number>[0-9]+)/(?P<field>[0-9]+)/$','export_pdf'),  
     
     url(r'^visor_template', views.TemplateView.as_view(template_name='visor_template.html')),
     url(r'^visor/publishVersion/(?P<slug>[a-z,0-9,\-,\_]+)/$', views.FillForm.as_view()),
