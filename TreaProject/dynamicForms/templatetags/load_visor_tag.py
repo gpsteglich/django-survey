@@ -28,15 +28,15 @@ class visor_template_tag(InclusionTag):
     )
 
     def get_context(self, context, form):
+        context['errors'] = ""
         try:
             f =  Form.objects.get(pk=form)
         except Form.DoesNotExist:
-            context['errors'] = ["This Form does not exist."]
-            #return render_to_string('chuck404.html', context)
+            context['errors'] += "This Form does not exist.\n"
             return context
         v = f.versions.filter(status=PUBLISHED).first()
         if (not v):
-            context['errors'] = ["This Form has no published version."]
+            context['errors'] += "This Form has no published version.\n"
             raise Http404
         else:
             output = f.slug
@@ -47,6 +47,8 @@ class visor_template_tag(InclusionTag):
 
     def render_tag(self, context, form):
         data = self.get_context(context, form)
+        if (data['errors'] != ""):
+            return render_to_string('404.html', data)
         output = render_to_string(self.template, data)
         return output
     

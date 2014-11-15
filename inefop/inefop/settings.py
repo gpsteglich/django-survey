@@ -30,7 +30,7 @@ COMPRESS_ENABLED = True
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "www.pyforms.com", "*"]
 
 SITE_ID = 1
 
@@ -57,6 +57,7 @@ INSTALLED_APPS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'dynamicForms.middlets.ValidationErrorToHttpErrorMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
