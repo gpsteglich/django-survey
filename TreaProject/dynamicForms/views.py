@@ -656,3 +656,8 @@ def export_csv(request, pk, number, format=None):
 def render_form(request, format=None, **kwargs):
     base_url = settings.FORMS_BASE_URL
     return render_to_response('visor.html', {"instance": kwargs['instance'], "base_url": base_url}, context_instance=RequestContext(request))
+
+@api_view(['GET'])
+def redirect_to_main(request, format=None):
+    print(request.path)
+    return HttpResponseRedirect(settings.FORMS_BASE_URL + "main/")
