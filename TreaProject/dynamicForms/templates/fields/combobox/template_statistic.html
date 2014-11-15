@@ -26,7 +26,8 @@
                 </tr>
             </tbody>
         </table>
-        <button type="button" ng-click="createPDF(field)" class="btn btn-primary">Export PDF</button>
+          <a type="button" class="btn btn-primary" href="export-pdf/{{s.formId}}/{{s.versionNumber}}/{{field.id}}">Export PDF
+        </a>
     </div>
 
 {% endverbatim %}
