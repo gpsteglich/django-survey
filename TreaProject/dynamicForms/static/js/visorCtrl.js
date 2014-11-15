@@ -12,7 +12,7 @@
 
         var visor = $scope;
         
-        visor.loadmaps=[];        
+        visor.loadmaps = [];        
             
         visor.disableSubmit = true;
         
@@ -110,11 +110,11 @@
                         alert('error loading form: ' + status);
                     });
             } else {
-                //Load form
+                // Load form
                 $http.get(visor.base_url+'forms/'+visor.formIdParam)
                     .success(function(data){
                         visor.title = data.title;
-                        //Load version
+                        // Load version
                         $http.get('version/'+visor.formIdParam+'/'+visor.versionIdParam)
                         .success(function(data){
                             visor.setFormValues(data);
@@ -144,9 +144,9 @@
         };
 
         visor.pre_save = function(){
-	        visor.submitting=true;
+	        visor.submitting = true;
             visor.questions = [];
-            for (var i=0; i< visor.pages.length; i++) {
+            for (var i = 0; i< visor.pages.length; i++) {
                 visor.questions = visor.questions.concat(angular.copy(visor.pages[i].fields));
             }
             for ( var i = 0; i < visor.questions.length; i++) { 
@@ -158,15 +158,15 @@
                     respuesta += visor.questions[i].options[visor.questions[i].options.length-1].id;
                     visor.questions[i].options = respuesta;
                 }else if (visor.questions[i].field_type == 'SelectField'){
-                    visor.questions[i].options= visor.questions[i].options.join('#');
+                    visor.questions[i].options = visor.questions[i].options.join('#');
                 }
-                if(visor.questions[i].field_type!='FileField')                
+                if(visor.questions[i].field_type != 'FileField')                
              		   visor.questions[i].answer = visor.questions[i].answer.join('#');
                 else if(visor.questions[i].field_type=='FileField' && visor.questions[i].answer.length==0)
-                    visor.questions[i].answer = visor.questions[i].answer=""
+                    visor.questions[i].answer = visor.questions[i].answer = ""
                 console.log('aca' +visor.questions[i].answer.length);
             }
-            for (var j=0; j< visor.questions.length; j++) {
+            for (var j = 0; j < visor.questions.length; j++) {
                 var pageNum = visor.getPageNumByFieldId(visor.questions[j].field_id);
                 visor.questions[j].shown = Boolean(visor.showValues[visor.questions[j].field_id]
                                             && visor.showPageValues[pageNum]);
@@ -204,7 +204,7 @@
                 })
                 .error(function(data, status, headers, config) {
                     alert('Error saving data: ' + data.error);
-                    visor.submitting=false;
+                    visor.submitting = false;
                 });
                 console.log(visor.dataMedia);
             } else {
@@ -213,9 +213,7 @@
         };
 
         
-        /* 
-        * Page navegation
-        */
+        // Page navegation
 
         // The page selection is fired by the change of the url
         visor.changePage = function(page){
@@ -231,7 +229,7 @@
         // This function watches any change in the url and updates the selected page.
         visor.$on('$locationChangeSuccess', function(event) {
             var changePage;
-            visor.loadmaps=[];
+            visor.loadmaps = [];
             if (visor.plugin_mode){
                 changePage = $location.hash() || 0;
             } else if (visor.isVisorMode()) {
@@ -309,20 +307,18 @@
         };            
 
 
-        /*
-         * Logic evaluation
-         */
+        // Logic evaluation
         
         visor.showValues = [];
         visor.showPageValues = [];
 
         visor.initialiceConditions = function(){
             visor.questions = [];
-            for (var i=0; i< visor.pages.length; i++) {
+            for (var i = 0; i < visor.pages.length; i++) {
                 visor.questions = visor.questions.concat(angular.copy(visor.pages[i].fields));
                 visor.evaluatePageCondition(i);
             }
-            for (var j=0; j< visor.questions.length; j++){
+            for (var j = 0; j < visor.questions.length; j++){
                 var field = visor.questions[j];
                 visor.evaluateCondition(field.field_id);
             }
@@ -331,11 +327,11 @@
         visor.updateDependencies = function(field_id){
             var field_org = visor.getFieldById(field_id);
             var field_dst;
-            for (var k=0; k < field_org.dependencies.fields.length; k++){
+            for (var k = 0; k < field_org.dependencies.fields.length; k++){
                 field_dst = visor.getFieldById(field_org.dependencies.fields[k]);
                 visor.evaluateCondition(field_dst.field_id);
             }
-            for (var j=0; j < field_org.dependencies.pages.length; j++){
+            for (var j = 0; j < field_org.dependencies.pages.length; j++){
                 visor.evaluatePageCondition(field_org.dependencies.pages[j]);
             }
         };
@@ -417,24 +413,21 @@
         };
         
         
-        /*
-         * Auxiliar functions
-         */
+        // Auxiliar functions
         
          visor.onFileSelect = function($files,fileModel) {
-                //$files: an array of files selected, each file has name, size, and type.
-             console.log("hola");
-             var file = $files[0]; 
-                  var file_id = file.name;
-                  visor.dataMedia.append(file_id,file);
-                  fileModel.answer = file_id;//clean answer field.
-                  console.log(file);
-             console.log("hola");
-                  
-            };
+            // $files: an array of files selected, each file has name, size, and type.
+            console.log("hola");
+            var file = $files[0]; 
+                var file_id = file.name;
+                visor.dataMedia.append(file_id,file);
+                fileModel.answer = file_id;
+                console.log(file);
+            console.log("hola");    
+        };
         
         
-        //precondition: Field with field_id == id exists
+        // Precondition: Field with field_id == id exists
         visor.getFieldById = function(id){
             for(var i = 0; i < visor.pages.length; i++){
                 var page = visor.pages[i];
@@ -447,7 +440,7 @@
             }
         };
 
-        //precondition: Field with field_id == id exists
+        // Precondition: Field with field_id == id exists
         visor.getPageNumByFieldId = function(id){
             for(var i = 0; i < visor.pages.length; i++){
                 var page = visor.pages[i];
