@@ -10,6 +10,10 @@
     background-color: transparent;
 }
 
+[ng\:cloak], [ng-cloak], .ng-cloak {
+    display: none;
+}
+
     /* Background gradient effect */
 .radial-center { 
     /* fallback */ 
