@@ -63,9 +63,7 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^responses/export-csv/(?P<pk>[a-z,0-9,\-,\_]+)/(?P<number>[0-9]+)/$', 'export_csv' ),
     url(r'^constants/$', 'get_constants'),
     url(r'^base_url/$', views.get_URL, name='get_URL'),
-    url(r'^$', 'redirect_to_main'),
-    url(r'^.*/$', 'redirect_to_main'),
-    url(r'^chuck/$', views.TemplateView.as_view(template_name='chuck404.html'), name="chuck"),
+    url(r'^.*/$', views.TemplateView.as_view(template_name='404.html'), name="error404"),
 )
 
 urlpatterns = format_suffix_patterns(urlpatterns)
