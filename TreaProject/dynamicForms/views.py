@@ -12,14 +12,14 @@ from django.conf import settings
 from django.template import RequestContext
 from django.utils.decorators import method_decorator
 
-from reportlab.pdfgen import canvas
-
 from rest_framework.decorators import api_view
 from rest_framework import generics
 from rest_framework import permissions
 from rest_framework import status
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
+
+from io import BytesIO
 
 import json
 import csv
@@ -32,7 +32,8 @@ from dynamicForms.serializers import FieldEntrySerializer, FormEntrySerializer
 from dynamicForms.fields import Field
 from dynamicForms.fieldtypes.FieldFactory import FieldFactory as Factory
 from dynamicForms.JSONSerializers import FieldSerializer 
-from dynamicForms.statistics.StatisticsCtrl import StatisticsCtrl 
+from dynamicForms.statistics.StatisticsCtrl import StatisticsCtrl
+from dynamicForms.statistics.StatisticsPdf import StatisticsPdf 
 
 
 class FormList(generics.ListCreateAPIView):
@@ -367,13 +368,6 @@ def submit_form_entry(request, slug, format=None):
                 serializer.save()
     return Response(status=status.HTTP_200_OK)
 
-
-#TODO: esta función no se usa.
-@login_required
-def editor(request):
-    return render_to_response('editor.html', {}, context_instance=RequestContext(request))
-
-
 @login_required
 @api_view(['GET'])
 def get_responses(request, pk, number, format=None):
@@ -529,24 +523,25 @@ def export_csv(request, pk, number, format=None):
 @api_view(['GET'])
 def export_pdf(request, pk, number, field):
     """
-    # Create the HttpResponse object with the appropriate PDF headers.
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="field_statistics.pdf"'
-    
-    #Create the PDF object, using the response object as its "file."
-    p = canvas.Canvas(response)
-    
-    p.drawString(100, 100, "Hello world.")
-
-    # Close the PDF object cleanly, and we're done.
-    p.showPage()
-    p.save()
-    
-    return response
+    View for exporting field statistics on pdf format
     """
     try:
+        
         statistics = StatisticsCtrl().getFieldStatistics(pk, number, field)
-        return Response(data=statistics,status=status.HTTP_200_OK)
+        
+        #Create the HttpResponse object with the appropriate PDF headers.
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="field_statistics.pdf"'
+        
+        buffer = BytesIO()
+         
+        report = StatisticsPdf(buffer, 'A4', statistics)
+        pdf = report.print_statistics() 
+        
+        response.write(pdf)
+        
+        return response
+    
     except Exception as e:
         error_msg = str(e) 
     return Response(data=error_msg, status=status.HTTP_406_NOT_ACCEPTABLE)

@@ -67,7 +67,6 @@
         
                 .success(function(data){
                     stat.json = JSON.parse(JSON.stringify(data));
-                    console.log(stat.json);
                     for(var field_id in stat.json){
                         var field = $.extend({}, stat.json[field_id]);
                         if (field.field_type=='NumberField'){
