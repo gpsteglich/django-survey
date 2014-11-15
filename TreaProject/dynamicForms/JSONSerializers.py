@@ -1,4 +1,3 @@
-
 from rest_framework import serializers
 import ast
 
@@ -68,6 +67,7 @@ class DependencySerializer(serializers.Serializer):
             instance.pages = ast.literal_eval(attrs.get('pages', instance.pages))
             return instance
         return Dependencies(**attrs)
+
         
 class FieldSerializer(serializers.Serializer):
     text = serializers.CharField(required=True, max_length=500)
@@ -80,7 +80,6 @@ class FieldSerializer(serializers.Serializer):
     max_id = serializers.IntegerField(required=False)
     field_type = serializers.CharField(required=True, max_length=30)
     field_id = serializers.IntegerField(required=True)
-    
 
     def restore_object(self, attrs, instance=None):
         """
@@ -93,14 +92,13 @@ class FieldSerializer(serializers.Serializer):
             instance.tooltip = attrs.get('tooltip', instance.tooltip)
             instance.answer = attrs.get('answer', instance.answer)
             instance.options = attrs.get('options', instance.options)
-            #instance.dependencies = attrs.get('dependencies', instance.dependencies)
-            #instance.validations = attrs.get('validations', instance.validations)
             instance.max_id = attrs.get('max_id', instance.max_id)
             instance.field_type = attrs.get('field_type', instance.field_type)
             instance.field_id = attrs.get('field_id', instance.field_id)
 
             return instance
         return Field_Data(**attrs)
+
 
 class AfterSubmitSerializer(serializers.Serializer):
     """
