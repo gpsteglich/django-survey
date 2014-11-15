@@ -1,4 +1,3 @@
-
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.dispatch import receiver
@@ -7,12 +6,13 @@ from django.http.response import HttpResponseRedirect
 from django.views.generic import TemplateView
 from django.shortcuts import render_to_response
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
-
 from django.conf import settings
-
 from django.template import RequestContext
 from django.utils.decorators import method_decorator
-
+from datetime import datetime
+import json
+import logging
+import csv
 
 from rest_framework.decorators import api_view
 from rest_framework import generics
@@ -20,11 +20,6 @@ from rest_framework import permissions
 from rest_framework import status
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
-
-import json
-import logging
-import csv
-from datetime import datetime
 
 from .models import Form, FormEntry, Version
 from .fields import PUBLISHED, DRAFT
@@ -59,19 +54,18 @@ class FormList(generics.ListCreateAPIView):
         index = 1
 
         for f in forms:
-            #Obtain the list of versions of the form f
-            #ordered by version number (descendant)
-            #FIX ME: improve get versions
+            # Obtain the list of versions of the form f
+            # ordered by version number (descendant)
             query_set = Form.objects.get(slug=f['slug']).versions.order_by('number').reverse()
             vers_dict = query_set.values()
-            #Assign the dict of versions to the form dict
+            # Assign the dict of versions to the form dict
             f["versions"] = vers_dict
             f["index"] = index
             f["username"] = User.objects.get(id=f['owner_id'])
 
             index += 1
-            #Get the status of the last version,
-            #to know if there is already a draft in this form
+            # Get the status of the last version,
+            # to know if there is already a draft in this form
             if len(vers_dict) > 0:
                 last_version = vers_dict[0]
                 f["lastStatus"] = last_version['status']
@@ -84,8 +78,6 @@ def ordered_forms(request, order="id", ad="asc"):
     Gets the list of all forms and versions from the database,
     and renders the template to show them
     """
-    #User.objects.order_by('username')
-
     if order == "owner":
         f1 = Form.objects.all().order_by('owner__username')
     else:
@@ -95,19 +87,18 @@ def ordered_forms(request, order="id", ad="asc"):
     forms = f1.values()
     index = 1
     for f in forms:
-    #Obtain the list of versions of the form f
-    #ordered by version number (descendant)
-    #FIX ME: improve get versions
+        # Obtain the list of versions of the form f
+        # ordered by version number (descendant)
         query_set = Form.objects.get(slug=f['slug']).versions.order_by('number').reverse()
         vers_dict = query_set.values()
-    #Assign the dict of versions to the form dict
+        # Assign the dict of versions to the form dict
         f["versions"] = vers_dict
         f["index"] = index
         f["username"] = User.objects.get(id=f['owner_id'])
 
         index += 1
-    #Get the status of the last version,
-    #to know if there is already a draft in this form
+        # Get the status of the last version,
+        # to know if there is already a draft in this form
         if len(vers_dict) > 0:
             last_version = vers_dict[0]
             f["lastStatus"] = last_version['status']
@@ -197,14 +188,14 @@ class VersionDetail(generics.RetrieveUpdateDestroyAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, number, format=None):
-        #get related form of the version that is going to be deleted
+        # Get related form of the version that is going to be deleted
         try:
             form = Form.objects.get(id=pk)
-            #get version
+            # Get version
             version = Version.objects.get(form=form, number=number)
-            #only draft versions can be deleted this way
+            # Only draft versions can be deleted this way
             if version.status == DRAFT:
-                #if selected form has only a draft and no previous versions
+                # If selected form has only a draft and no previous versions
                 if len(Version.objects.filter(form=form)) == 1:
                     form.delete()
                 else:
@@ -228,35 +219,35 @@ class NewVersion(generics.CreateAPIView):
     
     def get(self, request, pk, number, action):
         try:
-            #get version of form that is going to be duplicated-
+            # Get version of form that is going to be duplicated-
             form = Form.objects.get(id=pk)
             version = Version.objects.get(form=form, number=number)
         except Version.DoesNotExist or Form.DoesNotExist:
             content = {"error": "There is no form with that slug or the"
             " corresponding form has no version with that number"}
             return Response(content, status=status.HTTP_404_NOT_FOUND)
-        #if action new version
+        # If action new version
         if action == "new":
-            #create version and save it on database
+            # Create version and save it on database
             new_version = Version(json=version.json, form=form)
             new_version.save()
-        #if action duplicate a version
+        # If action duplicate a version
         elif action == "duplicate":
-            #create a copy of the form related to selected version
+            # Create a copy of the form related to selected version
             new_form = Form(title=form.title, owner=request.user)
             count = 2
             try:
                 f_try = 1
                 while (f_try != None):
                     suffix = "(" + str(count) + ")"
-                    #new_form.title += str(count)
+                    # New_form.title += str(count)
                     count += 1
                     f_try = Form.objects.filter(title=new_form.title + suffix).first()
             except Form.DoesNotExist:
                 pass
             new_form.title += suffix
             new_form.save()
-            #create a copy of the version and save it on database
+            # Create a copy of the version and save it on database
             new_version = Version(json=version.json, form=new_form)
             new_version.save()
         return HttpResponseRedirect(settings.FORMS_BASE_URL + "main/")
@@ -264,7 +255,7 @@ class NewVersion(generics.CreateAPIView):
 
 class DeleteVersion(generics.DestroyAPIView):
     """
-     APIView to delete a form
+    APIView to delete a form
     """
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
@@ -273,14 +264,14 @@ class DeleteVersion(generics.DestroyAPIView):
         return super(DeleteVersion, self).dispatch(*args, **kwargs)
     
     def get(self, request, pk, number, format=None):
-        ##get related form of the version that is going to be deleted
+        # Get related form of the version that is going to be deleted
         try:
             form = Form.objects.get(id=pk)
-            #get version
+            # Get version
             version = Version.objects.get(form=form, number=number)
-            #only draft versions can be deleted this way
+            # Only draft versions can be deleted this way
             if version.status == DRAFT:
-                #if selected form has only a draft and no previous versions
+                # If selected form has only a draft and no previous versions
                 if len(Version.objects.filter(form=form)) == 1:
                     form.delete()
                 else:
@@ -294,7 +285,7 @@ class DeleteVersion(generics.DestroyAPIView):
 
 class DeleteForm(generics.DestroyAPIView):
     """
-     APIView to delete a form
+    APIView to delete a form
     """
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
@@ -303,7 +294,7 @@ class DeleteForm(generics.DestroyAPIView):
         return super(DeleteForm, self).dispatch(*args, **kwargs)
     
     def get(self, request, pk):
-        #get form and delete it
+        # Get form and delete it
         try:
             form = Form.objects.get(id=pk)
             form.delete()
@@ -443,14 +434,11 @@ def validate_logic(request, version):
     # If there are no errors, logic is valid
     return True
 
-
 @api_view(['POST'])
 def submit_form_entry(request, slug, format=None):
     """
     APIView to submit a Form Entry.
     """
-    # TODO: agregar primera iteracion por las respuestas
-    # para hacer la validacion, antes de crear el entry
     error_log = {"error": ""}
     form_versions = Form.objects.get(slug=slug).versions.all()
     final_version = form_versions.filter(status=PUBLISHED).first()
@@ -486,8 +474,6 @@ def submit_form_entry(request, slug, format=None):
     if not logic_check:
         modified_logic.send(sender=request, sent_data=request.DATA)
         return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
-    # FIXME: Error log sent to client side is handmade,
-    # find a better way to make the dictionary
     if error_log['error'] != "":
         return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data=error_log)
     entry = FormEntry(version=final_version)
@@ -531,7 +517,6 @@ def get_responses(request, pk, number, format=None):
         " corresponding form has no version with that number"}
         return Response(content, status=status.HTTP_404_NOT_FOUND)
 
-
 @login_required
 @api_view(['GET'])
 def get_constants(request, format=None):
@@ -540,7 +525,6 @@ def get_constants(request, format=None):
     """
     data = Factory.get_strings()
     return Response(status=status.HTTP_200_OK, data=data)
-
 
 @login_required
 @api_view(['GET'])
@@ -559,6 +543,7 @@ class FieldTemplateView(TemplateView):
     def get_template_names(self):
         field = Factory.get_class(self.kwargs.get('type'))
         return field().render()
+
 
 class FieldEditTemplateView(TemplateView):
     """
@@ -579,6 +564,7 @@ class FieldPrpTemplateView(TemplateView):
         field = Factory.get_class(self.kwargs.get('type'))
         return field().render_properties()
 
+
 class FieldStsTemplateView(TemplateView):
     """
     Renders the field type statistics templates.
@@ -586,9 +572,9 @@ class FieldStsTemplateView(TemplateView):
     def get_template_names(self):
         field = Factory.get_class(self.kwargs.get('type'))
         return field().render_statistic()
-   
+
+
 class StatisticsView(generics.RetrieveAPIView):
-    
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     
     def get(self, request, pk, number, fieldId=None,filterType=None, filter=""):
@@ -621,24 +607,23 @@ def export_csv(request, pk, number, format=None):
     """
     Function view for exporting responses of form version in csv format
     """
-    
     # Create the HttpResponse object with the appropriate CSV header.
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="responses.csv"'
-    #Create a csv writer object
+    # Create a csv writer object
     writer = csv.writer(response)
     
     try:
-        #get version
+        # Get version
         form = Form.objects.get(pk=pk)
         version = form.versions.get(number=number)
         
-        #only from a not draft version a csv file can be exported
+        # Only from a not draft version a csv file can be exported
         if (version.status == DRAFT):
             content = {"error": "This version's status is Draft."}
             return Response(content, status=status.HTTP_406_NOT_ACCEPTABLE)
-        
-        #get all entries
+
+        # Get all entries
         formEntries = version.entries.all()
         if formEntries:
             initial = formEntries[0]
@@ -662,7 +647,6 @@ def export_csv(request, pk, number, format=None):
                     data.append(field.answer)
                 data.append(formEntry.entry_time)   
                 writer.writerow(data)
-                            
             return response
         else: 
             return Response(data="No field entries for this form", status=status.HTTP_406_NOT_ACCEPTABLE)
@@ -671,7 +655,6 @@ def export_csv(request, pk, number, format=None):
         " corresponding form has no version with that number"}
         return Response(content, status=status.HTTP_404_NOT_FOUND)
    
-
 @api_view(['GET'])
 def render_form(request, format=None, **kwargs):
     base_url = settings.FORMS_BASE_URL
