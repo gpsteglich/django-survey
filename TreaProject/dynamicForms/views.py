@@ -1,6 +1,7 @@
 
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.dispatch import receiver
 from django.http import HttpResponse
 from django.http.response import HttpResponseRedirect
 from django.views.generic import TemplateView
@@ -23,6 +24,7 @@ from rest_framework.response import Response
 from io import BytesIO
 
 import json
+import logging
 import csv
 from datetime import datetime
 
@@ -37,6 +39,7 @@ from .fieldtypes.ModelField import ModelField
 from .JSONSerializers import FieldSerializer, AfterSubmitSerializer 
 from .statistics.StatisticsCtrl import StatisticsCtrl 
 from dynamicForms.statistics.StatisticsPdf import StatisticsPdf 
+from .signals import modified_logic
 
 
 
@@ -246,7 +249,17 @@ class NewVersion(generics.CreateAPIView):
         elif action == "duplicate":
             #create a copy of the form related to selected version
             new_form = Form(title=form.title, owner=request.user)
-            new_form.title += "(duplicated)"
+            count = 2
+            try:
+                f_try = 1
+                while (f_try != None):
+                    suffix = "(" + str(count) + ")"
+                    #new_form.title += str(count)
+                    count += 1
+                    f_try = Form.objects.filter(title=new_form.title + suffix).first()
+            except Form.DoesNotExist:
+                pass
+            new_form.title += suffix
             new_form.save()
             #create a copy of the version and save it on database
             new_version = Version(json=version.json, form=new_form)
@@ -296,9 +309,12 @@ class DeleteForm(generics.DestroyAPIView):
     
     def get(self, request, pk):
         #get form and delete it
-        form = Form.objects.get(id=pk)
-        form.delete()
-        return HttpResponseRedirect(settings.FORMS_BASE_URL + "main/")
+        try:
+            form = Form.objects.get(id=pk)
+            form.delete()
+            return HttpResponseRedirect(settings.FORMS_BASE_URL + "main/")
+        except Form.DoesNotExist:
+            return HttpResponseRedirect(settings.FORMS_BASE_URL + "chuck/")
 
 
 class FillForm(generics.RetrieveUpdateDestroyAPIView):
@@ -475,8 +491,7 @@ def submit_form_entry(request, slug, format=None):
     # Make sure logic contraints are respected.
     logic_check = validate_logic(request, final_version)
     if not logic_check:
-        # If logic has been manipulated we return an error and raise an alarm.
-        # TODO: Raise alarm
+        modified_logic.send(sender=request, sent_data=request.DATA)
         return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
     # FIXME: Error log sent to client side is handmade,
     # find a better way to make the dictionary
@@ -500,6 +515,11 @@ def submit_form_entry(request, slug, format=None):
                         FileEntry.objects.create(field_id=serializer.object.field_id,file_type=request.FILES[data_json].content_type,file_data=request.FILES[data_json],field_entry=FieldEntry.objects.get(pk=serializer.object.pk),file_name=request.FILES[data_json].name)
     return Response(status=status.HTTP_200_OK)
 
+logger = logging.getLogger(__name__)
+
+@receiver(modified_logic)
+def modified_logic_handler(sender, **kwargs):
+    logger.error("Submitted form logic has been modified. DATA:" + kwargs['sent_data'].__str__())
 
 @login_required
 @api_view(['GET'])

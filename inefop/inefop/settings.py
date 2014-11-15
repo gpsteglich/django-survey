@@ -26,11 +26,11 @@ SECRET_KEY = '%@fu@!^4e(%$j=sh!ujea7sffwp)33pr*m#vbz97hc=cs!d8g#'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-COMPRESS_ENABLED = False
+COMPRESS_ENABLED = True
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "www.pyforms.com", "*"]
 
 SITE_ID = 1
 
@@ -57,6 +57,7 @@ INSTALLED_APPS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'dynamicForms.middlets.ValidationErrorToHttpErrorMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -124,7 +125,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = '~/git/django-survey/TreaProject/dynamicForms/static/'
 #STATIC_ROOT = '/var/www/pyforms/static/'
 
-MEDIA_ROOT = '/home/federico/git/django-survey/inefop/inefop/media/'
+MEDIA_ROOT = '~/git/django-survey/inefop/inefop/media/'
 MEDIA_URL = '/media/'
 
 LOGIN_URL = "login"
@@ -164,3 +165,57 @@ EMAIL_HOST_USER = '46c73022-ff99-4460-b2b7-ef28e7bbe0b9'
 EMAIL_HOST_PASSWORD = '46c73022-ff99-4460-b2b7-ef28e7bbe0b9'
 EMAIL_PORT = 2525
 EMAIL_USE_TLS = True
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'null': {
+            'level': 'DEBUG',
+            'class': 'django.utils.log.NullHandler',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+        },
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'django-survey.log',
+            'formatter': 'verbose'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['null'],
+            'propagate': True,
+            'level': 'INFO',
+        },
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'dynamicForms': {
+            'handlers': ['file'],
+            'level': 'INFO',
+        },
+        '': {
+            'handlers': ['file'],
+            'level': 'INFO'
+        },
+    }
+}

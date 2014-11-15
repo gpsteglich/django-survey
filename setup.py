@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.2.2'
+version = '0.1.1'
 
 setup(name='dynamicForms',
       version=version,
@@ -18,7 +18,7 @@ Django App to create Surveys with multipath and multipaging support. It is desig
         'Intended Audience :: Information Technology',
         'Topic :: Internet :: WWW/HTTP :: WSGI :: Application'
       ],
-      keywords='Django Survey Framework',
+      keywords='Django Survey Framework Forms',
       author='PythonWarriors',
       author_email='info@trea.uy',
       url='https://github.com/trea-uy/django-survey',
@@ -29,6 +29,7 @@ Django App to create Surveys with multipath and multipaging support. It is desig
       install_requires=[
         'djangorestframework',
   	    'django-cms',
+        'django_compressor',
       ],
       entry_points="""
       # -*- Entry points: -*-

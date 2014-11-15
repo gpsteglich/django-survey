@@ -33,7 +33,8 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^logout/$', auth.user_logout, name='logout'),
     url(r'^preview$', login_required(views.TemplateView.as_view(template_name='preview.html'))),
     url(r'^editor$', login_required(views.TemplateView.as_view(template_name='editor.html')), name="editor"),
-
+    url(r'^$', auth.user_login, name='login'),
+    
     url(r'^field_condition$', views.TemplateView.as_view(template_name='field_condition.html')),
     url(r'^logic_modal', views.TemplateView.as_view(template_name='logic_modal.html')),
     url(r'^logic_page_modal', views.TemplateView.as_view(template_name='logic_page_modal.html')),
@@ -46,7 +47,7 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^select_modal$', views.TemplateView.as_view(template_name='select_modal.html')),
     url(r'^tooltip_modal$', views.TemplateView.as_view(template_name='tooltip_modal.html')),
     url(r'^modify_input$', views.TemplateView.as_view(template_name='modifyInput.html')),
-     
+    
    
     url(r'^statistics/$' ,views.TemplateView.as_view(template_name='statistics.html'), name="statistics"),
     url(r'^statistics/(?P<pk>[0-9]+)/(?P<number>[0-9]+)(?:/(?P<fieldId>[0-9]+)/(?P<filterType>[a-z]+)/(?P<filter>[A-Z,a-z,0-9,\-,\_]+))?/$',views.StatisticsView.as_view()),
@@ -56,7 +57,6 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^visor/publishVersion/(?P<slug>[a-z,0-9,\-,\_]+)/$', views.FillForm.as_view()),
     url(r'^visor$', views.TemplateView.as_view(template_name='visor.html'), name="visor"),
     url(r'^visor/submit/(?P<slug>[a-z,0-9,\-,\_]+)/$', 'submit_form_entry'),
-    #url(r'^visor/form/submitted/$', views.TemplateView.as_view(template_name='form_submitted.html')),
     url(r'^visor/form/submitted/(?P<slug>[a-z,0-9,\-,\_]+)/$', 'after_submit_message'),
     url(r'^responses/download/(?P<field_id>[0-9]+)/(?P<entry>[0-9]+)/$', 'download_file'),
 
@@ -65,8 +65,7 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^responses/export-csv/(?P<pk>[a-z,0-9,\-,\_]+)/(?P<number>[0-9]+)/$', 'export_csv' ),
     url(r'^constants/$', 'get_constants'),
     url(r'^base_url/$', views.get_URL, name='get_URL'),
-    
-    url(r'^some_form/$', 'render_form', {'instance':'ppp'}),
+    #url(r'^.*/$', views.TemplateView.as_view(template_name='404.html'), name="error404"),
 )
 
 urlpatterns = format_suffix_patterns(urlpatterns)

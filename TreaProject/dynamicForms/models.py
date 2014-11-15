@@ -1,23 +1,27 @@
+import json
+import logging
+from datetime import datetime
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.template.defaultfilters import slugify
-import json
-
-from dynamicForms.fields import JSONField, STATUS, DRAFT, PUBLISHED, EXPIRED
-from dynamicForms.JSONSerializers import AfterSubmitSerializer
-from datetime import datetime
-
 from django.core.mail import send_mail
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 
 from cms.models.pluginmodel import CMSPlugin
 
+from dynamicForms.fields import JSONField, STATUS, DRAFT, PUBLISHED, EXPIRED
+from dynamicForms.JSONSerializers import AfterSubmitSerializer
+
+
+logger = logging.getLogger(__name__)
+
 
 class FormEntryQuerySet(models.query.QuerySet):
     """
     QuerySet for FormEntry model
     """
+
     def data_icontains(self, field_id, data, exclude=False):
         entries = set()
         for entry in self:
@@ -76,6 +80,7 @@ class FormEntryManager(models.Manager):
     """
     Manager for FormEntry model
     """
+
     def get_queryset(self):
         return FormEntryQuerySet(self.model, using=self._db)
 
@@ -84,6 +89,7 @@ class VersionManager(models.Manager):
     """
     Manager for Version model
     """
+
     def get_entries(self, version):
         return self.get(pk=version).entries.all()
 
@@ -132,24 +138,22 @@ class Version(models.Model):
 
     def __str__(self):
         return str(self.number)
-    #'%d: %s' % (self.number, self.get_status_display())
 
     def save(self, *args, **kwargs):
-
-        #if (self.number < 1):
-        #   raise ValidationError("Version cannot be below 1.")
+        # If (self.number < 1):
+        # raise ValidationError("Version cannot be below 1.")
         if Version.objects.filter(pk=self.pk).exists():
-            #When it's an update of an existing version
+            # When it's an update of an existing version
             pass
         else:
-            #When it's a POST of a new Version
+            # When it's a POST of a new Version
             # if it is a new version of an existing form
             # check if there is no previous draft and
             # check that there exists a version less than the current
             all_versions = self.form.versions.all()
             count = all_versions.count()
             if (count > 0):
-                #if it is the first version do not check any of these
+                # If it is the first version do not check any of these
                 if not all_versions.filter(number=count).exists():
                     # We consider all the previous versions have to exist.
                     # There would be a severe problem if the admin
@@ -183,11 +187,13 @@ class Version(models.Model):
         loaded = json.loads(self.json)
         return loaded['pages']
 
+
 class FormEntry(models.Model):
     version = models.ForeignKey("Version", related_name="entries")
     entry_time = models.DateTimeField(blank=True)
 
     objects = FormEntryManager()
+
 
 class FieldEntry(models.Model):
     field_id = models.IntegerField()
@@ -214,6 +220,26 @@ class Survey(CMSPlugin):
     def __str__(self):
         return self.slug
 
+
+@receiver(post_save, sender=Form)
+def form_handler(sender, **kwargs):
+    if kwargs['created']:
+        logger.info("Form has been created with slug '" + kwargs['instance'].slug + "'")
+    else:
+        logger.info("Form has been saved with slug '" + kwargs['instance'].slug + "'")
+
+@receiver(post_save, sender=Version)
+def version_handler(sender, **kwargs):
+    msg = "Version " + kwargs['instance'].number.__str__() + " of Form '" + kwargs['instance'].form.slug + "'"
+    if kwargs['instance'].status == DRAFT and kwargs['created']:
+        logger.info(msg + " has been created.")
+    if kwargs['instance'].status == DRAFT:
+        logger.info(msg + " has been saved.")
+    elif kwargs['instance'].status == PUBLISHED:
+        logger.info(msg + " has been published.")
+    elif kwargs['instance'].status == EXPIRED:
+        logger.info(msg + " has expired.")
+
 @receiver(post_save, sender=FormEntry)
 def notification_mail(sender, **kwargs):
     print("notification_mail")
@@ -223,6 +249,9 @@ def notification_mail(sender, **kwargs):
     if serializer.is_valid():
         d = serializer.object
         if d.sendMail:
+            logger.info("Mail has been sent to '" + d.mailRecipient + "'"
+                        + " after completing Version " + kwargs['instance'].version.number.__str__()
+                        + " of Form '" + kwargs['instance'].version.form.slug + "'")
             content = d.mailText
             subject = d.mailSubject
             sender = d.mailSender

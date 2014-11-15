@@ -1,54 +1,50 @@
 {%extends 'base.html' %}
 {% load staticfiles sekizai_tags %}
 
-<!DOCTYPE html>
-<html lang="en">
 {%block content%}
-        <script type="text/javascript">
-            var urlBase = {% url 'main'%};
-        </script>
-        <div id="page-wrapper" ng-controller="MainPageCtrl as mainPage">
-            <div class="container-fluid">
+    <script type="text/javascript">
+        var urlBase = "{% url 'main'%}";
+    </script>
+    <div id="page-wrapper" ng-controller="MainPageCtrl as mainPage">
+        <div class="container-fluid">
 
-                <!-- Page Heading -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        <h1 class="page-header">
-                            Forms
-                        </h1>
-                    </div>
+            <!-- Page Heading -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">
+                        Forms
+                    </h1>
                 </div>
+            </div>
 
-                    {% verbatim %}                    
-                <!--forms sorting menu-->
-                <div class="row">
-                    <ul class="combo_order col-md-pull-1">
-                        <li class="col-md-3">
-                            <select ng-model="myOrder" ng-init="myOrder = mainPage.actualOrder()" 
-                                    ng-options="order.name for order in mainPage.orders" class="form-control">
-                            </select>
-                                    
-                        </li>
-                        <li class = "btn-group" name="rbtn_ascdsc">
-                            <input type="radio" ng-click="mainPage.selectascdsc('asc')" name="ascdsc" 
-                                    value="ASC" ng-checked="mainPage.actualascdsc == 'ASC'">
-                            <span class="glyphicon glyphicon-arrow-up"></span>Asc
-                            <input type="radio" ng-click="mainPage.selectascdsc('dsc')" name="ascdsc"
-                                    value="DSC" ng-checked="mainPage.actualascdsc == 'DSC'">
-                            <span class="glyphicon glyphicon-arrow-down"></span>Dsc
-                        </li>
-                            <a href="{{urlBase}}{{myOrder.value}}/{{mainPage.ascdsc}}" 
-                                class="btn btn-default" type="button">Sort</a>
-                        </li>
-                    </ul>
-                </div>
-                {% endverbatim %} 
-                <!--List of forms heading-->
+            {% verbatim %}                    
+            <!--forms sorting menu-->
+            <div class="row">
+                <ul class="combo_order col-md-pull-1">
+                    <li class="col-md-3">
+                        <select ng-model="mainPage.myOrder" ng-init="mainPage.myOrder = mainPage.actualOrder()" 
+                                ng-options="order.name for order in mainPage.orders" class="form-control">
+                        </select>
+                    </li>
+                    <li class = "btn-group" name="rbtn_ascdsc">
+                        <input type="radio" ng-click="mainPage.selectascdsc('asc')" name="ascdsc" 
+                                value="ASC" ng-checked="mainPage.actualascdsc == 'ASC'">
+                        <span class="glyphicon glyphicon-arrow-up"></span>Asc
+                        <input type="radio" ng-click="mainPage.selectascdsc('dsc')" name="ascdsc"
+                                value="DSC" ng-checked="mainPage.actualascdsc == 'DSC'">
+                        <span class="glyphicon glyphicon-arrow-down"></span>Dsc
+                    </li>
+                    <a href="{{mainPage.getOrderUrl()}}"
+                        class="btn btn-default" type="button">Sort</a>
+                </ul>
+            </div>
+            {% endverbatim %} 
+            <!--List of forms heading-->
 
-                <hr>
-                <div class="row">
-				    <div class="col-sm-11">
-				        <div class="list-group">
+            <hr>
+            <div class="row">
+        	    <div class="col-sm-11">
+        	        <div class="list-group">
                         <div class="panel-heading bg-primary">
                             <div class = "row">
                                 <h4 class="panel-title">
@@ -69,9 +65,9 @@
                         </div>
                         <!--List of forms-->
 
-			            {% for form in formList %}
-                            <div class="panel-group" id="accordion">
-                              <div class="panel panel-default">
+        	            {% for form in formList %}
+                        <div class="panel-group" id="accordion">
+                            <div class="panel panel-default">
                                 <div class="panel-heading bg-primary">
                                     <div class = "row">
                                         <h4 class="panel-title">
@@ -91,11 +87,11 @@
                                                 
                                             </a>
                                         </h4>
-                                            <a type="button" class="btn btn-danger btn-xs col-md-1" 
-                                                href="{% url 'form_delete' pk=form.id %}" 
-                                                onclick="return confirmation();">
-                                                <span class="glyphicon glyphicon-trash"></span> DELETE
-                                            </a>
+                                        <a type="button" class="btn btn-danger btn-xs col-md-1" 
+                                            href="{% url 'form_delete' pk=form.id %}" 
+                                            onclick="return confirmation();">
+                                            <span class="glyphicon glyphicon-trash"></span> DELETE
+                                        </a>
                                     </div>
                                     
                                 </div>
@@ -137,7 +133,7 @@
                                                         {% ifequal v.status 0 %} disabled {% endifequal %}>
                                                         <span class="glyphicon glyphicon-pencil"></span> RESPONSES
                                                     </a>
-													<a type="button" class="btn btn-default btn-sm" href= "
+        											<a type="button" class="btn btn-default btn-sm" href= "
                                                     {% url 'statistics' %}#?form={{form.id}}&ver={{v.number}}" {% ifequal v.status 0 %} disabled {% endifequal %}>
                                                         <span class="glyphicon glyphicon-signal"></span> STATISTICS
                                                     </a>
@@ -154,11 +150,13 @@
                                     </div>
                                 </div>
                             </div>
-                        {% endfor %}
                         </div>
-    				</div>
-             </div>
-          </div>
+                        {% endfor %}
+            		</div>
+                </div>
+            </div>
+        </div>
+    </div>
 {%endblock%}          
 
 {%block scripts%}

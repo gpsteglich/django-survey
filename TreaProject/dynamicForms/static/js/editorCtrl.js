@@ -161,7 +161,10 @@
         };
 
         editor.addField = function(type) {
-            var newField = editor.createField(type);//angular.copy(editor.newField);
+            var newField = editor.createField(type);
+            if (!editor.max_id){
+                editor.max_id = 0;
+            }
             newField.field_id = ++editor.max_id;
             newField.field_type = type || 1;
             if (type === editor.FieldTypes[6]){
@@ -260,8 +263,7 @@
                         editor.max_id = Math.max.apply(Math,editor.questions.map(function(o){
                             return o.field_id;
                         }));
-
-                        if (isNaN(editor.max_id)){
+                        if (!editor.max_id || isNaN(editor.max_id) || !isFinite(editor.max_id)){
                             editor.max_id = 0;
                         }
                     })
