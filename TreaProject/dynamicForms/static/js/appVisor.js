@@ -17,6 +17,9 @@
 
     }]);
 
+    /*
+     * This directive checks custom javascript validations defined for each field.
+     */
     app.directive('validate', function() {
         return {
             require: 'ngModel',
@@ -29,10 +32,8 @@
                     var validator = validatorFactory.getValidator(attrs.fieldtype);
                     if (validator){
                         if (validator.validate(viewValue, attrs)) {
-                            // it is valid
                             return true;
                         }
-                        // it is invalid
                         return false;
                     } else {
                         return true;
