@@ -1,12 +1,12 @@
 from django.core.exceptions import ValidationError
+
 from dynamicForms.fieldtypes import Field
 from dynamicForms.fieldtypes import FieldFactory
 
 
-
 class GeoField(Field.Field):
     """
-    
+    GeoField    
     """
     template_name = "geolocation/template.html"
     edit_template_name = "geolocation/template_edit.html"
@@ -25,7 +25,7 @@ class GeoField(Field.Field):
                     raise ValidationError("Invalid longitude coordinates.") 
         
         except ValidationError as e:
-        #transform the message to be cathed later.
+        # Transform the message to be cathed later.
             raise ValidationError(e.__str__())
 
     def get_methods(self, **kwargs):

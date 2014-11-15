@@ -1,24 +1,21 @@
 from dynamicForms.statistics.serializers import ListStatisticsSerializer 
 
+
 class ListStatistics():
-    
     """
-    Class with the statistics info of a number  field  
+    Class with the statistics info of a number field  
     """
-    
+
     def __init__(self, data_list, options):
-        
         self.total_per_option = []        
         self.options = []
         self.total_filled = 0
         self.total_not_filled = 0
-        #initiate lists   
+        # Initiate lists   
         for option in options:
             self.total_per_option.append(0)
             self.options.append(option["label"])
-            
-            
-        #count and remove null values from data list and count not null values
+        # Count and remove null values from data list and count not null values
         aux_list = []
         for data in data_list:
             if data != "":
@@ -26,7 +23,7 @@ class ListStatistics():
                 self.total_filled += 1
             else:
                 self.total_not_filled += 1
-        
+
         total_options = len(options)         
         for data in aux_list:
             pos = 0
@@ -39,5 +36,3 @@ class ListStatistics():
             
     def getSerializedData(self):
         return ListStatisticsSerializer(self).data
-            
-        

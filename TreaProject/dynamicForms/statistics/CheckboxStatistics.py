@@ -1,21 +1,19 @@
 from dynamicForms.statistics.serializers import ListStatisticsSerializer
 
+
 class CheckboxStatistics():
     
     def __init__(self, data_list, options):
-        
         self.total_per_option = []        
         self.options = []
         self.total_filled = 0
         self.total_not_filled = 0
-        
-        #initiate lists  )
+        # Initiate lists
         for option in options:
             self.total_per_option.append(0)
             self.options.append(option["label"])
-            
-        #count and remove null values
-        #count not null values data and insert them into an auxiliary list
+        # Count and remove null values
+        # Count not null values data and insert them into an auxiliary list
         aux_list = []
         for data in data_list:
             if data != "":
