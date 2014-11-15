@@ -26,7 +26,7 @@ SECRET_KEY = '%@fu@!^4e(%$j=sh!ujea7sffwp)33pr*m#vbz97hc=cs!d8g#'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-COMPRESS_ENABLED = False
+COMPRESS_ENABLED = True
 
 TEMPLATE_DEBUG = True
 
@@ -120,8 +120,8 @@ FIELD_FILES = (
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = '~/git/django-survey/TreaProject/dynamicForms/static/'
-#STATIC_ROOT = '/var/www/pyforms/static/'
+#STATIC_ROOT = '~/git/django-survey/TreaProject/dynamicForms/static/'
+STATIC_ROOT = '/var/www/pyforms/static/'
 
 MEDIA_ROOT = '~/git/django-survey/inefop/inefop/media/'
 MEDIA_URL = '/media/'

@@ -56,7 +56,6 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^visor/publishVersion/(?P<slug>[a-z,0-9,\-,\_]+)/$', views.FillForm.as_view()),
     url(r'^visor$', views.TemplateView.as_view(template_name='visor.html'), name="visor"),
     url(r'^visor/submit/(?P<slug>[a-z,0-9,\-,\_]+)/$', 'submit_form_entry'),
-    #url(r'^visor/form/submitted/$', views.TemplateView.as_view(template_name='form_submitted.html')),
     url(r'^visor/form/submitted/(?P<slug>[a-z,0-9,\-,\_]+)/$', 'after_submit_message'),
 
     url(r'^responses/(?P<pk>[a-z,0-9,\-,\_]+)/(?P<number>[0-9]+)/$', 'get_responses'),
@@ -64,7 +63,8 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^responses/export-csv/(?P<pk>[a-z,0-9,\-,\_]+)/(?P<number>[0-9]+)/$', 'export_csv' ),
     url(r'^constants/$', 'get_constants'),
     url(r'^base_url/$', views.get_URL, name='get_URL'),
-
+    url(r'^$', 'redirect_to_main'),
+    url(r'^.*/$', 'redirect_to_main'),
     url(r'^chuck/$', views.TemplateView.as_view(template_name='chuck404.html'), name="chuck"),
 )
 
