@@ -244,7 +244,17 @@ class NewVersion(generics.CreateAPIView):
         elif action == "duplicate":
             #create a copy of the form related to selected version
             new_form = Form(title=form.title, owner=request.user)
-            new_form.title += "(duplicated)"
+            count = 2
+            try:
+                f_try = 1
+                while (f_try != None):
+                    suffix = "(" + str(count) + ")"
+                    #new_form.title += str(count)
+                    count += 1
+                    f_try = Form.objects.filter(title=new_form.title + suffix).first()
+            except Form.DoesNotExist:
+                pass
+            new_form.title += suffix
             new_form.save()
             #create a copy of the version and save it on database
             new_version = Version(json=version.json, form=new_form)
