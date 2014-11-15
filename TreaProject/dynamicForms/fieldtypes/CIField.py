@@ -4,6 +4,7 @@ import re
 from dynamicForms.fieldtypes import Field
 from dynamicForms.fieldtypes import FieldFactory
 
+
 class CIField(Field.Field):
     """
     CI field type class
@@ -29,7 +30,7 @@ class CIField(Field.Field):
             raise ValidationError('Enter a valid ID.', code='invalid')
 
     def get_methods(self, **kwargs):
-        #default validation or pass
+        # Default validation or pass
         base = super(CIField, self).get_methods(**kwargs)
         base.extend([self.int_check, self.check_id])
         return base
