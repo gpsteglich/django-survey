@@ -123,6 +123,9 @@ STATIC_URL = '/static/'
 STATIC_ROOT = '~/git/django-survey/TreaProject/dynamicForms/static/'
 #STATIC_ROOT = '/var/www/pyforms/static/'
 
+MEDIA_ROOT = '/home/federico/git/django-survey/inefop/inefop/media/'
+MEDIA_URL = '/media/'
+
 LOGIN_URL = "login"
 
 FORMS_BASE_URL = '/inefop/'

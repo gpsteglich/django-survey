@@ -4,7 +4,7 @@ function EmailField() {
 
 EmailField.buildField = function(){
 	var field = FieldBase.buildField(this);
-	field.field_type = EmailField.name;
+	field.field_type = 'EmailField';
 	field.validations = {
         max_len_text: 255,
     };
@@ -12,4 +12,4 @@ EmailField.buildField = function(){
 };
 
 // Register field constructor in Factory
-fieldFactory.registerField(EmailField.name, EmailField);
+fieldFactory.registerField('EmailField', EmailField);

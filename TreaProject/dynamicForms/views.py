@@ -591,8 +591,8 @@ def after_submit_message(request, slug):
     serializer = AfterSubmitSerializer(data=js['after_submit'])
     if serializer.is_valid():
         d = serializer.object
-        message = d.message
-    #message = json.loads(final_version.json)['after_submit']['message']
+        msj = d.message
+    message = msj.split("\n")
     return render_to_response('form_submitted.html', {"message": message}, context_instance=RequestContext(request))
 
 @login_required

@@ -4,10 +4,10 @@ function MatriculaField() {
 
 MatriculaField.buildField = function(){
 	var field = FieldBase.buildField(this);
-	field.field_type = MatriculaField.name;
+	field.field_type = 'MatriculaField';
 	field.validations = {};
 	return (field);
 };
 
 // Register field constructor in Factory
-fieldFactory.registerField(MatriculaField.name, MatriculaField);
+fieldFactory.registerField('MatriculaField', MatriculaField);
