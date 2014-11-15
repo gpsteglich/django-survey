@@ -48,6 +48,10 @@
             mainPage.selectascdsc('asc');
             mainPage.actualascdsc = 'ASC';
         }
-            
+        
+        mainPage.getOrderUrl = function(){
+            return urlBase+mainPage.myOrder.value+'/'+mainPage.ascdsc;
+        }
+
     }]);
 })();
