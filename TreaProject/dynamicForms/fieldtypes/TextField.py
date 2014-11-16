@@ -34,7 +34,7 @@ class TextField(Field.Field):
             raise ValidationError("Max length might not be less than 0.")
 
     def get_assets():
-        return ['js/fields/TextField.js']
+        return ['js/fields/TextField.js','js/validators/TextField.js']
 
     def get_styles():
         return ['css/fields/TextField.css']
