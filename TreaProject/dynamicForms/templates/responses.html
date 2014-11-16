@@ -1,6 +1,6 @@
 {%extends 'base.html' %}
 {% load staticfiles sekizai_tags %}
-<!DOCTYPE html>
+
 {%block content%}
     {% verbatim %}
     <div id="page-wrapper" ng-controller="ResponsesCtrl as responses">
@@ -44,29 +44,20 @@
             </div>
         </div>
     </div>
-
-
-
-
     {% endverbatim %}
-    {% addtoblock "js" %}
-    <script src={% static "jquery/js/jquery-2.1.1.min.js" %}></script>
-    {% endaddtoblock %}
-    {% addtoblock "js" %}
-    <script src={% static "bootstrap/js/bootstrap.js" %}></script>
-    {% endaddtoblock %}
-    {% addtoblock "js" %}
-    <script src={% static "angular/angular.min.js" %}></script>
-    {% endaddtoblock %}
-    {% addtoblock "js" %}
-    <script src={% static "angular/sortable.js" %}></script>
-    {% endaddtoblock %}
+{%endblock%}
+
+{%block scripts%}
     {% addtoblock "js" %}
     <script src={% static "js/app.js" %}></script>
     {% endaddtoblock %}
     {% addtoblock "js" %}
     <script src={% static "js/responsesCtrl.js" %}></script>
-     <script src={% static "angular/angular-sanitize.js" %}></script>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
+    <script src={% static "angular/angular-sanitize.js" %}></script>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
     <script src={% static "angular/ng-csv.js" %}></script>
     {% endaddtoblock %}
 {%endblock%}

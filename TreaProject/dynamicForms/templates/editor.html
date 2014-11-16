@@ -8,9 +8,9 @@
 {% endblock %}
 
 {%block content%}
-	<div  id="page-wrapper">
+	<div id="page-wrapper" ng-controller="EditorCtrl as editor">
         {% verbatim %}
-        <div class="content" ng-controller="EditorCtrl as editor">
+        <div class="container-fluid">
           	<div ng-include="'select_modal'"></div> 	<!-- checkbox option modal and tooltip -->
           	<div ng-include="'logic_modal'"></div>    	<!--modal goes here to skip affix property-->
           	<div ng-include="'logic_page_modal'"></div>
@@ -115,13 +115,8 @@
 	{% endaddtoblock %}
 	{% addtoblock "js" %}
 	<script src={% static "angular/angular-sanitize.js" %}></script>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
     <script src={% static "angular/ng-csv.js" %}></script>
     {% endaddtoblock %}
-
-{%endblock%}   
-            
-            
-		
-	   
-
-
+{%endblock%}
