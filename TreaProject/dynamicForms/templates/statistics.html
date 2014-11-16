@@ -1,5 +1,5 @@
 {%extends 'base.html' %}
-{% load staticfiles sekizai_tags load_fields_template %}
+{% load staticfiles sekizai_tags load_fields_assets %}
 
 {%block content%}
     {% verbatim %} 
@@ -73,25 +73,13 @@
     <script src={% static "angular/sortable.js" %}></script>
     {% endaddtoblock %}
     {% addtoblock "js" %}
-    <script src={% static "js/operators/operatorFactory.js" %}></script>
-    {% endaddtoblock %}
-    {% addtoblock "js" %}
-    <script src={% static "js/operators/operatorField.js" %}></script>
-    {% endaddtoblock %}
-    {% addtoblock "js" %}
-    <script src={% static "js/fields/FieldFactory.js" %}></script>
-    {% endaddtoblock %}
-    {% addtoblock "js" %}
-    <script src={% static "js/fields/FieldBase.js" %}></script>
-    {% endaddtoblock %}
-    {% addtoblock "js" %}
     <script src={% static "js/app.js" %}></script>
     {% endaddtoblock %}
     {% addtoblock "js" %}
     <script src={% static "js/statisticsCtrl.js" %}></script>
     {% endaddtoblock %}
     
-    {% asset_block_template %}
+    {% fields_assets_block %}
 {%endblock%}   
         
 

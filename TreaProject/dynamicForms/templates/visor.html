@@ -1,4 +1,4 @@
-{% load staticfiles sekizai_tags load_fields_template %}
+{% load staticfiles sekizai_tags load_fields_assets %}
 <!DOCTYPE html>
 <html ng-app="dynamicFormsFramework" ng-controller="VisorCtrl as visor">
 	<head>
@@ -29,17 +29,14 @@
     {% addtoblock "js" %}
     <script src={% static "bootstrap/js/bootstrap.js" %}></script>
     {% endaddtoblock %}
-     
-     {% addtoblock "js" %}
-        <script src={% static "angular/angular-file-upload-shim.js" %}></script>
+    {% addtoblock "js" %}
+    <script src={% static "angular/angular-file-upload-shim.js" %}></script>
     {% endaddtoblock %}
-  
-    
     {% addtoblock "js" %}
     <script src={% static "angular/angular.js" %}></script>
     {% endaddtoblock %}
-      {% addtoblock "js" %}
-        <script src={% static "angular/angular-file-upload.js" %}></script>
+    {% addtoblock "js" %}
+    <script src={% static "angular/angular-file-upload.js" %}></script>
     {% endaddtoblock %}
     {% addtoblock "js" %}
     <script src={% static "angular/captcha.js" %}></script>
@@ -57,23 +54,7 @@
     <script src={% static "angular/ng-csv.js" %}></script>
     {% endaddtoblock %}
     
-    {% addtoblock "js" %}
-    <script src={% static "js/validators/validatorFactory.js" %}></script>
-    {% endaddtoblock %}
-    {% addtoblock "js" %}
-    <script src={% static "js/fields/FieldFactory.js" %}></script>
-    {% endaddtoblock %}
-    {% addtoblock "js" %}
-    <script src={% static "js/fields/FieldBase.js" %}></script>
-    {% endaddtoblock %}
-    {% addtoblock "js" %}
-    <script src={% static "js/operators/operatorFactory.js" %}></script>
-    {% endaddtoblock %}
-    {% addtoblock "js" %}
-    <script src={% static "js/operators/operatorField.js" %}></script>
-    {% endaddtoblock %}
-
-    {% asset_block_template %}
+    {% fields_assets_block %}
 
     {% addtoblock "js" %}
     <script src={% static "js/appVisor.js" %}></script>

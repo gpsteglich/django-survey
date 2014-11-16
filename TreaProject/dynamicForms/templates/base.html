@@ -104,7 +104,7 @@
         </script>
         {% endaddtoblock %}
         {%block scripts%} {%endblock%}
-        {% render_block "js" %}
+        {% render_block "js" postprocessor "compressor.contrib.sekizai.compress" %}
         {% render_block "jsUnc" %}
     </body>
 </html>

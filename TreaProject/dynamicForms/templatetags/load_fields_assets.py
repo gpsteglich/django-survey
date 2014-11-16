@@ -9,7 +9,7 @@ from dynamicForms.fieldtypes import FieldFactory
 register = template.Library()
 
 
-class asset_block_template(InclusionTag):
+class fields_assets_block(InclusionTag):
     template = 'asset_block_template.html'
 
     def get_context(self, context):
@@ -24,6 +24,13 @@ class asset_block_template(InclusionTag):
         context['asset_list'] = []
         context['non_static_assets'] = []
         context['style_list'] = []
+        # Permanent assets
+        context['asset_list'].append(static('js/validators/validatorFactory.js'))
+        context['asset_list'].append(static('js/fields/FieldFactory.js'))
+        context['asset_list'].append(static('js/fields/FieldBase.js'))
+        context['asset_list'].append(static('js/operators/operatorFactory.js'))
+        context['asset_list'].append(static('js/operators/operatorField.js'))
+        # Dynamic assets        
         for elem in ret:
             st_elem = static(elem)
             if st_elem not in context['asset_list']:
@@ -42,4 +49,4 @@ class asset_block_template(InclusionTag):
         output = render_to_string(self.template, data)
         return output
     
-register.tag(asset_block_template)
+register.tag(fields_assets_block)
