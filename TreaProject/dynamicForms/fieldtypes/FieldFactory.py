@@ -2,8 +2,9 @@ from django.core.exceptions import ValidationError
 
 
 class FieldFactory():
-    #factory
-
+    """
+    Factory
+    """
     fields = {}
 
     def get_class(id):

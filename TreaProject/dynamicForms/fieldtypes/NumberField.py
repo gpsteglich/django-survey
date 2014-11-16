@@ -33,7 +33,7 @@ class NumberField(Field.Field):
             raise ValidationError('Enter a valid integer.', code='invalid')
         
     def get_methods(self, **kwargs):
-        #default validation or pass
+        # Default validation or pass
         base = super(NumberField, self).get_methods(**kwargs)
         base.append(self.int_check)
         field = kwargs['field']
@@ -45,7 +45,7 @@ class NumberField(Field.Field):
         return base
     
     def check_consistency(self, field):
-        #When a field is created check if the restrictions are consistent
+        # When a field is created check if the restrictions are consistent
         val = field.validations
         if not val.valid_number():
             raise ValidationError("The min value might not "
@@ -53,7 +53,7 @@ class NumberField(Field.Field):
                 
     def get_statistics(self, data, field):
         """
-        returns a serialized NumericStatistics data containing statistical 
+        Returns a serialized NumericStatistics data containing statistical 
         data for the field.
         """  
         statistics = super(NumberField, self).get_statistics(data, field)      

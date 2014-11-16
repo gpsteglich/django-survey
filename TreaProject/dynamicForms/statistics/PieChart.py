@@ -7,9 +7,8 @@ from reportlab.lib.colors import Color, HexColor
 class PieChart(Drawing):
     
     def __init__(self, data, labels):
-        
         super(PieChart, self).__init__(400,200)
-        
+
         colors = [  
             HexColor("#0000e5"),  
             HexColor("#ff0011"),
@@ -24,8 +23,8 @@ class PieChart(Drawing):
             HexColor("#ffff00"),
             HexColor("#1f1feb"),   
         ]  
-        
-        #create pie chart 
+
+        # Create pie chart 
         pieChart = Pie()
         pieChart.x = 40
         pieChart.y = 30
@@ -36,20 +35,19 @@ class PieChart(Drawing):
         pieChart.labels = []
         for d in data:
             pieChart.labels.append(str(d))
-            
-        #create legend
+
+        # Create legend
         legend = Legend()
         legend.x = 380
         legend.y = 60  
         legend.boxAnchor           = 'se'  
         legend.subCols[1].align    = 'right'
         legend.colorNamePairs = []
-           
+
         len_data = len(data) 
         for i in range(0,len_data):
             pieChart.slices[i].fillColor = colors[i]
             legend.colorNamePairs.append((colors[i],labels[i]))
-            
-        
+
         self.add(pieChart, "pie chart")       
         self.add(legend, "legend")

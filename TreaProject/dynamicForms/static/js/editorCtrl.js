@@ -1,5 +1,3 @@
-
-
 (function () {
 	
     var app = angular.module('dynamicFormsFrameworkAdmin');
@@ -9,24 +7,24 @@
      */    
     app.controller('EditorCtrl', ['$scope','$http','$location', '$window', '$rootScope', '$templateCache', 
                 function ($scope, $http, $location, $window, $rootScope, $templateCache) {
-        
-    	/*
-    	 * editorMode variable determines if the context is for editing or showing the
-    	 * form on the fields templates. 
-    	 */
-        
+       
         var editor = this;
+        editor.loadmaps = [];
+        editor.urlBase = $rootScope.urlBase;
+        editor.FieldTypes = [];
+        editor.max_id = 0;
+        editor.newPage = {'fields':[], 'subTitle':''};
+        editor.pages = [angular.copy(editor.newPage)];
+        editor.questions = [];
+        editor.optionsAdded = [];
 
-        editor.loadmaps=[];            
-             
 	    editor.loadmap = function(field){
-        
-        var map;
+            var map;
             if (editor.loadmaps[field.field_id]==undefined){
                 if (field.mapXY == undefined){
                     var lat = -34.806777135903424;
                     var lon = -56.164398487890594; 
-                }else{    
+                } else {    
                     var lat = field.mapXY.latitude;
                     var lon = field.mapXY.longitude;
                 }
@@ -34,66 +32,40 @@
                     zoom: 8,
                     center: new google.maps.LatLng(lat, lon)
                 };
-
-                map = new google.maps.Map(document.getElementById(field.field_id),
-                options);
-
+                map = new google.maps.Map(document.getElementById(field.field_id), options);
                 var oneLatLng = new google.maps.LatLng(lat, lon);
-                   var one = new google.maps.Marker({
+                var one = new google.maps.Marker({
                     position: oneLatLng,
                     map: map,
                     draggable: true
-
                 });
                 editor.loadmaps[field.field_id] = true;
-                
                 google.maps.event.addListener(one, "dragend", function(evento) {
-                    //Obtengo las coordenadas separadas
                     var la = evento.latLng.lat();
                     var lo = evento.latLng.lng();
-                    
                     field.mapXY.latitude = la;
                     field.mapXY.longitude = lo;
-                    //Puedo unirlas en una unica variable si asi lo prefiero
-                    //var coordenadas = evento.latLng.lat() + ", " + evento.latLng.lng();
-                    //Las muestro con un popup
-                    //alert(coordenadas);
                 });    
             }
-
-        };            
-
-        editor.urlBase = $rootScope.urlBase;
-
-        editor.FieldTypes = [];
+        };
         
         $http.get('constants/')
-                .success(function(data){
-                    editor.FieldTypes = data;
-                    var fields = Object.keys(editor.FieldTypes);
-                    for(var i = 0;i<fields.length; i++){
-                        $http.get('field_edit/'+fields[i], {cache:$templateCache});
-                    }
-                }).error(function(status, data){
-                    alert(status+' data:'+data);
-                });
+            .success(function(data){
+                editor.FieldTypes = data;
+                var fields = Object.keys(editor.FieldTypes);
+                for(var i = 0;i<fields.length; i++){
+                    $http.get('field_edit/'+fields[i], {cache:$templateCache});
+                }
+            }).error(function(status, data){
+                alert(status+' data:'+data);
+            });
         
         var option = {
             label : 'new option',
             id : 0
         };
-        
-        editor.max_id = 0;
-        
-        editor.newPage = {'fields':[], 'subTitle':''};
-        
-        editor.pages = [angular.copy(editor.newPage)];
 
-        editor.questions = [];
-
-        /*
-        * 'selectedPage' holds the current page that's being edited
-        */
+        // selectedPage' holds the current page that's being edited
         editor.selectedPage = editor.pages[0];
         
         editor.selectPage = function(index) {
@@ -104,14 +76,11 @@
             editor.pages.push(newPage);   
         };
         editor.deletePage = function(index){
-            //TODO: Add modal asking confirmation..
             editor.pages.splice(index,1);
             
         };
         
-        /*
-         *  'selectedField' holds the current field that is being edited.
-         */
+        // 'selectedField' holds the current field that is being edited.
         editor.selectedField = '';
         
         editor.getSelectedField = function(){
@@ -125,7 +94,7 @@
         editor.selectField = function(page, index) {
             editor.selectedPage = editor.pages[page];   
             editor.selectedField = editor.selectedPage.fields[index];
-            //select properties tab as active
+            // Select properties tab as active
             $("#myTab li:eq(1) a").tab('show');
         };
 
@@ -143,13 +112,12 @@
              editor.questions.splice(editor.questions.indexOf(editor.pages[page].fields[index]));  
              editor.pages[page].fields.splice(index,1);  
         };
-        
-        editor.optionsAdded = [];
+
         editor.applyOptions = function(){     
             editor.optionsAdded = editor.optionsAdded.map(function(o){
                 return { label:o.toString(), id: 0   };
             });
-            for(var i = 0;i<editor.optionsAdded.length; i++){
+            for(var i = 0;i < editor.optionsAdded.length; i++){
                 editor.optionsAdded[i].id = ++editor.selectedField.max_id;
             }            
             editor.selectedField.options = editor.selectedField.options.concat(angular.copy(editor.optionsAdded));
@@ -219,14 +187,10 @@
   
         $scope.list = tmpList;
         
-        /*
-        * Load or create a new Form
-        */
+        // Load or create a new Form
         editor.loadForm = function(){
             if (editor.isNewForm()){
-                /*
-                * New Form Case
-                */
+                // New Form Case
                 editor.form = {
                     'title' : '',
                     'slug' : '',
@@ -242,14 +206,11 @@
                     'captcha':false,
                 };
             } else {
-                /*
-                * Edit Form Case
-                */
-                    //Load Form
+                // Load Form
                 $http.get('forms/'+editor.formIdParam)
                 .success(function(data){
                     editor.form = data;
-                     //Load version
+                     // Load version
                     $http.get('version/'+editor.formIdParam+'/'+editor.versionIdParam)
                     .success(function(data){
                         editor.version = data;
@@ -257,7 +218,7 @@
                         editor.logic = JSON.parse(data.json).logic;
                         editor.after_submit = JSON.parse(data.json).after_submit;
                         editor.questions = [];
-                        for (var i=0; i<editor.pages.length; i++) {
+                        for (var i = 0; i < editor.pages.length; i++) {
                             editor.questions = editor.questions.concat(editor.pages[i].fields);
                         }
                         editor.max_id = Math.max.apply(Math,editor.questions.map(function(o){
@@ -276,13 +237,11 @@
                 });
             }
         };
+
         // Call to loadForm function on control initialization
         editor.loadForm(); 
         
-        /*
-        * Save and publish form
-        */
-        //TODO: usar variables globales para PUBLISH, DRAFT
+        // Save and publish form
         editor.saveForm = function(){
             if (editor.validateForm()){
                 editor.persistForm(0);
@@ -342,7 +301,7 @@
                         if (formStatus == 1){
                             $window.location.href = 'main';
                         } else {
-                            // update the url parameters
+                            // Update the url parameters
                             $location.search({form:editor.formIdParam, ver:editor.versionIdParam});
                         }
                     })
@@ -374,11 +333,10 @@
                     alert('error saving form: ' + data.error);
                 });
             }
-
         };
 
         editor.getFieldById = function(id){
-            //precondition: Field with field_id == id exists
+            // Precondition: Field with field_id == id exists
             for(var i = 0; i < editor.pages.length; i++){
                 var page = editor.pages[i];
                 for(var j = 0; j < page.fields.length; j++){
@@ -399,10 +357,8 @@
         };
 
 
-//------------------------------------------------LOGICA------------------------------------------------------------------------//
-        // logic structures  
-      
-        editor.newLogicField ={
+        // Logic methods
+        editor.newLogicField = {
             operation : 'Show',
             action : 'All',
             conditions: [],
@@ -422,14 +378,14 @@
         
         editor.configLogicField = function (fieldId){
             editor.questions = [];
-            for (var i=0; i< editor.pages.length; i++) {
+            for (var i = 0; i < editor.pages.length; i++) {
                 editor.questions = editor.questions.concat(editor.pages[i].fields);
             }
             if(editor.logic.fields[fieldId]==undefined){
                 editor.logicField = angular.copy(editor.newLogicField);
                 
             }else{
-                editor.logicField=angular.copy(editor.logic.fields[fieldId]);
+                editor.logicField = angular.copy(editor.logic.fields[fieldId]);
                 for (var cond_index in editor.logicField.conditions){
                     cond = editor.logicField.conditions[cond_index];
                     editor.selectFieldOnCondition(cond);
@@ -439,14 +395,14 @@
 
         editor.configLogicPage = function (page){
             editor.questions = [];
-            for (var i=0; i< editor.pages.length; i++) {
+            for (var i = 0; i < editor.pages.length; i++) {
                 editor.questions = editor.questions.concat(editor.pages[i].fields);
             }
             var pageNum = editor.getPageNum(page);
-            if(editor.logic.pages[pageNum]==undefined){
+            if(editor.logic.pages[pageNum] == undefined){
                 editor.logicField = angular.copy(editor.newLogicField);
             }else{
-                editor.logicField=angular.copy(editor.logic.pages[pageNum]);
+                editor.logicField = angular.copy(editor.logic.pages[pageNum]);
                 for (var cond_index in editor.logicField.conditions){
                     cond = editor.logicField.conditions[cond_index];
                     editor.selectFieldOnCondition(cond);
@@ -459,7 +415,7 @@
             editor.logicField.conditions.push(newLogicCondition);
         };
 
-        editor.removeLogicCondition= function(indexCond){
+        editor.removeLogicCondition = function(indexCond){
             editor.logicField.conditions.splice(indexCond);
         };
 
@@ -467,7 +423,7 @@
             
             editor.logic.fields[fieldId] = angular.copy(editor.logicField);
 
-            //clean field dependecies of every field
+            // Clean field dependecies of every field
             for(var i = 0; i < editor.pages.length; i++){
                 var page = editor.pages[i];
                 for(var j = 0; j < page.fields.length; j++){
@@ -475,7 +431,7 @@
                     field.dependencies.fields = [];
                 }
             }
-            //add dependencies
+            // Add dependencies
             for (var dest_id in editor.logic.fields){
                 var dest_field = editor.logic.fields[dest_id];
                 for (var k = 0; k < dest_field.conditions.length; k++){
@@ -489,8 +445,7 @@
         editor.applyPageDependencies = function(page){
             pageNum = editor.getPageNum(page);
             editor.logic.pages[pageNum] = angular.copy(editor.logicField);
-
-            //clean page dependecies of every field
+            // Clean page dependecies of every field
             for(var i = 0; i < editor.pages.length; i++){
                 var pageTemp = editor.pages[i];
                 for(var j = 0; j < pageTemp.fields.length; j++){
@@ -498,8 +453,7 @@
                     field.dependencies.pages = [];
                 }
             }
-  
-            //add dependencies
+            // Add dependencies
             for (var dest_page_num in editor.logic.pages){
                 var dest_page = editor.logic.pages[dest_page_num];
                 for (var k = 0; k < dest_page.conditions.length; k++){
@@ -530,7 +484,7 @@
 
         editor.getFieldType = function(field_id){
             var fieldType = '';
-            for (var i=0; i<editor.questions.length; i++){
+            for (var i = 0; i < editor.questions.length; i++){
                 if (field_id == editor.questions[i].field_id){
                     fieldType = editor.questions[i].field_type;
                 }
@@ -561,7 +515,8 @@
             mailText: '',
             mailSender: '',
             mailRecipient: '',
-            action: 'Show Message',// can be 'Show Message' or 'Redirect To',
+            // Can be 'Show Message' or 'Redirect To'
+            action: 'Show Message',
             message: 'Thank you. You successfully filled the form!',
             redirect: 'http://'
         };
@@ -574,8 +529,6 @@
             
         editor.applyAfterSubmit = function(){
             editor.after_submit = editor.actual_after_submit;
-        };
-        
-    }]);
-    
+        };    
+    }]);    
 })();

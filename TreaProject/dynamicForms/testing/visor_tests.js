@@ -93,11 +93,9 @@ describe("VisorCtrl Testing", function() {
             "fields": {},
             "pages": {}
         };
-
         var form = {};
         form.pages = pages;
         form.logic = logic;
-
         return form;
     };
 

@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError
+
 from dynamicForms.models import Version, FieldEntry 
 
 
@@ -12,7 +13,7 @@ class Field(object):
     prp_template_name = "field_properties_base.html" 
 
     def validate(self, value, **kwargs):
-        #default validation or pass
+        # Default validation or pass
         checks = self.get_methods(**kwargs)
         for method in checks:
             method(value, **kwargs)
@@ -34,7 +35,7 @@ class Field(object):
         return None
 
     def check_consistency(self, field):
-        #When a field is created check if the restrictions are consistent
+        # When a field is created check if the restrictions are consistent
         pass
 
     def count_responses_pct(self, form_pk, version_num, field_id):
@@ -46,7 +47,7 @@ class Field(object):
     
     def get_statistics(self, data_list, field):
         """
-        returns a the statistics related to the data list. 
+        Returns a the statistics related to the data list. 
         """
         statistics = {"field_type": field["field_type"], "field_text": field["text"]}
         if field["required"]:

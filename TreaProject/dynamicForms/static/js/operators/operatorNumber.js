@@ -38,7 +38,7 @@ OperatorNumber.less_than_or_equal = function(a, b){
 OperatorNumber.less_than = function(a, b){
 	aInt = parseInt(a,10);
 	bInt = parseInt(b,10);
-	return (aInt<bInt);
+	return (aInt < bInt);
 };
 
 operatorFactory.registerOperator('NumberField', OperatorNumber);

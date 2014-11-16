@@ -14,7 +14,7 @@ GeoField.buildField = function(){
     }, 
     field.first = true;
     return (field);
- };
+};
 
 // Register field constructor in Factory
 fieldFactory.registerField('GeoField', GeoField);

@@ -18,14 +18,7 @@
         stat.versionNumber = ($location.search()).ver;
         stat.versionNumber = ($location.search()).ver;
         stat.json = "";
-        /*
-        // $scope.templates = {
-        //     'NumberField': '/dynamicForms/field_statistic/NumberField/',
-        //     'SelectField': '/dynamicForms/field_statistic/SelectField/',
-        //     'CheckboxField': '/dynamicForms/field_statistic/CheckboxField/',
 
-        // }
-        }*/
         stat.config = {
             title: '',
             tooltips: true,
@@ -35,7 +28,7 @@
             click: function() {},
             legend: {
                 display: true,
-                //could be 'left, right'
+                // Could be 'left, right'
                 position: 'right'
             }
         };
@@ -43,37 +36,33 @@
         stat.data = {
             series: [],
             data: [{
-              x: "",
-              y: []
+                x: "",
+                y: []
             }]
-          };
-        
-        stat.values ={
         };
-        stat.filter_id='';
-        stat.filter_type='';
-        stat.filter_value='';
-        stat.path='';
+        
+        stat.values = {};
+        stat.filter_id = '';
+        stat.filter_type = '';
+        stat.filter_value = '';
+        stat.path = '';
 
-        stat.getStatistics= function(){
-
-            if(stat.filter_id!='' && stat.filter_type !='' && stat.filter_value != ''){
+        stat.getStatistics = function(){
+            if(stat.filter_id != '' && stat.filter_type != '' && stat.filter_value != ''){
                 stat.path = stat.filter_id +'/' +stat.filter_type +'/'+ stat.filter_value;
             }else {
-                stat.path='';
+                stat.path = '';
             }
-
             $http.get('../statistics/'+stat.formId+'/'+stat.versionNumber+'/'+stat.path)
-        
                 .success(function(data){
                     stat.json = JSON.parse(JSON.stringify(data));
                     for(var field_id in stat.json){
                         var field = $.extend({}, stat.json[field_id]);
-                        if (field.field_type=='NumberField'){
+                        if (field.field_type == 'NumberField'){
                             var conf = angular.copy(stat.config);
                             conf.title = field.field_text;
                             var d = angular.copy(stat.data);
-                            for(var i=0; i<5; i++){
+                            for(var i = 0; i < 5; i++){
                                 d.data[i] = {
                                     'x': field.quintilesX[i],
                                     'y': [field.quintilesY[i]]
@@ -94,11 +83,11 @@
                                 'req': field.required,
                                 'type': "Number"
                             }
-                        } else if (field.field_type=='SelectField'){
+                        } else if (field.field_type == 'SelectField'){
                             var conf = angular.copy(stat.config);
                             conf.title = field.field_text;
                             var d = angular.copy(stat.data);
-                            for(var i=0; i<field.total_per_option.length; i++){
+                            for(var i = 0; i < field.total_per_option.length; i++){
                                 d.data[i] = {
                                     'x': field.options[i],
                                     'y': [field.total_per_option[i]]
@@ -116,11 +105,11 @@
                                 'type': "Combobox"
 
                             }
-                        } else if (field.field_type=='CheckboxField'){
+                        } else if (field.field_type == 'CheckboxField'){
                             var conf = angular.copy(stat.config);
                             conf.title = field.field_text;
                             var d = angular.copy(stat.data);
-                            for(var i=0; i<field.total_per_option.length; i++){
+                            for(var i = 0; i < field.total_per_option.length; i++){
                                 d.data[i] = {
                                     'x': field.options[i],
                                     'y': [field.total_per_option[i]]
@@ -144,22 +133,20 @@
                 .error(function(data, status, headers, config){
                     alert('error loading statistics: ' + data);
                 });
-        
         };
      
         stat.getStatistics();
      
         stat.Discard = function(){
-            stat.filter_id='';
-            stat.filter_type='';
-            stat.filter_value='';
-            stat.path='';
+            stat.filter_id = '';
+            stat.filter_type = '';
+            stat.filter_value = '';
+            stat.path = '';
             stat.getStatistics();
         }
 
-        $scope.createArrayToExport  = function (field){
+        $scope.createArrayToExport = function (field){
             var data = [];
-       
             data.push({
                 "Label" : "field type",
                 "Value" : field.type,                               
@@ -180,9 +167,7 @@
                 "Label" : "   ",
                 "Value" : '',                               
             });
-
             if (field.type == 'Number'){
-            
                 data.push({
                     "Label" : "Mean",
                     "Value" : field.m,                               
@@ -199,13 +184,13 @@
                     "Label" : "Total Standard deviation",
                     "Value" : field.sdt,                               
                 });      
-                for(var i=0; i<5; i++){
+                for(var i = 0; i < 5; i++){
                    data.push(field.data.data[i]); 
                 }
              }
             else{
              
-                for(var i=0; i<field.data.data.length; i++){
+                for(var i = 0; i < field.data.data.length; i++){
                      data.push(field.data.data[i]);
                 }
             }

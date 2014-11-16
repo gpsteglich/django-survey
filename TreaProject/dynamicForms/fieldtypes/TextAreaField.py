@@ -1,4 +1,3 @@
-
 from dynamicForms.fieldtypes import TextField
 from dynamicForms.fieldtypes import FieldFactory
 

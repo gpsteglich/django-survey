@@ -5,21 +5,17 @@ var fieldFactory = (function () {
     var field = {};
  
     return {
-        getField: function ( fieldName ) {
+        getField: function (fieldName) {
             var Field = field[fieldName];
             return Field;
         },
-
-        registerField: function ( fieldName, Field ) {
+        registerField: function (fieldName, Field) {
             // Register Field Class
             field[fieldName] = Field;
             return fieldFactory;
         },
-
         listFields: function (){
             return field;
         }
-
     };
 })();
-

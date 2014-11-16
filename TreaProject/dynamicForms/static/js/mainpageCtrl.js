@@ -36,7 +36,7 @@
                 return mainPage.orders[1];
             } else if (mainPage.url()[0] == 'title'){
                 return mainPage.orders[2];
-            } else { //default: id
+            } else {
                 return mainPage.orders[0];
             }
         }

@@ -5,7 +5,6 @@ from django.shortcuts import render_to_response
 from django.http import Http404
 from django.template import RequestContext
 
-
 from classytags.core import Options
 from classytags.arguments import Argument
 from classytags.helpers import InclusionTag
@@ -14,6 +13,7 @@ from dynamicForms.models import Form
 from dynamicForms.fields import PUBLISHED
 
 register = template.Library()
+
 
 class visor_template_tag(InclusionTag):
     """

@@ -19,7 +19,7 @@ class TextField(Field.Field):
             raise ValidationError("Text is too long")
 
     def get_methods(self, **kwargs):
-        #default validation or pass
+        # Default validation or pass
         base = super(TextField, self).get_methods(**kwargs)
         field = kwargs['field']
         val = field.validations
@@ -28,7 +28,7 @@ class TextField(Field.Field):
         return base
 
     def check_consistency(self, field):
-        #When a field is created check if the restrictions are consistent
+        # When a field is created check if the restrictions are consistent
         val = field.validations
         if (not val.valid_text()):
             raise ValidationError("Max length might not be less than 0.")
