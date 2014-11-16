@@ -79,7 +79,7 @@ describe("VisorCtrl Testing", function() {
         expect(scope.getPageNumByFieldId(4)).toBe(2);
     }));
 
-    it("Testing visor auxiliar functions", inject(function($controller,$rootScope) {
+    it("Testing visor logic functions", inject(function($controller,$rootScope) {
         
     }));
 

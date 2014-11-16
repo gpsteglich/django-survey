@@ -17,7 +17,7 @@
         stat.versionNumber = ($location.search()).ver;
         stat.versionNumber = ($location.search()).ver;
         stat.versionNumber = ($location.search()).ver;
-        stat.json = "";
+        stat.json = '';
 
         stat.config = {
             title: '',
@@ -36,7 +36,7 @@
         stat.data = {
             series: [],
             data: [{
-                x: "",
+                x: '',
                 y: []
             }]
         };
@@ -66,7 +66,7 @@
                                 d.data[i] = {
                                     'x': field.quintilesX[i],
                                     'y': [field.quintilesY[i]]
-                                }
+                                };
                             }
                             stat.values[field_id] = {
                                 'id': field_id,
@@ -81,8 +81,8 @@
                                 'tf' : field.total_filled,
                                 'tnf': field.total_not_filled,
                                 'req': field.required,
-                                'type': "Number"
-                            }
+                                'type': 'Number'
+                            };
                         } else if (field.field_type == 'SelectField'){
                             var conf = angular.copy(stat.config);
                             conf.title = field.field_text;
@@ -91,7 +91,7 @@
                                 d.data[i] = {
                                     'x': field.options[i],
                                     'y': [field.total_per_option[i]]
-                                }
+                                };
                             }
                             stat.values[field_id] = {
                                 'id': field_id,
@@ -102,9 +102,8 @@
                                 'tf' : field.total_filled,
                                 'tnf': field.total_not_filled,
                                 'req': field.required,
-                                'type': "Combobox"
-
-                            }
+                                'type': 'Combobox'
+                            };
                         } else if (field.field_type == 'CheckboxField'){
                             var conf = angular.copy(stat.config);
                             conf.title = field.field_text;
@@ -113,7 +112,7 @@
                                 d.data[i] = {
                                     'x': field.options[i],
                                     'y': [field.total_per_option[i]]
-                                }
+                                };
                             }
                             stat.values[field_id] = {
                                 'id': field_id,
@@ -124,8 +123,8 @@
                                 'tf' : field.total_filled,
                                 'tnf': field.total_not_filled,
                                 'req': field.required,
-                                'type': "Checkbox"
-                            }
+                                'type': 'Checkbox'
+                            };
                         }
                                         
                     }
@@ -143,46 +142,46 @@
             stat.filter_value = '';
             stat.path = '';
             stat.getStatistics();
-        }
+        };
 
         $scope.createArrayToExport = function (field){
             var data = [];
             data.push({
-                "Label" : "field type",
-                "Value" : field.type,                               
+                'Label' : 'field type',
+                'Value' : field.type,                               
             });
             data.push({
-                "Label" : "is required",
-                "Value" : field.req,                               
+                'Label' : 'is required',
+                'Value' : field.req,                               
             });
             data.push({
-                "Label" : "Answered fields",
-                "Value" : field.tf,                               
+                'Label' : 'Answered fields',
+                'Value' : field.tf,                               
             });
             data.push({
-                "Label" : "Empty fields",
-                "Value" : field.tnf,                               
+                'Label' : 'Empty fields',
+                'Value' : field.tnf,                               
             });
             data.push({
-                "Label" : "   ",
-                "Value" : '',                               
+                'Label' : '   ',
+                'Value' : '',                               
             });
             if (field.type == 'Number'){
                 data.push({
-                    "Label" : "Mean",
-                    "Value" : field.m,                               
+                    'Label' : 'Mean',
+                    'Value' : field.m,                               
                 });
                 data.push({
-                    "Label" : "Total Mean",
-                    "Value" : field.mt,                               
+                    'Label' : 'Total Mean',
+                    'Value' : field.mt,                               
                 });
                 data.push({
-                    "Label" : "Standard Deviaion",
-                    "Value" : field.sd,                               
+                    'Label' : 'Standard Deviaion',
+                    'Value' : field.sd,                               
                 });
                 data.push({
-                    "Label" : "Total Standard deviation",
-                    "Value" : field.sdt,                               
+                    'Label' : 'Total Standard deviation',
+                    'Value' : field.sdt,                               
                 });      
                 for(var i = 0; i < 5; i++){
                    data.push(field.data.data[i]); 
@@ -195,15 +194,14 @@
                 }
             }
             return data;
-        }
+        };
         
         $scope.createPDF = function(fieldId){
           $http.get('export-pdf/'+stat.formId+'/'+stat.versionNumber+'/'+fieldId)
             .error(function(data, status, headers, config){
                     alert('error exporting pdf: ' + data);
-            });
-                         
-        }
+            });               
+        };
         
         $scope.chart_types = [
             'pie',

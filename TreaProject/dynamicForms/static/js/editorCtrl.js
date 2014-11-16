@@ -1,3 +1,5 @@
+'use strict';
+
 (function () {
 	
     var app = angular.module('dynamicFormsFrameworkAdmin');
@@ -20,13 +22,15 @@
 
 	    editor.loadmap = function(field){
             var map;
-            if (editor.loadmaps[field.field_id]==undefined){
+            if (editor.loadmaps[field.field_id] == undefined){
+                var lat = 0;
+                var lon = 0;
                 if (field.mapXY == undefined){
-                    var lat = -34.806777135903424;
-                    var lon = -56.164398487890594; 
+                    lat = -34.806777135903424;
+                    lon = -56.164398487890594; 
                 } else {    
-                    var lat = field.mapXY.latitude;
-                    var lon = field.mapXY.longitude;
+                    lat = field.mapXY.latitude;
+                    lon = field.mapXY.longitude;
                 }
                 var options = {
                     zoom: 8,
@@ -40,7 +44,7 @@
                     draggable: true
                 });
                 editor.loadmaps[field.field_id] = true;
-                google.maps.event.addListener(one, "dragend", function(evento) {
+                google.maps.event.addListener(one, 'dragend', function(evento) {
                     var la = evento.latLng.lat();
                     var lo = evento.latLng.lng();
                     field.mapXY.latitude = la;
@@ -72,7 +76,7 @@
             editor.selectedPage = editor.pages[index];   
         };
         editor.addPage = function() {
-            newPage = angular.copy(editor.newPage);
+            var newPage = angular.copy(editor.newPage);
             editor.pages.push(newPage);   
         };
         editor.deletePage = function(index){
@@ -95,7 +99,7 @@
             editor.selectedPage = editor.pages[page];   
             editor.selectedField = editor.selectedPage.fields[index];
             // Select properties tab as active
-            $("#myTab li:eq(1) a").tab('show');
+            $('#myTab li:eq(1) a').tab('show');
         };
 
         editor.addOption = function() {
@@ -135,23 +139,11 @@
             }
             newField.field_id = ++editor.max_id;
             newField.field_type = type || 1;
-            if (type === editor.FieldTypes[6]){
-                 var option1 = angular.copy(checkboxOption);
-                 option1.label ='first option';
-                 var option2 = angular.copy(checkboxOption);
-                 option2.label ='second option';
-                 var option3 = angular.copy(checkboxOption);
-                 option3.label ='third option';
-                newField.options= [option1,option2,option3];
-            }
             editor.selectedPage.fields.push(newField);
             editor.selectedField = editor.selectedPage.fields[editor.selectedPage.fields.length];
         };
        
-        editor.clearSelectedField = function(){
-            editor.selectedField = editor.createField(type);            
-        };
-        
+
         /*
         * This controller expects a query params to edit an existing form's version (e.g. path#?form=1&ver=1),
         * if the param is empty then it creats a new form.
@@ -167,12 +159,12 @@
             var val = field.validations;
             if (val.min_number && val.max_number){
                 if (val.min_number > val.max_number) {
-                    alert("Minimum can't exceed maximum");
+                    alert('Minimum can\'t exceed maximum');
                     val.min_number = val.max_number;
                 }
             }
             if (val.max_len_text < 0){
-                alert("Maximum length can't be less than 0");
+                alert('Maximum length can\'t be less than 0');
                 val.max_len_text = 0;
             }
         };
@@ -259,14 +251,12 @@
                 for (var fieldIndex in page.fields){
                     var field = page.fields[fieldIndex];
                     if (field.text == null || field.text == ''){
-                        f = parseInt(fieldIndex, 10) + 1;
-                        p = parseInt(pageNum, 10) + 1;
-                        alert ("Field labels can't be empty.");
+                        alert ('Field labels can\'t be empty.');
                         return false;
                     }
                     if (field.field_type == 'SelectField' || field.field_type == 'CheckboxField'){
                         if (!field.options.length){
-                            alert ("Field options can't be empty.");
+                            alert ('Field options can\'t be empty.');
                             return false;
                         }
                     }
@@ -318,7 +308,7 @@
                 .success( function(data, status, headers, config){
                     editor.form = data;
                     editor.version.json = angular.toJson({'pages':editor.pages,'logic':editor.logic,'after_submit':editor.after_submit});
-                    $http.put('version/'+editor.formIdParam+'/'+editor.versionIdParam+"/", editor.version)
+                    $http.put('version/'+editor.formIdParam+'/'+editor.versionIdParam+'/', editor.version)
                     .success( function(data, status, headers, config){
                         editor.version = data;
                         if (formStatus == 1){
@@ -387,7 +377,7 @@
             }else{
                 editor.logicField = angular.copy(editor.logic.fields[fieldId]);
                 for (var cond_index in editor.logicField.conditions){
-                    cond = editor.logicField.conditions[cond_index];
+                    var cond = editor.logicField.conditions[cond_index];
                     editor.selectFieldOnCondition(cond);
                 }
             }
@@ -404,7 +394,7 @@
             }else{
                 editor.logicField = angular.copy(editor.logic.pages[pageNum]);
                 for (var cond_index in editor.logicField.conditions){
-                    cond = editor.logicField.conditions[cond_index];
+                    var cond = editor.logicField.conditions[cond_index];
                     editor.selectFieldOnCondition(cond);
                 }
             }
@@ -435,15 +425,15 @@
             for (var dest_id in editor.logic.fields){
                 var dest_field = editor.logic.fields[dest_id];
                 for (var k = 0; k < dest_field.conditions.length; k++){
-                    origin_id = dest_field.conditions[k].field;
-                    origin = editor.getFieldById(origin_id);
+                    var origin_id = dest_field.conditions[k].field;
+                    var origin = editor.getFieldById(origin_id);
                     origin.dependencies.fields.push(dest_id);
                 }
             }
         };
 
         editor.applyPageDependencies = function(page){
-            pageNum = editor.getPageNum(page);
+            var pageNum = editor.getPageNum(page);
             editor.logic.pages[pageNum] = angular.copy(editor.logicField);
             // Clean page dependecies of every field
             for(var i = 0; i < editor.pages.length; i++){
@@ -457,8 +447,8 @@
             for (var dest_page_num in editor.logic.pages){
                 var dest_page = editor.logic.pages[dest_page_num];
                 for (var k = 0; k < dest_page.conditions.length; k++){
-                    origin_id = dest_page.conditions[k].field;
-                    origin = editor.getFieldById(origin_id);
+                    var origin_id = dest_page.conditions[k].field;
+                    var origin = editor.getFieldById(origin_id);
                     origin.dependencies.pages.push(dest_page_num);
                 }
             }

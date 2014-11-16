@@ -32,13 +32,13 @@
                     field.answer[0] = lat;
                 } else {
                     var lat = field.answer[0];
-                };
+                }
                 if (field.answer[1] == undefined){
                     var lon = field.mapXY.longitude;
                     field.answer[1] = lon;
                 } else {
                     var lon = field.answer[1];
-                };
+                }
                 var options = {
                     zoom: 8,
                     center: new google.maps.LatLng(lat, lon)
@@ -52,7 +52,7 @@
                 draggable: true
             });
             visor.loadmaps[field.field_id]= true;
-            google.maps.event.addListener(one, "dragend", function(evento) {
+            google.maps.event.addListener(one, 'dragend', function(evento) {
                 var la = evento.latLng.lat();
                 var lo = evento.latLng.lng();
                 field.answer=[la,lo];
@@ -160,11 +160,11 @@
                 }else if (visor.questions[i].field_type == 'SelectField'){
                     visor.questions[i].options = visor.questions[i].options.join('#');
                 }
-                if(visor.questions[i].field_type != 'FileField')                
-             		   visor.questions[i].answer = visor.questions[i].answer.join('#');
-                else if(visor.questions[i].field_type=='FileField' && visor.questions[i].answer.length==0)
-                    visor.questions[i].answer = visor.questions[i].answer = ""
-                console.log('aca' +visor.questions[i].answer.length);
+                if(visor.questions[i].field_type != 'FileField'){
+                    visor.questions[i].answer = visor.questions[i].answer.join('#');
+                } else if(visor.questions[i].field_type=='FileField' && visor.questions[i].answer.length==0){
+                    visor.questions[i].answer = visor.questions[i].answer = "";
+                }
             }
             for (var j = 0; j < visor.questions.length; j++) {
                 var pageNum = visor.getPageNumByFieldId(visor.questions[j].field_id);
@@ -191,12 +191,12 @@
                     url: visor.base_url+'visor/submit/'+visor.slug+'/',
                     headers: { 'Content-Type': undefined},
                     transformRequest:function (data) {                          
-                        data.append("data", angular.toJson(visor.questions));
+                        data.append('data', angular.toJson(visor.questions));
                         return data; 
                     },
                     data:visor.dataMedia
                 }).success( function(data, status, headers, config){
-                    if(visor.after_submit.action == "Redirect To"){
+                    if(visor.after_submit.action == 'Redirect To'){
                         $window.location.href = visor.after_submit.redirect;
                     } else {
                         $window.location.href = 'visor/form/submitted/'+visor.slug+'/';
@@ -206,7 +206,6 @@
                     alert('Error saving data: ' + data.error);
                     visor.submitting = false;
                 });
-                console.log(visor.dataMedia);
             } else {
                 alert('Form was completed correctly. \nThis is a preview, the data wont be saved.');
             }
@@ -417,13 +416,10 @@
         
          visor.onFileSelect = function($files,fileModel) {
             // $files: an array of files selected, each file has name, size, and type.
-            console.log("hola");
             var file = $files[0]; 
-                var file_id = file.name;
-                visor.dataMedia.append(file_id,file);
-                fileModel.answer = file_id;
-                console.log(file);
-            console.log("hola");    
+            var file_id = file.name;
+            visor.dataMedia.append(file_id,file);
+            fileModel.answer = file_id;
         };
         
         
