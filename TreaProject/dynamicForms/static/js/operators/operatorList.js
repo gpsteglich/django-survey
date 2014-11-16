@@ -1,3 +1,5 @@
+'use strict';
+
 function OperatorList() {
 
 	OperatorField.call();
@@ -13,10 +15,10 @@ OperatorList.operandKind = function(){
 
 OperatorList.equal = function(a, b){
 	return (a === b);
-}
+};
 
 OperatorList.not_equal = function(a, b){
 	return (a !== b);
-}
+};
 
 operatorFactory.registerOperator('SelectField', OperatorList);

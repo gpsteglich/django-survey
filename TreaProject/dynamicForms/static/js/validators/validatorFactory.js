@@ -1,4 +1,5 @@
 'use strict';
+
 var validatorFactory = (function () {
  
     // Available validators classes

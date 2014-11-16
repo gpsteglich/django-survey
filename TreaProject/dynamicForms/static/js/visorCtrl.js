@@ -163,7 +163,7 @@
                 if(visor.questions[i].field_type != 'FileField'){
                     visor.questions[i].answer = visor.questions[i].answer.join('#');
                 } else if(visor.questions[i].field_type=='FileField' && visor.questions[i].answer.length==0){
-                    visor.questions[i].answer = visor.questions[i].answer = "";
+                    visor.questions[i].answer = '';
                 }
             }
             for (var j = 0; j < visor.questions.length; j++) {

@@ -1,4 +1,5 @@
 'use strict';
+
 var fieldFactory = (function () {
  
     // Available field classes

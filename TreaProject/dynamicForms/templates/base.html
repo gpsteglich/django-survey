@@ -99,6 +99,12 @@
         <script src={% static "angular/ng-csv.js" %}></script>
         {% endaddtoblock %}
         {% addtoblock "js" %}
+        <script src={% static "angular/lodash.min.js" %}></script>
+        {% endaddtoblock %}
+        {% addtoblock "js" %}
+        <script src={% static "angular/bluebird.js" %}></script>
+        {% endaddtoblock %}
+        {% addtoblock "js" %}
         <script type="text/javascript">
             $('.collapse').collapse();
         </script>

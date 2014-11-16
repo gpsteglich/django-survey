@@ -1,4 +1,5 @@
 'use strict';
+
 var operatorFactory = (function () {
  
     // Available operators classes
