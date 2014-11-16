@@ -64,4 +64,4 @@
 {% endaddtoblock %}
 
 {% render_block "jsUnc" %}
-{% render_block "js" %}
+{% render_block "js" postprocessor "compressor.contrib.sekizai.compress" %}
