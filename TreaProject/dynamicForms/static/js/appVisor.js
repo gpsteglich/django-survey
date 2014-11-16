@@ -26,7 +26,7 @@
             link: function(scope, elm, attrs, ctrl) {
                 ctrl.$validators.validate = function(modelValue, viewValue) {
                     if (ctrl.$isEmpty(modelValue)) {
-                        // consider empty models to be valid
+                        // Consider empty models to be valid
                         return true;
                     }
                     var validator = validatorFactory.getValidator(attrs.fieldtype);
