@@ -34,10 +34,11 @@ module.exports = function(config) {
         './static/js/appVisor.js',
         './static/js/app.js',
         './static/js/visorCtrl.js',
+        './static/js/editorCtrl.js',
         './static/js/mainpageCtrl.js',
         './testing/mainPage_test.js',
-        //'./testing/visor_tests.js',
-        //'./testing/editor_test.js',
+        './testing/visor_tests.js',
+        './testing/editor_test.js',
     ],
 
 
