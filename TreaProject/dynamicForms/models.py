@@ -248,18 +248,21 @@ def notification_mail(sender, **kwargs):
     if serializer.is_valid():
         d = serializer.object
         if d.sendMail:
-            logger.info("Mail has been sent to '" + d.mailRecipient + "'"
-                        + " after completing Version " + kwargs['instance'].version.number.__str__()
-                        + " of Form '" + kwargs['instance'].version.form.slug + "'")
             content = d.mailText
             subject = d.mailSubject
             sender = d.mailSender
             recipient = d.mailRecipient
             try:
                 send_mail(subject, content, sender, [recipient], fail_silently=False)
+                logger.info("Mail has been sent to '" + d.mailRecipient +
+                            "' after completing Version " + kwargs['instance'].version.number.__str__() +
+                            " of Form '" + kwargs['instance'].version.form.slug + "'")
             except Exception as e:
-                logger.error("Error sending mail: " + e.__str__())
-                
+                logger.error("Error sending mail: '" + e.__str__() +
+                            "' after completing Version " + kwargs['instance'].version.number.__str__() +
+                            " of Form '" + kwargs['instance'].version.form.slug + "'")
+
+
 class FileEntry(models.Model):
     field_id = models.IntegerField()
     file_type = models.CharField(max_length=50)
