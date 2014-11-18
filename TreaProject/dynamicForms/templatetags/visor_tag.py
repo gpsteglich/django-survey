@@ -20,7 +20,7 @@ class visor_template_tag(InclusionTag):
     Template Tag to include a Form into an existing Page.
     Usage:
         {% visor_template_tag form %}
-    where form is the pk of the form to be loaded.
+    where form is the slug of the form to be loaded.
     """
     template = 'visor_cms.html'
     options = Options(
@@ -30,7 +30,7 @@ class visor_template_tag(InclusionTag):
     def get_context(self, context, form):
         context['errors'] = ""
         try:
-            f =  Form.objects.get(pk=form)
+            f =  Form.objects.get(slug=form)
         except Form.DoesNotExist:
             context['errors'] += "This Form does not exist.\n"
             return context
