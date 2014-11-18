@@ -29,6 +29,7 @@ Django App to create Surveys with multipath and multipaging support. It is desig
       install_requires=[
         'djangorestframework',
   	    'django-cms',
+        'report-lab',
       ],
       entry_points="""
       # -*- Entry points: -*-
