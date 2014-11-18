@@ -134,14 +134,69 @@ describe("EditorCtrl testing logic", function() {
         };
     }));
 
-    it("Adding a logic condition to a field", inject(function($controller,$rootScope) {
+    it("Adding and removing logic conditions to a field", inject(function($controller,$rootScope) {
         var ctrl = createController();
-        scope.pages = getFakeForm().pages;
-        scope.logic = getFakeForm().logic;
-        ctrl.configLogicField();
+        var form = getFakeForm();
+        scope.pages = form.pages;
+        scope.logic = form.logic;
+        ctrl.configLogicField(1);
         expect(ctrl.logicField.conditions.length).toBe(0);
         ctrl.addNewLogicCondition();
         expect(ctrl.logicField.conditions.length).toBe(1);
+        ctrl.removeLogicCondition(0);
+        expect(ctrl.logicField.conditions.length).toBe(0);
+    }));
+
+    it("Removing a logic condition to a page", inject(function($controller, $rootScope) {
+        var ctrl = createController();
+        var form = getFakeForm();
+        scope.pages = form.pages;
+        scope.logic = form.logic;
+        ctrl.configLogicPage(0);
+        expect(ctrl.logicField.conditions.length).toBe(0);
+        ctrl.addNewLogicCondition();
+        expect(ctrl.logicField.conditions.length).toBe(1);
+        ctrl.removeLogicCondition(0);
+        expect(ctrl.logicField.conditions.length).toBe(0);
+    }));
+
+    xit("Applying dependencies", inject(function($controller, $rootScope) {
+        var ctrl = createController();
+        var form = getFakeForm();
+        scope.pages = form.pages;
+        scope.logic = form.logic;
+        ctrl.configLogicField(4);
+        ctrl.logicField = {"fields":{"4":{"operation":"Show","action":"All","conditions":[{"field":3,"comparator":"greater_than","value":"5","operatorsList":["greater_than","greater_than_or_equal","equal","not_equal","less_than_or_equal","less_than"],"field_type":"NumberField","operandKind":"input"}]}},"pages":{}};
+        ctrl.applyDependencies(4);
+
+    }));
+
+    it("Getting operators for field", inject(function($controller, $rootScope) {
+        var ctrl = createController();
+        var form = getFakeForm();
+        scope.pages = form.pages;
+        scope.logic = form.logic;
+
+        var numOperators = ctrl.getOperatorsForField('NumberField');
+        expect(numOperators).toContain("greater_than");
+        expect(numOperators).toContain("greater_than_or_equal");
+        expect(numOperators).toContain("equal");
+        expect(numOperators).toContain("not_equal");
+        expect(numOperators).toContain("less_than_or_equal");
+        expect(numOperators).toContain("less_than");
+        expect(numOperators.length).toBe(6);
+
+        var listOperators = ctrl.getOperatorsForField('SelectField');
+        expect(listOperators).toContain("equal");
+        expect(listOperators).toContain("not_equal");
+        expect(listOperators.length).toBe(2);
+
+        var checkOperators = ctrl.getOperatorsForField('CheckboxField');
+        expect(checkOperators).toContain("equal");
+        expect(checkOperators).toContain("not_equal");
+        expect(checkOperators).toContain("contains");
+        expect(checkOperators).toContain("not_contains");
+        expect(checkOperators.length).toBe(4);
     }));
   
     getFakeForm = function(){

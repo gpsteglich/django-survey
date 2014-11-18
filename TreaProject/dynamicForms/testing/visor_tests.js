@@ -80,7 +80,32 @@ describe("VisorCtrl Testing", function() {
     }));
 
     it("Testing visor logic functions", inject(function($controller,$rootScope) {
+        var ctrl = createController();
+        scope.pages = getFakeFormWithLogic().pages;
+        scope.logic = getFakeFormWithLogic().logic;
         
+        scope.initialiceConditions();
+        expect(scope.showValues[1]).toBeTruthy();
+        expect(scope.showValues[3]).toBeTruthy();
+        expect(scope.showValues[4]).toBeFalsy();
+        expect(scope.showPageValues[0]).toBeTruthy();
+        expect(scope.showPageValues[1]).toBeTruthy();
+        expect(scope.showPageValues[2]).toBeTruthy();
+
+        scope.pages[1].fields[0].answer[0] = 1;
+        scope.updateDependencies(3);
+        expect(scope.showValues[4]).toBeTruthy();
+        expect(scope.showPageValues[2]).toBeFalsy();
+        
+        scope.pages[1].fields[0].answer[0] = 8;
+        scope.updateDependencies(3);
+        expect(scope.showValues[4]).toBeFalsy();
+        expect(scope.showPageValues[2]).toBeTruthy();
+
+        scope.pages[1].fields[0].answer[0] = 2;
+        scope.updateDependencies(3);
+        expect(scope.showValues[4]).toBeTruthy();
+        expect(scope.showPageValues[2]).toBeTruthy();        
     }));
 
     getFakeForm = function(){
@@ -93,6 +118,23 @@ describe("VisorCtrl Testing", function() {
             "fields": {},
             "pages": {}
         };
+        var form = {};
+        form.pages = pages;
+        form.logic = logic;
+        return form;
+    };
+
+    getFakeFormWithLogic = function(){
+        var pages = [
+            {"fields":[{"dependencies":{"fields":[],"pages":[]},"text":"text","field_type":"TextField","tooltip":"","answer":[],"field_id":1,"required":false,"validations":{"max_len_text":255}}],"subTitle":""},
+            {"fields":[{"dependencies":{"fields":["4"],"pages":["2"]},"text":"number","field_type":"NumberField","tooltip":"","answer":[],"field_id":3,"required":false,"validations":{"max_number":null,"min_number":null}}],"subTitle":""},
+            {"fields":[{"dependencies":{"fields":[],"pages":[]},"text":"textArea","field_type":"TextAreaField","tooltip":"","answer":[],"field_id":4,"required":false,"validations":{"max_len_text":400}}],"subTitle":""}];
+
+        var logic = {
+            "fields":{"4":{"operation":"Show","action":"All","conditions":[{"field":3,"comparator":"less_than","value":"5","operatorsList":["greater_than","greater_than_or_equal","equal","not_equal","less_than_or_equal","less_than"],"field_type":"NumberField","operandKind":"input"}]}},
+            "pages":{"2":{"operation":"Hide","action":"Any","conditions":[{"field":3,"comparator":"equal","value":"1","operatorsList":["greater_than","greater_than_or_equal","equal","not_equal","less_than_or_equal","less_than"],"field_type":"NumberField","operandKind":"input"}]}}
+        };
+
         var form = {};
         form.pages = pages;
         form.logic = logic;
