@@ -242,7 +242,6 @@ def version_handler(sender, **kwargs):
 
 @receiver(post_save, sender=FormEntry)
 def notification_mail(sender, **kwargs):
-    print("notification_mail")
     instance = kwargs.get('instance')
     js = json.loads(instance.version.json)
     serializer = AfterSubmitSerializer(data=js['after_submit'])
@@ -259,7 +258,7 @@ def notification_mail(sender, **kwargs):
             try:
                 send_mail(subject, content, sender, [recipient], fail_silently=False)
             except Exception as e:
-                print ("Error sending mail")
+                logger.error("Error sending mail: " + e.__str__())
                 
 class FileEntry(models.Model):
     field_id = models.IntegerField()
