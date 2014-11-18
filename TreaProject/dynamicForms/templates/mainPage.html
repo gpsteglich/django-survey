@@ -55,10 +55,13 @@
                                         Id 
                                     </div>
                                     <div class="col-md-2">
-                                        Username 
+                                        Owner 
                                     </div>
-                                    <div class="col-md-7">
+                                    <div class="col-md-3">
                                         Title 
+                                    </div>
+                                    <div class="col-md-3">
+                                        Slug 
                                     </div>
                                 </h4>
                             </div>
@@ -81,8 +84,11 @@
                                                 <div class="col-md-2">
                                                     {{ form.username }} 
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-3">
                                                     {{ form.title }} 
+                                                </div>
+                                                <div class="col-md-3">
+                                                    {{ form.slug }} 
                                                 </div>
                                                 
                                             </a>
@@ -167,9 +173,6 @@
     <script src={% static "js/mainpageCtrl.js" %}></script>
     {% endaddtoblock %}
     {% addtoblock "js" %}
-    <script src={% static "angular/angular-sanitize.js" %}></script>
-    <script src={% static "angular/ng-csv.js" %}></script>
-    
     <script type="text/javascript">
         function confirmation(){
             if (confirm("Are you sure you want to delete this form?")){

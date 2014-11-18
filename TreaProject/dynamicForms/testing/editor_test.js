@@ -54,46 +54,46 @@ describe("EditorCtrl Testing Fields", function() {
     
     beforeEach(angular.mock.module('dynamicFormsFrameworkAdmin'));
     
-    xit("Add Fields to Some Page.", inject(function($controller,$rootScope) {
+    it("Add Fields to Some Page.", inject(function($controller,$rootScope) {
         var scope = $rootScope.$new();
         var ctrl = $controller('EditorCtrl', {$scope: scope});
         ctrl.addPage();
         ctrl.addPage();
         expect(ctrl.pages.length).toBe(3);    
         ctrl.selectPage(0);  
-        ctrl.addField(ctrl.FieldTypes[0]);
-        ctrl.addField(ctrl.FieldTypes[0]);
-        ctrl.addField(ctrl.FieldTypes[0]);
+        ctrl.addField("NumberField");
+        ctrl.addField("NumberField");
+        ctrl.addField("NumberField");
         expect(ctrl.pages[0].fields[0]).not.toBe(null);
         expect(ctrl.pages[0].fields[0]).toBeDefined();
         expect(ctrl.pages[0].fields.length).toBe(3);
     }));
     
-    xit("Delete Fields in Some Page.", inject(function($controller,$rootScope) {
+    it("Delete Fields in Some Page.", inject(function($controller,$rootScope) {
         var scope = $rootScope.$new();
         var ctrl = $controller('EditorCtrl', {$scope: scope});
         ctrl.addPage();
         ctrl.addPage();
         expect(ctrl.pages.length).toBe(3);
         ctrl.selectPage(0);  
-        ctrl.addField(ctrl.FieldTypes[0]);
-        ctrl.addField(ctrl.FieldTypes[0]);
-        ctrl.addField(ctrl.FieldTypes[0]);
+        ctrl.addField("NumberField");
+        ctrl.addField("NumberField");
+        ctrl.addField("NumberField");
         expect(ctrl.pages[0].fields.length).toBe(3);
         ctrl.deleteField(0,1);
         expect(ctrl.pages[0].fields.length).toBe(2);      
     }));
     
-    xit("Add Options to Some Field in a page.", inject(function($controller,$rootScope) {
+    it("Add Options to Some Field in a page.", inject(function($controller,$rootScope) {
         var scope = $rootScope.$new();
         var ctrl = $controller('EditorCtrl', {$scope: scope});
         ctrl.addPage();
         ctrl.addPage();
         expect(ctrl.pages.length).toBe(3);
         ctrl.selectPage(0);  
-        ctrl.addField("check_box");
-        ctrl.addField("check_box");
-        ctrl.addField("check_box");      
+        ctrl.addField("CheckboxField");
+        ctrl.addField("CheckboxField");
+        ctrl.addField("CheckboxField");      
         ctrl.selectField(0,0);
         ctrl.addOption();
         alert(ctrl.pages[0].fields[0].options);
@@ -104,13 +104,13 @@ describe("EditorCtrl Testing Fields", function() {
         expect(ctrl.pages[0].fields[2].options.length).toBe(1);    
     }));
     
-    xit("Delete Options to Some Field in a page.", inject(function($controller,$rootScope) {
+    it("Delete Options to Some Field in a page.", inject(function($controller,$rootScope) {
         var scope = $rootScope.$new();
         var ctrl = $controller('EditorCtrl', {$scope: scope});
         ctrl.selectPage(0);  
-        ctrl.addField("check_box");
-        ctrl.addField("check_box");
-        ctrl.addField("check_box");      
+        ctrl.addField("CheckboxField");
+        ctrl.addField("CheckboxField");
+        ctrl.addField("CheckboxField");      
         ctrl.selectField(0,2);
         ctrl.addOption();
         expect(ctrl.pages[0].fields[2].options.length).toBe(1);
@@ -166,7 +166,7 @@ describe("EditorCtrl testing logic", function() {
         scope.pages = form.pages;
         scope.logic = form.logic;
         ctrl.configLogicField(4);
-        ctrl.logicField = {"fields":{"4":{"operation":"Show","action":"All","conditions":[{"field":3,"comparator":"greater_than","value":"5","operatorsList":["greater_than","greater_than_or_equal","equal","not_equal","less_than_or_equal","less_than"],"field_type":"NumberField","operandKind":"input"}]}},"pages":{}};
+        ctrl.logicField = {"operation":"Show","action":"All","conditions":[{"field":3,"comparator":"greater_than","value":"10","operatorsList":["greater_than","greater_than_or_equal","equal","not_equal","less_than_or_equal","less_than"],"field_type":"NumberField","operandKind":"input"}]};
         ctrl.applyDependencies(4);
 
     }));
@@ -203,7 +203,8 @@ describe("EditorCtrl testing logic", function() {
         var pages = [
             {"fields":[{"dependencies":{"fields":[],"pages":[]},"text":"text","field_type":"TextField","tooltip":"","answer":[],"field_id":1,"required":false,"validations":{"max_len_text":255}}],"subTitle":""},
             {"fields":[{"dependencies":{"fields":[],"pages":[]},"text":"number","field_type":"NumberField","tooltip":"","answer":[],"field_id":3,"required":false,"validations":{"max_number":null,"min_number":null}}],"subTitle":""},
-            {"fields":[{"dependencies":{"fields":[],"pages":[]},"text":"textArea","field_type":"TextAreaField","tooltip":"","answer":[],"field_id":4,"required":false,"validations":{"max_len_text":400}}],"subTitle":""}];
+            {"fields":[{"dependencies":{"fields":[],"pages":[]},"text":"textArea","field_type":"TextAreaField","tooltip":"","answer":[],"field_id":4,"required":false,"validations":{"max_len_text":400}}],"subTitle":""}
+        ];
 
         var logic = {
             "fields": {},
