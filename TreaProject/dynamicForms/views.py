@@ -643,7 +643,7 @@ def export_csv(request, pk, number, format=None):
             initial = formEntries[0]
             labels = []
             for field in initial.fields.all().order_by("field_id"):
-                labels.append(field.text)
+                labels.append('"' + field.text + '"')
             writer.writerow(labels)
             for formEntry in formEntries:
                 fields = formEntry.fields.all().order_by("field_id")
