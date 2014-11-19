@@ -480,7 +480,7 @@ def submit_form_entry(request, slug, format=None):
     # Make sure logic contraints are respected.
     logic_check = validate_logic(request, final_version)
     if not logic_check:
-        modified_logic.send(sender=request, sent_data=request.DATA)
+        modified_logic.send(sender=request, sent_data=request.DATA['data'])
         return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
     if error_log['error'] != "":
         return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data=error_log)
