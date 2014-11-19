@@ -99,16 +99,17 @@ class StatisticsTestCase(TestCase):
                     fieldEntry = FieldEntry(field_id=j, field_type="SelectField", required=False, answer = str(random.randint(1, 3)), entry=entry, text="Paises", shown=True)
                 else: 
                     fieldEntry = FieldEntry(field_id=j, field_type="TextField", required=False, answer = "text" + str(i), entry=entry, text="Nombre", shown=True)
-                fieldEntry.save()
-
-      
-                
+                fieldEntry.save()          
         
-        #statistics without filter
+        # statistics without filter
         statistics1 = StatisticsCtrl().getStatistics(form.pk, version.number)
         
-        #equal filter
+        # equal filter
         statistics2 = StatisticsCtrl().getStatistics(form.pk, version.number, "2", "equals", "1")
+
+        # field statistics
+        fieldStatistics = StatisticsCtrl().getFieldStatistics(form.pk, version.number, 1)
+
         form.delete()
 
                

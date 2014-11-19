@@ -108,6 +108,7 @@
                     })
                     .error(function(data, status, headers, config){
                         alert('error loading form: ' + status);
+                        visor.errLoading = true;
                     });
             } else {
                 // Load form

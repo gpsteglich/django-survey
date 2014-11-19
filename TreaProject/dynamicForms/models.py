@@ -261,6 +261,7 @@ def notification_mail(sender, **kwargs):
                 logger.error("Error sending mail: '" + e.__str__() +
                             "' after completing Version " + kwargs['instance'].version.number.__str__() +
                             " of Form '" + kwargs['instance'].version.form.slug + "'")
+    
 
 
 class FileEntry(models.Model):
