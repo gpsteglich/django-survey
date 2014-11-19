@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.2.3'
+version = '0.2.8'
 
 setup(name='dynamicForms',
       version=version,
@@ -27,9 +27,10 @@ Django App to create Surveys with multipath and multipaging support. It is desig
       include_package_data=True,
       zip_safe=True,
       install_requires=[
+        'Django==1.6',
         'djangorestframework',
   	    'django-cms',
-        'report-lab',
+        'reportlab',
         'django-compressor',
       ],
       entry_points="""

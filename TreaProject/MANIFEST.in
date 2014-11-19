@@ -8,4 +8,5 @@ graft dynamicForms/static
 prune dynamicForms/static/CACHE
 prune dynamicForms/testing
 prune dynamicForms/migrations
+prune tests
 prune TreaProject
