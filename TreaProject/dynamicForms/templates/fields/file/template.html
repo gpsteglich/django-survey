@@ -10,6 +10,6 @@
                 class="FileField"
 		  		ng-file-select="onFileSelect($files,question)" 
 		  		fieldtype="{{question.field_type}}" 
-		  		ng-required="question.required && showValues[question.field_id]">
+		  		ng-required="question.required && showValues[question.field_id]" style="color: transparent">{{fileName(question.answer)}}</button>
     {% endverbatim %} 
 {%endblock%}
