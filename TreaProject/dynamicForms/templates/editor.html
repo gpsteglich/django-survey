@@ -58,9 +58,24 @@
                                 </div>
                                 
                                 <div class="text-right">
-                                    <button type="submit" ng-click="editor.submitForm()" class="btn btn-default" ng-disabled="userForm.$invalid">Publish</button>
-                                    <button type="submit" ng-click="editor.saveForm()" class="btn btn-default" ng-disabled="userForm.$invalid">Save</button>
-                              	    <a href="main" class="btn btn-default">Discard changes</a>
+                                    <button type="submit" 
+                                            ng-click="editor.submitForm()"
+                                            ng-confirm-click="Are you sure you want to discard changes?"
+                                            class="btn btn-default" 
+                                            ng-disabled="userForm.$invalid">
+                                        Publish
+                                    </button>
+                                    <button type="submit" 
+                                            ng-click="editor.saveForm()"
+                                            class="btn btn-default" 
+                                            ng-disabled="userForm.$invalid">
+                                        Save
+                                    </button>
+                              	    <a href="main" 
+                                            class="btn btn-default"
+                                            onclick="return confirmation();">
+                                        Discard changes
+                                    </a>
                                 </div>
                             </div>
 	                    </form>
@@ -98,5 +113,16 @@
 			$("#myTab li:eq(0) a").tab('show');
 		});
 	</script>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
+    <script type="text/javascript">
+        function confirmation(action){
+            if (confirm("Are you sure you want to discard changes?")){
+                return true;
+            } else {
+                return false;
+            }
+        }
+    </script>
 	{% endaddtoblock %}
 {%endblock%}
