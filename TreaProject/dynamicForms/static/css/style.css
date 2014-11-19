@@ -31,18 +31,18 @@
 }
     
     /* Form fields style */
-.dyn-form input.ng-invalid {
+.dyn-form *.ng-invalid {
     background-color: #ffdfe1;
 }
+
+/*
 .dyn-form input.ng-valid {
-    /*background-color: #d6ffd9;*/
-}
-.dyn-form textarea.ng-invalid {
-    background-color: #ffdfe1;
+    background-color: #d6ffd9;
 }
 .dyn-form textarea.ng-valid {
-    /*background-color: #d6ffd9;*/
+    background-color: #d6ffd9;
 }
+*/
 
 .list-wrapper { font-family: courier; }
 .list-title { font-weight: bold; font-size: 1.2em; margin-bottom: .5em }

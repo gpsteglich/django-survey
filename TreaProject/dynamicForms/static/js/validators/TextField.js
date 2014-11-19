@@ -21,4 +21,4 @@ TextField.validate = function(value, attrs){
 };
 
 // Register field constructor in Factory
-validatorFactory.registerValidator(TextField.name, TextField);
+validatorFactory.registerValidator('TextField', TextField);

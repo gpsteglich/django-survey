@@ -1,10 +1,15 @@
 {%extends 'fields/field_template_base.html' %}
 {%block field%}
     {% verbatim %} 
-        <button style="border:none;background:none" ng-show="question.tooltip!=undefined && question.tooltip!=''" tooltip="{{question.tooltip}}">
+        <button style="border:none;background:none" 
+        		ng-show="question.tooltip!=undefined && question.tooltip!=''" 
+        		tooltip="{{question.tooltip}}">
             <span class="glyphicon glyphicon-info-sign"></span>
         </button>
-       
-  <input  type="file" ng-file-select="onFileSelect($files,question)" fieldtype="{{question.field_type}}" ng-required="question.required && showValues[question.field_id]">
+	  	<input  type="file"  
+                class="FileField"
+		  		ng-file-select="onFileSelect($files,question)" 
+		  		fieldtype="{{question.field_type}}" 
+		  		ng-required="question.required && showValues[question.field_id]">
     {% endverbatim %} 
 {%endblock%}

@@ -6,7 +6,8 @@
     <button style="border:none;background:none" ng-show="question.tooltip!=undefined && question.tooltip!=''" tooltip="{{question.tooltip}}">
         <span class="glyphicon glyphicon-info-sign"></span>
     </button>
-    <div id={{question.field_id}} class="map-canvas-visor" ng-required="question.required && showValues[question.field_id]" >
+    <div id={{question.field_id}} class="map-canvas-visor" 
+    	ng-required="question.required && showValues[question.field_id]" >
         {{loadmap(question)}}
     </div>             
 	{% endverbatim %}

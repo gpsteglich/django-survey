@@ -7,13 +7,15 @@
                 <div class="panel-heading text-center">
                     <h1 class="text-center"><span class="glyphicon glyphicon-list"></span> {{version.form}}</h1>
                 </div>
-                <form role="form" name="dynForm" ng-submit="save(dynForm.$valid)" class="dyn-form panel-body">
+                <form role="form" name="dynForm" ng-submit="save(dynForm.$valid)" class="dyn-form panel-body" novalidate>
                     <div style="padding-top:30px;" ng-class="{ 'has-error' : userFieldForm.email.$invalid }">
                         <div class="text-center">
                             <h3>{{selectedPage.subTitle}}</h3>
                         </div>
                         <div ng-repeat="question in selectedPage.fields" class="form-group">
-                            <div ng-include="base_url + 'field/' + question.field_type"></div>
+                            <ng-form>
+                                <div ng-include="base_url + 'field/' + question.field_type"></div>
+                            </ng-form>
                         </div>
                     </div>
                      <div class="jumbotron" style="padding-top:0px" ng-show ="version.captcha &&!canNext()" >
