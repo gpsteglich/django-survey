@@ -20,7 +20,8 @@
 	                    <form class="panel panel-primary" form role="form" name="userForm">
 	                        <div class="panel-heading text-center">
                                 <h1>Title:</h1>
-                                <input name="title"  class="form-control" type="text" ng-model="editor.form.title" required/>
+                                <input name="title"  class="form-control" type="text" ng-model="editor.form.title"
+                                    maxlength="100" required/>
                                 <div class="alert alert-info" ng-show= "userForm.title.$error.required"> 
                                 	Please enter a title!
                                 </div>

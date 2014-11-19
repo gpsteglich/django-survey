@@ -424,14 +424,9 @@
         };
         
         visor.fileName = function(name){
-            
-            console.log(name.toString());
             if(JSON.stringify(name) == "[]")
                 return ""
             return name;
-            
-            
-        
         }
         
         // Precondition: Field with field_id == id exists
