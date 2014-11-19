@@ -160,16 +160,27 @@ describe("EditorCtrl testing logic", function() {
         expect(ctrl.logicField.conditions.length).toBe(0);
     }));
 
-    xit("Applying dependencies", inject(function($controller, $rootScope) {
+    it("Applying dependencies", inject(function($controller, $rootScope) {
         var ctrl = createController();
         var form = getFakeForm();
-        scope.pages = form.pages;
-        scope.logic = form.logic;
+        ctrl.pages = form.pages;
+        ctrl.logic = form.logic;
         ctrl.configLogicField(4);
         ctrl.logicField = {"operation":"Show","action":"All","conditions":[{"field":3,"comparator":"greater_than","value":"10","operatorsList":["greater_than","greater_than_or_equal","equal","not_equal","less_than_or_equal","less_than"],"field_type":"NumberField","operandKind":"input"}]};
         ctrl.applyDependencies(4);
 
     }));
+    
+    it("Applying page dependencies", inject(function($controller, $rootScope) {
+        var ctrl = createController();
+        var form = getFakeForm();
+        ctrl.pages = form.pages;
+        ctrl.logic = form.logic;
+        ctrl.configLogicPage(2);
+        ctrl.logicField = {"operation":"Hide","action":"Any","conditions":[{"field":3,"comparator":"equal","value":"1","operatorsList":["greater_than","greater_than_or_equal","equal","not_equal","less_than_or_equal","less_than"],"field_type":"NumberField","operandKind":"input"}]};
+        ctrl.applyDependencies(2);
+
+    }));    
 
     it("Getting operators for field", inject(function($controller, $rootScope) {
         var ctrl = createController();
@@ -201,9 +212,9 @@ describe("EditorCtrl testing logic", function() {
   
     getFakeForm = function(){
         var pages = [
-            {"fields":[{"dependencies":{"fields":[],"pages":[]},"text":"text","field_type":"TextField","tooltip":"","answer":[],"field_id":1,"required":false,"validations":{"max_len_text":255}}],"subTitle":""},
-            {"fields":[{"dependencies":{"fields":[],"pages":[]},"text":"number","field_type":"NumberField","tooltip":"","answer":[],"field_id":3,"required":false,"validations":{"max_number":null,"min_number":null}}],"subTitle":""},
-            {"fields":[{"dependencies":{"fields":[],"pages":[]},"text":"textArea","field_type":"TextAreaField","tooltip":"","answer":[],"field_id":4,"required":false,"validations":{"max_len_text":400}}],"subTitle":""}
+            {"subTitle": "", "fields": [{"text": "text", "field_id": 1, "required": false, "dependencies": {"fields": [], "pages": []}, "validations": {"max_len_text": 255}, "answer": [], "field_type": "TextField", "tooltip": ""}]}, 
+            {"subTitle": "", "fields": [{"text": "number", "field_id": 3, "required": false, "dependencies": {"fields": [], "pages": []}, "validations": {"min_number": null, "max_number": null}, "answer": [], "field_type": "NumberField", "tooltip": ""}]},
+            {"subTitle": "", "fields": [{"text": "text area", "field_id": 4, "required": false, "dependencies": {"fields": [], "pages": []}, "validations": {"max_len_text": 400}, "answer": [], "field_type": "TextAreaField", "tooltip": ""}]}
         ];
 
         var logic = {
