@@ -74,7 +74,7 @@ class StatisticsTestCase(TestCase):
         user.save()
         form = Form(title="formulario 1", slug="formulario-1", owner=user)
         form.save()
-        json = '{"logic": {"fields": {}, "pages": {}}, "pages": [{"fields": [{"field_id": 1, "tooltip": "", "text": "Numero", "field_type": "NumberField", "required": false, "dependencies": {"fields": [], "pages": []}, "answer": [], "validations": {"max_number": 100, "min_number": 0}}, {"field_id": 2, "tooltip": "", "text": "Hobbies", "field_type": "CheckboxField", "options": [{"id": 1, "label": "Leer"}, {"id": 2, "label": "Deportes"}, {"id": 3, "label": "Nada"}], "required": false, "dependencies": {"fields": [], "pages": []}, "max_id": 3, "answer": [], "validations": {}}, {"field_id": 3, "tooltip": "", "text": "Paises", "field_type": "SelectField", "options": [{"id": 1, "label": "Argentina"}, {"id": 2, "label": "Brasil"}, {"id": 3, "label": "Uruguay"}], "required": false, "dependencies": {"fields": [], "pages": []}, "max_id": 3, "answer": [], "validations": {}}, {"field_id": 4, "tooltip": "", "text": "Nombre", "field_type": "TextField", "required": false, "dependencies": {"fields": [], "pages": []}, "answer": [], "validations": {"max_len_text": 255}}], "subTitle": "Pagina"}], "after_submit":{"sendMail": false,"mailSubject": '',"mailText": '',"mailSender": '',"mailRecipient": '',"action": "Show Message","message": "Thank you. You successfully filled the form!","redirect": "http://"}}'
+        json = '{"logic": {"fields": {}, "pages": {}}, "pages": [{"fields": [{"tooltip": "", "field_type": "NumberField", "validations": {"max_number": 100, "min_number": 0}, "dependencies": {"fields": [], "pages": []}, "field_id": 1, "answer": [], "text": "Numero", "required": false}, {"tooltip": "", "field_type": "CheckboxField", "options": [{"label": "Leer", "id": 1}, {"label": "TV", "id": 2}, {"label": "Deportes", "id": 3}], "validations": {}, "dependencies": {"fields": [], "pages": []}, "max_id": 3, "field_id": 2, "answer": [], "text": "Hobbies", "required": false}, {"tooltip": "", "field_type": "SelectField", "options": [{"label": "Argentina", "id": 1}, {"label": "Uruguay", "id": 2}, {"label": "Brasil", "id": 3}], "validations": {}, "dependencies": {"fields": [], "pages": []}, "max_id": 3, "field_id": 3, "answer": [], "text": "Paises", "required": false}, {"tooltip": "", "field_type": "TextField", "validations": {"max_len_text": 255}, "dependencies": {"fields": [], "pages": []}, "field_id": 4, "answer": [], "text": "Nombre", "required": false}], "subTitle": "pagina"}], "after_submit": {"sendMail": false, "action": "Show Message", "redirect": "http://", "mailRecipient": "", "message": "Thank you. You successfully filled the form!", "mailSender": "", "mailText": "", "mailSubject": ""}}'
         version = Version(json=json, form=form)
         version.save()
         for i in range(0,12):
@@ -100,14 +100,17 @@ class StatisticsTestCase(TestCase):
                 else: 
                     fieldEntry = FieldEntry(field_id=j, field_type="TextField", required=False, answer = "text" + str(i), entry=entry, text="Nombre", shown=True)
                 fieldEntry.save()
+
+      
                 
-    
+        
         #statistics without filter
-        statistics1 = StatisticsCtrl().getStatistics(form.pk, version.number,"2","","")
+        statistics1 = StatisticsCtrl().getStatistics(form.pk, version.number)
         
         #equal filter
-        statistics2 = StatisticsCtrl().getStatistics(form.pk, version.number, "2", "equals", "3")
+        statistics2 = StatisticsCtrl().getStatistics(form.pk, version.number, "2", "equals", "1")
         form.delete()
+
                
                  
                     
