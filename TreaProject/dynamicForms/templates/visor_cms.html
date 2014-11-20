@@ -12,7 +12,6 @@
     {% addtoblock "css" %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     {% endaddtoblock %}
-    {% render_block "css" postprocessor "compressor.contrib.sekizai.compress" %}
 </head>
 <div ng-app="dynamicFormsFramework" ng-controller="VisorCtrl as visor">
     <script type="text/javascript">
@@ -58,4 +57,3 @@
 {% endaddtoblock %}
 
 {% render_block "jsUnc" %}
-{% render_block "js" postprocessor "compressor.contrib.sekizai.compress" %}

@@ -363,7 +363,8 @@ def is_shown(request, version, field, item_id):
     conditions = logic[item_id]['conditions']
     for condition in conditions:
         data = ''
-        for field in request.DATA:
+        form_json = json.loads(request.DATA['data'])
+        for field in form_json:
             serializer = FieldEntrySerializer(data=field)
             if serializer.is_valid():
                 if serializer.object.field_id == condition['field']:
@@ -414,7 +415,8 @@ def validate_logic(request, version):
         pages_show_value.append(is_shown(request, version, False, page_id.__str__()))
         page_id += 1
 
-    for field in request.DATA:
+    form_json = json.loads(request.DATA['data'])
+    for field in form_json:
         field_page = -1
         serializer = FieldEntrySerializer(data=field)
         if serializer.is_valid():
