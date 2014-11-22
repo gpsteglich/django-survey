@@ -11,14 +11,16 @@ Dynamic Forms provides several useful functionalities and characteristics for su
 * User-friendly and responsive web interface for the completion of the surveys.
 * Support for multi page surveys.
 * Multiple field types, such as:
-	* Numeric
-	* Single Text Line
-	* Text Area
-	* Single Response List
-	* Multiple Response List
-	* E-mail
-	* Map
-	* File
+
+  * Numeric
+  * Single Text Line
+  * Text Area
+  * Single Response List
+  * Multiple Response List
+  * E-mail
+  * Map
+  * File
+
 * The possibility to show or hide a question (field) depending on the answer of one or more other fields.
 * The possibility of showing and hiding whole pages depending on the answer of one or more fields.
 * Custom validations for each of the different field types.
