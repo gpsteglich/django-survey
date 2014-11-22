@@ -22,7 +22,7 @@ Settings
 
 	FORMS_BASE_URL = '<base_url>'
 
-* To use the mail service offered by the application the following configuration has to be set in your settings file as well::
+* To configure the mail service the following variables must be defined in your settings file as well::
 
 	EMAIL_HOST = <'MAIL_SERVER'>
 	EMAIL_HOST_USER = <'MAIL_ACCOUNT'>
