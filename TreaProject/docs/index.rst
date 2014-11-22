@@ -12,7 +12,7 @@ if a question has to be shown or hidden. The aforementioned surveys are created
 on a user-friendly webpage tested on Google Chrome, Mozilla Firefox and Internet 
 Explorer.
 The development of this application focused on being extensible so that the creation 
-and/or modification of new types of questions (fields) can be done easily.
+and/or modification of new types of questions (fields) could be done easily.
 
 Contents
 ========
@@ -20,7 +20,9 @@ Contents
 .. toctree::
    :maxdepth: 2
 
+   features
    starting
    surveys
    fields
+   architecture
 

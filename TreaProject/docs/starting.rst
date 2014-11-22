@@ -18,7 +18,7 @@ Settings
 		"dynamicForms",
 	)
 
-* Define the base_url you want to and add it to your project's settings:: 
+* Define the base url you want and add it to your project's settings:: 
 
 	FORMS_BASE_URL = '<base_url>'
 

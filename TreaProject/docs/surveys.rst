@@ -55,4 +55,8 @@ To complete or fill a survey it has to be displayed on a web page. Currently, th
 Restrictions
 ^^^^^^^^^^^^
 
-* Multipath logic has very few consistency checks so the user that generates the surveys will be responsible for creating a consistent logic.
+  .. warning::
+    Multipath logic has very few consistency checks so the user that generates the surveys will be responsible for creating a consistent logic.
+
+  .. warning::
+    Due to restrictions of the technologies used, you cannot put more than one survey on a single webpage.
