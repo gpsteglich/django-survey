@@ -70,7 +70,7 @@ And add a line to the settings of your project::
 Model field
 ---------------
 
-Dynamic Forms supports adding the items of models of other applications as combobox options.This is called ``ModelField``.
+Dynamic Forms supports adding the items of models of other applications as combobox options. This is called ``ModelField``.
 For this to work it is necessary to define a new field type that extends the abstract class ``ModelField`` and which sets the *model* attribute to the model class whose items shall be shown.
 
 	.. note::

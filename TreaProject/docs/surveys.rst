@@ -4,14 +4,14 @@ Surveys
 Creating a new Survey
 ---------------------
 
-* Go to the defined ``base_url`` and login with a Django Admin user.
+* Go to the defined base url and login with a Django Admin user.
 * Once logged in press the link “*New Form*” on the left menu of the page. You will be redirected to the Editor page.
 * Choose a title for this survey. The title will generate a slug which will identify the survey so it must be unique in the system.
 * On the Editor you will be able to create and modify the surveys before publishing them. For this purpose there is a panel on the right hand side of the page, with three tabs.
 
 	* The first one is named "Palette" and lets you insert new fields (questions) to the survey.
 	* The second one is for setting the properties of the fields. The properties will vary depending on the type of the field you are editing.
-	* Last but not least, The third tab is the configuration tab. Among the options here are: enabling the use of a captcha, selecting the actions to be realized when a survey is completed and configuring the logic that determines if a field or page is shown or hidden.
+	* Last but not least, the third tab is the configuration tab. Among the options here are: enabling the use of a captcha, selecting the actions to be realized when a survey is completed and configuring the logic that determines if a field or page is shown or hidden.
 
 * Once the desired modifications have been done click on 'Save' or 'Publish'.
 * On the main page you will now see listed the newly created survey.

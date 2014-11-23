@@ -33,7 +33,7 @@ Dynamic Forms provides several useful functionalities and characteristics for su
 * Customizable actions to determine what happens after a survey is completed (e.g.: Sending an email to the administrator).
 * Captcha support.
 
-Rquirements
+Requirements
 -----------
 
 * Python 3.4
