@@ -45,7 +45,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'Dynamic-Forms'
-copyright = '2014, Group 1 - PIS 2014, FING, Udelar'
+copyright = '2014, Group 1 (PythonWarriors) - PIS 2014, FING, Udelar'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
