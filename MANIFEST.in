@@ -3,10 +3,9 @@ global-include *.html
 global-include *.js
 global-include *.css
 
-graft static
+graft dynamicForms/static
 
-prune static/CACHE
-prune testing
-prune migrations
-prune dist
-prune dynamicForms.egg-info
+prune dynamicForms/static/CACHE
+prune dynamicForms/testing
+prune dynamicForms/migrations
+prune tests

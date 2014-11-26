@@ -1,9 +1,9 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.1.1'
+version = '0.9'
 
-setup(name='dynamicForms',
+setup(name='dynamic-forms',
       version=version,
       description="Django App to create dynamic Surveys",
       long_description="""\
@@ -18,18 +18,20 @@ Django App to create Surveys with multipath and multipaging support. It is desig
         'Intended Audience :: Information Technology',
         'Topic :: Internet :: WWW/HTTP :: WSGI :: Application'
       ],
-      keywords='Django Survey Framework Forms',
+      keywords='Django Survey Framework',
       author='PythonWarriors',
       author_email='info@trea.uy',
       url='https://github.com/trea-uy/django-survey',
       license='GNU',
-      packages=find_packages(exclude=['migrations', 'testing']),
+      packages=['dynamicForms'],
       include_package_data=True,
       zip_safe=True,
       install_requires=[
+        'Django<1.7',
         'djangorestframework',
   	    'django-cms',
-        'django_compressor',
+        'reportlab',
+        'django-compressor',
       ],
       entry_points="""
       # -*- Entry points: -*-
