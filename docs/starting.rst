@@ -18,6 +18,13 @@ Settings
 		"dynamicForms",
 	)
 
+* Add ``'dynamicForms.middlets.ValidationErrorToHttpErrorMiddleware'`` to the ``MIDDLEWARE_CLASSES`` of your project's settings::
+
+	MIDDLEWARE_CLASSES = (
+		# other
+		'dynamicForms.middlets.ValidationErrorToHttpErrorMiddleware',
+	)
+
 * Define the base url you want and add it to your project's settings:: 
 
 	FORMS_BASE_URL = '<base_url>'

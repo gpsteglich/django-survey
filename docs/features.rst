@@ -34,7 +34,7 @@ Dynamic Forms provides several useful functionalities and characteristics for su
 * Captcha support.
 
 Requirements
------------
+------------
 
 * Python 3.4
 * Django 1.6
