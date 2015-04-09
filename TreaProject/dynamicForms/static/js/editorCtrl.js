@@ -1,15 +1,17 @@
 'use strict';
 
 (function () {
-	
+
     var app = angular.module('dynamicFormsFrameworkAdmin');
-    
+
     /*
      * This controller handles the logic to create, edit and save a form.
-     */    
-    app.controller('EditorCtrl', ['$scope','$http','$location', '$window', '$rootScope', '$templateCache', 
-                function ($scope, $http, $location, $window, $rootScope, $templateCache) {
-       
+     */
+    app.controller('EditorCtrl', ['$scope','$location', '$window', '$rootScope', '$templateCache',
+                'ConstantService', 'FieldEditService', 'FormService', 'VersionService',
+                function ($scope, $location, $window, $rootScope, $templateCache,
+                            ConstantService, FieldEditService, FormService, VersionService) {
+
         var editor = this;
         editor.loadmaps = [];
         editor.urlBase = $rootScope.urlBase;
@@ -28,7 +30,7 @@
                 if (field.mapXY == undefined){
                     lat = -34.806777135903424;
                     lon = -56.164398487890594; 
-                } else {    
+                } else {
                     lat = field.mapXY.latitude;
                     lon = field.mapXY.longitude;
                 }
@@ -49,21 +51,20 @@
                     var lo = evento.latLng.lng();
                     field.mapXY.latitude = la;
                     field.mapXY.longitude = lo;
-                });    
+                });
             }
         };
-        
-        $http.get('constants/')
-            .success(function(data){
-                editor.FieldTypes = data;
-                var fields = Object.keys(editor.FieldTypes);
-                for(var i = 0;i<fields.length; i++){
-                    $http.get('field_edit/'+fields[i], {cache:$templateCache});
-                }
-            }).error(function(status, data){
-                alert(status+' data:'+data);
-            });
-        
+
+        ConstantService.get(function (constants){
+            delete constants.$promise;
+            delete constants.$resolved;
+            editor.FieldTypes = constants;
+            var fields = Object.keys(editor.FieldTypes);
+            for(var i = 0;i<fields.length; i++){
+                FieldEditService.get({field:fields[i]});
+            }
+        });
+
         var option = {
             label : 'new option',
             id : 0
@@ -73,20 +74,20 @@
         editor.selectedPage = editor.pages[0];
         
         editor.selectPage = function(index) {
-            editor.selectedPage = editor.pages[index];   
+            editor.selectedPage = editor.pages[index];
         };
         editor.addPage = function() {
             var newPage = angular.copy(editor.newPage);
-            editor.pages.push(newPage);   
+            editor.pages.push(newPage);
         };
         editor.deletePage = function(index){
             editor.pages.splice(index,1);
-            
+
         };
-        
+
         // 'selectedField' holds the current field that is being edited.
         editor.selectedField = '';
-        
+
         editor.getSelectedField = function(){
             if (editor.selectedField){
                 return editor.selectedField.field_type || 'default';
@@ -94,16 +95,16 @@
                 return 'default';
             }
         };
-        
+
         editor.selectField = function(page, index) {
-            editor.selectedPage = editor.pages[page];   
+            editor.selectedPage = editor.pages[page];
             editor.selectedField = editor.selectedPage.fields[index];
             // Select properties tab as active
             $('#myTab li:eq(1) a').tab('show');
         };
 
         editor.addOption = function() {
-            var option1 = angular.copy(option);   
+            var option1 = angular.copy(option);
             editor.selectedField.options.push(option1);
             option1.id =  ++editor.selectedField.max_id;
         };
@@ -114,10 +115,10 @@
 
         editor.deleteField = function(page, index){
              editor.questions.splice(editor.questions.indexOf(editor.pages[page].fields[index]));  
-             editor.pages[page].fields.splice(index,1);  
+             editor.pages[page].fields.splice(index,1);
         };
 
-        editor.applyOptions = function(){     
+        editor.applyOptions = function(){
             editor.optionsAdded = editor.optionsAdded.map(function(o){
                 return { label:o.toString(), id: 0   };
             });
@@ -127,7 +128,7 @@
             editor.selectedField.options = editor.selectedField.options.concat(angular.copy(editor.optionsAdded));
             editor.optionsAdded = [];
         };
-    
+
         editor.createField = function(type){
             return fieldFactory.getField(type).buildField();
         };
@@ -142,7 +143,7 @@
             editor.selectedPage.fields.push(newField);
             editor.selectedField = editor.selectedPage.fields[editor.selectedPage.fields.length];
         };
-       
+
 
         /*
         * This controller expects a query params to edit an existing form's version (e.g. path#?form=1&ver=1),
@@ -150,11 +151,11 @@
         */
         editor.formIdParam = ($location.search()).form;
         editor.versionIdParam = ($location.search()).ver;
-    
+
         editor.isNewForm = function(){
             return !(Boolean(editor.formIdParam) && Boolean(editor.versionIdParam));
         };
-        
+
         editor.checkValidations = function(field){
             var val = field.validations;
             if (val.min_number && val.max_number){
@@ -168,7 +169,7 @@
                 val.max_len_text = 0;
             }
         };
-        
+
         var tmpList = [];
         for (var i = 1; i <= 6; i++){
            	tmpList.push({
@@ -176,9 +177,9 @@
         		value: i
            	});
         }
-  
+
         $scope.list = tmpList;
-        
+
         // Load or create a new Form
         editor.loadForm = function(){
             if (editor.isNewForm()){
@@ -198,34 +199,34 @@
                     'captcha':false,
                 };
             } else {
-                // Load Form
-                $http.get('forms/'+editor.formIdParam)
-                .success(function(data){
-                    editor.form = data;
-                     // Load version
-                    $http.get('version/'+editor.formIdParam+'/'+editor.versionIdParam)
-                    .success(function(data){
-                        editor.version = data;
-                        editor.pages = JSON.parse(data.json).pages;
-                        editor.logic = JSON.parse(data.json).logic;
-                        editor.after_submit = JSON.parse(data.json).after_submit;
-                        editor.questions = [];
-                        for (var i = 0; i < editor.pages.length; i++) {
-                            editor.questions = editor.questions.concat(editor.pages[i].fields);
-                        }
-                        editor.max_id = Math.max.apply(Math,editor.questions.map(function(o){
-                            return o.field_id;
-                        }));
-                        if (!editor.max_id || isNaN(editor.max_id) || !isFinite(editor.max_id)){
-                            editor.max_id = 0;
-                        }
-                    })
-                    .error(function(data, status, headers, config){
-                        alert('error cargando version: ' + status);
-                    });
-                })
-                .error(function(data, status, headers, config){
-                    alert('error cargando formulario: ' + status);
+                FormService.get({id:editor.formIdParam}, function(form){
+                    delete form.$promise;
+                    delete form.$resolved;
+                    editor.form = form;
+                    // Load version
+                    VersionService.get({formId: editor.formIdParam, versionId: editor.versionIdParam},
+                        function(version){
+                            delete version.$promise;
+                            delete version.$resolved;
+                            editor.version = version;
+                            editor.pages = JSON.parse(version.json).pages;
+                            editor.logic = JSON.parse(version.json).logic;
+                            editor.after_submit = JSON.parse(version.json).after_submit;
+                            editor.questions = [];
+                            for (var i = 0; i < editor.pages.length; i++) {
+                                editor.questions = editor.questions.concat(editor.pages[i].fields);
+                            }
+                            editor.max_id = Math.max.apply(Math,editor.questions.map(function(o){
+                                return o.field_id;
+                            }));
+                            if (!editor.max_id || isNaN(editor.max_id) || !isFinite(editor.max_id)){
+                                editor.max_id = 0;
+                            }
+                        }, function(error){
+                            alert('Error loading version: ' + error.data.error);
+                        })
+                }, function(error){
+                    alert('Error loading survey: ' + error.data.detail);
                 });
             }
         };
@@ -278,49 +279,50 @@
             editor.version.status = formStatus;
             editor.cleanJson();
             if (editor.isNewForm()){
-                $http.post('forms/', editor.form)
-                .success( function(data, status, headers, config){
-                    editor.form = data;
-                    editor.formIdParam = data.id;
-                    editor.version.form = data.id;
+                FormService.create(editor.form, function(form){
+                    delete form.$promise;
+                    delete form.$resolved;
+                    editor.form = form;
+                    editor.formIdParam = form.id;
+                    editor.version.form = form.id;
                     editor.version.json = angular.toJson({'pages':editor.pages,'logic':editor.logic, 'after_submit':editor.after_submit});
-                    $http.post('version/'+editor.formIdParam+'/', editor.version)
-                    .success( function(data, status, headers, config){
-                        editor.versionIdParam = data.number;
-                        editor.version = data;
-                        if (formStatus == 1){
-                            $window.location.href = 'main';
-                        } else {
-                            // Update the url parameters
-                            $location.search({form:editor.formIdParam, ver:editor.versionIdParam});
-                        }
-                    })
-                    .error(function(data, status, headers, config) {
-                        var errors = data.error;
-                        alert('error saving new version: ' + data.error);
-                    });
-                })
-                .error(function(data, status, headers, config) {
-                    alert('error saving new form: ' + data.error);
+                    VersionService.create({formId: editor.formIdParam}, editor.version,
+                        function(version){
+                            delete version.$promise;
+                            delete version.$resolved;
+                            editor.versionIdParam = version.number;
+                            editor.version = version;
+                            if (formStatus == 1){
+                                $window.location.href = 'main';
+                            } else {
+                                // Update the url parameters
+                                $location.search({form:editor.formIdParam, ver:editor.versionIdParam});
+                            }
+                        }, function(error){
+                            alert('Error loading version: ' + error.data);
+                        })
+                }, function(error){
+                    alert('Error loading survey: ' + error.data.error);
                 });
             } else {
-                $http.put('forms/'+ editor.formIdParam + '/', editor.form)
-                .success( function(data, status, headers, config){
-                    editor.form = data;
+                FormService.update({id: editor.formIdParam}, editor.form, function(form){
+                    delete form.$promise;
+                    delete form.$resolved;
+                    editor.form = form;
                     editor.version.json = angular.toJson({'pages':editor.pages,'logic':editor.logic,'after_submit':editor.after_submit});
-                    $http.put('version/'+editor.formIdParam+'/'+editor.versionIdParam+'/', editor.version)
-                    .success( function(data, status, headers, config){
-                        editor.version = data;
-                        if (formStatus == 1){
-                            $window.location.href = 'main';
-                        }
-                    })
-                    .error(function(data, status, headers, config) {
-                        alert('error saving version: ' + data.error);
-                    });
-                })
-                .error(function(data, status, headers, config) {
-                    alert('error saving form: ' + data.error);
+                    VersionService.update({formId: editor.formIdParam, versionId: editor.versionIdParam}, editor.version,
+                        function(version){
+                            delete version.$promise;
+                            delete version.$resolved;
+                            editor.version = version;
+                            if (formStatus == 1){
+                                $window.location.href = 'main';
+                            }
+                        }, function(error){
+                            alert('Error loading version: ' + error.data);
+                        })
+                }, function(error){
+                    alert('Error loading survey: ' + error.data.error);
                 });
             }
         };
@@ -373,7 +375,7 @@
             }
             if(editor.logic.fields[fieldId]==undefined){
                 editor.logicField = angular.copy(editor.newLogicField);
-                
+
             }else{
                 editor.logicField = angular.copy(editor.logic.fields[fieldId]);
                 for (var cond_index in editor.logicField.conditions){
@@ -510,15 +512,15 @@
             message: 'Thank you. You successfully filled the form!',
             redirect: 'http://'
         };
-                    
+
         editor.after_submit = angular.copy(editor.new_after_submit);
                     
         editor.configAfterSubmit = function(){
             editor.actual_after_submit = angular.copy(editor.after_submit);
         };
-            
+
         editor.applyAfterSubmit = function(){
             editor.after_submit = editor.actual_after_submit;
-        };    
-    }]);    
+        };
+    }]);
 })();
