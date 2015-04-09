@@ -1,38 +1,44 @@
 'use strict';
 
 (function () {
-	
-    var app = angular.module('dynamicFormsFrameworkAdmin', []);
-    
+
+    var app = angular.module('dynamicFormsFrameworkAdmin');
+
     /*
      * This controller handles the logic to create, edit and save a form.
      */    
-    app.controller('ResponsesCtrl', function ($scope, $http, $location) {
+    app.controller('ResponsesCtrl', function ($scope, $location, ResponsesService) {
 
-    	var responses = this;
-    	responses.formId = ($location.search()).form;
+        var responses = this;
+        responses.formId = ($location.search()).form;
         responses.versionNumber = ($location.search()).ver;
         responses.json = '';
 
         responses.getResponses = function(){
-            $http.get(responses.formId+'/'+ responses.versionNumber+'/')
-            .success(function(data){
-                responses.json = data;
-            })
-            .error(function(data, status, headers, config){
-                alert(data + status);
+            ResponsesService.query({formId: responses.formId, versionId: responses.versionNumber},
+                function (data){
+                    delete data.$promise;
+                    delete data.$resolved;
+                    responses.json = JSON.parse(JSON.stringify(data));
+            }, function(error){
+                console.log(error);
+                if (error.data.error) {
+                    alert('Error cargando respuestas: ' + error.data.error);
+                } else {
+                    alert('Error cargando respuestas: ' + error.data);
+                };
             });
         };
 
         // Calls the function getResponses
         responses.getResponses();
- 		responses.isFile = function(field){
+        responses.isFile = function(field){
             var re = new RegExp('FileField');
             var infoFile =  /\[.*\].*:(.*)/g.exec(field);
             var res = '';
             res = re.exec(field);
             return res != null && infoFile[1] != ' ';
-            
+
         };
 
         responses.fieldResponse=function(field){
