@@ -182,6 +182,8 @@ class VersionDetail(generics.RetrieveUpdateDestroyAPIView):
 
     def get(self, request, pk, number, format=None):
         version = self.get_object(pk, number)
+        if type(version) is not Version:
+            return version
         serializer = VersionSerializer(version)
         return Response(serializer.data)
 
@@ -371,25 +373,28 @@ def is_shown(request, version, field, item_id):
                     field_org = serializer.object
                     data = field_org.answer
                     break
-        operator = ''
-        if condition['comparator'] == "greater_than":
-            operator = '>'
-        elif condition['comparator'] == "greater_than_or_equal":
-            operator = '>='
-        elif condition['comparator'] == "equal":
-            operator = '=='
-        elif condition['comparator'] == "not_equal":
-            operator = '!='
-        elif condition['comparator'] == "less_than_or_equal":
-            operator = '<='
-        elif condition['comparator'] == "less_than":
-            operator = '<'
-        if operator != '':
-            expression = data + operator + condition['value'].__str__()
-            eval_results.append(eval(expression))
-        # TODO: Missing error handling
+        if data:
+            operator = ''
+            if condition['comparator'] == "greater_than":
+                operator = '>'
+            elif condition['comparator'] == "greater_than_or_equal":
+                operator = '>='
+            elif condition['comparator'] == "equal":
+                operator = '=='
+            elif condition['comparator'] == "not_equal":
+                operator = '!='
+            elif condition['comparator'] == "less_than_or_equal":
+                operator = '<='
+            elif condition['comparator'] == "less_than":
+                operator = '<'
+            if operator != '':
+                expression = data + operator + condition['value'].__str__()
+                eval_results.append(eval(expression))
+            # TODO: Missing error handling
+            else:
+                pass
         else:
-            pass
+            eval_results.append(False)
 
     if logic[item_id]['action'] == 'All':
         value = True
