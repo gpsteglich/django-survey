@@ -2,14 +2,14 @@
 
 
 (function () {
-	
+
     var app = angular.module('dynamicFormsFrameworkAdmin');
-    
+
     /*
-     * This controller handles the logic to create, edit and save a form.
-     */    
-    app.controller('statisticsCtrl', function ($scope, $http, $location, $window, $filter) {
-    	
+     * This controller handles the retrival of data to create the form statistics
+     */
+    app.controller('statisticsCtrl', function ($scope, $location, $window, $filter, StatisticsService) {
+
         var separator = '/';
         var stat = this;
     	stat.formId = ($location.search()).form;
@@ -40,7 +40,7 @@
                 y: []
             }]
         };
-        
+
         stat.values = {};
         stat.filter_id = '';
         stat.filter_type = '';
@@ -53,9 +53,9 @@
             }else {
                 stat.path = '';
             }
-            $http.get('../statistics/'+stat.formId+'/'+stat.versionNumber+'/'+stat.path)
-                .success(function(data){
-                    stat.json = JSON.parse(JSON.stringify(data));
+            StatisticsService.get({formId:stat.formId, versionId: stat.versionNumber},
+                function(stats){
+                    stat.json = JSON.parse(JSON.stringify(stats));
                     for(var field_id in stat.json){
                         var field = $.extend({}, stat.json[field_id]);
                         if (field.field_type == 'NumberField'){
@@ -71,7 +71,7 @@
                             stat.values[field_id] = {
                                 'id': field_id,
                                 'chart': 'pie',
-                                'field_type': 'NumberField',  
+                                'field_type': 'NumberField',
                                 'conf': conf,
                                 'data': d,
                                 'm' : field.mean,
@@ -96,7 +96,7 @@
                             stat.values[field_id] = {
                                 'id': field_id,
                                 'chart': 'pie',
-                                'field_type': 'SelectField',  
+                                'field_type': 'SelectField',
                                 'conf': conf,
                                 'data': d,
                                 'tf' : field.total_filled,
@@ -117,7 +117,7 @@
                             stat.values[field_id] = {
                                 'id': field_id,
                                 'chart': 'pie',
-                                'field_type': 'CheckboxField',  
+                                'field_type': 'CheckboxField',
                                 'conf': conf,
                                 'data': d,
                                 'tf' : field.total_filled,
@@ -126,16 +126,14 @@
                                 'type': 'Checkbox'
                             };
                         }
-                                        
                     }
-                })
-                .error(function(data, status, headers, config){
-                    alert('error loading statistics: ' + data);
-                });
+            }, function(error){
+                alert("Error loading statistics: " + error.data);
+            });
         };
-     
+
         stat.getStatistics();
-     
+
         stat.Discard = function(){
             stat.filter_id = '';
             stat.filter_type = '';
@@ -148,7 +146,7 @@
         $scope.chart_types = [
             'pie',
             'bar',
-        ];    
+        ];
 
     });
 })();
