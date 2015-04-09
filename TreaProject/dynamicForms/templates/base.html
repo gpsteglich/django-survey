@@ -78,6 +78,9 @@
         <script src={% static "angular/angular.js" %}></script>
         {% endaddtoblock %}
         {% addtoblock "js" %}
+        <script src={% static "angular/angular-resource.min.js" %}></script>
+        {% endaddtoblock %}
+        {% addtoblock "js" %}
         <script src={% static "bootstrap/js/ui-bootstrap.min.js" %}></script>
         {% endaddtoblock %}
         {% addtoblock "js" %}
@@ -88,6 +91,12 @@
         {% endaddtoblock %}
         {% addtoblock "js" %}
         <script src={% static "angular/sortable.js" %}></script>
+        {% endaddtoblock %}
+        {% addtoblock "js" %}
+        <script src={% static "angular/angular-file-upload.js" %}></script>
+        {% endaddtoblock %}
+        {% addtoblock "js" %}
+        <script src={% static "angular/captcha.js" %}></script>
         {% endaddtoblock %}
         {% addtoblock "js" %}
         <script src={% static "angular/angular-charts.min.js" %}></script>   

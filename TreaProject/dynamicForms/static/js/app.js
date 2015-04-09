@@ -5,7 +5,9 @@
     * Module dynamicFormsFramework
     * This module encapsulates the logic that will handle the form.
     */
-    var app = angular.module('dynamicFormsFrameworkAdmin', ['ui.sortable','ui.bootstrap','checklist-model','angularCharts', 'ngResource'])
+    var app = angular.module('dynamicFormsFrameworkAdmin', ['ui.sortable','ui.bootstrap',
+                                                            'checklist-model','angularCharts',
+                                                            'udpCaptcha', 'ngResource'])
     .config(['$locationProvider', '$httpProvider', function ($locationProvider, $httpProvider) {
 
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';

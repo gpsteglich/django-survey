@@ -120,7 +120,7 @@
                                                         {% ifnotequal v.status 0 %} disabled {% endifnotequal %}>
                                                         <span class="glyphicon glyphicon-pencil"></span> EDIT
                                                     </a>
-                                                    <a type="button" class="btn btn-default btn-sm" target="_blank" href= "{% url 'visor' %}?form={{form.id}}&ver={{v.number}}" 
+                                                    <a type="button" class="btn btn-default btn-sm" target="_blank" href= "{% url 'preview' %}#?form={{form.id}}&ver={{v.number}}" 
                                                         {% ifnotequal v.status 1 %} disabled {% endifnotequal %}>
                                                         <span class="glyphicon glyphicon-eye-open"></span> VIEW
                                                     </a>
