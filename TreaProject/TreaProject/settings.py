@@ -155,6 +155,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 CMS_TEMPLATES = (
+    ('cms_template.html', 'Template One'),
 )
 
 LANGUAGES = [
