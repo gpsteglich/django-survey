@@ -36,6 +36,9 @@
     <script src={% static "angular/angular.js" %}></script>
     {% endaddtoblock %}
     {% addtoblock "js" %}
+    <script src={% static "angular/angular-resource.min.js" %}></script>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
     <script src={% static "angular/angular-file-upload.js" %}></script>
     {% endaddtoblock %}
     {% addtoblock "js" %}
@@ -51,6 +54,12 @@
 
     {% addtoblock "js" %}
     <script src={% static "js/appVisor.js" %}></script>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
+    <script src={% static "js/services/visorResources.js" %}></script>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
+    <script src={% static "js/directives/question.js" %}></script>
     {% endaddtoblock %}
     {% addtoblock "js" %}
     <script src={% static "js/visorCtrl.js" %}></script>

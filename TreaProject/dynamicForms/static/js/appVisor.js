@@ -5,7 +5,8 @@
     * Module dynamicFormsFramework
     * This module encapsulates the logic that will handle the form.
     */
-    var app = angular.module('dynamicFormsFramework', ['ui.bootstrap','checklist-model', 'udpCaptcha','angularFileUpload'])
+    var app = angular.module('dynamicFormsFramework', ['ui.bootstrap','checklist-model', 'udpCaptcha','ngResource',
+                                                        'angularFileUpload','survey-question'])
     .config(['$locationProvider','$httpProvider', function ($locationProvider, $httpProvider) {
         
         $locationProvider.html5Mode({
@@ -15,6 +16,11 @@
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';
 		$httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 
+    }]);
+
+    app.config(['$resourceProvider', function($resourceProvider) {
+       // Don't strip trailing slashes from calculated URLs
+       $resourceProvider.defaults.stripTrailingSlashes = false;
     }]);
 
     /*
