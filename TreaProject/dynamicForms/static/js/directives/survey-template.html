@@ -40,7 +40,7 @@
                   <span class="glyphicon glyphicon-arrow-left">
               </button>
               <button type="button" ng-click="next()" ng-show="canNext()"
-                  class="btn btn-primary pull-right">
+                  ng-disabled="dynForm.$invalid" class="btn btn-primary pull-right">
                   <span class="glyphicon glyphicon-arrow-right">
               </button>
           </div>
