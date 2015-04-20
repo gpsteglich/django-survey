@@ -53,12 +53,12 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'rest_framework',
     'dynamicForms',
-    'south',
+    # 'south',
     'sekizai',
     'compressor',
-    'cms',  # django CMS itself
+    # 'cms',  # django CMS itself
     'mptt',  # utilities for implementing a modified pre-order traversal tree
-    'menus',  # helper for model independent hierarchical website navigation
+    # 'menus',  # helper for model independent hierarchical website navigation
 
 )
 
@@ -67,16 +67,16 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.admindocs.middleware.XViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
-    'django.middleware.doc.XViewMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'cms.middleware.user.CurrentUserMiddleware',
-    'cms.middleware.page.CurrentPageMiddleware',
-    'cms.middleware.toolbar.ToolbarMiddleware',
-    'cms.middleware.language.LanguageCookieMiddleware',
+    # 'cms.middleware.user.CurrentUserMiddleware',
+    # 'cms.middleware.page.CurrentPageMiddleware',
+    # 'cms.middleware.toolbar.ToolbarMiddleware',
+    # 'cms.middleware.language.LanguageCookieMiddleware',
 )
 
 ROOT_URLCONF = 'TreaProject.urls'
@@ -151,12 +151,12 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
     'sekizai.context_processors.sekizai',
-    'cms.context_processors.cms_settings',
+    # 'cms.context_processors.cms_settings',
 )
 
-CMS_TEMPLATES = (
-    ('cms_template.html', 'Template One'),
-)
+# CMS_TEMPLATES = (
+#     ('cms_template.html', 'Template One'),
+# )
 
 LANGUAGES = [
     ('en-us', 'English'),

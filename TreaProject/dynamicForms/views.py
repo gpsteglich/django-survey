@@ -19,6 +19,7 @@ from rest_framework.parsers import MultiPartParser,FormParser,JSONParser
 from rest_framework import generics
 from rest_framework import permissions
 from rest_framework import status
+from rest_framework import serializers
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 
@@ -48,8 +49,8 @@ class FormList(generics.ListCreateAPIView):
     serializer_class = FormSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
-    def pre_save(self, obj):
-        obj.owner = self.request.user
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
@@ -150,10 +151,10 @@ class VersionList(generics.ListCreateAPIView):
             return Response(content, status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request, pk, format=None):
-        serializer = VersionSerializer(data=request.DATA)
+        serializer = VersionSerializer(data=request.DATA, partial=True)
         form = Form.objects.get(id=pk)
         if serializer.is_valid():
-            serializer.object.form = form
+            # serializer.form = form
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -369,9 +370,9 @@ def is_shown(request, version, field, item_id):
         for field in form_json:
             serializer = FieldEntrySerializer(data=field)
             if serializer.is_valid():
-                if serializer.object.field_id == condition['field']:
-                    field_org = serializer.object
-                    data = field_org.answer
+                if serializer.initial_data['field_id'] == condition['field']:
+                    field_org = serializer.initial_data
+                    data = field_org['answer']
                     break
         if data:
             operator = ''
@@ -425,12 +426,12 @@ def validate_logic(request, version):
         field_page = -1
         serializer = FieldEntrySerializer(data=field)
         if serializer.is_valid():
-            obj = serializer.object
+            obj = serializer.initial_data
             index = -1
             for page in pages:
                 index += 1
                 for page_field in page['fields']:
-                    if page_field['field_id'] == obj.field_id:
+                    if page_field['field_id'] == obj['field_id']:
                         field_page = index
                         break
                 if field_page != -1:
@@ -439,9 +440,9 @@ def validate_logic(request, version):
             if field_page == -1:
                 return False
 
-            shown = is_shown(request, version, True, obj.field_id.__str__())
+            shown = is_shown(request, version, True, obj['field_id'].__str__())
             shown = shown & pages_show_value[field_page]
-            if shown != obj.shown:
+            if shown != obj['shown']:
                 # If recived shown value differs from calculated, we return False
                 return False
     # If there are no errors, logic is valid
@@ -460,23 +461,23 @@ def submit_form_entry(request, slug, format=None):
     for field in form_json:
         serializer = FieldEntrySerializer(data=field)
         if serializer.is_valid():
-            obj = serializer.object
-            if obj.required and obj.answer.__str__() == '' and obj.shown:
-                error_log['error'] += obj.text + ': This field is required\n'
-            elif not obj.required and obj.answer.__str__() == '':
+            obj = serializer.initial_data
+            if obj['required'] and obj['answer'].__str__() == '' and obj['shown']:
+                error_log['error'] += obj['text'] + ': This field is required\n'
+            elif not obj['required'] and obj['answer'].__str__() == '':
                 pass
-            elif obj.shown:
-                fld = (Factory.get_class(obj.field_type))()
+            elif obj['shown']:
+                fld = (Factory.get_class(obj['field_type']))()
                 try:
                     loaded = json.loads(final_version.json)
-                    f_id = obj.field_id
+                    f_id = obj['field_id']
                     kw = {}
                     f = Field_Data()
                     data = FieldSerializer(f, field)
                     if (data.is_valid()):
                         kw['field'] = f
                         kw['options'] = fld.get_options(loaded, f_id)
-                        fld.validate(obj.answer, **kw)
+                        fld.validate(obj['answer'], **kw)
                     else:
                         raise ValidationError("Invalid JSON format.")
                     
@@ -498,15 +499,16 @@ def submit_form_entry(request, slug, format=None):
     for field in form_json:
             serializer = FieldEntrySerializer(data=field)
             if serializer.is_valid():
-                serializer.object.entry = entry
-                if not serializer.object.shown:
-                    serializer.object.answer = ''
-                serializer.save()
+                # serializer.object.entry = entry
+                if not serializer.initial_data['shown']:
+                    # serializer.object.answer = ''
+                    field_entry = serializer.save(entry=entry, answer='')
+                field_entry = serializer.save(entry=entry)
                 # If field is a FileField we find the corresponding file and save it to the database
-                if serializer.object.field_type == 'FileField':
-                    data_json = serializer.object.answer
+                if field_entry.field_type == 'FileField':
+                    data_json = field_entry.answer
                     if data_json != '':
-                        FileEntry.objects.create(field_id=serializer.object.field_id,file_type=request.FILES[data_json].content_type,file_data=request.FILES[data_json],field_entry=FieldEntry.objects.get(pk=serializer.object.pk),file_name=request.FILES[data_json].name)
+                        FileEntry.objects.create(field_id=field_entry.field_id,file_type=request.FILES[data_json].content_type,file_data=request.FILES[data_json],field_entry=FieldEntry.objects.get(pk=field_entry.pk),file_name=request.FILES[data_json].name)
     return Response(status=status.HTTP_200_OK)
 
 logger = logging.getLogger(__name__)
@@ -617,8 +619,8 @@ def after_submit_message(request, slug):
     js = json.loads(final_version.json)
     serializer = AfterSubmitSerializer(data=js['after_submit'])
     if serializer.is_valid():
-        d = serializer.object
-        msj = d.message
+        d = serializer.initial_data
+        msj = d['message']
     message = msj.split("\n")
     return render_to_response('form_submitted.html', {"message": message}, context_instance=RequestContext(request))
 

@@ -191,8 +191,6 @@
                 editor.version = {
                     'json' : '',
                     'status' :0 ,
-                    'publish_date' : '',
-                    'expiry_date' : '',
                     'number' : 0,
                     'owner' : '',
                     'form' : '',
@@ -223,10 +221,18 @@
                                 editor.max_id = 0;
                             }
                         }, function(error){
-                            alert('Error loading version: ' + error.data.error);
+                            if (error.data.error) {
+                                alert('Error loading version: ' + error.data.error);
+                            } else {
+                                alert('Error loading version: ' + error.data);
+                            };
                         })
                 }, function(error){
-                    alert('Error loading survey: ' + error.data.detail);
+                    if (error.data.detail) {
+                        alert('Error loading survey: ' + error.data.detail);
+                    } else {
+                        alert('Error loading survey: ' + error.data);
+                    };
                 });
             }
         };
@@ -299,12 +305,21 @@
                                 $location.search({form:editor.formIdParam, ver:editor.versionIdParam});
                             }
                         }, function(error){
-                            alert('Error loading version: ' + error.data);
+                            if (error.data.error) {
+                                alert('Error saving version: ' + error.data.error);    
+                            } else {
+                                alert('Error saving version: ' + error.data);
+                            };
                         })
                 }, function(error){
-                    alert('Error loading survey: ' + error.data.error);
+                    if (error.data.error) {
+                        alert('Error saving survey: ' + error.data.error);
+                    } else {
+                        alert('Error saving survey: ' + error.data);
+                    };
                 });
             } else {
+                editor.version.form = editor.formIdParam;
                 FormService.update({id: editor.formIdParam}, editor.form, function(form){
                     delete form.$promise;
                     delete form.$resolved;
@@ -319,10 +334,18 @@
                                 $window.location.href = 'main';
                             }
                         }, function(error){
-                            alert('Error loading version: ' + error.data);
+                            if (error.data.error) {
+                                alert('Error saving version: ' + error.data.error);    
+                            } else {
+                                alert('Error saving version: ' + error.data);
+                            };
                         })
                 }, function(error){
-                    alert('Error loading survey: ' + error.data.error);
+                    if (error.data.error) {
+                        alert('Error saving survey: ' + error.data.error);
+                    } else {
+                        alert('Error saving survey: ' + error.data);
+                    };
                 });
             }
         };

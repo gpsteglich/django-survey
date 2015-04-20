@@ -20,8 +20,18 @@
                     delete data.$promise;
                     delete data.$resolved;
                     responses.json = JSON.parse(JSON.stringify(data));
+                    var fields,location;
+                    for (var i = 0; i < responses.json.length; i++) {
+                        fields = responses.json[i].fields;
+                        for (var j = 0; j < fields.length; j++) {
+                            if (fields[j].field_type == 'FileField'){
+                                location = window.location.href.split("#")[0];
+                                location += 'download/' + fields[j].field_id + '/' + fields[j].pk + '/';
+                                fields[j].download_link = location;
+                            }
+                        };
+                    };
             }, function(error){
-                console.log(error);
                 if (error.data.error) {
                     alert('Error cargando respuestas: ' + error.data.error);
                 } else {

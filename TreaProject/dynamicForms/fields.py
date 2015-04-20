@@ -3,7 +3,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from south.modelsinspector import add_introspection_rules
+# from south.modelsinspector import add_introspection_rules
 
 
 # Form status constants
@@ -17,7 +17,7 @@ STATUS = (
           (EXPIRED, _("Expired")),
           )
 
-add_introspection_rules([], ["^dynamicForms.fields.JSONField"])
+# add_introspection_rules([], ["^dynamicForms.fields.JSONField"])
 
 
 class JSONField(models.TextField):

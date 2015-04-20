@@ -59,6 +59,8 @@
                     for(var field_id in stat.json){
                         var field = $.extend({}, stat.json[field_id]);
                         if (field.field_type == 'NumberField'){
+                            field.quintilesX = eval(field.quintilesX);
+                            field.quintilesY = eval(field.quintilesY);
                             var conf = angular.copy(stat.config);
                             conf.title = field.field_text;
                             var d = angular.copy(stat.data);
@@ -84,6 +86,8 @@
                                 'type': 'Number'
                             };
                         } else if (field.field_type == 'SelectField'){
+                            field.total_per_option = eval(field.total_per_option);
+                            field.options = eval(field.options);
                             var conf = angular.copy(stat.config);
                             conf.title = field.field_text;
                             var d = angular.copy(stat.data);
@@ -105,6 +109,8 @@
                                 'type': 'Combobox'
                             };
                         } else if (field.field_type == 'CheckboxField'){
+                            field.total_per_option = eval(field.total_per_option);
+                            field.options = eval(field.options);
                             var conf = angular.copy(stat.config);
                             conf.title = field.field_text;
                             var d = angular.copy(stat.data);

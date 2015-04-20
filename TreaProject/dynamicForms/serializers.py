@@ -14,12 +14,12 @@ class FormSerializer(serializers.ModelSerializer):
     """
     Complete serializer for the forms used for the REST framework
     """
-    owner = serializers.Field(source='owner.username')
-    versions = serializers.RelatedField(many=True)
+    owner = serializers.ReadOnlyField(source='owner.username')
+    # versions = serializers.RelatedField(many=True, read_only=True)
 
     class Meta:
         model = Form
-        fields = ('id', 'title', 'slug', 'versions', 'owner')
+        fields = ('id', 'title', 'slug', 'owner')
         read_only_fields = ('slug', 'id', )
 
 
@@ -27,32 +27,63 @@ class VersionSerializer(serializers.ModelSerializer):
     """
     Complete serializer for the forms used for the REST framework
     """
-    form = serializers.Field(source='form.title')
+    form = serializers.ReadOnlyField(source='form.id')
     json = serializers.CharField(required=False)
 
-    def validate_json(self, attrs, source):
-        value = json.loads(attrs[source])
+    def to_internal_value(self, data):
+        formId = data['form']
+        form = Form.objects.get(id=formId)
+        data['form'] = form
+        value = json.loads(data['json'])
         for page in value['pages']:
             for field in page['fields']:
                 f_type = Factory.get_class(field['field_type'])
                 kw = {}
                 f = Field_Data()
-                data = FieldSerializer(f, field)
-                if (data.is_valid()):
-                    f_type().check_consistency(f)
-                else:
-                    raise ValidationError("Invalid JSON format.")
-        return attrs
+                fieldData = FieldSerializer(f, field)
+                fieldData.update(f, field)
+                # if (data.is_valid()):
+                f_type().check_consistency(f)
+                # else:
+                    # raise ValidationError("Invalid JSON format.")
+        return data
+
+    def to_representation(self, obj):
+        '''
+        Override to_representation method to change the form ID for its title
+        '''
+        data = {}
+        data['number'] = obj.number
+        data['json'] = obj.json
+        data['captcha'] = obj.captcha
+        data ['form'] = obj.form.title
+        data['status'] = obj.status
+
+        return data
+
+    def update(self, instance, validated_data):
+        instance.number = validated_data.get('number', instance.number)
+        instance.status = validated_data.get('status', instance.status)
+        instance.json = validated_data.get('json', instance.json)
+        instance.captcha = validated_data.get('captcha', instance.captcha)
+        instance.save()
+        return instance
+
+    def create(self, validated_data):
+        if 'owner' in validated_data:
+            del validated_data['owner']
+        return Version.objects.create(**validated_data)
+
 
     class Meta:
         model = Version
-        fields = ('number', 'status', 'publish_date', 'expiry_date',
+        fields = ('number', 'status',
                  'json', 'form', 'captcha')
         read_only_fields = ('number',)
 
 
 class UserSerializer(serializers.ModelSerializer):
-    forms = serializers.PrimaryKeyRelatedField(many=True)
+    forms = serializers.PrimaryKeyRelatedField(many=True, queryset=Form.objects.all())
 
     class Meta:
         model = User
@@ -61,16 +92,34 @@ class UserSerializer(serializers.ModelSerializer):
 
 class FieldEntrySerializer(serializers.ModelSerializer):
 
+    def create(self, validated_data):
+        return FieldEntry.objects.create(**validated_data)
+
     class Meta:
         model = FieldEntry
-        fields = ('field_id', 'field_type', 'text', 'required', 'shown', 'answer')
+        fields = ('pk', 'field_id', 'field_type', 'text', 'required', 'shown', 'answer')
+        read_only_fields = ('pk',)
 
 
 class FormEntrySerializer(serializers.ModelSerializer):
     """
     Serializer for the form entries
     """
-    fields = serializers.RelatedField(many=True)
+    fields = serializers.RelatedField(many=True, queryset=FormEntry.objects.all())
+
+    def create(self, validated_data):
+        return FormEntry.objects.create(**validated_data)
+
+    def to_representation(self, obj):
+        data = {}
+        data['entry_time'] = obj.entry_time
+        data['fields'] = []
+        for field in obj.fields.all():
+            serializer = FieldEntrySerializer(field)
+            serializer.data['id'] = field.pk
+            data['fields'].append(serializer.data)
+
+        return data
 
     class Meta:
         model = FormEntry

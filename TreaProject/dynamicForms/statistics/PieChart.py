@@ -3,6 +3,7 @@ from reportlab.graphics.charts.legends import Legend
 from reportlab.graphics.shapes import Drawing 
 from reportlab.lib.colors import Color, HexColor
 
+import json
 
 class PieChart(Drawing):
     
@@ -31,8 +32,10 @@ class PieChart(Drawing):
         pieChart.width = 120
         pieChart.height = 120
         pieChart.slices.strokeWidth=0.5
+        data = json.loads(data)
         pieChart.data = data
         pieChart.labels = []
+        labels = json.loads(labels.replace("'",'"'))
         for d in data:
             pieChart.labels.append(str(d))
 

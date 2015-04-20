@@ -8,7 +8,7 @@ from django.core.mail import send_mail
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 
-from cms.models.pluginmodel import CMSPlugin
+# from cms.models.pluginmodel import CMSPlugin
 
 from dynamicForms.fields import JSONField, STATUS, DRAFT, PUBLISHED, EXPIRED
 from dynamicForms.JSONSerializers import AfterSubmitSerializer
@@ -164,7 +164,10 @@ class Version(models.Model):
                     raise ValidationError("There is a previous draft "
                     "pending for this Form")
                 self.number = all_versions.count() + 1
-        if (self.status == PUBLISHED) and (self.publish_date is None):
+            else:
+                self.number = 1
+        if ((self.status == PUBLISHED) and
+                    (self.publish_date is None or self.publish_date == '' )):
             self.publish_date = datetime.now()
             # If there is a previous published version,
             # its status is changed to expired.
@@ -175,7 +178,7 @@ class Version(models.Model):
                 prev.status = EXPIRED
                 prev.expiry_date = datetime.now()
                 super(Version, prev).save()
-        elif (self.publish_date is not None):
+        elif (self.publish_date is not None and self.publish_date != ''):
             raise ValidationError('You cannot edit a published form')
         super(Version, self).save(*args, **kwargs)
 
@@ -209,16 +212,16 @@ class FieldEntry(models.Model):
         return '[%s,%s,%s] %s : %s' % (self.field_type,self.field_id.__str__(),self.pk.__str__(), self.text, self.answer)
 
 
-class Survey(CMSPlugin):
-    form = models.ForeignKey(Form, related_name='plugins',limit_choices_to={'versions__status__exact': PUBLISHED})
-    slug = models.SlugField(max_length=100, blank=True)
+# class Survey(CMSPlugin):
+#     form = models.ForeignKey(Form, related_name='plugins',limit_choices_to={'versions__status__exact': PUBLISHED})
+#     slug = models.SlugField(max_length=100, blank=True)
 
-    def save(self, *args, **kwargs):
-        self.slug = self.form.slug
-        super(Survey, self).save(*args, **kwargs)
+#     def save(self, *args, **kwargs):
+#         self.slug = self.form.slug
+#         super(Survey, self).save(*args, **kwargs)
 
-    def __str__(self):
-        return self.slug
+#     def __str__(self):
+#         return self.slug
 
 
 @receiver(post_save, sender=Form)
@@ -246,15 +249,15 @@ def notification_mail(sender, **kwargs):
     js = json.loads(instance.version.json)
     serializer = AfterSubmitSerializer(data=js['after_submit'])
     if serializer.is_valid():
-        d = serializer.object
-        if d.sendMail:
-            content = d.mailText
-            subject = d.mailSubject
-            sender = d.mailSender
-            recipient = d.mailRecipient
+        d = serializer.initial_data
+        if d['sendMail']:
+            content = d['mailText']
+            subject = d['mailSubject']
+            sender = d['mailSender']
+            recipient = d['mailRecipient']
             try:
                 send_mail(subject, content, sender, [recipient], fail_silently=False)
-                logger.info("Mail has been sent to '" + d.mailRecipient +
+                logger.info("Mail has been sent to '" + d['mailRecipient'] +
                             "' after completing Version " + kwargs['instance'].version.number.__str__() +
                             " of Form '" + kwargs['instance'].version.form.slug + "'")
             except Exception as e:
