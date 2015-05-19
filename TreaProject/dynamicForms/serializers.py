@@ -1,5 +1,4 @@
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
 import json
 
 from rest_framework import serializers
@@ -7,7 +6,7 @@ from rest_framework import serializers
 from dynamicForms.models import Form, FieldEntry, Version, FormEntry
 from dynamicForms.fields import Field_Data
 from dynamicForms.fieldtypes.FieldFactory import FieldFactory as Factory
-from dynamicForms.JSONSerializers import FieldSerializer 
+from dynamicForms.JSONSerializers import FieldSerializer
 
 
 class FormSerializer(serializers.ModelSerializer):
@@ -31,21 +30,17 @@ class VersionSerializer(serializers.ModelSerializer):
     json = serializers.CharField(required=False)
 
     def to_internal_value(self, data):
-        formId = data['form']
-        form = Form.objects.get(id=formId)
+        form_id = data['form']
+        form = Form.objects.get(id=form_id)
         data['form'] = form
         value = json.loads(data['json'])
         for page in value['pages']:
             for field in page['fields']:
                 f_type = Factory.get_class(field['field_type'])
-                kw = {}
                 f = Field_Data()
-                fieldData = FieldSerializer(f, field)
-                fieldData.update(f, field)
-                # if (data.is_valid()):
+                field_data = FieldSerializer(f, field)
+                field_data.update(f, field)
                 f_type().check_consistency(f)
-                # else:
-                    # raise ValidationError("Invalid JSON format.")
         return data
 
     def to_representation(self, obj):
@@ -56,7 +51,7 @@ class VersionSerializer(serializers.ModelSerializer):
         data['number'] = obj.number
         data['json'] = obj.json
         data['captcha'] = obj.captcha
-        data ['form'] = obj.form.title
+        data['form'] = obj.form.title
         data['status'] = obj.status
 
         return data
@@ -74,16 +69,15 @@ class VersionSerializer(serializers.ModelSerializer):
             del validated_data['owner']
         return Version.objects.create(**validated_data)
 
-
     class Meta:
         model = Version
-        fields = ('number', 'status',
-                 'json', 'form', 'captcha')
+        fields = ('number', 'status', 'json', 'form', 'captcha')
         read_only_fields = ('number',)
 
 
 class UserSerializer(serializers.ModelSerializer):
-    forms = serializers.PrimaryKeyRelatedField(many=True, queryset=Form.objects.all())
+    forms = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=Form.objects.all())
 
     class Meta:
         model = User
@@ -97,7 +91,10 @@ class FieldEntrySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FieldEntry
-        fields = ('pk', 'field_id', 'field_type', 'text', 'required', 'shown', 'answer')
+        fields = (
+            'pk', 'field_id', 'field_type',
+            'text', 'required', 'shown', 'answer'
+        )
         read_only_fields = ('pk',)
 
 
@@ -105,7 +102,8 @@ class FormEntrySerializer(serializers.ModelSerializer):
     """
     Serializer for the form entries
     """
-    fields = serializers.RelatedField(many=True, queryset=FormEntry.objects.all())
+    fields = serializers.RelatedField(
+        many=True, queryset=FormEntry.objects.all())
 
     def create(self, validated_data):
         return FormEntry.objects.create(**validated_data)

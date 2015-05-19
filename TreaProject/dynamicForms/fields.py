@@ -12,10 +12,10 @@ PUBLISHED = 1
 EXPIRED = 2
 # These are the possible status for a form
 STATUS = (
-          (DRAFT, _("Draft")),
-          (PUBLISHED, _("Published")),
-          (EXPIRED, _("Expired")),
-          )
+    (DRAFT, _("Draft")),
+    (PUBLISHED, _("Published")),
+    (EXPIRED, _("Expired")),
+)
 
 # add_introspection_rules([], ["^dynamicForms.fields.JSONField"])
 
@@ -52,8 +52,8 @@ class JSONField(models.TextField):
             value = json.dumps(value, cls=DjangoJSONEncoder)
 
         return super(JSONField, self).get_db_prep_save(value, connection)
-    
-    
+
+
 class Validations():
     """
     Class for validation objects of the versions json
@@ -61,17 +61,17 @@ class Validations():
     max_len_text = models.IntegerField(blank=True)
     max_number = models.IntegerField(blank=True)
     min_number = models.IntegerField(blank=True)
-    
+
     def valid_number(self):
-        if (self.max_number != None) \
-         and (self.min_number != None):
+        if ((self.max_number is not None)
+                and (self.min_number is not None)):
             return self.max_number >= self.min_number
         return True
-    
+
     def valid_text(self):
-        if self.max_len_text != None:
+        if self.max_len_text is not None:
             return self.max_len_text > 0
-    
+
     def __init__(self):
         self.max_len_text = None
         self.max_number = None
@@ -84,8 +84,10 @@ class Option():
 
 
 class Dependencies():
-    fields = models.CommaSeparatedIntegerField(null=True, blank=True, max_length=300) 
-    pages = models.CommaSeparatedIntegerField(null=True, blank=True, max_length=300)
+    fields = models.CommaSeparatedIntegerField(
+        null=True, blank=True, max_length=300)
+    pages = models.CommaSeparatedIntegerField(
+        null=True, blank=True, max_length=300)
 
 
 class Field_Data():
@@ -110,7 +112,7 @@ class AfterSubmit(object):
     mailRecipient = models.CharField()
     message = models.CharField()
     redirect = models.CharField()
-    
+
     def __init__(self, sendMail, action, mailSubject, mailText, mailSender, 
                  mailRecipient, message, redirect):
         self.sendMail = sendMail

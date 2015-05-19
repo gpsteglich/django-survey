@@ -25,7 +25,8 @@ class FormEntryQuerySet(models.query.QuerySet):
     def data_icontains(self, field_id, data, exclude=False):
         entries = set()
         for entry in self:
-            fields = entry.fields.filter(field_id=field_id, answer__icontains=data)
+            fields = entry.fields.filter(
+                field_id=field_id, answer__icontains=data)
             if exclude:
                 if fields.count() == 0:
                     entries.add(entry.pk)
@@ -37,7 +38,8 @@ class FormEntryQuerySet(models.query.QuerySet):
     def data_iexact(self, field_id, data, exclude=False):
         entries = set()
         for entry in self:
-            fields = entry.fields.filter(field_id=field_id, answer__iexact=data)
+            fields = entry.fields.filter(
+                field_id=field_id, answer__iexact=data)
             if exclude:
                 if fields.count() == 0:
                     entries.add(entry.pk)
@@ -50,15 +52,20 @@ class FormEntryQuerySet(models.query.QuerySet):
         entries = set()
         for entry in self:
             if operator == 'gt':
-                fields = entry.fields.filter(field_id=field_id, answer__gt=data)
+                fields = entry.fields.filter(
+                    field_id=field_id, answer__gt=data)
             elif operator == 'gte':
-                fields = entry.fields.filter(field_id=field_id, answer__gte=data)
+                fields = entry.fields.filter(
+                    field_id=field_id, answer__gte=data)
             elif operator == 'lt':
-                fields = entry.fields.filter(field_id=field_id, answer__lt=data)
+                fields = entry.fields.filter(
+                    field_id=field_id, answer__lt=data)
             elif operator == 'lte':
-                fields = entry.fields.filter(field_id=field_id, answer__lte=data)
+                fields = entry.fields.filter(
+                    field_id=field_id, answer__lte=data)
             elif operator == 'eq':
-                fields = entry.fields.filter(field_id=field_id, answer=data)
+                fields = entry.fields.filter(
+                    field_id=field_id, answer=data)
             if exclude:
                 if fields.count() == 0:
                     entries.add(entry.pk)
@@ -117,8 +124,8 @@ class Form(models.Model):
             # Or if I try to create a new form with an conflicting slug
             f1 = Form.objects.get(slug=self.slug)
             if (self.pk != f1.pk):
-                raise ValidationError("Slug already exists."
-                " Choose another title.")
+                raise ValidationError("Slug already exists. \
+                    Choose another title.")
         super(Form, self).save(*args, **kwargs)
 
     class Meta:
@@ -132,7 +139,7 @@ class Version(models.Model):
     publish_date = models.DateTimeField(blank=True, null=True)
     expiry_date = models.DateTimeField(blank=True, null=True)
     form = models.ForeignKey("Form", related_name="versions")
-    captcha= models.BooleanField (default=False)
+    captcha = models.BooleanField(default=False)
 
     objects = VersionManager()
 
@@ -158,16 +165,16 @@ class Version(models.Model):
                     # We consider all the previous versions have to exist.
                     # There would be a severe problem if the admin
                     # touches the database to delete a old version.
-                    raise ValidationError("Oops. There is a problem with the "
-                    "version numbers. The previous version does not exist.")
+                    raise ValidationError("Oops. There is a problem with the \
+                        version numbers. The previous version does not exist.")
                 if (all_versions.get(number=count).status == DRAFT):
-                    raise ValidationError("There is a previous draft "
-                    "pending for this Form")
+                    raise ValidationError("There is a previous draft \
+                        pending for this Form")
                 self.number = all_versions.count() + 1
             else:
                 self.number = 1
         if ((self.status == PUBLISHED) and
-                    (self.publish_date is None or self.publish_date == '' )):
+                (self.publish_date is None or self.publish_date == '')):
             self.publish_date = datetime.now()
             # If there is a previous published version,
             # its status is changed to expired.
@@ -205,15 +212,22 @@ class FieldEntry(models.Model):
     required = models.BooleanField()
     shown = models.BooleanField(default=True)
     answer = models.CharField(max_length=400, blank=True, null=True)
-    entry = models.ForeignKey("FormEntry", related_name="fields",
-                             blank=True, null=True)
+    entry = models.ForeignKey(
+        "FormEntry", related_name="fields", blank=True, null=True)
 
     def __str__(self):
-        return '[%s,%s,%s] %s : %s' % (self.field_type,self.field_id.__str__(),self.pk.__str__(), self.text, self.answer)
+        return '[%s,%s,%s] %s : %s' % (
+            self.field_type,
+            self.field_id.__str__(),
+            self.pk.__str__(),
+            self.text,
+            self.answer)
 
 
 # class Survey(CMSPlugin):
-#     form = models.ForeignKey(Form, related_name='plugins',limit_choices_to={'versions__status__exact': PUBLISHED})
+#     form = models.ForeignKey(
+#         Form, related_name='plugins',
+#         limit_choices_to={'versions__status__exact': PUBLISHED})
 #     slug = models.SlugField(max_length=100, blank=True)
 
 #     def save(self, *args, **kwargs):
@@ -227,13 +241,19 @@ class FieldEntry(models.Model):
 @receiver(post_save, sender=Form)
 def form_handler(sender, **kwargs):
     if kwargs['created']:
-        logger.info("Form has been created with slug '" + kwargs['instance'].slug + "'")
+        logger.info(
+            "Form has been created with slug '{slug}'".format(
+                slug=kwargs['instance'].slug))
     else:
-        logger.info("Form has been saved with slug '" + kwargs['instance'].slug + "'")
+        logger.info("Form has been saved with slug '{slug}'".format(
+            slug=kwargs['instance'].slug))
+
 
 @receiver(post_save, sender=Version)
 def version_handler(sender, **kwargs):
-    msg = "Version " + kwargs['instance'].number.__str__() + " of Form '" + kwargs['instance'].form.slug + "'"
+    msg = "Version {version} of Form '{slug}'".format(
+        version=kwargs['instance'].number.__str__(),
+        slug=kwargs['instance'].form.slug)
     if kwargs['instance'].status == DRAFT and kwargs['created']:
         logger.info(msg + " has been created.")
     if kwargs['instance'].status == DRAFT:
@@ -242,6 +262,7 @@ def version_handler(sender, **kwargs):
         logger.info(msg + " has been published.")
     elif kwargs['instance'].status == EXPIRED:
         logger.info(msg + " has expired.")
+
 
 @receiver(post_save, sender=FormEntry)
 def notification_mail(sender, **kwargs):
@@ -256,15 +277,19 @@ def notification_mail(sender, **kwargs):
             sender = d['mailSender']
             recipient = d['mailRecipient']
             try:
-                send_mail(subject, content, sender, [recipient], fail_silently=False)
-                logger.info("Mail has been sent to '" + d['mailRecipient'] +
-                            "' after completing Version " + kwargs['instance'].version.number.__str__() +
-                            " of Form '" + kwargs['instance'].version.form.slug + "'")
+                send_mail(
+                    subject, content, sender, [recipient], fail_silently=False)
+                logger.info("Mail has been sent to '{recipient}' after \
+                    completing Version {version} of Form '{slug}'".format(
+                            recipient=d['mailRecipient'],
+                            version=str(kwargs['instance'].version.number),
+                            slug=kwargs['instance'].version.form.slug))
             except Exception as e:
-                logger.error("Error sending mail: '" + e.__str__() +
-                            "' after completing Version " + kwargs['instance'].version.number.__str__() +
-                            " of Form '" + kwargs['instance'].version.form.slug + "'")
-    
+                logger.error("Error sending mail: '{error}' after completing \
+                    Version {version} of Form '{slug}'".format(
+                    error=e.__str__(),
+                    version=str(kwargs['instance'].version.number),
+                    slug=kwargs['instance'].version.form.slug))
 
 
 class FileEntry(models.Model):
@@ -272,4 +297,5 @@ class FileEntry(models.Model):
     file_type = models.CharField(max_length=50)
     file_name = models.CharField(max_length=50)
     file_data = models.FileField(upload_to='doc')
-    field_entry = models.ForeignKey("FieldEntry",related_name="files",blank=True,null=True)
+    field_entry = models.ForeignKey(
+        "FieldEntry", related_name="files", blank=True, null=True)

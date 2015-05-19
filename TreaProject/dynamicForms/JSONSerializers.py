@@ -3,6 +3,7 @@ import ast
 
 from dynamicForms.fields import Validations, Dependencies, Field_Data, Option, AfterSubmit
 
+
 class ValidationSerializer(serializers.Serializer):
     """
     Serializer for the validations in the versions json
@@ -17,18 +18,24 @@ class ValidationSerializer(serializers.Serializer):
         an existing model instance, or create a new model instance.
         """
         if instance is not None:
-            if not validated_data.get('max_len_text') and (validated_data.get('max_len_text') != 0):
+            if (not validated_data.get('max_len_text')
+                    and (validated_data.get('max_len_text') != 0)):
                 instance.max_len_text = None
             else:
-                instance.max_len_text = validated_data.get('max_len_text', instance.max_len_text)
-            if not validated_data.get('max_number') and (validated_data.get('max_number') != 0):
+                instance.max_len_text = validated_data.get(
+                    'max_len_text', instance.max_len_text)
+            if (not validated_data.get('max_number')
+                    and (validated_data.get('max_number') != 0)):
                 instance.max_number = None
-            else:    
-                instance.max_number = validated_data.get('max_number', instance.max_number)
-            if not validated_data.get('min_number') and (validated_data.get('min_number') != 0):
+            else:
+                instance.max_number = validated_data.get(
+                    'max_number', instance.max_number)
+            if (not validated_data.get('min_number')
+                    and (validated_data.get('min_number') != 0)):
                 instance.min_number = None
             else:
-                instance.min_number = validated_data.get('min_number', instance.min_number)
+                instance.min_number = validated_data.get(
+                    'min_number', instance.min_number)
             return instance
 
 
@@ -61,8 +68,10 @@ class DependencySerializer(serializers.Serializer):
         Given a dictionary of deserialized field values, either update
         an existing model instance, or create a new model instance.
         """
-        instance.fields = ast.literal_eval(str(validated_data.get('fields', instance.fields)))
-        instance.pages = ast.literal_eval(str(validated_data.get('pages', instance.pages)))
+        instance.fields = ast.literal_eval(str(
+            validated_data.get('fields', instance.fields)))
+        instance.pages = ast.literal_eval(str(
+            validated_data.get('pages', instance.pages)))
         return instance
 
 
@@ -78,7 +87,6 @@ class FieldSerializer(serializers.Serializer):
     field_type = serializers.CharField(required=True, max_length=30)
     field_id = serializers.IntegerField(required=True)
 
-
     def update(self, instance, validated_data):
         instance.text = validated_data.get('text', instance.text)
         instance.required = validated_data.get('required', instance.required)
@@ -86,18 +94,21 @@ class FieldSerializer(serializers.Serializer):
         instance.answer = validated_data.get('answer', instance.answer)
         instance.options = validated_data.get('options', instance.options)
         instance.max_id = validated_data.get('max_id', instance.max_id)
-        instance.field_type = validated_data.get('field_type', instance.field_type)
+        instance.field_type = validated_data.get(
+            'field_type', instance.field_type)
         instance.field_id = validated_data.get('field_id', instance.field_id)
 
         dep = Dependencies()
-        dependencies = DependencySerializer(validated_data.get('dependencies', instance.dependencies))
-        instance.dependencies = dependencies.update(dep,
-                                    validated_data.get('dependencies', instance.dependencies))
+        dependencies = DependencySerializer(validated_data.get(
+            'dependencies', instance.dependencies))
+        instance.dependencies = dependencies.update(
+            dep, validated_data.get('dependencies', instance.dependencies))
 
         val = Validations()
-        validations = ValidationSerializer(validated_data.get('validations', instance.validations))
-        instance.validations = validations.update(val,
-                                    validated_data.get('validations', instance.validations))
+        validations = ValidationSerializer(validated_data.get(
+            'validations', instance.validations))
+        instance.validations = validations.update(
+            val, validated_data.get('validations', instance.validations))
 
         return instance
 
@@ -114,15 +125,17 @@ class AfterSubmitSerializer(serializers.Serializer):
     mailRecipient = serializers.CharField(required=False, allow_blank=True)
     message = serializers.CharField(required=False, allow_blank=True)
     redirect = serializers.CharField(required=False, allow_blank=True)
-    
+
     def update(self, instance, validated_data):
         instance.sendMail = validated_data.get('sendMail', instance.sendMail)
         instance.action = validated_data.get('action', instance.action)
-        instance.mailSubject = validated_data.get('mailSubject', instance.mailSubject)
+        instance.mailSubject = validated_data.get(
+            'mailSubject', instance.mailSubject)
         instance.mailText = validated_data.get('mailText', instance.mailText)
-        instance.mailSender = validated_data.get('mailSender', instance.mailSender)
-        instance.mailRecipient = validated_data.get('mailRecipient', instance.mailRecipient)
+        instance.mailSender = validated_data.get(
+            'mailSender', instance.mailSender)
+        instance.mailRecipient = validated_data.get(
+            'mailRecipient', instance.mailRecipient)
         instance.message = validated_data.get('message', instance.message)
         instance.redirect = validated_data.get('redirect', instance.redirect)
         return instance
-

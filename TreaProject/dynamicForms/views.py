@@ -19,7 +19,6 @@ from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework import generics
 from rest_framework import permissions as drf_permissions
 from rest_framework import status
-from rest_framework import serializers
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 
