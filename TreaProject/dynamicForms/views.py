@@ -14,17 +14,16 @@ import json
 import logging
 import csv
 
-from rest_framework.decorators import api_view,parser_classes
-from rest_framework.parsers import MultiPartParser,FormParser,JSONParser
+from rest_framework.decorators import api_view, parser_classes
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework import generics
-from rest_framework import permissions
+from rest_framework import permissions as drf_permissions
 from rest_framework import status
 from rest_framework import serializers
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 
 from io import BytesIO
-
 
 from .models import Form, FormEntry, Version, FieldEntry, FileEntry
 from .fields import PUBLISHED, DRAFT
@@ -33,11 +32,11 @@ from .serializers import FieldEntrySerializer, FormEntrySerializer
 from .fields import Field_Data
 from .fieldtypes.FieldFactory import FieldFactory as Factory
 from .fieldtypes.ModelField import ModelField
-from .JSONSerializers import FieldSerializer, AfterSubmitSerializer 
-from .statistics.StatisticsCtrl import StatisticsCtrl 
-from dynamicForms.statistics.StatisticsPdf import StatisticsPdf 
+from .JSONSerializers import FieldSerializer, AfterSubmitSerializer
+from .statistics.StatisticsCtrl import StatisticsCtrl
+from dynamicForms.statistics.StatisticsPdf import StatisticsPdf
 from .signals import modified_logic
-
+from .permissions import IsOwnerSuperUserOrReadOnly
 
 
 class FormList(generics.ListCreateAPIView):
@@ -45,9 +44,11 @@ class FormList(generics.ListCreateAPIView):
     APIView where the forms of the app are listed and a new form can be added.
     """
     model = Form
-    queryset = Form.objects.all()
     serializer_class = FormSerializer
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (
+        drf_permissions.IsAuthenticated,
+        IsOwnerSuperUserOrReadOnly
+    )
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -57,13 +58,18 @@ class FormList(generics.ListCreateAPIView):
         return super(FormList, self).dispatch(*args, **kwargs)
 
     def get(self, request):
-        forms = Form.objects.values()
+        user = self.request.user
+        if user.is_superuser:
+            forms = Form.objects.all().values()
+        else:
+            forms = Form.objects.filter(owner=user).values()
         index = 1
 
         for f in forms:
             # Obtain the list of versions of the form f
             # ordered by version number (descendant)
-            query_set = Form.objects.get(slug=f['slug']).versions.order_by('number').reverse()
+            query_set = Form.objects.get(
+                slug=f['slug']).versions.order_by('number').reverse()
             vers_dict = query_set.values()
             # Assign the dict of versions to the form dict
             f["versions"] = vers_dict
@@ -76,7 +82,10 @@ class FormList(generics.ListCreateAPIView):
             if len(vers_dict) > 0:
                 last_version = vers_dict[0]
                 f["lastStatus"] = last_version['status']
-        return render_to_response('mainPage.html', {"formList": forms}, context_instance=RequestContext(request))
+        return render_to_response(
+            'mainPage.html', {"formList": forms},
+            context_instance=RequestContext(request))
+
 
 @login_required
 @api_view(['GET'])
@@ -85,10 +94,17 @@ def ordered_forms(request, order="id", ad="asc"):
     Gets the list of all forms and versions from the database,
     and renders the template to show them
     """
-    if order == "owner":
-        f1 = Form.objects.all().order_by('owner__username')
+    if request.user.is_superuser:
+        if order == "owner":
+            f1 = Form.objects.all().order_by('owner__username')
+        else:
+            f1 = Form.objects.all().order_by(order)
     else:
-        f1 = Form.objects.all().order_by(order)
+        if order == "owner":
+            f1 = Form.objects.filter(owner=request.user).order_by(
+                'owner__username')
+        else:
+            f1 = Form.objects.filter(owner=request.user).order_by(order)
     if (ad == 'dsc'):
         f1 = f1.reverse()
     forms = f1.values()
@@ -96,7 +112,8 @@ def ordered_forms(request, order="id", ad="asc"):
     for f in forms:
         # Obtain the list of versions of the form f
         # ordered by version number (descendant)
-        query_set = Form.objects.get(slug=f['slug']).versions.order_by('number').reverse()
+        query_set = Form.objects.get(
+            slug=f['slug']).versions.order_by('number').reverse()
         vers_dict = query_set.values()
         # Assign the dict of versions to the form dict
         f["versions"] = vers_dict
@@ -110,7 +127,9 @@ def ordered_forms(request, order="id", ad="asc"):
             last_version = vers_dict[0]
             f["lastStatus"] = last_version['status']
 
-    return render_to_response('mainPage.html', {"formList": forms}, context_instance=RequestContext(request))
+    return render_to_response(
+        'mainPage.html', {"formList": forms},
+        context_instance=RequestContext(request))
 
 
 class FormDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -119,7 +138,10 @@ class FormDetail(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = Form.objects.all()
     serializer_class = FormSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (
+        drf_permissions.IsAuthenticatedOrReadOnly,
+        IsOwnerSuperUserOrReadOnly
+    )
 
     def pre_save(self, obj):
         obj.owner = self.request.user
@@ -128,6 +150,7 @@ class FormDetail(generics.RetrieveUpdateDestroyAPIView):
     def dispatch(self, *args, **kwargs):
         return super(FormDetail, self).dispatch(*args, **kwargs)
 
+
 class VersionList(generics.ListCreateAPIView):
     """
     APIView where the version of the selected form are listed
@@ -135,12 +158,15 @@ class VersionList(generics.ListCreateAPIView):
     """
     model = Version
     serializer_class = VersionSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (
+        drf_permissions.IsAuthenticatedOrReadOnly,
+        IsOwnerSuperUserOrReadOnly
+    )
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(VersionList, self).dispatch(*args, **kwargs)
-    
+
     def get(self, request, pk, format=None):
         try:
             versions = Form.objects.get(id=pk).versions.all()
@@ -152,9 +178,7 @@ class VersionList(generics.ListCreateAPIView):
 
     def post(self, request, pk, format=None):
         serializer = VersionSerializer(data=request.DATA, partial=True)
-        form = Form.objects.get(id=pk)
         if serializer.is_valid():
-            # serializer.form = form
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -166,19 +190,23 @@ class VersionDetail(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = Version.objects.all()
     serializer_class = VersionSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (
+        drf_permissions.IsAuthenticatedOrReadOnly,
+        IsOwnerSuperUserOrReadOnly
+    )
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(VersionDetail, self).dispatch(*args, **kwargs)
-    
+
     def get_object(self, pk, number):
         try:
             form = Form.objects.get(id=pk)
             return form.versions.get(number=number)
         except ObjectDoesNotExist:
-            content = {"error": "There is no form with that slug or the"
-            " corresponding form has no version with that number"}
+            content = {
+                "error": "There is no form with that slug or the \
+                corresponding form has no version with that number"}
             return Response(content, status=status.HTTP_404_NOT_FOUND)
 
     def get(self, request, pk, number, format=None):
@@ -220,20 +248,24 @@ class NewVersion(generics.CreateAPIView):
     """
     APIView to create a new version of a form or duplicate a form
     """
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (
+        drf_permissions.IsAuthenticated,
+        IsOwnerSuperUserOrReadOnly
+    )
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(NewVersion, self).dispatch(*args, **kwargs)
-    
+
     def get(self, request, pk, number, action):
         try:
             # Get version of form that is going to be duplicated-
             form = Form.objects.get(id=pk)
             version = Version.objects.get(form=form, number=number)
         except Version.DoesNotExist or Form.DoesNotExist:
-            content = {"error": "There is no form with that slug or the"
-            " corresponding form has no version with that number"}
+            content = {
+                "error": "There is no form with that slug or the \
+                corresponding form has no version with that number"}
             return Response(content, status=status.HTTP_404_NOT_FOUND)
         # If action new version
         if action == "new":
@@ -247,11 +279,12 @@ class NewVersion(generics.CreateAPIView):
             count = 2
             try:
                 f_try = 1
-                while (f_try != None):
+                while (f_try is not None):
                     suffix = "(" + str(count) + ")"
                     # New_form.title += str(count)
                     count += 1
-                    f_try = Form.objects.filter(title=new_form.title + suffix).first()
+                    f_try = Form.objects.filter(
+                        title=new_form.title + suffix).first()
             except Form.DoesNotExist:
                 pass
             new_form.title += suffix
@@ -266,12 +299,15 @@ class DeleteVersion(generics.DestroyAPIView):
     """
     APIView to delete a form
     """
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (
+        drf_permissions.IsAuthenticatedOrReadOnly,
+        IsOwnerSuperUserOrReadOnly
+    )
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(DeleteVersion, self).dispatch(*args, **kwargs)
-    
+
     def get(self, request, pk, number, format=None):
         # Get related form of the version that is going to be deleted
         try:
@@ -296,12 +332,15 @@ class DeleteForm(generics.DestroyAPIView):
     """
     APIView to delete a form
     """
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (
+        drf_permissions.IsAuthenticatedOrReadOnly,
+        IsOwnerSuperUserOrReadOnly
+    )
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(DeleteForm, self).dispatch(*args, **kwargs)
-    
+
     def get(self, request, pk):
         # Get form and delete it
         try:
@@ -317,6 +356,10 @@ class FillForm(generics.RetrieveUpdateDestroyAPIView):
     APIView to retrieve current version of a form to be filled
     """
     serializer_class = VersionSerializer
+    permission_classes = (
+        drf_permissions.IsAuthenticatedOrReadOnly,
+        IsOwnerSuperUserOrReadOnly
+    )
 
     def get(self, request, slug, format=None):
         try:
@@ -324,8 +367,9 @@ class FillForm(generics.RetrieveUpdateDestroyAPIView):
             # We assume there is only one published version at any given time
             final_version = form_versions.filter(status=PUBLISHED).first()
             if (not final_version):
-                error = {"error" : "This Form has not been published."}
-                return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data=error)
+                error = {"error": "This Form has not been published."}
+                return Response(
+                    status=status.HTTP_406_NOT_ACCEPTABLE, data=error)
             loaded = json.loads(final_version.json)
             for p in loaded['pages']:
                 for f in p['fields']:
@@ -412,13 +456,15 @@ def is_shown(request, version, field, item_id):
 
     return shown
 
+
 def validate_logic(request, version):
     pages = version.get_pages()
 
     page_id = 0
     pages_show_value = []
     for page in pages:
-        pages_show_value.append(is_shown(request, version, False, page_id.__str__()))
+        pages_show_value.append(
+            is_shown(request, version, False, page_id.__str__()))
         page_id += 1
 
     form_json = json.loads(request.DATA['data'])
@@ -443,13 +489,15 @@ def validate_logic(request, version):
             shown = is_shown(request, version, True, obj['field_id'].__str__())
             shown = shown & pages_show_value[field_page]
             if shown != obj['shown']:
-                # If recived shown value differs from calculated, we return False
+                # If recived shown value differs from calculated,
+                # we return False
                 return False
     # If there are no errors, logic is valid
     return True
 
+
 @api_view(['POST'])
-@parser_classes((FormParser,MultiPartParser,JSONParser))
+@parser_classes((FormParser, MultiPartParser, JSONParser))
 def submit_form_entry(request, slug, format=None):
     """
     APIView to submit a Form Entry.
@@ -462,8 +510,10 @@ def submit_form_entry(request, slug, format=None):
         serializer = FieldEntrySerializer(data=field)
         if serializer.is_valid():
             obj = serializer.initial_data
-            if obj['required'] and obj['answer'].__str__() == '' and obj['shown']:
-                error_log['error'] += obj['text'] + ': This field is required\n'
+            if (obj['required'] and obj['answer'].__str__() == ''
+                    and obj['shown']):
+                error_log['error'] += obj['text'] + ': This field \
+                    is required\n'
             elif not obj['required'] and obj['answer'].__str__() == '':
                 pass
             elif obj['shown']:
@@ -480,7 +530,7 @@ def submit_form_entry(request, slug, format=None):
                         fld.validate(obj['answer'], **kw)
                     else:
                         raise ValidationError("Invalid JSON format.")
-                    
+
                 except ValidationError as e:
                     error_log['error'] += e.message
         else:
@@ -504,18 +554,28 @@ def submit_form_entry(request, slug, format=None):
                     # serializer.object.answer = ''
                     field_entry = serializer.save(entry=entry, answer='')
                 field_entry = serializer.save(entry=entry)
-                # If field is a FileField we find the corresponding file and save it to the database
+                # If field is a FileField we find the corresponding file
+                # and save it to the database
                 if field_entry.field_type == 'FileField':
                     data_json = field_entry.answer
                     if data_json != '':
-                        FileEntry.objects.create(field_id=field_entry.field_id,file_type=request.FILES[data_json].content_type,file_data=request.FILES[data_json],field_entry=FieldEntry.objects.get(pk=field_entry.pk),file_name=request.FILES[data_json].name)
+                        FileEntry.objects.create(
+                            field_id=field_entry.field_id,
+                            file_type=request.FILES[data_json].content_type,
+                            file_data=request.FILES[data_json],
+                            field_entry=FieldEntry.objects.get(
+                                pk=field_entry.pk),
+                            file_name=request.FILES[data_json].name)
     return Response(status=status.HTTP_200_OK)
 
 logger = logging.getLogger(__name__)
 
+
 @receiver(modified_logic)
 def modified_logic_handler(sender, **kwargs):
-    logger.error("Submitted form logic has been modified. DATA:" + kwargs['sent_data'].__str__())
+    logger.error("Submitted form logic has been modified. \
+        DATA:" + kwargs['sent_data'].__str__())
+
 
 @login_required
 @api_view(['GET'])
@@ -533,12 +593,16 @@ def get_responses(request, pk, number, format=None):
         if queryset:
             serializer = FormEntrySerializer(queryset, many=True)
             return Response(serializer.data)
-        else: 
-            return Response(data="No field entries for this form", status=status.HTTP_406_NOT_ACCEPTABLE)
+        else:
+            return Response(
+                data="No field entries for this form",
+                status=status.HTTP_406_NOT_ACCEPTABLE)
     except ObjectDoesNotExist:
-        content = {"error": "There is no form with that slug or the"
-        " corresponding form has no version with that number"}
+        content = {
+            "error": "There is no form with that slug or the \
+                corresponding form has no version with that number"}
         return Response(content, status=status.HTTP_404_NOT_FOUND)
+
 
 @login_required
 @api_view(['GET'])
@@ -548,6 +612,7 @@ def get_constants(request, format=None):
     """
     data = Factory.get_strings()
     return Response(status=status.HTTP_200_OK, data=data)
+
 
 @login_required
 @api_view(['GET'])
@@ -598,18 +663,24 @@ class FieldStsTemplateView(TemplateView):
 
 
 class StatisticsView(generics.RetrieveAPIView):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    
-    def get(self, request, pk, number, fieldId=None,filterType=None, filter=""):
+    permission_classes = (
+        drf_permissions.IsAuthenticatedOrReadOnly,
+        IsOwnerSuperUserOrReadOnly
+    )
+
+    def get(self, request, pk, number, fieldId=None, filterType=None, filter=""):
         """
         Returns statistics for version (pk, number)
         """
         try:
-            statistics = StatisticsCtrl().getStatistics(pk, number, fieldId, filterType, filter)
-            return Response(data=statistics,status=status.HTTP_200_OK)
+            statistics = StatisticsCtrl().getStatistics(
+                pk, number, fieldId, filterType, filter)
+            return Response(data=statistics, status=status.HTTP_200_OK)
         except Exception as e:
-            error_msg = str(e) 
-            return Response(data=error_msg, status=status.HTTP_406_NOT_ACCEPTABLE)
+            error_msg = str(e)
+            return Response(
+                data=error_msg, status=status.HTTP_406_NOT_ACCEPTABLE)
+
 
 @login_required
 @api_view(['GET'])
@@ -622,7 +693,10 @@ def after_submit_message(request, slug):
         d = serializer.initial_data
         msj = d['message']
     message = msj.split("\n")
-    return render_to_response('form_submitted.html', {"message": message}, context_instance=RequestContext(request))
+    return render_to_response(
+        'form_submitted.html', {"message": message},
+        context_instance=RequestContext(request))
+
 
 @login_required
 @api_view(['GET'])
@@ -635,38 +709,43 @@ def export_csv(request, pk, number, format=None):
     response['Content-Disposition'] = 'attachment; filename="responses.csv"'
     # Create a csv writer object
     writer = csv.writer(response)
-    
+
     try:
         # Get version
         form = Form.objects.get(pk=pk)
         version = form.versions.get(number=number)
-        
+
         # Only from a not draft version a csv file can be exported
         if (version.status == DRAFT):
             content = {"error": "This version's status is Draft."}
             return Response(content, status=status.HTTP_406_NOT_ACCEPTABLE)
 
         # Get all entries
-        formEntries = version.entries.all()
-        if formEntries:
-            initial = formEntries[0]
+        form_entries = version.entries.all()
+        if form_entries:
+            initial = form_entries[0]
             labels = []
             for field in initial.fields.all().order_by("field_id"):
                 labels.append('"' + field.text + '"')
             writer.writerow(labels)
-            for formEntry in formEntries:
+            for formEntry in form_entries:
                 fields = formEntry.fields.all().order_by("field_id")
                 data = []
                 for field in fields:
                     data.append(field.answer)
                 writer.writerow(data)
             return response
-        else: 
-            return Response(data="No field entries for this form", status=status.HTTP_406_NOT_ACCEPTABLE)
+        else:
+            return Response(
+                data="No field entries for this form",
+                status=status.HTTP_406_NOT_ACCEPTABLE)
     except ObjectDoesNotExist:
-        content = {"error": "There is no form with that slug or the"
-        " corresponding form has no version with that number"}
+        content = {
+            "error": "There is no form with that slug or the \
+                corresponding form has no version with that number"}
         return Response(content, status=status.HTTP_404_NOT_FOUND)
+
+
 @login_required
 @api_view(['GET'])
 def export_pdf(request, pk, number, field):
@@ -674,36 +753,43 @@ def export_pdf(request, pk, number, field):
     View for exporting field statistics on pdf format
     """
     try:
-        
+
         statistics = StatisticsCtrl().getFieldStatistics(pk, number, field)
-        
-        #Create the HttpResponse object with the appropriate PDF headers.
+
+        # Create the HttpResponse object with the appropriate PDF headers.
         response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="field_statistics.pdf"'
-        
+        response['Content-Disposition'] = 'attachment; \
+            filename="field_statistics.pdf"'
+
         buffer = BytesIO()
-         
+
         report = StatisticsPdf(buffer, 'A4', statistics)
-        pdf = report.print_statistics() 
-        
+        pdf = report.print_statistics()
+
         response.write(pdf)
-        
+
         return response
-    
+
     except Exception as e:
-        error_msg = str(e) 
+        error_msg = str(e)
     return Response(data=error_msg, status=status.HTTP_406_NOT_ACCEPTABLE)
 
+
 @api_view(['GET'])
-def download_file(request,field_id,entry):
-    
-    fieldEntry = FieldEntry.objects.get(pk=entry)
-    fileEntry = fieldEntry.files.get(field_id=field_id)       
-    response = HttpResponse(fileEntry.file_data,content_type=fileEntry.file_type)
-    response['Content-Disposition'] = 'attachment; filename="' + fileEntry.file_name+'"'
+def download_file(request, field_id, entry):
+
+    field_entry = FieldEntry.objects.get(pk=entry)
+    file_entry = field_entry.files.get(field_id=field_id)
+    response = HttpResponse(
+        file_entry.file_data, content_type=file_entry.file_type)
+    response['Content-Disposition'] = 'attachment; filename=\
+        "' + file_entry.file_name + '"'
     return response
+
 
 @api_view(['GET'])
 def render_form(request, format=None, **kwargs):
     base_url = settings.FORMS_BASE_URL
-    return render_to_response('visor.html', {"instance": kwargs['instance'], "base_url": base_url}, context_instance=RequestContext(request))
+    return render_to_response(
+        'visor.html', {"instance": kwargs['instance'], "base_url": base_url},
+        context_instance=RequestContext(request))
