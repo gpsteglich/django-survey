@@ -1,7 +1,7 @@
 import json
 import logging
 from datetime import datetime
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.core.mail import send_mail
@@ -185,6 +185,13 @@ class Version(models.Model):
                 prev.status = EXPIRED
                 prev.expiry_date = datetime.now()
                 super(Version, prev).save()
+        elif (self.status == EXPIRED):
+            try:
+                old = Version.objects.get(pk=self.pk)
+            except ObjectDoesNotExist:
+                raise ValidationError('You cannot close a new form')
+            if (old.status != PUBLISHED):
+                raise ValidationError('Only published forms can be closed.')
         elif (self.publish_date is not None and self.publish_date != ''):
             raise ValidationError('You cannot edit a published form')
         super(Version, self).save(*args, **kwargs)

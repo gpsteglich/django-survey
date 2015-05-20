@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.dispatch import receiver
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.http.response import HttpResponseRedirect
 from django.views.generic import TemplateView
 from django.shortcuts import render_to_response
@@ -25,7 +25,7 @@ from rest_framework.response import Response
 from io import BytesIO
 
 from .models import Form, FormEntry, Version, FieldEntry, FileEntry
-from .fields import PUBLISHED, DRAFT
+from .fields import PUBLISHED, DRAFT, EXPIRED
 from .serializers import FormSerializer, VersionSerializer
 from .serializers import FieldEntrySerializer, FormEntrySerializer
 from .fields import Field_Data
@@ -327,6 +327,37 @@ class DeleteVersion(generics.DestroyAPIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 
+class ExpireVersion(generics.DestroyAPIView):
+    """
+    APIView to delete a form
+    """
+    permission_classes = (
+        drf_permissions.IsAuthenticatedOrReadOnly,
+        IsOwnerSuperUserOrReadOnly
+    )
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(ExpireVersion, self).dispatch(*args, **kwargs)
+
+    def get(self, request, pk, number, format=None):
+        # Get related form of the version that is going to expire
+        try:
+            form = Form.objects.get(id=pk)
+            # Get version
+            version = Version.objects.get(form=form, number=number)
+            # Only published versions can be expired this way
+            if version.status == PUBLISHED:
+                version.status = EXPIRED
+                version.expiry_date = datetime.now()
+                version.save()
+                return HttpResponseRedirect(settings.FORMS_BASE_URL + "main/")
+            else:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+        except Form.DoesNotExist or Version.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
 class DeleteForm(generics.DestroyAPIView):
     """
     APIView to delete a form
@@ -584,6 +615,9 @@ def get_responses(request, pk, number, format=None):
     """
     try:
         form = Form.objects.get(pk=pk)
+        if (form.owner != request.user):
+            return HttpResponseBadRequest(
+                json.dumps({"error": "This survey does not belong to you."}))
         v = form.versions.get(number=number)
         if (v.status == DRAFT):
             content = {"error": "This version's status is Draft."}

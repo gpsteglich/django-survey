@@ -12,7 +12,7 @@ admin.autodiscover()
 on_startup()
 
 urlpatterns = patterns('dynamicForms.views',
-    
+
     url(r'^forms/(?P<pk>[a-z,0-9,\-,\_]+)/$', views.FormDetail.as_view()),
     url(r'^forms/delete/(?P<pk>[a-z,0-9,\-,\_]+)/$', views.DeleteForm.as_view(), name="form_delete"),
     url(r'^forms/$', views.FormList.as_view()),
@@ -20,6 +20,7 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^version/(?P<pk>[a-z,0-9,\-,\_]+)/$', views.VersionList.as_view()),
     url(r'^version/(?P<pk>[a-z,0-9,\-,\_]+)/(?P<number>[0-9]+)/$', views.VersionDetail.as_view()),
     url(r'^version/delete/(?P<pk>[a-z,0-9,\-,\_]+)/(?P<number>[0-9]+)/$', views.DeleteVersion.as_view(), name="version_delete"),
+    url(r'^version/expire/(?P<pk>[a-z,0-9,\-,\_]+)/(?P<number>[0-9]+)/$', views.ExpireVersion.as_view(), name="version_expire"),
 
     url(r'^main/(?P<order>(id|owner|title|creation_date))/(?P<ad>(asc|dsc))/$', 'ordered_forms', name="main_sort"),
     url(r'^main/$', views.FormList.as_view(), name='main'),
@@ -28,7 +29,7 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^preview$', login_required(views.TemplateView.as_view(template_name='preview.html'))),
     url(r'^editor$', login_required(views.TemplateView.as_view(template_name='editor.html')), name="editor"),
     url(r'^$', auth.user_login, name='login'),
-    
+
     url(r'^field_condition$', views.TemplateView.as_view(template_name='field_condition.html')),
     url(r'^logic_modal', views.TemplateView.as_view(template_name='logic_modal.html')),
     url(r'^logic_page_modal', views.TemplateView.as_view(template_name='logic_page_modal.html')),
@@ -41,12 +42,12 @@ urlpatterns = patterns('dynamicForms.views',
     url(r'^select_modal$', views.TemplateView.as_view(template_name='select_modal.html')),
     url(r'^tooltip_modal$', views.TemplateView.as_view(template_name='tooltip_modal.html')),
     url(r'^modify_input$', views.TemplateView.as_view(template_name='modifyInput.html')),
-    
-   
+
+
     url(r'^statistics/$' ,views.TemplateView.as_view(template_name='statistics.html'), name="statistics"),
     url(r'^statistics/(?P<pk>[0-9]+)/(?P<number>[0-9]+)(?:/(?P<fieldId>[0-9]+)/(?P<filterType>[a-z]+)/(?P<filter>[A-Z,a-z,0-9,\-,\_]+))?/$',views.StatisticsView.as_view()),
     url(r'^statistics/export-pdf/(?P<pk>[a-z,0-9,\-,\_]+)/(?P<number>[0-9]+)/(?P<field>[0-9]+)/$','export_pdf'),  
-    
+
     url(r'^preview_template', views.TemplateView.as_view(template_name='preview_template.html')),
     url(r'^preview$', views.TemplateView.as_view(template_name='preview.html'), name="preview"),
 
