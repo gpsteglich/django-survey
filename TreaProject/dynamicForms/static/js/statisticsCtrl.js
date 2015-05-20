@@ -8,7 +8,7 @@
     /*
      * This controller handles the retrival of data to create the form statistics
      */
-    app.controller('statisticsCtrl', function ($scope, $location, $window, $filter, StatisticsService) {
+    app.controller('statisticsCtrl', function ($scope, $rootScope, $location, $window, $filter, StatisticsService) {
 
         var separator = '/';
         var stat = this;
@@ -134,7 +134,7 @@
                         }
                     }
             }, function(error){
-                alert("Error loading statistics: " + error.data);
+                $rootScope.add("Error loading statistics: " + error.data);
             });
         };
 

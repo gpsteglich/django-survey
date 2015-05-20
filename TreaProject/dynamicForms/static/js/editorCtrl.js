@@ -160,12 +160,12 @@
             var val = field.validations;
             if (val.min_number && val.max_number){
                 if (val.min_number > val.max_number) {
-                    alert('Minimum can\'t exceed maximum');
+                    $rootScope.add('Minimum can\'t exceed maximum');
                     val.min_number = val.max_number;
                 }
             }
             if (val.max_len_text < 0){
-                alert('Maximum length can\'t be less than 0');
+                $rootScope.add('Maximum length can\'t be less than 0');
                 val.max_len_text = 0;
             }
         };
@@ -222,16 +222,16 @@
                             }
                         }, function(error){
                             if (error.data.error) {
-                                alert('Error loading version: ' + error.data.error);
+                                $rootScope.add('Error loading version: ' + error.data.error);
                             } else {
-                                alert('Error loading version: ' + error.data);
+                                $rootScope.add('Error loading version: ' + error.data);
                             };
                         })
                 }, function(error){
                     if (error.data.detail) {
-                        alert('Error loading survey: ' + error.data.detail);
+                        $rootScope.add('Error loading survey: ' + error.data.detail);
                     } else {
-                        alert('Error loading survey: ' + error.data);
+                        $rootScope.add('Error loading survey: ' + error.data);
                     };
                 });
             }
@@ -258,12 +258,12 @@
                 for (var fieldIndex in page.fields){
                     var field = page.fields[fieldIndex];
                     if (field.text == null || field.text == ''){
-                        alert ('Field labels can\'t be empty.');
+                        $rootScope.add('Field labels can\'t be empty.');
                         return false;
                     }
                     if (field.field_type == 'SelectField' || field.field_type == 'CheckboxField'){
                         if (!field.options.length){
-                            alert ('Field options can\'t be empty.');
+                            $rootScope.add(field.text + ': Field options can\'t be empty.');
                             return false;
                         }
                     }
@@ -306,16 +306,16 @@
                             }
                         }, function(error){
                             if (error.data.error) {
-                                alert('Error saving version: ' + error.data.error);    
+                                $rootScope.add('Error saving version: ' + error.data.error);    
                             } else {
-                                alert('Error saving version: ' + error.data);
+                                $rootScope.add('Error saving version: ' + error.data);
                             };
                         })
                 }, function(error){
                     if (error.data.error) {
-                        alert('Error saving survey: ' + error.data.error);
+                        $rootScope.add('Error saving survey: ' + error.data.error);
                     } else {
-                        alert('Error saving survey: ' + error.data);
+                        $rootScope.add('Error saving survey: ' + error.data);
                     };
                 });
             } else {
@@ -335,16 +335,16 @@
                             }
                         }, function(error){
                             if (error.data.error) {
-                                alert('Error saving version: ' + error.data.error);    
+                                $rootScope.add('Error saving version: ' + error.data.error);    
                             } else {
-                                alert('Error saving version: ' + error.data);
+                                $rootScope.add('Error saving version: ' + error.data);
                             };
                         })
                 }, function(error){
                     if (error.data.error) {
-                        alert('Error saving survey: ' + error.data.error);
+                        $rootScope.add('Error saving survey: ' + error.data.error);
                     } else {
-                        alert('Error saving survey: ' + error.data);
+                        $rootScope.add('Error saving survey: ' + error.data);
                     };
                 });
             }

@@ -98,10 +98,10 @@
                         delete version.$resolved;
                         visor.setFormValues(version);
                     }, function(error){
-                        alert('Error loading version: ' + error.data.error);
+                        $rootScope.add('Error loading version: ' + error.data.error);
                     })
                 }, function(error){
-                    alert('Error loading survey: ' + error.data.detail);
+                    $rootScope.add('Error loading survey: ' + error.data.detail);
                 });
         };
 
@@ -160,7 +160,7 @@
 
         // Persist form
         visor.save = function(){
-            alert('Form was completed correctly. \nThis is a preview, the data wont be saved.');
+            $rootScope.add("Form was completed correctly. \nThis is a preview, the data won't be saved.");
         };
 
         

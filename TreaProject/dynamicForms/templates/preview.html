@@ -55,7 +55,10 @@
     {% endaddtoblock %}
     {% addtoblock "js" %}
     <script src={% static "bootstrap/js/ui-bootstrap.min.js" %}></script>
-    {% endaddtoblock %}  
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
+    <script src={% static "angular/angular-growl-notifications.min.js" %}></script>
+    {% endaddtoblock %}
     {% fields_assets_block %}
 
     {% addtoblock "js" %}

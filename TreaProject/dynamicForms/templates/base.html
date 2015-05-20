@@ -46,9 +46,17 @@
                 <ul class="nav navbar-right top-nav">
                 
                    <li>
-             	      <a href="{% url 'logout' %}"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+             	      <a href="{% url 'logout' %}"><i class="fa fa-fw fa-power-off"></i> Logout ({{user}}) </a>
                    </li>
-                       
+                    {% verbatim %}
+                    <growl-notifications>
+                        <div ng-repeat="(id, notification) in notifications track by id">
+                            <growl-notification class="fading dashboard-notification">
+                              <strong style="color:#5BC0DE">Notification:<br></strong>{{notification}}
+                            </growl-notification>
+                        </div>
+                    </growl-notifications>
+                    {% endverbatim %}
                 </ul>
                 <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
                 <div class="collapse navbar-collapse navbar-ex1-collapse">
@@ -82,6 +90,9 @@
         {% endaddtoblock %}
         {% addtoblock "js" %}
         <script src={% static "bootstrap/js/ui-bootstrap.min.js" %}></script>
+        {% endaddtoblock %}
+        {% addtoblock "js" %}
+        <script src={% static "angular/angular-growl-notifications.min.js" %}></script>
         {% endaddtoblock %}
         {% addtoblock "js" %}
         <script src={% static "angular/d3.min.js" %}></script> 

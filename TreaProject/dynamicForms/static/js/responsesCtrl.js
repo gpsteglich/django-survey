@@ -7,7 +7,7 @@
     /*
      * This controller handles the logic to create, edit and save a form.
      */    
-    app.controller('ResponsesCtrl', function ($scope, $location, ResponsesService) {
+    app.controller('ResponsesCtrl', function ($scope, $rootScope, $location, ResponsesService) {
 
         var responses = this;
         responses.formId = ($location.search()).form;
@@ -33,9 +33,9 @@
                     };
             }, function(error){
                 if (error.data.error) {
-                    alert('Error cargando respuestas: ' + error.data.error);
+                    $rootScope.add('Error loading responses: ' + error.data.error);
                 } else {
-                    alert('Error cargando respuestas: ' + error.data);
+                    $rootScope.add('Error loading responses: ' + error.data);
                 };
             });
         };

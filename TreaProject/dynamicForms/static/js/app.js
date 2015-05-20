@@ -7,7 +7,8 @@
     */
     var app = angular.module('dynamicFormsFrameworkAdmin', ['ui.sortable','ui.bootstrap',
                                                             'checklist-model','angularCharts',
-                                                            'udpCaptcha', 'ngResource'])
+                                                            'udpCaptcha', 'ngResource',
+                                                            'growlNotifications'])
     .config(['$locationProvider', '$httpProvider', function ($locationProvider, $httpProvider) {
 
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';
@@ -19,6 +20,23 @@
        // Don't strip trailing slashes from calculated URLs
        $resourceProvider.defaults.stripTrailingSlashes = false;
     }]);
+
+    app.run( function($rootScope){
+        $rootScope.notificationIndex = 0;
+        $rootScope.invalidNotification = false;
+        $rootScope.notifications = {};
+
+        $rootScope.add = function(notification){
+          var i;
+          if(!notification){
+            $rootScope.invalidNotification = true;
+            return;
+          }
+          i = $rootScope.notificationIndex++;
+          $rootScope.invalidNotification = false;
+          $rootScope.notifications[i] = notification;
+        };
+    })
 
     app.directive('ngConfirmClick', [function(){
         return {

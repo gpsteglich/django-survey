@@ -14,6 +14,56 @@
     display: none;
 }
 
+.label-as-badge {
+    border-radius: 1em !important;
+}
+
+.survey-list {
+    margin-bottom: 2px !important;
+}
+
+growl-notifications{
+  position: fixed;
+  top: 50px;
+  right: 10px;
+}
+growl-notification{
+    z-index: 9999 !important;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 15px 30px;
+    width: 250px;
+    display: block;
+    border: 0px;    
+    border-left-width: 5px;
+    border-radius: 3px;
+    min-height: 275px;
+    color: white;
+}
+
+growl-notification.dashboard-notification{
+    min-height: 50px;
+    border: 1px solid #5BC0DE;
+    border-bottom: 5px solid #5BC0DE;
+}
+
+growl-notification.fading.ng-move{
+    opacity: 0;
+    -webkit-transition: 1s linear all; /* Safari/Chrome */
+    transition: 1s linear all; /* All other modern browsers and IE10+ */
+}
+
+growl-notification.fading.ng-move.ng-move-active {
+    opacity: 1;
+}
+growl-notification.fading {
+    opacity: 1;
+    -webkit-transition: 1s linear all; /* Safari/Chrome */
+    transition: 1s linear all; /* All other modern browsers and IE10+ */
+}
+
+growl-notification.fading.ng-leave.ng-leave-active {
+    opacity: 0;
+}
     /* Background gradient effect */
 .radial-center { 
     /* fallback */ 

@@ -8,6 +8,13 @@
                     <h1 class="text-center"><span class="glyphicon glyphicon-list"></span> {{version.form}}</h1>
                 </div>
                 <h1 class="text-center" ng-show="errLoading">There was an error loading the form</h1>
+                <growl-notifications>
+                    <div ng-repeat="(id, notification) in notifications track by id">
+                        <growl-notification class="fading dashboard-notification">
+                          <strong style="color:#5BC0DE">Notification:<br></strong>{{notification}}
+                        </growl-notification>
+                    </div>
+                </growl-notifications>
                 <form role="form" name="dynForm" ng-submit="save(dynForm.$valid)" class="dyn-form panel-body" novalidate>
                     <div style="padding-top:30px;" ng-class="{ 'has-error' : userFieldForm.email.$invalid }">
                         <div class="text-center">
