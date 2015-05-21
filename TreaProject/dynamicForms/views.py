@@ -615,7 +615,7 @@ def get_responses(request, pk, number, format=None):
     """
     try:
         form = Form.objects.get(pk=pk)
-        if (form.owner != request.user):
+        if (form.owner != request.user and not request.user.is_superuser):
             return HttpResponseBadRequest(
                 json.dumps({"error": "This survey does not belong to you."}))
         v = form.versions.get(number=number)
@@ -701,13 +701,34 @@ class StatisticsView(generics.RetrieveAPIView):
         IsOwnerSuperUserOrReadOnly
     )
 
-    def get(self, request, pk, number, fieldId=None, filterType=None, filter=""):
+    def get(self, request, pk, number):
         """
         Returns statistics for version (pk, number)
         """
+        filters = []
         try:
+            fields = request.GET.get('fields', "NO FIELD")
+            types = request.GET.get('types', "NO TYPE")
+            values = request.GET.get('values', "NO VALUE")
+            if (fields != "NO FIELD"):
+                fields = fields.split(',')
+                types = types.split(',')
+                values = values.split(',')
+
+                length = len(fields)
+                if (length != len(types) or length != len(values)):
+                    return HttpResponseBadRequest(json.dumps(
+                        {"error": "Misconfigured filters"}))
+                for x in range(0, length):
+                    filter = {
+                        "field": fields[x],
+                        "filter_type": types[x],
+                        "field_value": values[x]
+                    }
+                    filters.append(filter)
+
             statistics = StatisticsCtrl().getStatistics(
-                pk, number, fieldId, filterType, filter)
+                pk, number, filters)
             return Response(data=statistics, status=status.HTTP_200_OK)
         except Exception as e:
             error_msg = str(e)

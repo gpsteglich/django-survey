@@ -25,8 +25,9 @@ class FormEntryQuerySet(models.query.QuerySet):
     def data_icontains(self, field_id, data, exclude=False):
         entries = set()
         for entry in self:
-            fields = entry.fields.filter(
-                field_id=field_id, answer__icontains=data)
+            fields = entry.fields.filter(field_id=field_id)
+            if (data not in fields.first().answer.split('#')):
+                fields = FormEntry.objects.none()
             if exclude:
                 if fields.count() == 0:
                     entries.add(entry.pk)
@@ -52,20 +53,25 @@ class FormEntryQuerySet(models.query.QuerySet):
         entries = set()
         for entry in self:
             if operator == 'gt':
-                fields = entry.fields.filter(
-                    field_id=field_id, answer__gt=data)
+                fields = entry.fields.filter(field_id=field_id)
+                if not (int(fields.first().answer) > data):
+                    fields = FormEntry.objects.none()
             elif operator == 'gte':
-                fields = entry.fields.filter(
-                    field_id=field_id, answer__gte=data)
+                fields = entry.fields.filter(field_id=field_id)
+                if not (int(fields.first().answer) >= data):
+                    fields = FormEntry.objects.none()
             elif operator == 'lt':
-                fields = entry.fields.filter(
-                    field_id=field_id, answer__lt=data)
+                fields = entry.fields.filter(field_id=field_id)
+                if not (int(fields.first().answer) < data):
+                    fields = FormEntry.objects.none()
             elif operator == 'lte':
-                fields = entry.fields.filter(
-                    field_id=field_id, answer__lte=data)
+                fields = entry.fields.filter(field_id=field_id)
+                if not (int(fields.first().answer) <= data):
+                    fields = FormEntry.objects.none()
             elif operator == 'eq':
-                fields = entry.fields.filter(
-                    field_id=field_id, answer=data)
+                fields = entry.fields.filter(field_id=field_id)
+                if not (int(fields.first().answer) == data):
+                    fields = FormEntry.objects.none()
             if exclude:
                 if fields.count() == 0:
                     entries.add(entry.pk)

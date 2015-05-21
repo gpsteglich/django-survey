@@ -37,8 +37,10 @@ app.factory('VersionService', function($resource){
 app.factory('ResponsesService', function($resource){
     var responses_api_url = '/dynamicForms/responses/'
 
-    return $resource( responses_api_url + ':formId/'+ ':versionId/',
-        {formId: '@formId', versionId:'@versionId'},
+    return $resource( responses_api_url + ':formId/'+ ':versionId/' +
+        ':field/' + ':type/' + ':value/',
+        {formId: '@formId', versionId:'@versionId',
+        field: '@field', type:'@type', value: '@value'},
         {'query': {method: 'GET', isArray: true}});
 });
 

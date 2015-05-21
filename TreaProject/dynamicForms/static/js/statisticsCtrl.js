@@ -19,6 +19,24 @@
         stat.versionNumber = ($location.search()).ver;
         stat.json = '';
 
+        $scope.filters = [
+            {
+                "field": '',
+                "type": '',
+                "value": '',
+            }
+        ];
+
+        $scope.number_operators = [
+            {"short": "lt", "label": "less than"},
+            {"short": "lte", "label": "less than or equal to"},
+            {"short": "equals", "label": "equals"},
+            {"short": "gt", "label": "greater than"},
+            {"short": "gte", "label": "greater than or equal to"},
+        ];
+
+        $scope.field_options = [];
+
         stat.config = {
             title: '',
             tooltips: true,
@@ -47,13 +65,49 @@
         stat.filter_value = '';
         stat.path = '';
 
+        $scope.removeFilter = function(index){
+            $scope.filters.splice(index, 1)
+        }
+
+        $scope.addFilter = function(){
+            $scope.filters.push({
+                "field": '',
+                "type": '',
+                "value": '',
+            })
+        }
+
         stat.getStatistics = function(){
-            if(stat.filter_id != '' && stat.filter_type != '' && stat.filter_value != ''){
-                stat.path = stat.filter_id +'/' +stat.filter_type +'/'+ stat.filter_value;
-            }else {
-                stat.path = '';
-            }
-            StatisticsService.get({formId:stat.formId, versionId: stat.versionNumber},
+            var fields = '';
+            var types = '';
+            var values = '';
+            var parsed;
+            for (var i = 0; i < $scope.filters.length; i++) {
+                if ($scope.filters[i].field != '' &&
+                        $scope.filters[i].type != '' &&
+                        $scope.filters[i].value != '') {
+                    if (stat.values[$scope.filters[i].field].field_type == "CheckboxField" ||
+                            stat.values[$scope.filters[i].field].field_type == "SelectField"){
+                        parsed = parseInt($scope.filters[i].value) + 1;
+                    } else {
+                        parsed = $scope.filters[i].value;
+                    }
+                    fields += $scope.filters[i].field + ',';
+                    types += $scope.filters[i].type + ',';
+                    values += parsed + ',';
+                }
+            };
+            // Remove last ','
+            if (fields != ''){
+                fields = fields.substring(0, fields.length - 1);
+                types = types.substring(0, types.length - 1);
+                values = values.substring(0, values.length - 1);
+                params = {formId:stat.formId, versionId: stat.versionNumber,
+                    fields: fields, types: types, values: values}
+            } else {
+                params = {formId:stat.formId, versionId: stat.versionNumber}
+            };
+            StatisticsService.get(params,
                 function(stats){
                     stat.json = JSON.parse(JSON.stringify(stats));
                     for(var field_id in stat.json){
@@ -108,6 +162,7 @@
                                 'req': field.required,
                                 'type': 'Combobox'
                             };
+                            $scope.field_options[field_id] = field.options;
                         } else if (field.field_type == 'CheckboxField'){
                             field.total_per_option = eval(field.total_per_option);
                             field.options = eval(field.options);
@@ -131,6 +186,7 @@
                                 'req': field.required,
                                 'type': 'Checkbox'
                             };
+                            $scope.field_options[field_id] = field.options;
                         }
                     }
             }, function(error){
@@ -141,10 +197,13 @@
         stat.getStatistics();
 
         stat.Discard = function(){
-            stat.filter_id = '';
-            stat.filter_type = '';
-            stat.filter_value = '';
-            stat.path = '';
+            $scope.filters = [
+                {
+                    "field": '',
+                    "type": '',
+                    "value": '',
+                }
+            ];
             stat.getStatistics();
         };
 

@@ -6,7 +6,7 @@ from dynamicForms.fieldtypes.FieldFactory import FieldFactory as Factory
 
 class StatisticsCtrl():
 
-    def getStatistics(self, formId, versionNum, fieldId=None, filterType=None, filter=None):
+    def getStatistics(self, formId, versionNum, filters):
         """
         Receives a the id of a version (formId, versionNum),
         returns the statistics of each field on it
@@ -14,14 +14,21 @@ class StatisticsCtrl():
         form = Form.objects.get(pk=formId)
         version = form.versions.get(number=versionNum)
 
-        if filterType == "equals":
-            fieldEntries = Version.objects.get_entries(version.pk).data_iexact(field_id=fieldId, data=filter).get_data()
-        elif filterType == "contains":
-            fieldEntries = Version.objects.get_entries(version.pk).data_icontains(field_id=fieldId, data=filter).get_data()
-        else:
-            fieldEntries = Version.objects.get_entries(version.pk).get_data()
+        field_entries = Version.objects.get_entries(version.pk)
+        for filter in filters:
+            if filter['filter_type'] == "equals":
+                field_entries = field_entries.data_iexact(
+                    field_id=filter['field'], data=filter['field_value'])
+            elif filter['filter_type'] == "contains":
+                field_entries = field_entries.data_icontains(
+                    field_id=filter['field'], data=filter['field_value'])
+            elif filter['filter_type'] in ["gte", "gt", "lte", "lt"]:
+                field_entries = field_entries.data_number(
+                    field_id=filter['field'], data=int(filter['field_value']),
+                    operator=filter['filter_type'])
+        field_entries = field_entries.get_data()
 
-        if fieldEntries:
+        if field_entries:
             loaded = json.loads(version.json)
             pages = loaded["pages"]
 
@@ -29,18 +36,18 @@ class StatisticsCtrl():
             for page in pages:
                 for field in page["fields"]:
                     data = []
-                    for fieldEntry in fieldEntries:
-                        if fieldEntry.field_id == field["field_id"]:
-                            data.append(fieldEntry.answer)                                      
-                    fieldType = Factory.get_class(field["field_type"])
-                    fieldStatistics = fieldType().get_statistics(data, field)
-                    statistics[field["field_id"]] = fieldStatistics
+                    for field_entry in field_entries:
+                        if field_entry.field_id == field["field_id"]:
+                            data.append(field_entry.answer)
+                    field_type = Factory.get_class(field["field_type"])
+                    field_statistics = field_type().get_statistics(data, field)
+                    statistics[field["field_id"]] = field_statistics
         else:
-            raise Exception("There are no field entries for this form.")
+            raise Exception("No entries found.")
 
         return statistics
-    
-    def getFieldStatistics(self, formId, versionNum, fieldId):  
+
+    def getFieldStatistics(self, formId, versionNum, fieldId):
         """
         Returns statistics for specific field in form
         """
@@ -48,31 +55,32 @@ class StatisticsCtrl():
         form = Form.objects.get(pk=formId)
         version = form.versions.get(number=versionNum)
 
-        fieldEntries = FieldEntry.objects.filter(entry__version_id=version.pk, field_id = fieldId)
-        
-        if fieldEntries:
+        field_entries = FieldEntry.objects.filter(
+            entry__version_id=version.pk, field_id=fieldId)
+
+        if field_entries:
             loaded = json.loads(version.json)
             pages = loaded["pages"]
             found = False
             # Indicates page number
             i = 0
             while not found:
-                j = 0 
+                j = 0
                 fields = pages[i]["fields"]
                 while (not found) and (j != len(fields)):
-                    if  fields[j]["field_id"] == int(fieldId):
+                    if fields[j]["field_id"] == int(fieldId):
                         field = fields[j]
                         found = True
                     else:
                         j += 1
                 i += 1
-  
-            data = []
-            for fieldEntry in fieldEntries:
-                data.append(fieldEntry.answer)
-            fieldType = Factory.get_class(field["field_type"])
-            fieldStatistics = fieldType().get_statistics(data, field)
 
-            return fieldStatistics
+            data = []
+            for field_entry in field_entries:
+                data.append(field_entry.answer)
+            field_type = Factory.get_class(field["field_type"])
+            field_statistics = field_type().get_statistics(data, field)
+
+            return field_statistics
         else:
-            raise Exception("There are no field entries for this form.")
+            raise Exception("No entries found.")
